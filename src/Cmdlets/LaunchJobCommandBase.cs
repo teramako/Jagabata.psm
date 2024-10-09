@@ -1,4 +1,5 @@
 using System.Management.Automation;
+using System.Security;
 using System.Text;
 using System.Text.Json;
 using AWX.Resources;
@@ -117,6 +118,18 @@ public abstract class LaunchJobCommandBase : APICmdletBase
         ui.WriteLine("\n");
     }
 
+    // Store SecureString gotten from Survey and Credential passwords.
+    protected List<SecureString> SecureStrings = [];
+
+    protected void ClearSecureStrings()
+    {
+        foreach (var ss in SecureStrings)
+        {
+            ss.Dispose();
+        }
+        SecureStrings.Clear();
+    }
+
     /// <summary>
     /// Get SurveySpecs and show input prompts.
     /// </summary>
@@ -213,6 +226,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
                         if (prompt.AskPassword(label, key, description, out var passwordAnswer))
                         {
                             extraVars[varName] = passwordAnswer.Input;
+                            SecureStrings.Add(passwordAnswer.Input);
                             PrintPromptResult(varName, string.Empty);
                             continue;
                         }

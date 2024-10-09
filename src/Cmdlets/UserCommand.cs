@@ -168,47 +168,49 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             string? user = null;
-            string? passwordString = null;
+            SecureString? password = null;
+            bool passwordPrompt = false;
             if (Credential != null)
             {
                 user = Credential.UserName;
-                passwordString = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(Credential.Password));
-                Credential.Password.Dispose();
+                password = Credential.Password;
             }
             else 
             {
                 user = UserName;
                 if (Password != null)
                 {
-                    passwordString = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(Password));
-                    Password.Dispose();
+                    password = Password;
                 }
                 else
                 {
                     if (CommandRuntime.Host == null)
                         throw new NullReferenceException();
 
+                    passwordPrompt = true;
                     var prompt = new AskPrompt(CommandRuntime.Host);
                     if (!prompt.AskPassword($"Password for {user}", "Password", "", out var pass))
                     {
                         return;
                     }
-                    passwordString = pass.Input;
+                    password = pass.Input;
                 }
             }
 
-            if (string.IsNullOrEmpty(user))
+            if (password == null || password.Length == 0)
             {
-                WriteError(new ErrorRecord(new ArgumentException("UserName should not be empty."),
+                WriteError(new ErrorRecord(new ArgumentException("Password should not be empty."),
                                            "Invalid Argument",
                                            ErrorCategory.InvalidArgument,
                                            null));
                 return;
             }
 
-            if (string.IsNullOrEmpty(passwordString))
+            if (string.IsNullOrEmpty(user))
             {
-                WriteError(new ErrorRecord(new ArgumentException("Password should not be empty."),
+                if (passwordPrompt)
+                    password.Dispose();
+                WriteError(new ErrorRecord(new ArgumentException("UserName should not be empty."),
                                            "Invalid Argument",
                                            ErrorCategory.InvalidArgument,
                                            null));
@@ -219,7 +221,7 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object>()
             {
                 { "username", user },
-                { "password", "***" }, // dummy
+                { "password", password },
             };
             if (!string.IsNullOrEmpty(FirstName))
                 sendData.Add("first_name", FirstName);
@@ -233,8 +235,6 @@ namespace AWX.Cmdlets
                 sendData.Add("is_system_auditor", IsSystemAuditor);
 
             var dataDescription = Json.Stringify(sendData, pretty: true);
-            sendData["password"] = passwordString; // set password string after `sendData` is stringified
-
             if (ShouldProcess(dataDescription))
             {
                 try
@@ -244,6 +244,8 @@ namespace AWX.Cmdlets
                 }
                 catch (RestAPIException) { }
             }
+            if (passwordPrompt)
+                password.Dispose();
         }
     }
 

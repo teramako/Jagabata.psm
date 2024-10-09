@@ -1,5 +1,6 @@
 using AWX.Resources;
 using System.Management.Automation;
+using System.Security;
 using System.Text;
 using System.Text.Json;
 using System.Web;
@@ -435,7 +436,7 @@ namespace AWX.Cmdlets
                 return false;
 
             var prompt = new AskPrompt(CommandRuntime.Host);
-            var credentialPassswords = new Dictionary<string, string>();
+            var credentialPassswords = new Dictionary<string, SecureString>();
             sendData.Add("credential_passwords", credentialPassswords);
 
             foreach (var (key, (caption, description)) in checkResult)
@@ -443,6 +444,7 @@ namespace AWX.Cmdlets
                 if (prompt.AskPassword(caption, key, description, out var passwordAnswer))
                 {
                     credentialPassswords.Add(key, passwordAnswer.Input);
+                    SecureStrings.Add(passwordAnswer.Input);
                     PrintPromptResult(key, string.Empty);
                 }
                 else
@@ -933,11 +935,20 @@ namespace AWX.Cmdlets
             var sendData = CreateSendData();
             if (!TryAskOnLaunch(requirements, sendData, checkOptional: Interactive))
             {
+                ClearSecureStrings();
                 WriteWarning("Launch canceled.");
                 return null;
             }
-            var apiResult = CreateResource<JobTemplateJob.LaunchResult>($"{Resources.JobTemplate.PATH}{id}/launch/", sendData);
-            var launchResult = apiResult.Contents;
+            JobTemplateJob.LaunchResult? launchResult;
+            try
+            {
+                var apiResult = CreateResource<JobTemplateJob.LaunchResult>($"{Resources.JobTemplate.PATH}{id}/launch/", sendData);
+                launchResult = apiResult.Contents;
+            }
+            finally
+            {
+                ClearSecureStrings();
+            }
             if (launchResult == null) return null;
             WriteVerbose($"Launch JobTemplate:{id} => Job:[{launchResult.Id}]");
             if (launchResult.IgnoredFields.Count > 0)

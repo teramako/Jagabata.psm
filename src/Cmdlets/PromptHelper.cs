@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Management.Automation.Host;
-using System.Runtime.InteropServices;
 using System.Security;
 
 namespace AWX.Cmdlets
@@ -482,7 +481,7 @@ namespace AWX.Cmdlets
         public bool AskPassword(string caption,
                                 string promptKey,
                                 string helpMessage,
-                                [MaybeNullWhen(false)] out Answer<string> answer)
+                                [MaybeNullWhen(false)] out Answer<SecureString> answer)
         {
             answer = null;
             printHeader(caption, "", helpMessage, showDefault: false);
@@ -501,9 +500,7 @@ namespace AWX.Cmdlets
                 }
                 if (pso.BaseObject is SecureString secureString)
                 {
-                    var password = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(secureString));
-                    secureString.Dispose();
-                    answer = new Answer<string>(password ?? string.Empty);
+                    answer = new Answer<SecureString>(secureString);
                     return true;
                 }
             }
