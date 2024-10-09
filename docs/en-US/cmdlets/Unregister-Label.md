@@ -40,6 +40,13 @@ Disassociate the Label of ID 1 from the Inventory of Id 2.
 ### -From
 Target resource to be unregistered from.
 
+Following resource is available:  
+- `Inventory`  
+- `JobTemplate`  
+- `Schedule`  
+- `WorkflowJobTemplate`  
+- `WorkflowJobTemplateNode`
+
 ```yaml
 Type: IResource
 Parameter Sets: (All)
