@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Runtime.InteropServices;
@@ -65,8 +66,13 @@ namespace AWX.Cmdlets
         /// <param name="helpMessage"></param>
         /// <param name="answers"></param>
         /// <returns>Whether the prompt is inputed(<c>true</c>) or Canceled(<c>false</c>)</returns>
-        public bool AskList<T>(string label, string promptKey, IEnumerable<string>? defaultValues, string helpMessage, out Answer<List<T>> answers)
+        public bool AskList<T>(string label,
+                               string promptKey,
+                               IEnumerable<string>? defaultValues,
+                               string helpMessage,
+                               [MaybeNullWhen(false)] out Answer<List<T>> answers)
         {
+            answers = null;
             var results = new List<T>();
             var index = 0;
             var defaultValuString = $"[{string.Join(", ", defaultValues ?? [])}]";
@@ -82,7 +88,6 @@ namespace AWX.Cmdlets
                                          + $"CurrentValues: [{string.Join(", ", results.Select(item => $"{item}"))}]";
                 if (!TryPromptOneInput(fieldLabel, out var inputString))
                 {
-                    answers = new Answer<List<T>>([], true);
                     return false;
                 }
                 if (inputString.StartsWith('!'))
@@ -133,8 +138,13 @@ namespace AWX.Cmdlets
         /// <param name="helpMessage"></param>
         /// <param name="answer"></param>
         /// <returns>Whether the prompt is inputed(<c>true</c>) or Canceled(<c>false</c>)</returns>
-        public bool Ask(string label, string promptKey, string? defaultValue, string helpMessage, out Answer<string> answer)
+        public bool Ask(string label,
+                        string promptKey,
+                        string? defaultValue,
+                        string helpMessage,
+                        [MaybeNullWhen(false)] out Answer<string> answer)
         {
+            answer = null;
             var defaultValueString = $"\"{defaultValue}\"";
             var helpIndicator = """
                 (!? => Show help, !! => Use default, !> => Suspend, Empty => Skip, ("", '', $null) => Specify empty string)
@@ -150,7 +160,6 @@ namespace AWX.Cmdlets
                 var inputed = false;
                 if (!TryPromptOneInput(promptKey, out var inputString))
                 {
-                    answer = new Answer<string>(string.Empty, true);
                     return false;
                 }
                 if (inputString.StartsWith('!'))
@@ -206,8 +215,14 @@ namespace AWX.Cmdlets
         /// <param name="required"></param>
         /// <param name="answer"></param>
         /// <returns>Whether the prompt is inputed(<c>true</c>) or Canceled(<c>false</c>)</returns>
-        public bool Ask<T>(string label, string promptKey, T? defaultValue, string helpMessage, bool required, out Answer<T> answer) where T : struct
+        public bool Ask<T>(string label,
+                           string promptKey,
+                           T? defaultValue,
+                           string helpMessage,
+                           bool required,
+                           [MaybeNullWhen(false)] out Answer<T> answer) where T : struct
         {
+            answer = null;
             string helpIndicator;
             string help = helpMessage;
             if (defaultValue == null)
@@ -233,7 +248,6 @@ namespace AWX.Cmdlets
                 var inputed = false;
                 if (!TryPromptOneInput(promptKey, out var inputString))
                 {
-                    answer = new Answer<T>(default(T), true);
                     return false;
                 }
                 if (inputString.StartsWith('!'))
@@ -301,8 +315,9 @@ namespace AWX.Cmdlets
         public bool AskBool(string label, bool defaultValue,
                             (string label, string helpMessage) trueParameter,
                             (string label, string helpMessage) falseParameter,
-                            out Answer<bool> answer)
+                            [MaybeNullWhen(false)] out Answer<bool> answer)
         {
+            answer = null;
             var choices = new Collection<ChoiceDescription>();
 
             choices.Add(new ChoiceDescription($"{trueParameter.label} (&Yes)", trueParameter.helpMessage));
@@ -319,7 +334,6 @@ namespace AWX.Cmdlets
                     answer = new Answer<bool>(false);
                     return true;
                 default:
-                    answer = new Answer<bool>(defaultValue);
                     return false;
             }
 
@@ -373,8 +387,9 @@ namespace AWX.Cmdlets
                                  IList<(string Value, string Description)> fields,
                                  string defaultValue,
                                  string helpMessage,
-                                 out Answer<string> answer)
+                                 [MaybeNullWhen(false)] out Answer<string> answer)
         {
+            answer = null;
             printHeader(label, defaultValue, helpMessage);
             var choices = new Collection<ChoiceDescription>();
             var defaultValueIndex = -1;
@@ -392,7 +407,6 @@ namespace AWX.Cmdlets
                 answer = new Answer<string>(fields[res].Value);
                 return true;
             }
-            answer = new Answer<string>(defaultValue, true);
             return false;
         }
         /// <summary>
@@ -409,8 +423,9 @@ namespace AWX.Cmdlets
                                    IList<(string Value, string Description)> fields,
                                    IList<string> defaultValues,
                                    string helpMessage,
-                                   out Answer<string[]> answer)
+                                   [MaybeNullWhen(false)] out Answer<string[]> answer)
         {
+            answer = null;
             printHeader(label, $"[{string.Join(", ", defaultValues)}]", helpMessage);
             var maxCount = fields.Count;
             var results = new List<string>();
@@ -449,7 +464,6 @@ namespace AWX.Cmdlets
                 }
                 else
                 {
-                    answer = new Answer<string[]>([], true);
                     return false;
                 }
             } while (results.Count <= maxCount);
@@ -465,8 +479,12 @@ namespace AWX.Cmdlets
         /// <param name="answer"></param>
         /// <param name="helpMessage"></param>
         /// <returns>Whether the prompt is inputed(<c>true</c>) or Canceled(<c>false</c>)</returns>
-        public bool AskPassword(string caption, string promptKey, string helpMessage, out Answer<string> answer)
+        public bool AskPassword(string caption,
+                                string promptKey,
+                                string helpMessage,
+                                [MaybeNullWhen(false)] out Answer<string> answer)
         {
+            answer = null;
             printHeader(caption, "", helpMessage, showDefault: false);
             if (string.IsNullOrEmpty(promptKey))
                 promptKey = "Password";
@@ -479,7 +497,6 @@ namespace AWX.Cmdlets
             {
                 if (pso == null || pso.BaseObject == null)
                 {
-                    answer = new Answer<string>(string.Empty, true);
                     return false;
                 }
                 if (pso.BaseObject is SecureString secureString)
@@ -490,7 +507,6 @@ namespace AWX.Cmdlets
                     return true;
                 }
             }
-            answer = new Answer<string>(string.Empty, true);
             return false;
         }
         private bool TryPromptOneInput(string label, out string inputString)
