@@ -31,7 +31,7 @@ namespace AWX.Cmdlets
         }
         protected override void EndProcessing()
         {
-            WriteObject(GetResource(), true);
+            WriteObject(GetResultSet(), true);
         }
     }
 
