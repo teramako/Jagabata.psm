@@ -10,8 +10,10 @@ using System.Text.Unicode;
 
 namespace AWX
 {
-    public class Json
+    public sealed class Json
     {
+        private Json() { }
+
         public static string Stringify(object obj, bool pretty = false)
         {
             var options = pretty ? SerializeOptions : DeserializeOptions;

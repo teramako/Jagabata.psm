@@ -18,12 +18,13 @@ namespace AWX
     /// <summary>
     /// Rest API client for AWX
     /// </summary>
-    public class RestAPI
+    public sealed class RestAPI
     {
+        private RestAPI() { }
         /// <summary>
         /// Single HttpClient for AWX
         /// </summary>
-        static public HttpClient Client
+        private static HttpClient Client
         {
             get
             {
@@ -52,7 +53,7 @@ namespace AWX
                 _client = value;
             }
         }
-        static private HttpClient? _client = null;
+        private static HttpClient? _client = null;
         public static void SetClient(ApiConfig config)
         {
             var uri = config.Origin;
