@@ -238,6 +238,7 @@ namespace AWX
             {
                 new LocalDateTimeConverter(),
                 new DictConverter(),
+                new SecureStringConverter(false),
                 // new ArrayConverter()
             }
         };
@@ -250,6 +251,7 @@ namespace AWX
             {
                 new PSObjectConverter(),
                 new LocalDateTimeConverter(),
+                new SecureStringConverter(true),
             }
         };
         /// <summary>
@@ -270,6 +272,46 @@ namespace AWX
                 JsonSerializer.Serialize(writer, value.BaseObject, options);
             }
         }
+
+        /// <summary>
+        /// Converter to serialize/deserialize SecureString
+        /// </summary>
+        private class SecureStringConverter : JsonConverter<System.Security.SecureString>
+        {
+            public SecureStringConverter(bool mask)
+            {
+                _mask = mask;
+            }
+
+            private bool _mask;
+
+            public override System.Security.SecureString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                var secureString = new System.Security.SecureString();
+                var stringPassword = reader.GetString();
+
+                if (stringPassword == null)
+                    return secureString;
+
+                foreach (char c in stringPassword)
+                    secureString.AppendChar(c);
+                return secureString;
+            }
+            public override void Write(Utf8JsonWriter writer, System.Security.SecureString value, JsonSerializerOptions options)
+            {
+                if (_mask)
+                {
+                    writer.WriteStringValue("*****");
+                }
+                else
+                {
+                    var passwordString = System.Runtime.InteropServices.Marshal.PtrToStringUni(
+                            System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocUnicode(value));
+                    writer.WriteStringValue(passwordString);
+                }
+            }
+        }
+
         /// <summary>
         /// Deserialize JSON to <see cref="Dictionary{string, object?}"/> and serialize
         /// </summary>
