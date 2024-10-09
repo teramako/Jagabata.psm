@@ -61,7 +61,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Organization", SupportsShouldProcess = true)]
     [OutputType(typeof(Organization))]
-    public class NewOrganizationCommand : APICmdletBase
+    public class NewOrganizationCommand : NewCommandBase<Organization>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -77,7 +77,7 @@ namespace AWX.Cmdlets
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
         public ulong DefaultEnvironment { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -90,18 +90,14 @@ namespace AWX.Cmdlets
             if (DefaultEnvironment > 0)
                 sendData.Add("default_environment", DefaultEnvironment);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Organization>(Organization.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

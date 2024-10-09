@@ -60,7 +60,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Team", SupportsShouldProcess = true)]
     [OutputType(typeof(Team))]
-    public class NewTeamCommand : APICmdletBase
+    public class NewTeamCommand : NewCommandBase<Team>
     {
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
@@ -73,7 +73,7 @@ namespace AWX.Cmdlets
         [AllowEmptyString]
         public string Description { get; set; } = string.Empty;
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -81,18 +81,14 @@ namespace AWX.Cmdlets
                 { "description", Description },
                 { "organization", Organization },
             };
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Team>(Team.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

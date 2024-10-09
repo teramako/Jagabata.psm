@@ -51,7 +51,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Application", SupportsShouldProcess = true)]
     [OutputType(typeof(Application))]
-    public class NewApplicationCommand : APICmdletBase
+    public class NewApplicationCommand : NewCommandBase<Application>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -77,7 +77,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public SwitchParameter SkipAuthorization { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -93,18 +93,14 @@ namespace AWX.Cmdlets
             if (SkipAuthorization)
                 sendData.Add("skip_authorization", true);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Application>(Application.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

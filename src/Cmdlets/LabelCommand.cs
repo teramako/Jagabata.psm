@@ -66,7 +66,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Label", SupportsShouldProcess = true)]
     [OutputType(typeof(Label))]
-    public class NewLabelCommand : APICmdletBase
+    public class NewLabelCommand : NewCommandBase<Label>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
         public string Name { get; set; } = string.Empty;
@@ -75,23 +75,21 @@ namespace AWX.Cmdlets
         [ValidateRange(1, ulong.MaxValue)]
         public ulong Organization { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
                 { "name", Name },
                 { "organization", Organization },
             };
+            return sendData;
+        }
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
             {
-                try
-                {
-                    var apiResult = CreateResource<Label>(Label.PATH, sendData);
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                WriteObject(result, false);
             }
         }
     }

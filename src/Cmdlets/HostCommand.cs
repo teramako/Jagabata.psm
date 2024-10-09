@@ -76,7 +76,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Host", SupportsShouldProcess = true)]
     [OutputType(typeof(Host))]
-    public class NewHostCommand : APICmdletBase
+    public class NewHostCommand : NewCommandBase<Host>
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
@@ -101,7 +101,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public SwitchParameter Disabled { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -117,18 +117,14 @@ namespace AWX.Cmdlets
             if (Disabled)
                 sendData.Add("enabled", false);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Host>(Host.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

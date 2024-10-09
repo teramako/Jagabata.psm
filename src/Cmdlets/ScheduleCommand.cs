@@ -60,7 +60,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Schedule", SupportsShouldProcess = true)]
     [OutputType(typeof(Schedule))]
-    public class NewScheduleCommand : APICmdletBase
+    public class NewScheduleCommand : NewCommandBase<Schedule>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -135,9 +135,9 @@ namespace AWX.Cmdlets
         [Parameter()]
         public int? Timeout { get; set; }
 
-        protected IDictionary<string, object?> CreateSendData()
+        protected override Dictionary<string, object> CreateSendData()
         {
-            var dict = new Dictionary<string, object?>()
+            var dict = new Dictionary<string, object>()
             {
                 { "name", Name },
                 { "rrule", RRule }
@@ -187,15 +187,9 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Template.Id}/schedules/",
                 _ => throw new ArgumentException("Invalid type")
             };
-            var sendData = CreateSendData();
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (TryCreate(path, out var result))
             {
-                var apiResult = CreateResource<Schedule>(path, sendData);
-                if (apiResult.Contents == null)
-                    return;
-
-                WriteObject(apiResult.Contents, false);
+                WriteObject(result, false);
             }
         }
     }

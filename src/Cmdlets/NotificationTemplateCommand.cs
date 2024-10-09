@@ -205,7 +205,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "NotificationTemplate", SupportsShouldProcess = true)]
     [OutputType(typeof(NotificationTemplate))]
-    public class NewNotificationTemplateCommand : APICmdletBase
+    public class NewNotificationTemplateCommand : NewCommandBase<NotificationTemplate>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -227,7 +227,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public IDictionary Messages { get; set; } = new Hashtable();
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -240,18 +240,14 @@ namespace AWX.Cmdlets
             if (Description != null)
                 sendData.Add("description", Description);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<NotificationTemplate>(NotificationTemplate.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

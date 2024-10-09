@@ -77,7 +77,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Token", SupportsShouldProcess = true, DefaultParameterSetName = "Application")]
     [OutputType(typeof(OAuth2AccessToken))]
-    public class NewTokenCommand : APICmdletBase
+    public class NewTokenCommand : NewCommandBase<OAuth2AccessToken>
     {
         [Parameter(Mandatory = true, ParameterSetName = "User", Position = 0)]
         public SwitchParameter ForMe { get; set; }
@@ -95,43 +95,43 @@ namespace AWX.Cmdlets
         [AllowEmptyString]
         public string? Description { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>();
             if (Description != null)
                 sendData.Add("description", Description);
             sendData.Add("scope", Scope);
+            if (ForMe && Application != null)
+                sendData.Add("application", Application);
 
+            return sendData;
+        }
+
+        protected override void ProcessRecord()
+        {
             ulong? id;
             string path;
-            string target;
+            string action;
             if (ForMe)
             {
                 id = 0;
-                target = "PersonalAccessToken";
+                action = "New Personal Access Token";
                 path = $"{Resources.User.PATH}{id}/tokens/";
-                if (Application != null)
-                    sendData.Add("application", Application);
+            }
+            else if (Application != null)
+            {
+                id = Application;
+                action = $"New Application Access Token [{id}]";
+                path = $"{Resources.Application.PATH}{id}/tokens/";
             }
             else
             {
-                id = Application;
-                target = $"Application [{id}]";
-                path = $"{Resources.Application.PATH}{id}/tokens/";
+                throw new ArgumentException("Parameter `ForMe` or `Application` must be supplied.");
             }
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(target, $"Create Token {dataDescription}"))
+            if (TryCreate(path, out var result, action))
             {
-                try
-                {
-                    var apiResult = CreateResource<OAuth2AccessToken>(path, sendData);
-                    if (apiResult.Contents == null)
-                        return;
-
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                WriteObject(result, false);
             }
         }
     }

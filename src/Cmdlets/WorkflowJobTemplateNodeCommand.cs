@@ -94,7 +94,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "WorkflowJobTemplateNode", DefaultParameterSetName = "UnifiedJobTemplate", SupportsShouldProcess = true)]
     [OutputType(typeof(WorkflowJobTemplateNode))]
-    public class NewWorkflowJobTemplateNodeCommand : APICmdletBase
+    public class NewWorkflowJobTemplateNodeCommand : NewCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
@@ -250,7 +250,7 @@ namespace AWX.Cmdlets
                 sendData.Add("timeout", Timeout);
 
             var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess($"WorkflowJobTemplate [{WorkflowJobtemplate}]", $"Create WorkflowApprovalTemplate {dataDescription}"))
+            if (ShouldProcess($"Create WorkflowApprovalTemplate {dataDescription}", $"WorkflowJobTemplate [{WorkflowJobtemplate}]"))
             {
                 if (TryCreateNode(out var node) &&
                     TryCreateApprovalTemplate(node, sendData, out var template) &&
@@ -261,11 +261,8 @@ namespace AWX.Cmdlets
             }
         }
 
-        protected void CreateWorkflowNode()
+        protected override Dictionary<string, object> CreateSendData()
         {
-            var path = ParentNode == null
-                ? $"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/"
-                : $"{WorkflowJobTemplateNode.PATH}{ParentNode}/{RunUpon}_nodes/";
             var sendData = new Dictionary<string, object>()
             {
                 { "unified_job_template", UnifiedJobTemplate }
@@ -301,8 +298,18 @@ namespace AWX.Cmdlets
             if (Identifier != null)
                 sendData.Add("identifier", Identifier);
 
+            return sendData;
+        }
+
+        protected void CreateWorkflowNode()
+        {
+            var path = ParentNode == null
+                ? $"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/"
+                : $"{WorkflowJobTemplateNode.PATH}{ParentNode}/{RunUpon}_nodes/";
+
+            var sendData = CreateSendData();
             var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess($"WorkflowJobTemplate [{WorkflowJobtemplate}]", $"Create WorkflowTemplateNode {dataDescription}"))
+            if (ShouldProcess($"Create WorkflowTemplateNode {dataDescription}", $"WorkflowJobTemplate [{WorkflowJobtemplate}]"))
             {
                 try
                 {

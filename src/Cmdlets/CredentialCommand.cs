@@ -86,7 +86,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Credential", SupportsShouldProcess = true)]
     [OutputType(typeof(Credential))]
-    public class NewCredentialCommand : APICmdletBase
+    public class NewCredentialCommand : NewCommandBase<Credential>
     {
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
@@ -110,7 +110,7 @@ namespace AWX.Cmdlets
         ])]
         public IResource? Owner { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -144,18 +144,14 @@ namespace AWX.Cmdlets
 
             // FIXME: Validation of Inputs value from CredentialType data
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Credential>(Credential.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

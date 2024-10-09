@@ -52,7 +52,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "CredentialType", SupportsShouldProcess = true)]
     [OutputType(typeof(CredentialType))]
-    public class NewCredentialTypeCommand : APICmdletBase
+    public class NewCredentialTypeCommand : NewCommandBase<CredentialType>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -71,7 +71,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public IDictionary Injectors { get; set; } = new Hashtable();
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -82,18 +82,15 @@ namespace AWX.Cmdlets
             };
             if (Description != null)
                 sendData.Add("description", Description);
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<CredentialType>(CredentialType.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+            return sendData;
+        }
+
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

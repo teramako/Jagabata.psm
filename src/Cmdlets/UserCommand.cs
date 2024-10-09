@@ -135,7 +135,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "User", SupportsShouldProcess = true, DefaultParameterSetName = "Credential")]
     [OutputType(typeof(User))]
-    public class NewUserCommand : APICmdletBase
+    public class NewUserCommand : NewCommandBase<User>
     {
         [Parameter(Mandatory = true, ParameterSetName = "Credential", Position = 0)]
         [Credential]
@@ -165,64 +165,59 @@ namespace AWX.Cmdlets
         [Parameter()]
         public SwitchParameter IsSystemAuditor { get; set; }
 
-        protected override void ProcessRecord()
+        private string? _user;
+        private SecureString? _password;
+        private bool _passwordInputedFromPrompt = false;
+
+        private void GatherUserAndPassword()
         {
-            string? user = null;
-            SecureString? password = null;
-            bool passwordPrompt = false;
             if (Credential != null)
             {
-                user = Credential.UserName;
-                password = Credential.Password;
+                _user = Credential.UserName;
+                _password = Credential.Password;
             }
             else 
             {
-                user = UserName;
+                _user = UserName;
                 if (Password != null)
                 {
-                    password = Password;
+                    _password = Password;
                 }
                 else
                 {
                     if (CommandRuntime.Host == null)
                         throw new NullReferenceException();
 
-                    passwordPrompt = true;
+                    _passwordInputedFromPrompt = true;
                     var prompt = new AskPrompt(CommandRuntime.Host);
-                    if (!prompt.AskPassword($"Password for {user}", "Password", "", out var pass))
+                    if (!prompt.AskPassword($"Password for {_user}", "Password", "", out var pass))
                     {
                         return;
                     }
-                    password = pass.Input;
+                    _password = pass.Input;
                 }
             }
 
-            if (password == null || password.Length == 0)
+            if (_password == null || _password.Length == 0)
             {
-                WriteError(new ErrorRecord(new ArgumentException("Password should not be empty."),
-                                           "Invalid Argument",
-                                           ErrorCategory.InvalidArgument,
-                                           null));
-                return;
+                throw new ArgumentException("Password should not be empty.");
             }
 
-            if (string.IsNullOrEmpty(user))
+            if (string.IsNullOrEmpty(_user))
             {
-                if (passwordPrompt)
-                    password.Dispose();
-                WriteError(new ErrorRecord(new ArgumentException("UserName should not be empty."),
-                                           "Invalid Argument",
-                                           ErrorCategory.InvalidArgument,
-                                           null));
-                return;
+                if (_passwordInputedFromPrompt)
+                    _password.Dispose();
+                throw new ArgumentException("UserName should not be empty.");
             }
+        }
 
-
-            var sendData = new Dictionary<string, object>()
-            {
-                { "username", user },
-                { "password", password },
-            };
+        protected override Dictionary<string, object> CreateSendData()
+        {
+            var sendData = new Dictionary<string, object>();
+            if (_user != null)
+                sendData.Add("username", _user);
+            if (_password != null)
+                sendData.Add("password", _password);
             if (!string.IsNullOrEmpty(FirstName))
                 sendData.Add("first_name", FirstName);
             if (!string.IsNullOrEmpty(LastName))
@@ -234,18 +229,28 @@ namespace AWX.Cmdlets
             if (IsSystemAuditor)
                 sendData.Add("is_system_auditor", IsSystemAuditor);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            return sendData;
+        }
+
+        protected override void ProcessRecord()
+        {
+            try
             {
-                try
-                {
-                    var apiResult = CreateResource<User>(User.PATH, sendData);
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                GatherUserAndPassword();
             }
-            if (passwordPrompt)
-                password.Dispose();
+            catch (Exception e)
+            {
+                WriteError(new ErrorRecord(e, "Invalid UserName or Password", ErrorCategory.InvalidArgument, null));
+                return;
+            }
+
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
+            }
+
+            if (_passwordInputedFromPrompt && _password != null)
+                _password.Dispose();
         }
     }
 

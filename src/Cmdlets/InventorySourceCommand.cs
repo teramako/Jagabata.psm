@@ -58,7 +58,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "InventorySource", SupportsShouldProcess = true)]
     [OutputType(typeof(InventorySource))]
-    public class NewInventorySourceCommand : APICmdletBase
+    public class NewInventorySourceCommand : NewCommandBase<InventorySource>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -134,7 +134,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public int? UpdateCacheTimeout { get; set; }
 
-        private Dictionary<string, object> CreateSendData()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -179,19 +179,9 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            var sendData = CreateSendData();
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (TryCreate(out var result))
             {
-                try
-                {
-                    var apiResult = CreateResource<InventorySource>(InventorySource.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
-
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                WriteObject(result, false);
             }
         }
     }

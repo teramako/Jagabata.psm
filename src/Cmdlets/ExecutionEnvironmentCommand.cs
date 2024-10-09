@@ -48,7 +48,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "ExecutionEnvironment", SupportsShouldProcess = true)]
     [OutputType(typeof(ExecutionEnvironment))]
-    public class NewExecutionEnvironmentCommand : APICmdletBase
+    public class NewExecutionEnvironmentCommand : NewCommandBase<ExecutionEnvironment>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -73,7 +73,7 @@ namespace AWX.Cmdlets
         [ValidateSet("", "always", "missing", "never")]
         public string? Pull { get; set; } = string.Empty;
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -88,18 +88,14 @@ namespace AWX.Cmdlets
             if (Pull != null)
                 sendData.Add("pull", Pull);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<ExecutionEnvironment>(ExecutionEnvironment.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

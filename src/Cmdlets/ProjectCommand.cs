@@ -88,7 +88,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Project", DefaultParameterSetName = "Manual", SupportsShouldProcess = true)]
     [OutputType(typeof(Project))]
-    public class NewProjectCommand : APICmdletBase
+    public class NewProjectCommand : NewCommandBase<Project>
     {
         [Parameter(ParameterSetName = "Manual", Mandatory = true)]
         public SwitchParameter Local { get; set; }
@@ -178,7 +178,7 @@ namespace AWX.Cmdlets
         [ValidateRange(0, int.MaxValue)]
         public int Timeout { get; set; }
 
-        private Dictionary<string, object> CreateSendData()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -228,20 +228,9 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var sendData = CreateSendData();
-
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (TryCreate(out var result))
             {
-                try
-                {
-                    var apiResult = CreateResource<Project>(Project.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
-
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                WriteObject(result, false);
             }
         }
 

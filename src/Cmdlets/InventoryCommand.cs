@@ -77,7 +77,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Inventory", SupportsShouldProcess = true, DefaultParameterSetName = "NormalInventory")]
     [OutputType(typeof(Inventory))]
-    public class NewInventoryCommand : APICmdletBase
+    public class NewInventoryCommand : NewCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
@@ -104,7 +104,7 @@ namespace AWX.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "SmartInventory")]
         public string HostFilter { get; set; } = string.Empty;
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -124,18 +124,14 @@ namespace AWX.Cmdlets
                 sendData.Add("host_filter", HostFilter);
             }
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Inventory>(Inventory.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }

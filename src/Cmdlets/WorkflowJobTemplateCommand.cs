@@ -547,7 +547,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "WorkflowJobTemplate", SupportsShouldProcess = true)]
     [OutputType(typeof(WorkflowJobTemplate))]
-    public class NewWorkflowJobTemplateCommand : APICmdletBase
+    public class NewWorkflowJobTemplateCommand : NewCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -611,7 +611,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public SwitchParameter AllowSimultaneous { get; set; }
 
-        protected IDictionary<string, object> CreateSendData()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var dict = new Dictionary<string, object>()
             {
@@ -660,19 +660,9 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var sendData = CreateSendData();
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (TryCreate(out var result))
             {
-                try
-                {
-                    var apiResult = CreateResource<WorkflowJobTemplate>(WorkflowJobTemplate.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
-
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+                WriteObject(result, false);
             }
         }
     }

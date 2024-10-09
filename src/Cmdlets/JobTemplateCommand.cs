@@ -1020,7 +1020,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "JobTemplate", SupportsShouldProcess = true)]
     [OutputType(typeof(JobTemplate))]
-    public class NewJobTemplateCommand : APICmdletBase
+    public class NewJobTemplateCommand : NewCommandBase<JobTemplate>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -1150,7 +1150,7 @@ namespace AWX.Cmdlets
         [Parameter()]
         public SwitchParameter PreventInstanceGroupFallback { get; set; }
 
-        protected IDictionary<string, object> CreateSendData()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var dict = new Dictionary<string, object>()
             {
@@ -1241,15 +1241,9 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            var sendData = CreateSendData();
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (TryCreate(out var result))
             {
-                var apiResult = CreateResource<JobTemplate>(JobTemplate.PATH, sendData);
-                if (apiResult.Contents == null)
-                    return;
-
-                WriteObject(apiResult.Contents, false);
+                WriteObject(result, false);
             }
         }
     }

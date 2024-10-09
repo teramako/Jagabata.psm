@@ -72,7 +72,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsCommon.New, "Group", SupportsShouldProcess = true)]
     [OutputType(typeof(Group))]
-    public class NewGroupCommand : APICmdletBase
+    public class NewGroupCommand : NewCommandBase<Group>
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
@@ -90,7 +90,7 @@ namespace AWX.Cmdlets
         [ExtraVarsArgumentTransformation]
         public string? Variables { get; set; }
 
-        protected override void ProcessRecord()
+        protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>()
             {
@@ -102,18 +102,14 @@ namespace AWX.Cmdlets
             if (Variables != null)
                 sendData.Add("variables", Variables);
 
-            var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
-            {
-                try
-                {
-                    var apiResult = CreateResource<Group>(Group.PATH, sendData);
-                    if (apiResult.Contents == null)
-                        return;
+            return sendData;
+        }
 
-                    WriteObject(apiResult.Contents, false);
-                }
-                catch (RestAPIException) { }
+        protected override void ProcessRecord()
+        {
+            if (TryCreate(out var result))
+            {
+                WriteObject(result, false);
             }
         }
     }
