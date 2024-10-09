@@ -1,4 +1,4 @@
-using System.Management.Automation;
+using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AWX.Resources;
@@ -9,17 +9,24 @@ namespace AWX
     {
 
         [JsonConstructor]
-        public ApiConfig(Uri origin, string token, DateTime? lastSaved) : this(origin, token)
+        public ApiConfig(Uri origin, SecureString token, DateTime? lastSaved) : this(origin, token)
         {
             LastSaved = lastSaved;
         }
-        public ApiConfig(Uri uri, string token)
+        public ApiConfig(Uri uri, SecureString token)
         {
             Origin = new Uri($"{uri.Scheme}://{uri.Authority}");
             Token = token;
         }
         public ApiConfig()
         {
+        }
+        ~ApiConfig()
+        {
+            if (Token != null)
+            {
+                Token.Dispose();
+            }
         }
         /// <summary>
         /// The URL of AWX.<br/>
@@ -32,8 +39,7 @@ namespace AWX
         /// This token is assigned to the <c>Authorization</c> HTTP request header
         /// </summary>
         [JsonPropertyName("token")]
-        [Hidden]
-        public string Token { get; private set; } = string.Empty;
+        public SecureString? Token { get; private set; }
         [JsonPropertyName("last_saved")]
         public DateTime? LastSaved { get; private set; }
         /// <summary>
@@ -175,6 +181,16 @@ namespace AWX
                 return _userName;
             }
             init { _userName = value; }
+        }
+
+        internal string? GetTokenString()
+        {
+            if (Token == null)
+                return null;
+
+            var str = System.Runtime.InteropServices.Marshal.PtrToStringUni(
+                    System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocUnicode(Token));
+            return str;
         }
     }
 }

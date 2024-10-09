@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Host;
-using System.Runtime.InteropServices;
 using System.Security;
 
 namespace AWX.Cmdlets
@@ -70,12 +69,7 @@ namespace AWX.Cmdlets
                 WriteVerbose("Canceled.");
                 return;
             }
-            var token = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(secureString));
-            if (token == null)
-            {
-                return;
-            }
-            config = new ApiConfig(Uri, token);
+            config = new ApiConfig(Uri, secureString);
         }
         protected override void EndProcessing()
         {

@@ -41,13 +41,14 @@ namespace AWX
                     DefaultRequestVersion = HttpVersion.Version11,
                 };
                 _client.DefaultRequestHeaders.Add("Accept", "application/json");
-                if (!string.IsNullOrEmpty(config.Token))
+                var token = config.GetTokenString();
+                if (!string.IsNullOrEmpty(token))
                 {
-                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.Token}");
+                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                 }
                 return _client;
             }
-            private set
+            set
             {
                 _client?.Dispose();
                 _client = value;
@@ -73,9 +74,10 @@ namespace AWX
             }
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("Accept", "application/json");
-            if (!string.IsNullOrEmpty(config.Token))
+            var token = config.GetTokenString();
+            if (!string.IsNullOrEmpty(token))
             {
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.Token}");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
             }
         }
         private static async Task<RestAPIException> CreateException(HttpResponseMessage response, string contentType)
