@@ -28,6 +28,7 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Register, "SurveySpec", SupportsShouldProcess = true)]
+    [OutputType(typeof(void))]
     public class RegisterSurverySpecCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -58,7 +59,7 @@ namespace AWX.Cmdlets
             };
             var sendData = new Survey() { Name = Name, Description = Description, Spec = Spec };
             var dataDescription = Json.Stringify(sendData, pretty: true);
-            if (ShouldProcess(dataDescription))
+            if (ShouldProcess(dataDescription, $"Register Survey to {Template.Type} [{Template.Id}]"))
             {
                 var apiResult = CreateResource<Survey>(path, sendData);
                 if (apiResult.Response.IsSuccessStatusCode)
