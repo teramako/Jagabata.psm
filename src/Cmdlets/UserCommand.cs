@@ -327,7 +327,7 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Register, "User", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class RegisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -351,12 +351,12 @@ namespace AWX.Cmdlets
                 ResourceType.Role => $"{Role.PATH}{To.Id}/users/",
                 _ => throw new ArgumentException($"Invalid resource type: {To.Type}")
             };
-            WriteObject(Register(path, Id, To));
+            Register(path, Id, To);
         }
     }
 
     [Cmdlet(VerbsLifecycle.Unregister, "User", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class UnregisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -380,7 +380,7 @@ namespace AWX.Cmdlets
                 ResourceType.Role => $"{Role.PATH}{From.Id}/users/",
                 _ => throw new ArgumentException($"Invalid resource type: {From.Type}")
             };
-            WriteObject(Unregister(path, Id, From));
+            Unregister(path, Id, From);
         }
     }
 

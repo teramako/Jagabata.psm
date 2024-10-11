@@ -157,7 +157,7 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Register, "Credential", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class RegisterCredentialCommand : RegistrationCommandBase<Credential>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -184,11 +184,11 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{To.Id}/credentials/",
                 _ => throw new ArgumentException($"Invalid resource type: {To.Type}")
             };
-            WriteObject(Register(path, Id, To));
+            Register(path, Id, To);
         }
     }
     [Cmdlet(VerbsLifecycle.Unregister, "Credential", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class UnregisterCredentialCommand : RegistrationCommandBase<Credential>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -215,7 +215,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{From.Id}/credentials/",
                 _ => throw new ArgumentException($"Invalid resource type: {From.Type}")
             };
-            WriteObject(Unregister(path, Id, From));
+            Unregister(path, Id, From);
         }
     }
 

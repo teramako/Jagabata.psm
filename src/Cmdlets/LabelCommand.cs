@@ -95,7 +95,7 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Register, "Label", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class RegisterLabelCommand : RegistrationCommandBase<Label>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -123,12 +123,12 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{To.Id}/labels/",
                 _ => throw new ArgumentException($"Invalid resource type: {To.Type}")
             };
-            WriteObject(Register(path, Id, To));
+            Register(path, Id, To);
         }
     }
 
     [Cmdlet(VerbsLifecycle.Unregister, "Label", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class UnregisterLabelCommand : RegistrationCommandBase<Label>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
@@ -156,7 +156,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{From.Id}/labels/",
                 _ => throw new ArgumentException($"Invalid resource type: {From.Type}")
             };
-            WriteObject(Unregister(path, Id, From));
+            Unregister(path, Id, From);
         }
     }
 
