@@ -220,29 +220,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "Credential", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveCredentialCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveCredentialCommand : RemoveCommandBase<Credential>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"Credential [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{Credential.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Credential {Id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 

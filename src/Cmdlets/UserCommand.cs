@@ -385,29 +385,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "User", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveUserCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveUserCommand : RemoveCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"User [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{User.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"User {Id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 }

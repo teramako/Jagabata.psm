@@ -94,29 +94,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "Team", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveTeamCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveTeamCommand : RemoveCommandBase<Team>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Team])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"Team [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{Team.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Team {Id} is removed.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 

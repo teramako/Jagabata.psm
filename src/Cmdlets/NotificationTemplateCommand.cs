@@ -309,29 +309,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "NotificationTemplate", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveNotificationTemplateCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveNotificationTemplateCommand : RemoveCommandBase<NotificationTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"NotificationTemplate [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{NotificationTemplate.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"NotificationTemplate {Id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 

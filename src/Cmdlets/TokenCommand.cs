@@ -137,29 +137,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "Token", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveTokenCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveTokenCommand : RemoveCommandBase<OAuth2AccessToken>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2AccessToken])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"Token [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{OAuth2AccessToken.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Token {Id} is removed.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 

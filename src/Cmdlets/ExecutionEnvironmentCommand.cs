@@ -160,29 +160,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "ExecutionEnvironment", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveExecutionEnvironmentCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveExecutionEnvironmentCommand : RemoveCommandBase<ExecutionEnvironment>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"ExecutionEnvironment [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{ExecutionEnvironment.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"ExecutionEnvironment {Id} is removed.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 }

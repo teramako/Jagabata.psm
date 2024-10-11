@@ -74,7 +74,8 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "SurveySpec", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveSurveySpecCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveSurveySpecCommand : RemoveCommandBase<SurveySpec>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
@@ -83,29 +84,15 @@ namespace AWX.Cmdlets
         ])]
         public IResource Template { get; set; } = new Resource(0, 0);
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
             var path = Template.Type switch
             {
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Template.Id}/survey_spec/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Template.Id}/survey_spec/",
+                ResourceType.JobTemplate => JobTemplate.PATH,
+                ResourceType.WorkflowJobTemplate => WorkflowJobTemplate.PATH,
                 _ => throw new ArgumentException($"Invalid Resource Type: {Template.Type}")
             };
-            if (Force || ShouldProcess($"Delete SurveySpec from {Template.Type} [{Template.Id}]"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource(path);
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Survey in {Template.Type} [{Template.Id}] is removed.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(path, Template.Id, $"Delete SurveySpec from {Template.Type} [{Template.Id}]");
         }
     }
 }

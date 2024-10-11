@@ -158,34 +158,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "Application", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveApplicationCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveApplicationCommand : RemoveCommandBase<Application>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2Application])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
-        private void Delete(ulong id)
-        {
-            if (Force || ShouldProcess($"Application [{id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{Application.PATH}{id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Application {id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
-        }
-
         protected override void ProcessRecord()
         {
-            Delete(Id);
+            TryDelete(Id);
         }
     }
 }

@@ -190,33 +190,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "Inventory", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveInventoryCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveInventoryCommand : RemoveCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
-        private void Delete(ulong id)
-        {
-            if (Force || ShouldProcess($"Inventory [{id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{Inventory.PATH}{id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"Inventory {id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
-        }
         protected override void ProcessRecord()
         {
-            Delete(Id);
+            TryDelete(Id);
         }
     }
 }

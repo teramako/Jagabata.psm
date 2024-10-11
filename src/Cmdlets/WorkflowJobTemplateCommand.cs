@@ -793,29 +793,16 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Remove, "WorkflowJobTemplate", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
-    public class RemoveWorkflowJobTemplateCommand : APICmdletBase
+    [OutputType(typeof(void))]
+    public class RemoveWorkflowJobTemplateCommand : RemoveCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
         public ulong Id { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Force { get; set; }
-
         protected override void ProcessRecord()
         {
-            if (Force || ShouldProcess($"WorkflowJobTemplate [{Id}]", "Delete completely"))
-            {
-                try
-                {
-                    var apiResult = DeleteResource($"{WorkflowJobTemplate.PATH}{Id}/");
-                    if (apiResult?.IsSuccessStatusCode ?? false)
-                    {
-                        WriteVerbose($"WorkflowJobTemplate {Id} is deleted.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            TryDelete(Id);
         }
     }
 }
