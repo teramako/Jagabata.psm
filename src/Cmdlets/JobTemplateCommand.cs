@@ -979,15 +979,11 @@ namespace AWX.Cmdlets
             {
                 Id = JobTemplate.Id;
             }
-            try
+            var launchResult = Launch(Id);
+            if (launchResult != null)
             {
-                var launchResult = Launch(Id);
-                if (launchResult != null)
-                {
-                    JobProgressManager.Add(launchResult);
-                }
+                JobProgressManager.Add(launchResult);
             }
-            catch (RestAPIException) { }
         }
         protected override void EndProcessing()
         {
@@ -1006,15 +1002,11 @@ namespace AWX.Cmdlets
             {
                 Id = JobTemplate.Id;
             }
-            try
+            var launchResult = Launch(Id);
+            if (launchResult != null)
             {
-                var launchResult = Launch(Id);
-                if (launchResult != null)
-                {
-                    WriteObject(launchResult, false);
-                }
+                WriteObject(launchResult, false);
             }
-            catch (RestAPIException) { }
         }
     }
 

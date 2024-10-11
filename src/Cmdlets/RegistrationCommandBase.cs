@@ -15,16 +15,12 @@ public abstract class RegistrationCommandBase<TResource> : APICmdletBase where T
             {
                 { "id", targetId },
             };
-            try
+            var result = CreateResource<string>(path, sendData);
+            if (result.Response.IsSuccessStatusCode)
             {
-                var result = CreateResource<string>(path, sendData);
-                if (result.Response.IsSuccessStatusCode)
-                {
-                    WriteVerbose($"{targetDescription} is registered to {toDescription}.");
-                }
-                return result.Response.IsSuccessStatusCode;
+                WriteVerbose($"{targetDescription} is registered to {toDescription}.");
             }
-            catch (RestAPIException) { }
+            return result.Response.IsSuccessStatusCode;
         }
         return false;
     }
@@ -41,16 +37,12 @@ public abstract class RegistrationCommandBase<TResource> : APICmdletBase where T
                 { "id", targetId },
                 { "disassociate", true }
             };
-            try
+            var result = CreateResource<string>(path, sendData);
+            if (result.Response.IsSuccessStatusCode)
             {
-                var result = CreateResource<string>(path, sendData);
-                if (result.Response.IsSuccessStatusCode)
-                {
-                    WriteVerbose($"{targetDescription} is unregistered from {fromDescription}.");
-                }
-                return result.Response.IsSuccessStatusCode;
+                WriteVerbose($"{targetDescription} is unregistered from {fromDescription}.");
             }
-            catch (RestAPIException) { }
+            return result.Response.IsSuccessStatusCode;
         }
         return false;
     }

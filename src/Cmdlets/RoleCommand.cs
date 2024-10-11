@@ -128,15 +128,11 @@ namespace AWX.Cmdlets
                     {
                         { "id", role.Id }
                     };
-                    try
+                    var apiResult = CreateResource<string>(path, sendData);
+                    if (apiResult.Response.IsSuccessStatusCode)
                     {
-                        var apiResult = CreateResource<string>(path, sendData);
-                        if (apiResult.Response.IsSuccessStatusCode)
-                        {
-                            WriteVerbose("Success");
-                        }
+                        WriteVerbose("Success");
                     }
-                    catch (RestAPIException) { }
                 }
             }
         }
@@ -174,15 +170,11 @@ namespace AWX.Cmdlets
                         { "id", role.Id },
                         { "disassociate", true }
                     };
-                    try
+                    var apiResult = CreateResource<string>(path, sendData);
+                    if (apiResult.Response.IsSuccessStatusCode)
                     {
-                        var apiResult = CreateResource<string>(path, sendData);
-                        if (apiResult.Response.IsSuccessStatusCode)
-                        {
-                            WriteVerbose("Success");
-                        }
+                        WriteVerbose("Success");
                     }
-                    catch (RestAPIException) { }
                 }
             }
         }

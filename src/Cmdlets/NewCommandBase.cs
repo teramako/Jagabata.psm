@@ -32,13 +32,9 @@ public abstract class NewCommandBase<TResource> : APICmdletBase where TResource 
                 ? ShouldProcess(dataDescription)
                 : ShouldProcess(dataDescription, action))
         {
-            try
-            {
-                var apiResult = CreateResource<TResource>(path, sendData);
-                result = apiResult.Contents;
-                return result != null;
-            }
-            catch (RestAPIException) { }
+            var apiResult = CreateResource<TResource>(path, sendData);
+            result = apiResult.Contents;
+            return result != null;
         }
         return false;
     }

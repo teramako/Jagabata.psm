@@ -91,13 +91,9 @@ namespace AWX.Cmdlets
             {
                 Id = SystemJobTemplate.Id;
             }
-            try
-            {
-                var job = Launch(Id);
-                WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
-                JobProgressManager.Add(job);
-            }
-            catch (RestAPIException) { }
+            var job = Launch(Id);
+            WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
+            JobProgressManager.Add(job);
         }
         protected override void EndProcessing()
         {
@@ -115,13 +111,9 @@ namespace AWX.Cmdlets
             {
                 Id = SystemJobTemplate.Id;
             }
-            try
-            {
-                var job = Launch(Id);
-                WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
-                WriteObject(job);
-            }
-            catch (RestAPIException) { }
+            var job = Launch(Id);
+            WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
+            WriteObject(job);
         }
     }
 }

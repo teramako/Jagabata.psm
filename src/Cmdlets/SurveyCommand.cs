@@ -60,15 +60,11 @@ namespace AWX.Cmdlets
             var dataDescription = Json.Stringify(sendData, pretty: true);
             if (ShouldProcess(dataDescription))
             {
-                try
+                var apiResult = CreateResource<Survey>(path, sendData);
+                if (apiResult.Response.IsSuccessStatusCode)
                 {
-                    var apiResult = CreateResource<Survey>(path, sendData);
-                    if (apiResult.Response.IsSuccessStatusCode)
-                    {
-                        WriteVerbose("Success");
-                    }
+                    WriteVerbose("Success");
                 }
-                catch (RestAPIException) { }
             }
         }
     }

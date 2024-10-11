@@ -123,13 +123,9 @@ namespace AWX.Cmdlets
             }
             else
             {
-                try
-                {
-                    var job = UpdateProject(Id);
-                    WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
-                    JobProgressManager.Add(job);
-                }
-                catch (RestAPIException) { }
+                var job = UpdateProject(Id);
+                WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
+                JobProgressManager.Add(job);
             }
         }
         protected override void EndProcessing()
@@ -159,13 +155,9 @@ namespace AWX.Cmdlets
             }
             else
             {
-                try
-                {
-                    var job = UpdateProject(Id);
-                    WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
-                    WriteObject(job, false);
-                }
-                catch (RestAPIException) { }
+                var job = UpdateProject(Id);
+                WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
+                WriteObject(job, false);
             }
         }
     }

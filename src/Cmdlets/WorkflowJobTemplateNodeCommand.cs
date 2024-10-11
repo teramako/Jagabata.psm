@@ -192,51 +192,30 @@ namespace AWX.Cmdlets
             };
             if (Identifier != null)
                 sendData.Add("identifier", Identifier);
-            try
-            {
-                var apiResponse = CreateResource<WorkflowJobTemplateNode>($"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/", sendData);
-                node = apiResponse.Contents;
-                return apiResponse.Response.IsSuccessStatusCode;
-            }
-            catch (RestAPIException)
-            {
-                node = null;
-                return false;
-            }
+
+            var apiResponse = CreateResource<WorkflowJobTemplateNode>($"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/", sendData);
+            node = apiResponse.Contents;
+            return apiResponse.Response.IsSuccessStatusCode;
         }
         private bool TryCreateApprovalTemplate(WorkflowJobTemplateNode node,
                                                IDictionary<string, object> sendData,
                                                [MaybeNullWhen(false)] out WorkflowApprovalTemplate result)
         {
-            try
-            {
-                var apiResponse = CreateResource<WorkflowApprovalTemplate>($"{WorkflowJobTemplateNode.PATH}{node.Id}/create_approval_template/", sendData);
-                result = apiResponse.Contents;
-                return apiResponse.Response.IsSuccessStatusCode;
-            }
-            catch (RestAPIException)
-            {
-                result = null;
-                return false;
-            }
+            var apiResponse = CreateResource<WorkflowApprovalTemplate>($"{WorkflowJobTemplateNode.PATH}{node.Id}/create_approval_template/", sendData);
+            result = apiResponse.Contents;
+            return apiResponse.Response.IsSuccessStatusCode;
         }
         private bool TryAddNode(WorkflowJobTemplateNode node, WorkflowApprovalTemplate template)
         {
             if (ParentNode == null)
                 return true;
-            try
+
+            var sendData = new Dictionary<string, object>()
             {
-                var sendData = new Dictionary<string, object>()
-                {
-                    {"id", template.Id }
-                };
-                var apiResponse = CreateResource<string>($"{WorkflowJobTemplateNode.PATH}{ParentNode}/{RunUpon}_nodes/", sendData);
-                return apiResponse.Response.IsSuccessStatusCode;
-            }
-            catch (RestAPIException)
-            {
-                return false;
-            }
+                {"id", template.Id }
+            };
+            var apiResponse = CreateResource<string>($"{WorkflowJobTemplateNode.PATH}{ParentNode}/{RunUpon}_nodes/", sendData);
+            return apiResponse.Response.IsSuccessStatusCode;
         }
         protected void CreateWorkflowApprovalNode()
         {
@@ -311,15 +290,11 @@ namespace AWX.Cmdlets
             var dataDescription = Json.Stringify(sendData, pretty: true);
             if (ShouldProcess($"Create WorkflowTemplateNode {dataDescription}", $"WorkflowJobTemplate [{WorkflowJobtemplate}]"))
             {
-                try
+                var apiResponse = CreateResource<WorkflowJobTemplateNode>(path, sendData);
+                if (apiResponse.Response.IsSuccessStatusCode)
                 {
-                    var apiResponse = CreateResource<WorkflowJobTemplateNode>(path, sendData);
-                    if (apiResponse.Response.IsSuccessStatusCode)
-                    {
-                        WriteObject(apiResponse.Contents, false);
-                    }
+                    WriteObject(apiResponse.Contents, false);
                 }
-                catch (RestAPIException) { }
             }
         }
 
@@ -485,15 +460,11 @@ namespace AWX.Cmdlets
             };
             if (ShouldProcess($"Link Node[{Id}] to Node[{To}] Upon {RunUpon}"))
             {
-                try
+                var apiResponse = CreateResource<string>(path, sendData);
+                if (apiResponse.Response.IsSuccessStatusCode)
                 {
-                    var apiResponse = CreateResource<string>(path, sendData);
-                    if (apiResponse.Response.IsSuccessStatusCode)
-                    {
-                        WriteVerbose($"Node {Id} is linked to Node[{To}] upon {RunUpon}.");
-                    }
+                    WriteVerbose($"Node {Id} is linked to Node[{To}] upon {RunUpon}.");
                 }
-                catch (RestAPIException) { }
             }
         }
     }

@@ -135,13 +135,8 @@ namespace AWX.Cmdlets
         }
         protected AdHocCommand? Launch()
         {
-            try
-            {
-                var apiResult = CreateResource<AdHocCommand>(GetPath(), SendData);
-                return apiResult.Contents;
-            }
-            catch (RestAPIException) { }
-            return null;
+            var apiResult = CreateResource<AdHocCommand>(GetPath(), SendData);
+            return apiResult.Contents;
         }
     }
 

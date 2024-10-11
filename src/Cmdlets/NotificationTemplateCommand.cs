@@ -376,15 +376,11 @@ namespace AWX.Cmdlets
                 {
                     var path = path1 + path2;
                     var sendData = new Dictionary<string, object>() { { "id", Id } };
-                    try
+                    var apiResult = CreateResource<string>(path, sendData);
+                    if (apiResult.Response.IsSuccessStatusCode)
                     {
-                        var apiResult = CreateResource<string>(path, sendData);
-                        if (apiResult.Response.IsSuccessStatusCode)
-                        {
-                            WriteVerbose($"NotificationTemplate {Id} is enabled to {For.Type} [{For.Id}] on {timing}.");
-                        }
+                        WriteVerbose($"NotificationTemplate {Id} is enabled to {For.Type} [{For.Id}] on {timing}.");
                     }
-                    catch (RestAPIException) { }
                 }
             }
         }
@@ -448,15 +444,11 @@ namespace AWX.Cmdlets
                         { "id", Id },
                         { "disassociate", true }
                     };
-                    try
+                    var apiResult = CreateResource<string>(path, sendData);
+                    if (apiResult.Response.IsSuccessStatusCode)
                     {
-                        var apiResult = CreateResource<string>(path, sendData);
-                        if (apiResult.Response.IsSuccessStatusCode)
-                        {
-                            WriteVerbose($"NotificationTemplate {Id} is disabled to {For.Type} [{For.Id}] on {timing}.");
-                        }
+                        WriteVerbose($"NotificationTemplate {Id} is disabled to {For.Type} [{For.Id}] on {timing}.");
                     }
-                    catch (RestAPIException) { }
                 }
             }
         }

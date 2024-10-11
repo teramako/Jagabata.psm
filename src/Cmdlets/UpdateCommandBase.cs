@@ -34,12 +34,8 @@ public abstract class UpdateCommandBase<TResource> : APICmdletBase where TResour
         var dataDescription = Json.Stringify(sendData, pretty: true);
         if (ShouldProcess($"{typeof(TResource).Name} [{id}]", $"Update {dataDescription}"))
         {
-            try
-            {
-                result = PatchResource<TResource>($"{ApiPath}{id}/", sendData);
-                return true;
-            }
-            catch (RestAPIException) { }
+            result = PatchResource<TResource>($"{ApiPath}{id}/", sendData);
+            return true;
         }
         return false;
     }

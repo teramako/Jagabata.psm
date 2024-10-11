@@ -149,24 +149,16 @@ namespace AWX.Cmdlets
             switch (Source.Type)
             {
                 case ResourceType.Inventory:
-                    try
+                    foreach (var inventoryUpdateJob in UpdateInventory(Source.Id))
                     {
-                        foreach (var job in UpdateInventory(Source.Id))
-                        {
-                            WriteVerbose($"Update InventorySource:{job.InventorySource} => Job:[{job.Id}]");
-                            JobProgressManager.Add(job);
-                        }
+                        WriteVerbose($"Update InventorySource:{inventoryUpdateJob.InventorySource} => Job:[{inventoryUpdateJob.Id}]");
+                        JobProgressManager.Add(inventoryUpdateJob);
                     }
-                    catch (RestAPIException) { }
                     break;
                 case ResourceType.InventorySource:
-                    try
-                    {
-                        var job = UpdateInventorySource(Id);
-                        WriteVerbose($"Update InventorySource:{job.InventorySource} => Job:[{job.Id}]");
-                        JobProgressManager.Add(job);
-                    }
-                    catch (RestAPIException) { }
+                    var inventorySourceUpdateJob = UpdateInventorySource(Id);
+                    WriteVerbose($"Update InventorySource:{inventorySourceUpdateJob.InventorySource} => Job:[{inventorySourceUpdateJob.Id}]");
+                    JobProgressManager.Add(inventorySourceUpdateJob);
                     break;
             }
         }
@@ -201,20 +193,12 @@ namespace AWX.Cmdlets
             switch (Source.Type)
             {
                 case ResourceType.Inventory:
-                    try
-                    {
-                        var jobs = UpdateInventory(Source.Id);
-                        WriteObject(jobs, true);
-                    }
-                    catch (RestAPIException) { }
+                    var inventoryUpdateJobs = UpdateInventory(Source.Id);
+                    WriteObject(inventoryUpdateJobs, true);
                     break;
                 case ResourceType.InventorySource:
-                    try
-                    {
-                        var job = UpdateInventorySource(Source.Id);
-                        WriteObject(job, false);
-                    }
-                    catch (RestAPIException) { }
+                    var inventorySourceUpdateJob = UpdateInventorySource(Source.Id);
+                    WriteObject(inventorySourceUpdateJob, false);
                     break;
             }
         }
