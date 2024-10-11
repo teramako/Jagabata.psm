@@ -2618,9 +2618,9 @@ namespace API_Test
             Console.WriteLine($"{res.Id} [{res.Type}] {res.Name} - {res.Description}");
             Console.WriteLine($"RRule   : {res.Rrule}");
             Console.WriteLine($"Job     : {res.UnifiedJobTemplate}");
-            Console.WriteLine($"Start   : {res.DTStart}");
+            Console.WriteLine($"Start   : {res.DtStart}");
             Console.WriteLine($"NextRun : {res.NextRun}");
-            Console.WriteLine($"End     : {res.DTEnd}");
+            Console.WriteLine($"End     : {res.DtEnd}");
         }
         static void DumpSummary(Schedule.Summary summary)
         {
@@ -2698,8 +2698,8 @@ namespace API_Test
             Console.WriteLine($"CreatedBy          : [{summary.CreatedBy?.Id}] {summary.CreatedBy?.Username}");
             Console.WriteLine($"ModifiedBy         : [{summary.ModifiedBy?.Id}] {summary.ModifiedBy?.Username}");
             Console.WriteLine($"Caps               : {summary.UserCapabilities}");
-            Console.WriteLine($"RecentNotification : ({summary.RecentNotification.Length})");
-            foreach (var notification in summary.RecentNotification)
+            Console.WriteLine($"RecentNotification : ({summary.RecentNotifications.Length})");
+            foreach (var notification in summary.RecentNotifications)
             {
                 Console.WriteLine($"[{notification.Id,3:d}] {notification.Status} Error: {notification.Error}");
             }
