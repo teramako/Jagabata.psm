@@ -148,7 +148,8 @@ namespace AWX.Cmdlets
 
                     break;
             }
-            throw new ArgumentException($"{nameof(inputData)} should be {typeof(IResource)}: {inputData}");
+            throw new ArgumentException($"{nameof(inputData)} should be {nameof(IResource)} or {nameof(IDictionary)} has `Id` and `Type` keys." +
+                                        $" And `Type` should be {string.Join(", ", AcceptableTypes)}");
         }
     }
 }
