@@ -113,8 +113,7 @@ Credential ID.
 
 ## OUTPUTS
 
-### System.Boolean
-Success or Failure
+### None
 
 ## NOTES
 

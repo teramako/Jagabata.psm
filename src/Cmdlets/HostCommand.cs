@@ -184,7 +184,7 @@ namespace AWX.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Register, "Host", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class RegisterHostCommand : RegistrationCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -199,12 +199,12 @@ namespace AWX.Cmdlets
         {
             var parentGroup = new Resource(ResourceType.Group, To);
             var path = $"{Group.PATH}{parentGroup.Id}/hosts/";
-            WriteObject(Register(path, Id, parentGroup));
+            Register(path, Id, parentGroup);
         }
     }
 
     [Cmdlet(VerbsLifecycle.Unregister, "Host", SupportsShouldProcess = true)]
-    [OutputType(typeof(bool))]
+    [OutputType(typeof(void))]
     public class UnregisterHostCommand : RegistrationCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -219,7 +219,7 @@ namespace AWX.Cmdlets
         {
             var parentGroup = new Resource(ResourceType.Group, From);
             var path = $"{Group.PATH}{parentGroup.Id}/hosts/";
-            WriteObject(Unregister(path, Id, parentGroup));
+            Unregister(path, Id, parentGroup);
         }
     }
 

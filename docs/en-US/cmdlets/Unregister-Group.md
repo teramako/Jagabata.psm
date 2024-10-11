@@ -108,8 +108,7 @@ Group Id.
 
 ## OUTPUTS
 
-### System.Boolean
-Success or Failure
+### None
 
 ## NOTES
 

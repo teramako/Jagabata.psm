@@ -108,8 +108,7 @@ Group Id to be a child.
 
 ## OUTPUTS
 
-### System.Boolean
-Success or Failure
+### None
 
 ## NOTES
 
