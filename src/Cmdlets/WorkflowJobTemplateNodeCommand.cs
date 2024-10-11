@@ -436,7 +436,7 @@ namespace AWX.Cmdlets
 
     [Cmdlet(VerbsLifecycle.Register, "WorkflowJobTemplateNode", SupportsShouldProcess = true)]
     [OutputType(typeof(void))]
-    public class RegisterWorkflowJobTemplateNodeCommand : APICmdletBase
+    public class RegisterWorkflowJobTemplateNodeCommand : RegistrationCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
@@ -453,25 +453,16 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
+            var description = $"Link Node[{Id}] to Node[{To}] Upon {RunUpon}";
             var path = $"{WorkflowJobTemplateNode.PATH}{To}/{RunUpon}_nodes/";
-            var sendData = new Dictionary<string, object>()
-            {
-                { "id", Id }
-            };
-            if (ShouldProcess($"Link Node[{Id}] to Node[{To}] Upon {RunUpon}"))
-            {
-                var apiResponse = CreateResource<string>(path, sendData);
-                if (apiResponse.Response.IsSuccessStatusCode)
-                {
-                    WriteVerbose($"Node {Id} is linked to Node[{To}] upon {RunUpon}.");
-                }
-            }
+            var toResource = new Resource(ResourceType.WorkflowJobTemplateNode, To);
+            Register(path, Id, toResource, description);
         }
     }
 
     [Cmdlet(VerbsLifecycle.Unregister, "WorkflowJobTemplateNode", SupportsShouldProcess = true)]
     [OutputType(typeof(void))]
-    public class UnregisterWorkflowJobTemplateNodeCommand : APICmdletBase
+    public class UnregisterWorkflowJobTemplateNodeCommand : RegistrationCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
@@ -515,24 +506,10 @@ namespace AWX.Cmdlets
                 return;
             }
 
+            var description = $"Unlink Node[{Id}] from Node[{From}] upon {upon}";
             var path = $"{WorkflowJobTemplateNode.PATH}{From}/{upon}_nodes/";
-            var sendData = new Dictionary<string, object>()
-            {
-                { "id", Id },
-                { "disassociate", true }
-            };
-            if (ShouldProcess($"Link Node[{Id}] from Node[{From}] upon {upon}"))
-            {
-                try
-                {
-                    var apiResponse = CreateResource<string>(path, sendData);
-                    if (apiResponse.Response.IsSuccessStatusCode)
-                    {
-                        WriteVerbose($"Node {Id} is unlinked from Node[{From}] upon {upon}.");
-                    }
-                }
-                catch (RestAPIException) { }
-            }
+            var fromResource = new Resource(ResourceType.WorkflowJobTemplateNode, From);
+            Unregister(path, Id, fromResource, description);
         }
     }
 
