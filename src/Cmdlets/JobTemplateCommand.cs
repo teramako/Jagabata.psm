@@ -927,10 +927,6 @@ namespace AWX.Cmdlets
         protected JobTemplateJob.LaunchResult? Launch(ulong id)
         {
             var requirements = GetResource<JobTemplateLaunchRequirements>($"{Resources.JobTemplate.PATH}{id}/launch/");
-            if (requirements == null)
-            {
-                return null;
-            }
             ShowJobTemplateInfo(requirements);
             var sendData = CreateSendData();
             if (!TryAskOnLaunch(requirements, sendData, checkOptional: Interactive))

@@ -20,10 +20,6 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             var metrics = GetResource<Metrics>(Metrics.PATH);
-            if (metrics == null)
-            {
-                return;
-            }
             foreach (var (key, item) in metrics)
             {
                 WriteObject(CreateItem(key, item), true);

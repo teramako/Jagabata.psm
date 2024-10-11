@@ -120,10 +120,6 @@ namespace AWX.Cmdlets
         protected void GetLaunchRequirements(ulong id)
         {
             var res = base.GetResource<WorkflowJobTemplateLaunchRequirements>($"{Resources.WorkflowJobTemplate.PATH}{id}/launch/");
-            if (res == null)
-            {
-                return;
-            }
             WriteObject(res, false);
         }
         private void ShowJobTemplateInfo(WorkflowJobTemplateLaunchRequirements requirements)
@@ -455,10 +451,6 @@ namespace AWX.Cmdlets
         protected WorkflowJob.LaunchResult? Launch(ulong id)
         {
             var requirements = GetResource<WorkflowJobTemplateLaunchRequirements>($"{Resources.WorkflowJobTemplate.PATH}{id}/launch/");
-            if (requirements == null)
-            {
-                return null;
-            }
             ShowJobTemplateInfo(requirements);
             if (requirements.NodeTemplatesMissing.Length > 0)
             {

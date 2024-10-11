@@ -64,8 +64,6 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
         if (IdSet.Count == 1)
         {
             var res = GetResource<TResource>($"{ApiPath}{IdSet.First()}/");
-            if (res == null)
-                yield break;
             yield return res;
         }
         else
@@ -101,10 +99,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
                 continue;
             }
             var res = GetResource<TResource>($"{ApiPath}{id}/{subPath}");
-            if (res != null)
-            {
-                yield return res;
-            }
+            yield return res;
         }
     }
 }

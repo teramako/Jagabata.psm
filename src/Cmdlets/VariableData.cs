@@ -26,9 +26,6 @@ namespace AWX.Cmdlets
                 _ => throw new ArgumentException($"Unkown Resource Type: {Type}")
             };
             var variableData = GetResource<Dictionary<string, object?>>(path);
-            if (variableData == null)
-                return;
-
             WriteObject(variableData, false);
         }
     }

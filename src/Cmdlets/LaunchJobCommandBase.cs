@@ -151,7 +151,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
         var extraVars = sendData.ContainsKey("extra_vars")
             ? Yaml.DeserializeToDict(sendData["extra_vars"] as string ?? "")
             : new Dictionary<string, object?>();
-        if (survey != null && survey.Spec?.Length > 0)
+        if (survey.Spec.Length > 0)
         {
             if (CommandRuntime.Host == null)
                 return false;

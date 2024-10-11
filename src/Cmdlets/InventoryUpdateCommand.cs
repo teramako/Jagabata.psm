@@ -81,10 +81,6 @@ namespace AWX.Cmdlets
         protected void CheckCanUpdateInventorySource(ulong id)
         {
             var res = GetResource<CanUpdateInventorySource>($"{InventorySource.PATH}{id}/update/");
-            if (res == null)
-            {
-                return;
-            }
             var psobject = new PSObject();
             psobject.Members.Add(new PSNoteProperty("Id", id));
             psobject.Members.Add(new PSNoteProperty("Type", ResourceType.InventorySource));
@@ -94,10 +90,6 @@ namespace AWX.Cmdlets
         protected void CheckCanUpdateInventory(ulong id)
         {
             var results = GetResource<CanUpdateInventorySource[]>($"{Inventory.PATH}{id}/update_inventory_sources/");
-            if (results == null)
-            {
-                return;
-            }
             foreach (var res in results)
             {
                 var psobject = new PSObject();

@@ -80,10 +80,6 @@ namespace AWX.Cmdlets
         protected void CheckCanUpdate(ulong projectId)
         {
             var res = GetResource<CanUpdateProject>($"{Resources.Project.PATH}{projectId}/update/");
-            if (res == null)
-            {
-                return;
-            }
             var psobject = new PSObject();
             psobject.Members.Add(new PSNoteProperty("Id", projectId));
             psobject.Members.Add(new PSNoteProperty("Type", ResourceType.Project));

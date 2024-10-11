@@ -202,7 +202,6 @@ namespace AWX.Cmdlets
             if (Determine)
             {
                 var result = GetResource<Dictionary<string, bool>>(path);
-                if (result == null) return;
                 result.TryGetValue("can_cancel", out bool canCancel);
                 psobject.Members.Add(new PSNoteProperty("CanCancel", canCancel));
                 WriteObject(psobject);

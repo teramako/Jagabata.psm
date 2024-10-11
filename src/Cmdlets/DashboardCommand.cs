@@ -44,7 +44,7 @@ namespace AWX.Cmdlets
                 path += $"?{query}";
             }
             var apiResult = GetResource<JobStatisticsContainer>(path);
-            WriteObject(apiResult?.Jobs, false);
+            WriteObject(apiResult.Jobs, false);
         }
     }
 }

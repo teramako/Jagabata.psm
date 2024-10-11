@@ -150,7 +150,7 @@ namespace AWX.Cmdlets
                 }
             }
         }
-        private IEnumerable<string?> StdoutLogs(IEnumerable<IResource> jobs)
+        private IEnumerable<string> StdoutLogs(IEnumerable<IResource> jobs)
         {
             foreach (var job in jobs)
             {
@@ -159,13 +159,13 @@ namespace AWX.Cmdlets
                 if (job.Type == ResourceType.SystemJob)
                 {
                     var systemJob = GetResource<SystemJob.Detail>(path);
-                    yield return systemJob?.ResultStdout;
+                    yield return systemJob.ResultStdout;
                     continue;
                 }
                 if (Format == JobLogFormat.json)
                 {
                     var jsonLog = GetResource<JobLog>($"{path}?{Query}");
-                    yield return jsonLog?.Content;
+                    yield return jsonLog.Content;
                 }
                 else
                 {
@@ -273,19 +273,6 @@ namespace AWX.Cmdlets
 
             // Write Log to a fileStream as HTML
             using StreamWriter ws = new(fileStream, Encoding.UTF8);
-            if (htmlLog != null)
-            {
-                int bodyTagStart = htmlLog.IndexOf("<body");
-                if (bodyTagStart > 0)
-                {
-                    int bodyTagEnd = htmlLog.IndexOf('>', bodyTagStart) + 1;
-                    ws.WriteLine(htmlLog[..bodyTagEnd].Replace("<title>Type</title>", $"<title>{title}</title>"));
-                    ws.WriteLine(jobInfo.ToString());
-                    ws.WriteLine(htmlLog[bodyTagEnd..]);
-                    return fileInfo;
-                }
-            }
-
             ws.WriteLine("<html>");
             ws.WriteLine($"<head><meta charset=\"utf-8\"><title>{title}</title></head>");
             ws.WriteLine("<body>");

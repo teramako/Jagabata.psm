@@ -491,9 +491,6 @@ namespace AWX.Cmdlets
         protected override void BeginProcessing()
         {
             var node = GetResource<WorkflowJobTemplateNode>($"{WorkflowJobTemplateNode.PATH}{From}/");
-            if (node == null)
-                StopProcessing();
-
             _parentNode = node;
         }
 

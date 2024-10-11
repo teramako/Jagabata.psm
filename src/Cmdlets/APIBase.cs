@@ -59,7 +59,7 @@ public abstract class APICmdletBase : Cmdlet
     /// <param name="pathAndQuery"></param>
     /// <param name="acceptType"></param>
     /// <returns>Return the result if success, otherwise null</returns>
-    protected TValue? GetResource<TValue>(string pathAndQuery, AcceptType acceptType = AcceptType.Json)
+    protected TValue GetResource<TValue>(string pathAndQuery, AcceptType acceptType = AcceptType.Json)
         where TValue : class
     {
         WriteVerboseRequest(pathAndQuery, Method.GET);
@@ -73,21 +73,18 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (RestAPIException ex)
         {
-            WriteApiError(ex);
+            WriteVerboseResponse(ex.Response);
+            throw;
         }
         catch (AggregateException aex)
         {
             if (aex.InnerException is RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
+                throw ex;
             }
-            else
-            {
-                throw;
-            }
+            throw;
         }
-        return null;
     }
     protected IEnumerable<ResultSet<TValue>> GetResultSet<TValue>(string path,
                                                                   NameValueCollection? query = null,
@@ -126,16 +123,14 @@ public abstract class APICmdletBase : Cmdlet
             catch (RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
-                break;
+                throw;
             }
             catch (AggregateException aex)
             {
                 if (aex.InnerException is RestAPIException ex)
                 {
                     WriteVerboseResponse(ex.Response);
-                    WriteApiError(ex);
-                    break;
+                    throw ex;
                 }
                 throw;
             }
@@ -170,7 +165,6 @@ public abstract class APICmdletBase : Cmdlet
         catch (RestAPIException ex)
         {
             WriteVerboseResponse(ex.Response);
-            WriteApiError(ex);
             throw;
         }
         catch (AggregateException aex)
@@ -178,7 +172,6 @@ public abstract class APICmdletBase : Cmdlet
             if (aex.InnerException is RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
                 throw ex;
             }
             throw;
@@ -207,7 +200,6 @@ public abstract class APICmdletBase : Cmdlet
         catch (RestAPIException ex)
         {
             WriteVerboseResponse(ex.Response);
-            WriteApiError(ex);
             throw;
         }
         catch (AggregateException aex)
@@ -215,7 +207,6 @@ public abstract class APICmdletBase : Cmdlet
             if (aex.InnerException is RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
                 throw ex;
             }
             throw;
@@ -244,7 +235,6 @@ public abstract class APICmdletBase : Cmdlet
         catch (RestAPIException ex)
         {
             WriteVerboseResponse(ex.Response);
-            WriteApiError(ex);
             throw;
         }
         catch (AggregateException aex)
@@ -252,7 +242,6 @@ public abstract class APICmdletBase : Cmdlet
             if (aex.InnerException is RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
                 throw ex;
             }
             throw;
@@ -278,7 +267,6 @@ public abstract class APICmdletBase : Cmdlet
         catch (RestAPIException ex)
         {
             WriteVerboseResponse(ex.Response);
-            WriteApiError(ex);
             throw;
         }
         catch (AggregateException aex)
@@ -286,7 +274,6 @@ public abstract class APICmdletBase : Cmdlet
             if (aex.InnerException is RestAPIException ex)
             {
                 WriteVerboseResponse(ex.Response);
-                WriteApiError(ex);
                 throw ex;
             }
             throw;
@@ -298,7 +285,7 @@ public abstract class APICmdletBase : Cmdlet
     /// </summary>
     /// <param name="pathAndQuery"></param>
     /// <returns>Return the result if success, otherwise null</returns>
-    protected ApiHelp? GetApiHelp(string pathAndQuery)
+    protected ApiHelp GetApiHelp(string pathAndQuery)
     {
         WriteVerboseRequest(pathAndQuery, Method.OPTIONS);
         try
@@ -312,9 +299,17 @@ public abstract class APICmdletBase : Cmdlet
         catch (RestAPIException ex)
         {
             WriteVerboseResponse(ex.Response);
-            WriteApiError(ex);
+            throw;
         }
-        return null;
+        catch (AggregateException aex)
+        {
+            if (aex.InnerException is RestAPIException ex)
+            {
+                WriteVerboseResponse(ex.Response);
+                throw ex;
+            }
+            throw;
+        }
     }
     protected void WriteVerboseRequest(string pathAndQuery, Method method)
     {
