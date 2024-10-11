@@ -4,9 +4,10 @@ namespace AWX.Cmdlets;
 
 public abstract class RegistrationCommandBase<TResource> : APICmdletBase where TResource: class
 {
-    protected bool Register(string path, ulong targetId, IResource toResource)
+    protected bool Register(string path, ulong targetId, IResource toResource, string? targetDescription = null)
     {
-        var targetDescription = $"{typeof(TResource).Name} [{targetId}]";
+        if (targetDescription is null)
+            targetDescription = $"{typeof(TResource).Name} [{targetId}]";
         var toDescription = $"{toResource.Type} [{toResource.Id}]";
 
         if (ShouldProcess(targetDescription, $"Register to {toDescription}"))
@@ -25,9 +26,10 @@ public abstract class RegistrationCommandBase<TResource> : APICmdletBase where T
         return false;
     }
 
-    protected bool Unregister(string path, ulong targetId, IResource fromResource)
+    protected bool Unregister(string path, ulong targetId, IResource fromResource, string? targetDescription = null)
     {
-        var targetDescription = $"{typeof(TResource).Name} [{targetId}]";
+        if (targetDescription is null)
+            targetDescription = $"{typeof(TResource).Name} [{targetId}]";
         var fromDescription = $"{fromResource.Type} [{fromResource.Id}]";
 
         if (ShouldProcess(targetDescription, $"Unregister from {fromDescription}"))
