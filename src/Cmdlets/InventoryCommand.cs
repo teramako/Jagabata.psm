@@ -111,9 +111,9 @@ namespace AWX.Cmdlets
                 { "name", Name },
                 { "organization", Organization },
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Variables != null)
+            if (Variables is not null)
                 sendData.Add("variables", Variables);
             if (PreventInstanceGroupFallback)
                 sendData.Add("prevent_instance_group_fallback", true);
@@ -168,13 +168,13 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Variables != null)
+            if (Variables is not null)
                 sendData.Add("variables", Variables);
-            if (HostFilter != null)
+            if (HostFilter is not null)
                 sendData.Add("host_filter", HostFilter);
-            if (PreventInstanceGroupFallback != null)
+            if (PreventInstanceGroupFallback is not null)
                 sendData.Add("prevent_instance_group_fallback", PreventInstanceGroupFallback);
 
             return sendData;

@@ -49,10 +49,10 @@ namespace AWX
                         {
                             var key = Utils.ToUpperCamelCase(typeValue.GetString() ?? string.Empty);
                             var fieldInfo = typeof(ResourceType).GetField(key);
-                            if (fieldInfo != null)
+                            if (fieldInfo is not null)
                             {
                                 var attr = fieldInfo.GetCustomAttributes<ResourcePathAttribute>(false).FirstOrDefault();
-                                if (attr != null && attr.Type != null)
+                                if (attr is not null && attr.Type is not null)
                                 {
                                     var resourceType = attr.Type;
                                     if (resourceType.IsGenericType && resourceType.IsSubclassOf(typeof(ResultSetBase)))
@@ -60,7 +60,7 @@ namespace AWX
                                         resourceType = resourceType.GenericTypeArguments[0];
                                     }
                                     var obj = val.Deserialize(resourceType, DeserializeOptions);
-                                    if (obj != null)
+                                    if (obj is not null)
                                     {
                                         return obj;
                                     }
@@ -145,7 +145,7 @@ namespace AWX
                     {
                         case JsonTokenType.String:
                             var val = reader.GetString();
-                            if (val != null)
+                            if (val is not null)
                                 dict.Add(propertyName, val);
                             break;
                         case JsonTokenType.StartArray:
@@ -290,7 +290,7 @@ namespace AWX
                 var secureString = new System.Security.SecureString();
                 var stringPassword = reader.GetString();
 
-                if (stringPassword == null)
+                if (stringPassword is null)
                     return secureString;
 
                 foreach (char c in stringPassword)
@@ -479,7 +479,7 @@ namespace AWX
                             var propertyName = reader.GetString();
                             reader.Read();
                             var flag = reader.GetBoolean();
-                            if (flag && propertyName != null)
+                            if (flag && propertyName is not null)
                             {
                                 cap |= Enum.Parse<Capability>(propertyName, true);
                             }

@@ -28,7 +28,7 @@ namespace AWX
         {
             get
             {
-                if (_client != null) return _client;
+                if (_client is not null) return _client;
                 var config = ApiConfig.Instance;
                 var handler = new HttpClientHandler()
                 {
@@ -59,7 +59,7 @@ namespace AWX
         {
             var uri = config.Origin;
             var client = Client;
-            if (client.BaseAddress == null)
+            if (client.BaseAddress is null)
             {
                 client.BaseAddress = uri;
             }
@@ -83,7 +83,7 @@ namespace AWX
         private static async Task<RestAPIException> CreateException(HttpResponseMessage response, string contentType)
         {
             var msg1 = $"{response.StatusCode:d} ({response.ReasonPhrase}): ";
-            var msg2 = (response.RequestMessage != null && response.RequestMessage.RequestUri != null)
+            var msg2 = (response.RequestMessage is not null && response.RequestMessage.RequestUri is not null)
                        ? $" on {response.RequestMessage.Method} {response.RequestMessage.RequestUri.PathAndQuery}"
                        : string.Empty;
             switch (contentType)
@@ -113,7 +113,7 @@ namespace AWX
                 {
                     long contentLength = response.Content.Headers.ContentLength ?? 0;
                     T? stringContents = (contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync()) as T;
-                    if (stringContents == null)
+                    if (stringContents is null)
                         throw new NullReferenceException();
                     return new RestAPIResult<T>(response, stringContents);
                 }
@@ -194,7 +194,7 @@ namespace AWX
                                                                                          bool all = false)
         {
             var sb = new StringBuilder(path);
-            if (query != null && query.Count > 0)
+            if (query is not null && query.Count > 0)
             {
                 sb.Append('?');
                 sb.Append(query.ToString());
@@ -243,7 +243,7 @@ namespace AWX
             if (response.StatusCode == HttpStatusCode.Found)
             {
                 var location = response.Headers.Location;
-                if (location == null)
+                if (location is null)
                 {
                     throw new RestAPIException("Not found Location", response);
                 }
@@ -269,7 +269,7 @@ namespace AWX
         {
             RestAPIResult<ResultSet<T>> apiResult;
             var sb = new StringBuilder(path);
-            if (query != null && query.Count > 0)
+            if (query is not null && query.Count > 0)
             {
                 sb.Append('?');
                 sb.Append(query.ToString());
@@ -279,7 +279,7 @@ namespace AWX
             {
                 apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery);
                 yield return apiResult;
-                if (apiResult.Contents == null)
+                if (apiResult.Contents is null)
                 {
                     break;
                 }
@@ -307,7 +307,7 @@ namespace AWX
         /// <returns><see cref="StringContent"/></returns>
         private static StringContent GetStringContent(object? data)
         {
-            if (data == null)
+            if (data is null)
             {
                 return new StringContent(string.Empty);
             }

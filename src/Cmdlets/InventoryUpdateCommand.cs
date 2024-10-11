@@ -127,7 +127,7 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Source == null)
+            if (Source is null)
             {
                 Source = new Resource(ResourceType.InventorySource, Id);
             }
@@ -171,7 +171,7 @@ namespace AWX.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (Source == null)
+            if (Source is null)
             {
                 Source = new Resource(ResourceType.InventorySource, Id);
             }

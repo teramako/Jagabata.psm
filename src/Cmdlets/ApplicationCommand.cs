@@ -86,9 +86,9 @@ namespace AWX.Cmdlets
                 { "authorization_grant_type", AuthorizationGrantType },
                 { "client_type", $"{ClientType}".ToLowerInvariant() }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (RedirectUris != null)
+            if (RedirectUris is not null)
                 sendData.Add("redirect_uris", RedirectUris);
             if (SkipAuthorization)
                 sendData.Add("skip_authorization", true);
@@ -137,13 +137,13 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Organization != null)
+            if (Organization is not null)
                 sendData.Add("organization", Organization);
-            if (RedirectUris != null)
+            if (RedirectUris is not null)
                 sendData.Add("redirect_uris", RedirectUris);
-            if (ClientType != null)
+            if (ClientType is not null)
                 sendData.Add("client_type", $"{ClientType}".ToLowerInvariant());
 
             return sendData;

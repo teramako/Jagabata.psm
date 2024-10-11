@@ -43,7 +43,7 @@ namespace AWX.Cmdlets
             Dictionary<string, PSObject?>? result = Host.UI.Prompt(string.Empty,
                                                                    "Please enter the your Personal Access Token(PAT)",
                                                                    fdc);
-            if (result == null) return null;
+            if (result is null) return null;
             foreach (PSObject? o in result.Values)
             {
                 if (o?.BaseObject is SecureString secureString)
@@ -56,7 +56,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Uri == null)
+            if (Uri is null)
             {
                 throw new ArgumentNullException(nameof(Uri));
             }
@@ -64,7 +64,7 @@ namespace AWX.Cmdlets
             Host.UI.WriteLine(ConsoleColor.Red, Console.BackgroundColor, banner);
 
             var secureString = GetToken();
-            if (secureString == null)
+            if (secureString is null)
             {
                 WriteVerbose("Canceled.");
                 return;
@@ -73,7 +73,7 @@ namespace AWX.Cmdlets
         }
         protected override void EndProcessing()
         {
-            if (config == null) return;
+            if (config is null) return;
             var currentConfig = ApiConfig.Instance;
             RestAPI.SetClient(ApiConfig.Load(config));
             try
@@ -115,7 +115,7 @@ namespace AWX.Cmdlets
             else
             {
                 var path = SessionState.Path.GetResolvedPSPathFromPSPath(Path).First();
-                if (path == null)
+                if (path is null)
                 {
                     return;
                 }

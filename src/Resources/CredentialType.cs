@@ -147,7 +147,7 @@ namespace AWX.Resources
             sb.Append("Fields = [");
             if (Fields.Length > 0) sb.Append($" {string.Join(", ", Fields.Select(field => field.Id))} ");
             sb.Append(']');
-            if (Required != null)
+            if (Required is not null)
             {
                 sb.Append(", Required = [");
                 if (Required.Length > 0) sb.Append($" {string.Join(", ", Required)} ");
@@ -175,8 +175,8 @@ namespace AWX.Resources
             sb.Append($" Id = {Id}");
             sb.Append($", Label = {Label}");
             sb.Append($", Type = {Type}");
-            if (Default != null) sb.Append($", Default = {Default}");
-            if (HelpText != null) sb.Append($", HelpText = {HelpText}");
+            if (Default is not null) sb.Append($", Default = {Default}");
+            if (HelpText is not null) sb.Append($", HelpText = {HelpText}");
             sb.Append(" }");
             return sb.ToString();
         }
@@ -199,12 +199,12 @@ namespace AWX.Resources
             sb.Append($" Id = {Id}");
             sb.Append($", Label = {Label}");
             sb.Append($", Type = {Type}");
-            if (Default != null) sb.Append($", Default = {Default}");
-            if (Choices != null) sb.Append($", Choices = [{string.Join(", ", Choices)}]");
-            if (Format != null) sb.Append($", Format = {Format}");
+            if (Default is not null) sb.Append($", Default = {Default}");
+            if (Choices is not null) sb.Append($", Choices = [{string.Join(", ", Choices)}]");
+            if (Format is not null) sb.Append($", Format = {Format}");
             if (Secret) sb.Append(", Secret = True");
             if (Multiline) sb.Append(", Multiline = True");
-            if (HelpText != null) sb.Append($", HelpText = {HelpText}");
+            if (HelpText is not null) sb.Append($", HelpText = {HelpText}");
             sb.Append(" }");
             return sb.ToString();
         }
@@ -287,29 +287,29 @@ namespace AWX.Resources
             writer.WriteString("id", value.Id);
             writer.WriteString("label", value.Label);
             writer.WriteString("type", value.Type);
-            if (value.HelpText != null)
+            if (value.HelpText is not null)
             {
                 writer.WriteString("help_text", value.HelpText);
             }
             switch (value)
             {
                 case CredentialBoolInputField boolField:
-                    if (boolField.Default != null)
+                    if (boolField.Default is not null)
                     {
                         writer.WriteBoolean("default", (bool)boolField.Default);
                     }
                     break;
                 case CredentialStringInputField strField:
-                    if (strField.Choices != null)
+                    if (strField.Choices is not null)
                     {
                         writer.WritePropertyName("choices");
                         JsonSerializer.Serialize(writer, strField.Choices, options);
                     }
-                    if (strField.Default != null)
+                    if (strField.Default is not null)
                     {
                         writer.WriteString("default", strField.Default);
                     }
-                    if (strField.Format != null)
+                    if (strField.Format is not null)
                     {
                         writer.WriteString("format", strField.Format);
                     }

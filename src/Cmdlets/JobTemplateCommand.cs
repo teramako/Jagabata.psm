@@ -42,7 +42,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Name != null)
+            if (Name is not null)
             {
                 Query.Add("name__in", string.Join(',', Name));
             }
@@ -131,35 +131,35 @@ namespace AWX.Cmdlets
         private IDictionary<string, object?> CreateSendData()
         {
             var dict = new Dictionary<string, object?>();
-            if (Inventory != null)
+            if (Inventory is not null)
             {
                 dict.Add("inventory", Inventory);
             }
-            if (JobType != null)
+            if (JobType is not null)
             {
                 dict.Add("job_type", $"{JobType}".ToLowerInvariant());
             }
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
             {
                 dict.Add("scm_branch", ScmBranch);
             }
-            if (Credentials != null)
+            if (Credentials is not null)
             {
                 dict.Add("credentials", Credentials);
             }
-            if (Limit != null)
+            if (Limit is not null)
             {
                 dict.Add("limit", Limit);
             }
-            if (Labels != null)
+            if (Labels is not null)
             {
                 dict.Add("labels", Labels);
             }
-            if (Tags != null)
+            if (Tags is not null)
             {
                 dict.Add("job_tags", string.Join(',', Tags));
             }
-            if (SkipTags != null)
+            if (SkipTags is not null)
             {
                 dict.Add("skip_tags", string.Join(',', SkipTags));
             }
@@ -167,27 +167,27 @@ namespace AWX.Cmdlets
             {
                 dict.Add("extra_vars", ExtraVars);
             }
-            if (DiffMode != null)
+            if (DiffMode is not null)
             {
                 dict.Add("diff_mode", DiffMode);
             }
-            if (Verbosity != null)
+            if (Verbosity is not null)
             {
                 dict.Add("verbosity", (int)Verbosity);
             }
-            if (Forks != null)
+            if (Forks is not null)
             {
                 dict.Add("forks", Forks);
             }
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
             {
                 dict.Add("execution_environment", ExecutionEnvironment);
             }
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
             {
                 dict.Add("job_slice_count", JobSliceCount);
             }
-            if (Timeout != null)
+            if (Timeout is not null)
             {
                 dict.Add("timeout", Timeout);
             }
@@ -202,45 +202,45 @@ namespace AWX.Cmdlets
             WriteHost($"[{jt.Id}] {jt.Name} - {jt.Description}\n");
             var fmt = "{0,22} : {1}\n";
             {
-                var inventoryVal = (def.Inventory.Id != null ? $"[{def.Inventory.Id}] {def.Inventory.Name}" : "Undefined")
-                                   + (requirements.AskInventoryOnLaunch && Inventory != null ? $" => [{Inventory}]" : "");
+                var inventoryVal = (def.Inventory.Id is not null ? $"[{def.Inventory.Id}] {def.Inventory.Name}" : "Undefined")
+                                   + (requirements.AskInventoryOnLaunch && Inventory is not null ? $" => [{Inventory}]" : "");
                 WriteHost(string.Format(fmt, "Inventory", inventoryVal),
-                            foregroundColor: requirements.AskInventoryOnLaunch ? (Inventory == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskInventoryOnLaunch ? (Inventory is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if (!string.IsNullOrEmpty(def.Limit) || Limit != null)
+            if (!string.IsNullOrEmpty(def.Limit) || Limit is not null)
             {
                 var limitVal = def.Limit
-                               + (requirements.AskLimitOnLaunch && Limit != null ? $" => {Limit}" : "");
+                               + (requirements.AskLimitOnLaunch && Limit is not null ? $" => {Limit}" : "");
                 WriteHost(string.Format(fmt, "Limit", $"{limitVal}"),
-                            foregroundColor: requirements.AskLimitOnLaunch ? (Limit == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskLimitOnLaunch ? (Limit is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if (!string.IsNullOrEmpty(def.ScmBranch) || ScmBranch != null)
+            if (!string.IsNullOrEmpty(def.ScmBranch) || ScmBranch is not null)
             {
                 var branchVal = def.ScmBranch
-                                + (requirements.AskScmBranchOnLaunch && ScmBranch != null ? $" => {ScmBranch}" : "");
+                                + (requirements.AskScmBranchOnLaunch && ScmBranch is not null ? $" => {ScmBranch}" : "");
                 WriteHost(string.Format(fmt, "Scm Branch", branchVal),
-                            foregroundColor: requirements.AskScmBranchOnLaunch ? (ScmBranch == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskScmBranchOnLaunch ? (ScmBranch is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if ((def.Labels != null && def.Labels.Length > 0) || Labels != null)
+            if ((def.Labels is not null && def.Labels.Length > 0) || Labels is not null)
             {
                 var labelsVal = string.Join(", ", def.Labels?.Select(l => $"[{l.Id}] {l.Name}") ?? [])
-                                + (requirements.AskLabelsOnLaunch && Labels != null ? $" => {string.Join(',', Labels.Select(id => $"[{id}]"))}" : "");
+                                + (requirements.AskLabelsOnLaunch && Labels is not null ? $" => {string.Join(',', Labels.Select(id => $"[{id}]"))}" : "");
                 WriteHost(string.Format(fmt, "Labels", labelsVal),
-                            foregroundColor: requirements.AskLabelsOnLaunch ? (Labels == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskLabelsOnLaunch ? (Labels is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if (!string.IsNullOrEmpty(def.JobTags) || Tags != null)
+            if (!string.IsNullOrEmpty(def.JobTags) || Tags is not null)
             {
                 var tagsVal = def.JobTags
-                              + (requirements.AskTagsOnLaunch && Tags != null ? $" => {string.Join(", ", Tags)}" : "");
+                              + (requirements.AskTagsOnLaunch && Tags is not null ? $" => {string.Join(", ", Tags)}" : "");
                 WriteHost(string.Format(fmt, "Job tags", tagsVal),
-                            foregroundColor: requirements.AskTagsOnLaunch ? (Tags == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskTagsOnLaunch ? (Tags is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if (!string.IsNullOrEmpty(def.SkipTags) || SkipTags != null)
+            if (!string.IsNullOrEmpty(def.SkipTags) || SkipTags is not null)
             {
                 var skipTagsVal = def.SkipTags
-                                  + (requirements.AskSkipTagsOnLaunch && SkipTags != null ? $" => {string.Join(", ", SkipTags)}" : "");
+                                  + (requirements.AskSkipTagsOnLaunch && SkipTags is not null ? $" => {string.Join(", ", SkipTags)}" : "");
                 WriteHost(string.Format(fmt, "Skip tags", skipTagsVal),
-                            foregroundColor: requirements.AskSkipTagsOnLaunch ? (SkipTags == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskSkipTagsOnLaunch ? (SkipTags is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.ExtraVars) || !string.IsNullOrEmpty(ExtraVars))
             {
@@ -262,7 +262,7 @@ namespace AWX.Cmdlets
                     }
                 }
                 WriteHost(sb.ToString(),
-                            foregroundColor: requirements.AskVariablesOnLaunch ? (ExtraVars == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskVariablesOnLaunch ? (ExtraVars is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (requirements.SurveyEnabled)
             {
@@ -275,57 +275,57 @@ namespace AWX.Cmdlets
             }
             {
                 var diffModeVal = $"{def.DiffMode}"
-                                  + (requirements.AskDiffModeOnLaunch && DiffMode != null ? $" => {DiffMode}" : "");
+                                  + (requirements.AskDiffModeOnLaunch && DiffMode is not null ? $" => {DiffMode}" : "");
                 WriteHost(string.Format(fmt, "Diff Mode", diffModeVal),
-                                foregroundColor: requirements.AskDiffModeOnLaunch ? (DiffMode == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskDiffModeOnLaunch ? (DiffMode is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var jobTypeVal = def.JobType
-                                 + (requirements.AskJobTypeOnLaunch && JobType != null ? $" => {JobType}" : "");
+                                 + (requirements.AskJobTypeOnLaunch && JobType is not null ? $" => {JobType}" : "");
                 WriteHost(string.Format(fmt, "Job Type", jobTypeVal),
-                                foregroundColor: requirements.AskJobTypeOnLaunch ? (JobType == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskJobTypeOnLaunch ? (JobType is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var verbosityVal = $"{def.Verbosity:d} ({def.Verbosity})"
-                                   + (requirements.AskVerbosityOnLaunch && Verbosity != null ? $" => {Verbosity:d} ({Verbosity})" : "");
+                                   + (requirements.AskVerbosityOnLaunch && Verbosity is not null ? $" => {Verbosity:d} ({Verbosity})" : "");
                 WriteHost(string.Format(fmt, "Verbosity", verbosityVal),
-                                foregroundColor: requirements.AskVerbosityOnLaunch ? (Verbosity == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskVerbosityOnLaunch ? (Verbosity is null ? implicitColor : explicitColor) : fixedColor);
             }
-            if (def.Credentials != null || Credentials != null)
+            if (def.Credentials is not null || Credentials is not null)
             {
                 var credentialsVal = string.Join(", ", def.Credentials?.Select(c => $"[{c.Id}] {c.Name}") ?? [])
-                        + (requirements.AskCredentialOnLaunch && Credentials != null ? $" => {string.Join(',', Credentials.Select(id => $"[{id}]"))}" : "");
+                        + (requirements.AskCredentialOnLaunch && Credentials is not null ? $" => {string.Join(',', Credentials.Select(id => $"[{id}]"))}" : "");
                 WriteHost(string.Format(fmt, "Credentials", credentialsVal),
-                            foregroundColor: requirements.AskCredentialOnLaunch ? (Credentials == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskCredentialOnLaunch ? (Credentials is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (requirements.PasswordsNeededToStart.Length > 0)
             {
                 WriteHost(string.Format(fmt, "CredentialPassswords", $"[{string.Join(", ", requirements.PasswordsNeededToStart)}]"),
                             foregroundColor: requiredColor);
             }
-            if (def.ExecutionEnvironment.Id != null || ExecutionEnvironment != null)
+            if (def.ExecutionEnvironment.Id is not null || ExecutionEnvironment is not null)
             {
                 var eeVal = $"[{def.ExecutionEnvironment.Id}] {def.ExecutionEnvironment.Name}"
-                            + (requirements.AskExecutionEnvironmentOnLaunch && ExecutionEnvironment != null ? $" => [{ExecutionEnvironment}]" : "");
+                            + (requirements.AskExecutionEnvironmentOnLaunch && ExecutionEnvironment is not null ? $" => [{ExecutionEnvironment}]" : "");
                 WriteHost(string.Format(fmt, "ExecutionEnvironment", eeVal),
-                            foregroundColor: requirements.AskExecutionEnvironmentOnLaunch ? (ExecutionEnvironment == null ? implicitColor : explicitColor) : fixedColor);
+                            foregroundColor: requirements.AskExecutionEnvironmentOnLaunch ? (ExecutionEnvironment is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
-                var forksVal = $"{def.Forks}" + (requirements.AskForksOnLaunch && Forks != null ? $" => {Forks}" : "");
+                var forksVal = $"{def.Forks}" + (requirements.AskForksOnLaunch && Forks is not null ? $" => {Forks}" : "");
                 WriteHost(string.Format(fmt, "Forks", forksVal),
-                                foregroundColor: requirements.AskForksOnLaunch ? (Forks == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskForksOnLaunch ? (Forks is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var jobSliceVal = $"{def.JobSliceCount}"
-                                  + (requirements.AskJobSliceCountOnLaunch && JobSliceCount != null ? $" => {JobSliceCount}" : "");
+                                  + (requirements.AskJobSliceCountOnLaunch && JobSliceCount is not null ? $" => {JobSliceCount}" : "");
                 WriteHost(string.Format(fmt, "Job Slice Count", jobSliceVal),
-                                foregroundColor: requirements.AskJobSliceCountOnLaunch ? (JobSliceCount == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskJobSliceCountOnLaunch ? (JobSliceCount is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var timeoutVal = $"{def.Timeout}"
-                                 + (requirements.AskTimeoutOnLaunch && Timeout != null ? $" => {Timeout}" : "");
+                                 + (requirements.AskTimeoutOnLaunch && Timeout is not null ? $" => {Timeout}" : "");
                 WriteHost(string.Format(fmt, "Timeout", timeoutVal),
-                                foregroundColor: requirements.AskTimeoutOnLaunch ? (Timeout == null ? implicitColor : explicitColor) : fixedColor);
+                                foregroundColor: requirements.AskTimeoutOnLaunch ? (Timeout is null ? implicitColor : explicitColor) : fixedColor);
             }
         }
 
@@ -432,7 +432,7 @@ namespace AWX.Cmdlets
         private bool TryAskCredentials(IDictionary<string, (string caption, string description)> checkResult,
                                          IDictionary<string, object?> sendData)
         {
-            if (CommandRuntime.Host == null)
+            if (CommandRuntime.Host is null)
                 return false;
 
             var prompt = new AskPrompt(CommandRuntime.Host);
@@ -473,7 +473,7 @@ namespace AWX.Cmdlets
             {
                 return true;
             }
-            if (CommandRuntime.Host == null)
+            if (CommandRuntime.Host is null)
             {
                 return false;
             }
@@ -945,7 +945,7 @@ namespace AWX.Cmdlets
             {
                 ClearSecureStrings();
             }
-            if (launchResult == null) return null;
+            if (launchResult is null) return null;
             WriteVerbose($"Launch JobTemplate:{id} => Job:[{launchResult.Id}]");
             if (launchResult.IgnoredFields.Count > 0)
             {
@@ -971,12 +971,12 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (JobTemplate != null)
+            if (JobTemplate is not null)
             {
                 Id = JobTemplate.Id;
             }
             var launchResult = Launch(Id);
-            if (launchResult != null)
+            if (launchResult is not null)
             {
                 JobProgressManager.Add(launchResult);
             }
@@ -994,12 +994,12 @@ namespace AWX.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (JobTemplate != null)
+            if (JobTemplate is not null)
             {
                 Id = JobTemplate.Id;
             }
             var launchResult = Launch(Id);
-            if (launchResult != null)
+            if (launchResult is not null)
             {
                 WriteObject(launchResult, false);
             }
@@ -1145,39 +1145,39 @@ namespace AWX.Cmdlets
                 { "name", Name },
                 { "playbook", Playbook },
             };
-            if (Description != null)
+            if (Description is not null)
                 dict.Add("description", Description);
-            if (JobType != null)
+            if (JobType is not null)
                 dict.Add("job_type", $"{JobType}".ToLowerInvariant());
-            if (Inventory != null)
+            if (Inventory is not null)
                 dict.Add("inventory", Inventory);
-            if (Project != null)
+            if (Project is not null)
                 dict.Add("project", Project);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 dict.Add("scm_branch", ScmBranch);
-            if (Forks != null)
+            if (Forks is not null)
                 dict.Add("forks", Forks);
-            if (Limit != null)
+            if (Limit is not null)
                 dict.Add("limit", Limit);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 dict.Add("verbosity", (int)Verbosity);
-            if (ExtraVars != null)
+            if (ExtraVars is not null)
                 dict.Add("extra_vars", ExtraVars);
-            if (Tags != null)
+            if (Tags is not null)
                 dict.Add("job_tags", Tags);
             if (ForceHandlers)
                 dict.Add("force_handlers", true);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 dict.Add("skip_tags", SkipTags);
-            if (StartAtTask != null)
+            if (StartAtTask is not null)
                 dict.Add("start_at_task", StartAtTask);
-            if (Timeout != null)
+            if (Timeout is not null)
                 dict.Add("timeout", Timeout);
             if (UseFactCache)
                 dict.Add("use_fact_cache", true);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 dict.Add("execution_environment", ExecutionEnvironment);
-            if (HostConfigKey != null)
+            if (HostConfigKey is not null)
                 dict.Add("host_config_key", HostConfigKey);
             if (AskScmBranch)
                 dict.Add("ask_scm_branch_on_launch", true);
@@ -1215,11 +1215,11 @@ namespace AWX.Cmdlets
                 dict.Add("diff_mode", true);
             if (AllowSimultaneous)
                 dict.Add("allow_simultaneous", true);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 dict.Add("job_slice_count", JobSliceCount);
-            if (WebhookService != null)
+            if (WebhookService is not null)
                 dict.Add("webhook_service", WebhookService);
-            if (WebhookCredential != null)
+            if (WebhookCredential is not null)
                 dict.Add("webhook_credential", WebhookCredential);
             if (PreventInstanceGroupFallback)
                 dict.Add("prevent_instance_group_fallback", true);
@@ -1381,85 +1381,85 @@ namespace AWX.Cmdlets
             var dict = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 dict.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 dict.Add("description", Description);
-            if (Playbook != null)
+            if (Playbook is not null)
                 dict.Add("playbook", Playbook);
-            if (JobType != null)
+            if (JobType is not null)
                 dict.Add("job_type", $"{JobType}".ToLowerInvariant());
-            if (Inventory != null)
+            if (Inventory is not null)
                 dict.Add("inventory", Inventory == 0 ? null : Inventory);
-            if (Project != null)
+            if (Project is not null)
                 dict.Add("project", Project == 0 ? null : Project);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 dict.Add("scm_branch", ScmBranch);
-            if (Forks != null)
+            if (Forks is not null)
                 dict.Add("forks", Forks);
-            if (Limit != null)
+            if (Limit is not null)
                 dict.Add("limit", Limit);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 dict.Add("verbosity", (int)Verbosity);
-            if (ExtraVars != null)
+            if (ExtraVars is not null)
                 dict.Add("extra_vars", ExtraVars);
-            if (Tags != null)
+            if (Tags is not null)
                 dict.Add("job_tags", Tags);
-            if (ForceHandlers != null)
+            if (ForceHandlers is not null)
                 dict.Add("force_handlers", ForceHandlers);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 dict.Add("skip_tags", SkipTags);
-            if (StartAtTask != null)
+            if (StartAtTask is not null)
                 dict.Add("start_at_task", StartAtTask);
-            if (Timeout != null)
+            if (Timeout is not null)
                 dict.Add("timeout", Timeout);
-            if (UseFactCache != null)
+            if (UseFactCache is not null)
                 dict.Add("use_fact_cache", UseFactCache);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 dict.Add("execution_environment", ExecutionEnvironment == 0 ? null : ExecutionEnvironment);
-            if (HostConfigKey != null)
+            if (HostConfigKey is not null)
                 dict.Add("host_config_key", HostConfigKey);
-            if (AskScmBranch != null)
+            if (AskScmBranch is not null)
                 dict.Add("ask_scm_branch_on_launch", AskScmBranch);
-            if (AskDiffMode != null)
+            if (AskDiffMode is not null)
                 dict.Add("ask_diff_mode_on_launch", AskDiffMode);
-            if (AskVariables != null)
+            if (AskVariables is not null)
                 dict.Add("ask_variables_on_launch", AskVariables);
-            if (AskLimit != null)
+            if (AskLimit is not null)
                 dict.Add("ask_limit_on_launch", AskLimit);
-            if (AskTags != null)
+            if (AskTags is not null)
                 dict.Add("ask_tags_on_launch", AskTags);
-            if (AskSkipTags != null)
+            if (AskSkipTags is not null)
                 dict.Add("ask_skip_tags_on_launch", AskSkipTags);
-            if (AskJobType != null)
+            if (AskJobType is not null)
                 dict.Add("ask_job_type_on_launch", AskJobType);
-            if (AskVerbosity != null)
+            if (AskVerbosity is not null)
                 dict.Add("ask_verbosity_on_launch", AskVerbosity);
-            if (AskInventory != null)
+            if (AskInventory is not null)
                 dict.Add("ask_inventory_on_launch", AskInventory);
-            if (AskCredential != null)
+            if (AskCredential is not null)
                 dict.Add("ask_credential_on_launch", AskCredential);
-            if (AskExecutionEnvironment != null)
+            if (AskExecutionEnvironment is not null)
                 dict.Add("ask_execution_environment_on_launch", AskExecutionEnvironment);
-            if (AskLabels != null)
+            if (AskLabels is not null)
                 dict.Add("ask_labels_on_launch", AskLabels);
-            if (AskForks != null)
+            if (AskForks is not null)
                 dict.Add("ask_forks_on_launch", AskForks);
-            if (AskJobSliceCount != null)
+            if (AskJobSliceCount is not null)
                 dict.Add("ask_job_slice_count_on_launch", AskJobSliceCount);
-            if (SurveyEnabled != null)
+            if (SurveyEnabled is not null)
                 dict.Add("survey_enabled", SurveyEnabled);
-            if (BecomeEnabled != null)
+            if (BecomeEnabled is not null)
                 dict.Add("become_enabled", BecomeEnabled);
-            if (DiffMode != null)
+            if (DiffMode is not null)
                 dict.Add("diff_mode", DiffMode);
-            if (AllowSimultaneous != null)
+            if (AllowSimultaneous is not null)
                 dict.Add("allow_simultaneous", AllowSimultaneous);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 dict.Add("job_slice_count", JobSliceCount);
-            if (WebhookService != null)
+            if (WebhookService is not null)
                 dict.Add("webhook_service", WebhookService);
-            if (WebhookCredential != null)
+            if (WebhookCredential is not null)
                 dict.Add("webhook_credential", WebhookCredential == 0 ? null : WebhookCredential);
-            if (PreventInstanceGroupFallback != null)
+            if (PreventInstanceGroupFallback is not null)
                 dict.Add("prevent_instance_group_fallback", PreventInstanceGroupFallback);
 
             return dict;

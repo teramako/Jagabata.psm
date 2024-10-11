@@ -205,9 +205,9 @@ namespace AWX.Cmdlets
                 sendData.Add("local_path", LocalPath);
             if (!string.IsNullOrEmpty(ScmUrl))
                 sendData.Add("scm_url", ScmUrl);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 sendData.Add("scm_branch", ScmBranch);
-            if (ScmRefspec != null)
+            if (ScmRefspec is not null)
                 sendData.Add("scm_refspec", ScmRefspec);
             if (Credential > 0)
                 sendData.Add("credential", Credential);
@@ -329,11 +329,11 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
             if (Organization > 0)
                 sendData.Add("organization", Organization);
-            if (ScmType != null)
+            if (ScmType is not null)
             {
                 var scmType = ScmType switch
                 {
@@ -347,32 +347,32 @@ namespace AWX.Cmdlets
                 };
                 sendData.Add("scm_type", scmType);
             }
-            if (DefaultEnvironment != null)
+            if (DefaultEnvironment is not null)
                 sendData.Add("default_environment", DefaultEnvironment == 0 ? null : DefaultEnvironment);
-            if (SignatureValidationCredential != null)
+            if (SignatureValidationCredential is not null)
                 sendData.Add("signature_validation_credential",
                         SignatureValidationCredential == 0 ? null : SignatureValidationCredential);
-            if (LocalPath != null)
+            if (LocalPath is not null)
                 sendData.Add("local_path", LocalPath);
-            if (ScmUrl != null)
+            if (ScmUrl is not null)
                 sendData.Add("scm_url", ScmUrl);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 sendData.Add("scm_branch", ScmBranch);
-            if (ScmRefspec != null)
+            if (ScmRefspec is not null)
                 sendData.Add("scm_refspec", ScmRefspec);
-            if (Credential != null)
+            if (Credential is not null)
                 sendData.Add("credential", Credential == 0 ? null : Credential);
-            if (ScmClean != null)
+            if (ScmClean is not null)
                 sendData.Add("scm_clean", ScmClean);
-            if (ScmDeleteOnUpdate != null)
+            if (ScmDeleteOnUpdate is not null)
                 sendData.Add("scm_delete_on_update", ScmDeleteOnUpdate);
-            if (ScmTrackSubmodules != null)
+            if (ScmTrackSubmodules is not null)
                 sendData.Add("scm_track_submodules", ScmTrackSubmodules);
-            if (ScmUpdateOnLaunch != null)
+            if (ScmUpdateOnLaunch is not null)
                 sendData.Add("scm_update_on_launch", ScmUpdateOnLaunch);
-            if (AllowOverride != null)
+            if (AllowOverride is not null)
                 sendData.Add("allow_override", AllowOverride);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
 
             return sendData;

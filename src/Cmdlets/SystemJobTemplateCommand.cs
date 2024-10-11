@@ -61,7 +61,7 @@ namespace AWX.Cmdlets
         protected Hashtable CreateSendData()
         {
             var dict = new Hashtable();
-            if (ExtraVars != null)
+            if (ExtraVars is not null)
             {
                 dict.Add("extra_vars", ExtraVars);
             }
@@ -87,7 +87,7 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (SystemJobTemplate != null)
+            if (SystemJobTemplate is not null)
             {
                 Id = SystemJobTemplate.Id;
             }
@@ -107,7 +107,7 @@ namespace AWX.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (SystemJobTemplate != null)
+            if (SystemJobTemplate is not null)
             {
                 Id = SystemJobTemplate.Id;
             }

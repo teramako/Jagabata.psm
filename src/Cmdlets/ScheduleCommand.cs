@@ -142,35 +142,35 @@ namespace AWX.Cmdlets
                 { "name", Name },
                 { "rrule", RRule }
             };
-            if (Description != null)
+            if (Description is not null)
                 dict.Add("description", Description);
             if (Disabled)
                 dict.Add("enabled", false);
-            if (ExtraData != null)
+            if (ExtraData is not null)
                 dict.Add("extra_data", ExtraData);
-            if (Inventory != null)
+            if (Inventory is not null)
                 dict.Add("inventory", Inventory);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 dict.Add("scm_branch", ScmBranch);
-            if (JobType != null)
+            if (JobType is not null)
                 dict.Add("job_type", $"{JobType}".ToLowerInvariant());
-            if (Tags != null)
+            if (Tags is not null)
                 dict.Add("job_tags", Tags);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 dict.Add("skip_tags", SkipTags);
-            if (Limit != null)
+            if (Limit is not null)
                 dict.Add("limit", Limit);
-            if (DiffMode != null)
+            if (DiffMode is not null)
                 dict.Add("diff_mode", DiffMode);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 dict.Add("verbosity", (int)Verbosity);
-            if (Forks != null)
+            if (Forks is not null)
                 dict.Add("forks", Forks);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 dict.Add("execution_environment", ExecutionEnvironment);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 dict.Add("job_slice_count", JobSliceCount);
-            if (Timeout != null)
+            if (Timeout is not null)
                 dict.Add("timeout", Timeout);
 
             return dict;
@@ -270,37 +270,37 @@ namespace AWX.Cmdlets
             var dict = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 dict.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 dict.Add("description", Description);
             if (!string.IsNullOrEmpty(RRule))
                 dict.Add("rrule", RRule);
-            if (Enable != null)
+            if (Enable is not null)
                 dict.Add("enabled", Enable);
-            if (ExtraData != null)
+            if (ExtraData is not null)
                 dict.Add("extra_data", ExtraData);
-            if (Inventory != null)
+            if (Inventory is not null)
                 dict.Add("inventory", Inventory);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 dict.Add("scm_branch", ScmBranch);
-            if (JobType != null)
+            if (JobType is not null)
                 dict.Add("job_type", $"{JobType}".ToLowerInvariant());
-            if (Tags != null)
+            if (Tags is not null)
                 dict.Add("job_tags", Tags);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 dict.Add("skip_tags", SkipTags);
-            if (Limit != null)
+            if (Limit is not null)
                 dict.Add("limit", Limit);
-            if (DiffMode != null)
+            if (DiffMode is not null)
                 dict.Add("diff_mode", DiffMode);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 dict.Add("verbosity", (int)Verbosity);
-            if (Forks != null)
+            if (Forks is not null)
                 dict.Add("forks", Forks);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 dict.Add("execution_environment", ExecutionEnvironment);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 dict.Add("job_slice_count", JobSliceCount);
-            if (Timeout != null)
+            if (Timeout is not null)
                 dict.Add("timeout", Timeout);
 
             return dict;

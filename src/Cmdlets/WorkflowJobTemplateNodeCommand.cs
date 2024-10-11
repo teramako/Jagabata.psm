@@ -190,7 +190,7 @@ namespace AWX.Cmdlets
             {
                 { "all_parents_must_converge", AllParentsMustConverge ? true : false }
             };
-            if (Identifier != null)
+            if (Identifier is not null)
                 sendData.Add("identifier", Identifier);
 
             var apiResponse = CreateResource<WorkflowJobTemplateNode>($"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/", sendData);
@@ -207,7 +207,7 @@ namespace AWX.Cmdlets
         }
         private bool TryAddNode(WorkflowJobTemplateNode node, WorkflowApprovalTemplate template)
         {
-            if (ParentNode == null)
+            if (ParentNode is null)
                 return true;
 
             var sendData = new Dictionary<string, object>()
@@ -223,9 +223,9 @@ namespace AWX.Cmdlets
             {
                 { "name", ApprovalName }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
 
             var dataDescription = Json.Stringify(sendData, pretty: true);
@@ -246,35 +246,35 @@ namespace AWX.Cmdlets
             {
                 { "unified_job_template", UnifiedJobTemplate }
             };
-            if (ExtraData != null)
+            if (ExtraData is not null)
                 sendData.Add("extra_data", Yaml.DeserializeToDict(ExtraData));
-            if (Inventory != null)
+            if (Inventory is not null)
                 sendData.Add("inventory", Inventory);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 sendData.Add("scm_branch", ScmBranch);
-            if (JobType != null)
+            if (JobType is not null)
                 sendData.Add("job_type", JobType);
-            if (Tags != null)
+            if (Tags is not null)
                 sendData.Add("job_tags", Tags);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 sendData.Add("skip_tags", SkipTags);
-            if (Limit != null)
+            if (Limit is not null)
                 sendData.Add("limit", Limit);
             if (DiffMode)
                 sendData.Add("diff_mode", true);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 sendData.Add("verbosity", (int)Verbosity);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 sendData.Add("execution_environment", ExecutionEnvironment);
-            if (Forks != null)
+            if (Forks is not null)
                 sendData.Add("forks", Forks);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 sendData.Add("job_slice_count", JobSliceCount);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
             if (AllParentsMustConverge)
                 sendData.Add("all_parents_must_converge", true);
-            if (Identifier != null)
+            if (Identifier is not null)
                 sendData.Add("identifier", Identifier);
 
             return sendData;
@@ -282,7 +282,7 @@ namespace AWX.Cmdlets
 
         protected void CreateWorkflowNode()
         {
-            var path = ParentNode == null
+            var path = ParentNode is null
                 ? $"{WorkflowJobTemplate.PATH}{WorkflowJobtemplate}/workflow_nodes/"
                 : $"{WorkflowJobTemplateNode.PATH}{ParentNode}/{RunUpon}_nodes/";
 
@@ -390,37 +390,37 @@ namespace AWX.Cmdlets
         protected override Dictionary<string, object?> CreateSendData()
         {
             var sendData = new Dictionary<string, object?>();
-            if (UnifiedJobTemplate != null)
+            if (UnifiedJobTemplate is not null)
                 sendData.Add("unified_job_template", UnifiedJobTemplate == 0 ? null : UnifiedJobTemplate);
-            if (ExtraData != null)
+            if (ExtraData is not null)
                 sendData.Add("extra_data", Yaml.DeserializeToDict(ExtraData));
-            if (Inventory != null)
+            if (Inventory is not null)
                 sendData.Add("inventory", Inventory == 0 ? null : Inventory);
-            if (ScmBranch != null)
+            if (ScmBranch is not null)
                 sendData.Add("scm_branch", ScmBranch);
-            if (JobType != null)
+            if (JobType is not null)
                 sendData.Add("job_type", JobType);
-            if (Tags != null)
+            if (Tags is not null)
                 sendData.Add("job_tags", Tags);
-            if (SkipTags != null)
+            if (SkipTags is not null)
                 sendData.Add("skip_tags", SkipTags);
-            if (Limit != null)
+            if (Limit is not null)
                 sendData.Add("limit", Limit);
-            if (DiffMode != null)
+            if (DiffMode is not null)
                 sendData.Add("diff_mode", DiffMode);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 sendData.Add("verbosity", (int)Verbosity);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 sendData.Add("execution_environment", ExecutionEnvironment == 0 ? null : ExecutionEnvironment);
-            if (Forks != null)
+            if (Forks is not null)
                 sendData.Add("forks", Forks);
-            if (JobSliceCount != null)
+            if (JobSliceCount is not null)
                 sendData.Add("job_slice_count", JobSliceCount);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
-            if (AllParentsMustConverge != null)
+            if (AllParentsMustConverge is not null)
                 sendData.Add("all_parents_must_converge", AllParentsMustConverge);
-            if (Identifier != null)
+            if (Identifier is not null)
                 sendData.Add("identifier", Identifier);
             return sendData;
         }
@@ -475,7 +475,7 @@ namespace AWX.Cmdlets
         private WorkflowJobTemplateNode? _parentNode;
         private string GetUpon()
         {
-            if (_parentNode == null)
+            if (_parentNode is null)
                 return string.Empty;
 
             if (_parentNode.SuccessNodes.Any(id => id == Id))

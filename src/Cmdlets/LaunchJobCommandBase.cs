@@ -85,7 +85,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
         var jpList = JobProgressManager.GetJobLog();
         foreach (var jp in jpList)
         {
-            if (jp == null) continue;
+            if (jp is null) continue;
             WriteJobLog(jp, suppressJobLog);
         }
     }
@@ -98,7 +98,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
     protected void PrintPromptResult(string label, string resultValue, bool notSpecified = false)
     {
         var ui = CommandRuntime.Host?.UI;
-        if (ui == null) return;
+        if (ui is null) return;
         var bg = Console.BackgroundColor;
         ui.Write(ConsoleColor.Green, bg, "==> ");
         var sb = new StringBuilder();
@@ -153,7 +153,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
             : new Dictionary<string, object?>();
         if (survey.Spec.Length > 0)
         {
-            if (CommandRuntime.Host == null)
+            if (CommandRuntime.Host is null)
                 return false;
 
             var prompt = new AskPrompt(CommandRuntime.Host);

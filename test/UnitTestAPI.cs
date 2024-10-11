@@ -20,7 +20,7 @@ namespace API_Test
                 Console.WriteLine("    {0}: {1}", header.Key, string.Join(", ", header.Value));
             }
             Console.WriteLine("Request Header:");
-            if (res.RequestHeaders == null) return;
+            if (res.RequestHeaders is null) return;
             foreach (var header in res.RequestHeaders)
             {
                 Console.WriteLine("    {0}: {1}", header.Key, string.Join(", ", header.Value));
@@ -228,7 +228,7 @@ namespace API_Test
         {
             Console.WriteLine("-----SummaryFields-----");
             Console.WriteLine($"Actor : [{summary.Actor?.Id}] {summary.Actor?.Username}");
-            if (summary.ExtensionData != null)
+            if (summary.ExtensionData is not null)
                 Util.DumpObject(summary.ExtensionData);
         }
         [TestMethod]
@@ -933,7 +933,7 @@ namespace API_Test
             var id = createdUser.Id;
             var deleteResult = await RestAPI.DeleteAsync($"/api/v2/users/{id}/");
             Assert.IsTrue(deleteResult.Response.ContentLength == 0);
-            if (deleteResult.Contents != null)
+            if (deleteResult.Contents is not null)
                 Util.DumpObject(deleteResult.Contents);
             else
                 Console.WriteLine($"{nameof(deleteResult.Contents)} is null");
@@ -1944,7 +1944,7 @@ namespace API_Test
             {
                 Console.WriteLine($"  [{job.Id}] {job.Name} {job.Status} {job.Finished}");
             }
-            if (summary.LastJob != null) {
+            if (summary.LastJob is not null) {
                 Console.WriteLine($"LastJob: [{summary.LastJob.Id}] {summary.LastJob.Name} [{summary.LastJob.JobTemplateId}]{summary.LastJob.JobTemplateName}");
             }
             Console.WriteLine();
@@ -2687,7 +2687,7 @@ namespace API_Test
             Console.WriteLine($"NotificationType : {res.NotificationType}");
             Console.WriteLine($"NotificationConfig:");
             Util.DumpObject(res.NotificationConfiguration);
-            if (res.Messages != null)
+            if (res.Messages is not null)
                 Util.DumpObject(res.Messages);
 
         }

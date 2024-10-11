@@ -105,7 +105,7 @@ namespace Cmdlet_Test
             foreach (string key in github.Keys)
             {
                 var val = github[key];
-                Console.WriteLine($"{key}: {(val == null ? "null" : "\"" + val + '"')}");
+                Console.WriteLine($"{key}: {(val is null ? "null" : "\"" + val + '"')}");
             }
         }
     }

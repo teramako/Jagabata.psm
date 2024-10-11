@@ -108,11 +108,11 @@ namespace AWX.Cmdlets
                 { "name", Name },
                 { "inventory", Inventory },
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (InstanceId != null)
+            if (InstanceId is not null)
                 sendData.Add("instance_id", InstanceId);
-            if (Variables != null)
+            if (Variables is not null)
                 sendData.Add("variables", Variables);
             if (Disabled)
                 sendData.Add("enabled", false);
@@ -162,13 +162,13 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Enabled != null)
+            if (Enabled is not null)
                 sendData.Add("enabled", Enabled);
-            if (InstanceId != null)
+            if (InstanceId is not null)
                 sendData.Add("instance_id", InstanceId);
-            if (Variables != null)
+            if (Variables is not null)
                 sendData.Add("variables", Variables);
 
             return sendData;

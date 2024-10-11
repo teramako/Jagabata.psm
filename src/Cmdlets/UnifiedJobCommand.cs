@@ -31,7 +31,7 @@ namespace AWX.Cmdlets
                                                     NameValueCollection? query = null,
                                                     bool getAll = false)
         {
-            var nextPathAndQuery = path + (query == null ? "" : $"?{query}");
+            var nextPathAndQuery = path + (query is null ? "" : $"?{query}");
             do
             {
                 WriteVerboseRequest(nextPathAndQuery, Method.GET);

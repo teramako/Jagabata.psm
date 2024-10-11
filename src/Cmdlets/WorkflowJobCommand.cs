@@ -42,15 +42,15 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Name != null)
+            if (Name is not null)
             {
                 Query.Add("name__in", string.Join(',', Name));
             }
-            if (Status != null)
+            if (Status is not null)
             {
                 Query.Add("status__in", string.Join(',', Status));
             }
-            if (LaunchType != null)
+            if (LaunchType is not null)
             {
                 Query.Add("launch_type__in", string.Join(',', LaunchType));
             }

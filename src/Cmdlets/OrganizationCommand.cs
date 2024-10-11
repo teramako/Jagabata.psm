@@ -39,7 +39,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Name != null)
+            if (Name is not null)
             {
                 Query.Add("name__in", string.Join(",", Name));
             }
@@ -83,7 +83,7 @@ namespace AWX.Cmdlets
             {
                 { "name", Name }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
             if (MaxHosts > 0)
                 sendData.Add("max_hosts", MaxHosts);
@@ -130,11 +130,11 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (MaxHosts != null)
+            if (MaxHosts is not null)
                 sendData.Add("max_hosts", MaxHosts);
-            if (DefaultEnvironment != null)
+            if (DefaultEnvironment is not null)
                 sendData.Add("default_environment", DefaultEnvironment == 0 ? null : DefaultEnvironment);
 
             return sendData;

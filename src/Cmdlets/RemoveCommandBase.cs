@@ -12,7 +12,7 @@ public abstract class RemoveCommandBase<TResource> : APICmdletBase
     {
         get
         {
-            if (_apiPath != null)
+            if (_apiPath is not null)
                 return _apiPath;
 
             _apiPath = GetApiPath(typeof(TResource));
@@ -27,7 +27,7 @@ public abstract class RemoveCommandBase<TResource> : APICmdletBase
 
     protected bool TryDelete(string path, ulong id, string? target = null)
     {
-        if (Force || ShouldProcess(target != null ? target : $"{typeof(TResource).Name} [{id}]"))
+        if (Force || ShouldProcess(target is not null ? target : $"{typeof(TResource).Name} [{id}]"))
         {
             var apiResult = DeleteResource($"{path}{id}/");
             var isSuccess = apiResult?.IsSuccessStatusCode ?? false;

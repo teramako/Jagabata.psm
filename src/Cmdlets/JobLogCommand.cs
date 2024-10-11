@@ -61,7 +61,7 @@ namespace AWX.Cmdlets
             {
                 foreach (var node in resultSet.Results)
                 {
-                    if (node.Job == null || node.SummaryFields.Job == null)
+                    if (node.Job is null || node.SummaryFields.Job is null)
                     {
                         continue;
                     }
@@ -87,7 +87,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Download != null)
+            if (Download is not null)
             {
                 if (!Download.Exists)
                 {
@@ -135,7 +135,7 @@ namespace AWX.Cmdlets
         }
         protected override void EndProcessing()
         {
-            if (Download != null)
+            if (Download is not null)
             {
                 foreach (var fileInfo in DownloadLogs(Download))
                 {

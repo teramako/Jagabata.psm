@@ -59,11 +59,11 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (UserName != null)
+            if (UserName is not null)
             {
                 Query.Add("username__in", string.Join(',', UserName));
             }
-            if (Email != null)
+            if (Email is not null)
             {
                 Query.Add("email__in", string.Join(",", Email));
             }
@@ -171,7 +171,7 @@ namespace AWX.Cmdlets
 
         private void GatherUserAndPassword()
         {
-            if (Credential != null)
+            if (Credential is not null)
             {
                 _user = Credential.UserName;
                 _password = Credential.Password;
@@ -179,13 +179,13 @@ namespace AWX.Cmdlets
             else 
             {
                 _user = UserName;
-                if (Password != null)
+                if (Password is not null)
                 {
                     _password = Password;
                 }
                 else
                 {
-                    if (CommandRuntime.Host == null)
+                    if (CommandRuntime.Host is null)
                         throw new NullReferenceException();
 
                     _passwordInputedFromPrompt = true;
@@ -198,7 +198,7 @@ namespace AWX.Cmdlets
                 }
             }
 
-            if (_password == null || _password.Length == 0)
+            if (_password is null || _password.Length == 0)
             {
                 throw new ArgumentException("Password should not be empty.");
             }
@@ -214,9 +214,9 @@ namespace AWX.Cmdlets
         protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>();
-            if (_user != null)
+            if (_user is not null)
                 sendData.Add("username", _user);
-            if (_password != null)
+            if (_password is not null)
                 sendData.Add("password", _password);
             if (!string.IsNullOrEmpty(FirstName))
                 sendData.Add("first_name", FirstName);
@@ -249,7 +249,7 @@ namespace AWX.Cmdlets
                 WriteObject(result, false);
             }
 
-            if (_passwordInputedFromPrompt && _password != null)
+            if (_passwordInputedFromPrompt && _password is not null)
                 _password.Dispose();
         }
     }
@@ -292,17 +292,17 @@ namespace AWX.Cmdlets
             string dataDescription = string.Empty;
             if (!string.IsNullOrEmpty(UserName))
                 sendData.Add("username", UserName);
-            if (FirstName != null)
+            if (FirstName is not null)
                 sendData.Add("first_name", FirstName);
-            if (LastName != null)
+            if (LastName is not null)
                 sendData.Add("last_name", LastName);
-            if (Email != null)
+            if (Email is not null)
                 sendData.Add("email", Email);
-            if (IsSuperUser != null)
+            if (IsSuperUser is not null)
                 sendData.Add("is_superuser", IsSuperUser);
-            if (IsSystemAuditor != null)
+            if (IsSystemAuditor is not null)
                 sendData.Add("is_system_auditor", IsSystemAuditor);
-            if (Password != null)
+            if (Password is not null)
             {
                 var passwordString = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(Password));
                 Password.Dispose();

@@ -54,7 +54,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Kind != null)
+            if (Kind is not null)
             {
                 Query.Add("chain__credential_type__namespace__icontains", Kind);
             }
@@ -118,9 +118,9 @@ namespace AWX.Cmdlets
                 { "credential_type", CredentialType },
                 { "inputs", Inputs }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Owner != null)
+            if (Owner is not null)
             {
                 switch (Owner.Type)
                 {
@@ -138,7 +138,7 @@ namespace AWX.Cmdlets
             else
             {
                 var userId = ApiConfig.Instance.UserId;
-                if (userId != null)
+                if (userId is not null)
                     sendData.Add("user", userId);
             }
 
@@ -264,13 +264,13 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (CredentialType != null)
+            if (CredentialType is not null)
                 sendData.Add("credential_type", CredentialType);
-            if (Inputs != null)
+            if (Inputs is not null)
                 sendData.Add("inputs", Inputs);
-            if (Organization != null)
+            if (Organization is not null)
                 sendData.Add("organization", Organization);
 
             return sendData;

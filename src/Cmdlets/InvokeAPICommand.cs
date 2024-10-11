@@ -69,7 +69,7 @@ namespace AWX.Cmdlets
                         return task.Result;
                     }
                 case Method.PUT:
-                    if (SenData != null)
+                    if (SenData is not null)
                     {
                         var task = RestAPI.PutJsonAsync<string>(pathAndQuery, SenData);
                         task.Wait();
@@ -77,7 +77,7 @@ namespace AWX.Cmdlets
                     }
                     throw new ArgumentNullException(nameof(SenData));
                 case Method.PATCH:
-                    if (SenData != null)
+                    if (SenData is not null)
                     {
                         var task = RestAPI.PatchJsonAsync<string>(pathAndQuery, SenData);
                         task.Wait();
@@ -107,7 +107,7 @@ namespace AWX.Cmdlets
 
             var result = InvokeAPI(pathAndQuery);
             WriteVerboseResponse(result.Response);
-            if (!AsRawString && result.Response.ContentType == "application/json" && result.Contents != null)
+            if (!AsRawString && result.Response.ContentType == "application/json" && result.Contents is not null)
             {
                 if (APIPath.TryGetTypeFromPath(pathAndQuery, Method, out var type))
                 {
@@ -216,7 +216,7 @@ namespace AWX.Cmdlets
             foreach (var field in typeof(ResourceType).GetFields())
             {
                 var attr = field.GetCustomAttributes<ResourcePathAttribute>(false).FirstOrDefault();
-                if (attr == null) continue;
+                if (attr is null) continue;
                 if (attr.PathName == p3)
                 {
                     resourceField = field;
@@ -224,8 +224,8 @@ namespace AWX.Cmdlets
                     break;
                 }
             }
-            if (p3Attr == null) yield break;
-            if (resourceField == null) yield break;
+            if (p3Attr is null) yield break;
+            if (resourceField is null) yield break;
             var p4IsId = ulong.TryParse(p4, out _);
 
             var subPathAttrs = resourceField.GetCustomAttributes<ResourceSubPathBase>(false)
@@ -281,7 +281,7 @@ namespace AWX.Cmdlets
             foreach (var field in typeof(ResourceType).GetFields())
             {
                 var attr = field.GetCustomAttributes<ResourcePathAttribute>(false).FirstOrDefault();
-                if (attr == null) continue;
+                if (attr is null) continue;
                 if (attr.PathName == p3)
                 {
                     resourceField = field;
@@ -290,8 +290,8 @@ namespace AWX.Cmdlets
                 }
             }
 
-            if (p3Attr == null) yield break;
-            if (resourceField == null) yield break;
+            if (p3Attr is null) yield break;
+            if (resourceField is null) yield break;
             var p4IsId = ulong.TryParse(p4, out _);
 
             foreach (var subPathAttr in resourceField.GetCustomAttributes<ResourceSubPathAttribute>(false)

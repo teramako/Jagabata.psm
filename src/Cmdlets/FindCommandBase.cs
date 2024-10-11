@@ -98,18 +98,18 @@ public abstract class FindCommandBase : APICmdletBase
     /// </summary>
     protected virtual void SetupCommonQuery()
     {
-        if (Search != null)
+        if (Search is not null)
         {
             Query.Add("search", string.Join(',', Search));
         }
-        if (OrderBy != null)
+        if (OrderBy is not null)
         {
             Query.Add("order_by",
                       string.Join(',', OrderBy.Select(item => item.StartsWith('!') ? $"-{item.Substring(1)}" : item)));
         }
         Query.Add("page_size", $"{Count}");
         Query.Add("page", $"{Page}");
-        if (Filter != null)
+        if (Filter is not null)
         {
             Query.Add(Filter);
         }

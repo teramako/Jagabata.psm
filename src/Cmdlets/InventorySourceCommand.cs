@@ -142,37 +142,37 @@ namespace AWX.Cmdlets
                 { "source", $"{Source}".ToLowerInvariant() },
                 { "inventory", Inventory },
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (SourceProject != null)
+            if (SourceProject is not null)
                 sendData.Add("source_project", SourceProject);
-            if (SourcePath != null)
+            if (SourcePath is not null)
                 sendData.Add("source_path", SourcePath);
-            if (SourceVars != null)
+            if (SourceVars is not null)
                 sendData.Add("source_vars", SourceVars);
-            if (Credential != null)
+            if (Credential is not null)
                 sendData.Add("credential", Credential);
-            if (EnabledVar != null)
+            if (EnabledVar is not null)
                 sendData.Add("enabled_var", EnabledVar);
-            if (EnabledValue != null)
+            if (EnabledValue is not null)
                 sendData.Add("enabled_value", EnabledValue);
-            if (HostFilter != null)
+            if (HostFilter is not null)
                 sendData.Add("host_filter", HostFilter);
             if (Overwrite)
                 sendData.Add("overwrite", true);
             if (OverwriteVars)
                 sendData.Add("overwrite_vars", true);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 sendData.Add("verbosity", Verbosity);
-            if (Limit != null)
+            if (Limit is not null)
                 sendData.Add("limit", Limit);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 sendData.Add("execution_environment", ExecutionEnvironment);
             if (UpdateOnLaunch)
                 sendData.Add("update_on_launch", true);
-            if (UpdateCacheTimeout != null)
+            if (UpdateCacheTimeout is not null)
                 sendData.Add("update_cache_timeout", UpdateCacheTimeout);
             return sendData;
         }
@@ -269,39 +269,39 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Source != null)
+            if (Source is not null)
                 sendData.Add("source", $"{Source}".ToLowerInvariant());
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (SourceProject != null)
+            if (SourceProject is not null)
                 sendData.Add("source_project", SourceProject == 0 ? null : SourceProject);
-            if (SourcePath != null)
+            if (SourcePath is not null)
                 sendData.Add("source_path", SourcePath);
-            if (SourceVars != null)
+            if (SourceVars is not null)
                 sendData.Add("source_vars", SourceVars);
-            if (Credential != null)
+            if (Credential is not null)
                 sendData.Add("credential", Credential == 0 ? null : Credential);
-            if (EnabledVar != null)
+            if (EnabledVar is not null)
                 sendData.Add("enabled_var", EnabledVar);
-            if (EnabledValue != null)
+            if (EnabledValue is not null)
                 sendData.Add("enabled_value", EnabledValue);
-            if (HostFilter != null)
+            if (HostFilter is not null)
                 sendData.Add("host_filter", HostFilter);
-            if (Overwrite != null)
+            if (Overwrite is not null)
                 sendData.Add("overwrite", Overwrite);
-            if (OverwriteVars != null)
+            if (OverwriteVars is not null)
                 sendData.Add("overwrite_vars", OverwriteVars);
-            if (Timeout != null)
+            if (Timeout is not null)
                 sendData.Add("timeout", Timeout);
-            if (Verbosity != null)
+            if (Verbosity is not null)
                 sendData.Add("verbosity", Verbosity);
-            if (Limit != null)
+            if (Limit is not null)
                 sendData.Add("limit", Limit);
-            if (ExecutionEnvironment != null)
+            if (ExecutionEnvironment is not null)
                 sendData.Add("execution_environment", ExecutionEnvironment == 0 ? null : ExecutionEnvironment);
-            if (UpdateOnLaunch != null)
+            if (UpdateOnLaunch is not null)
                 sendData.Add("update_on_launch", UpdateOnLaunch);
-            if (UpdateCacheTimeout != null)
+            if (UpdateCacheTimeout is not null)
                 sendData.Add("update_cache_timeout", UpdateCacheTimeout);
             return sendData;
         }

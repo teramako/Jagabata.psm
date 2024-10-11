@@ -31,7 +31,7 @@ public abstract class APICmdletBase : Cmdlet
             NoNewLine = true
         };
         List<string> infoTags = dontshow ? [] : ["PSHOST"];
-        if (tags != null) { infoTags.AddRange(tags); }
+        if (tags is not null) { infoTags.AddRange(tags); }
         WriteInformation(msg, infoTags.ToArray());
     }
     /// <summary>
@@ -41,7 +41,7 @@ public abstract class APICmdletBase : Cmdlet
     /// <exception cref="NullReferenceException">throw if <c>PATH</c> is not foudn or the value is null</exception>
     protected string GetApiPath(Type t)
     {
-        if (t.IsNested && t.ReflectedType != null)
+        if (t.IsNested && t.ReflectedType is not null)
         {
             t = t.ReflectedType;
         }
@@ -91,7 +91,7 @@ public abstract class APICmdletBase : Cmdlet
                                                                   bool getAll = false)
         where TValue : class
     {
-        var pathAndQuery = path + (query == null ? "" : $"?{query}");
+        var pathAndQuery = path + (query is null ? "" : $"?{query}");
         foreach (var resultSet in GetResultSet<TValue>(pathAndQuery, getAll))
         {
             yield return resultSet;
@@ -326,7 +326,7 @@ public abstract class APICmdletBase : Cmdlet
     }
     private void WriteDebugHeaders(FrozenDictionary<string, IEnumerable<string>>? headers, char indicator)
     {
-        if (headers == null) return;
+        if (headers is null) return;
         foreach (var header in headers)
         {
             if (header.Key == "Authorization")

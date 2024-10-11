@@ -98,10 +98,10 @@ namespace AWX.Cmdlets
         protected override Dictionary<string, object> CreateSendData()
         {
             var sendData = new Dictionary<string, object>();
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
             sendData.Add("scope", Scope);
-            if (ForMe && Application != null)
+            if (ForMe && Application is not null)
                 sendData.Add("application", Application);
 
             return sendData;
@@ -118,7 +118,7 @@ namespace AWX.Cmdlets
                 action = "New Personal Access Token";
                 path = $"{Resources.User.PATH}{id}/tokens/";
             }
-            else if (Application != null)
+            else if (Application is not null)
             {
                 id = Application;
                 action = $"New Application Access Token [{id}]";
@@ -169,9 +169,9 @@ namespace AWX.Cmdlets
         protected override Dictionary<string, object?> CreateSendData()
         {
             var sendData = new Dictionary<string, object?>();
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Scope != null)
+            if (Scope is not null)
                 sendData.Add("scope", Scope);
 
             return sendData;

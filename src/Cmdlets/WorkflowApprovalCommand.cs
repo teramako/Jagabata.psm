@@ -35,7 +35,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Status != null)
+            if (Status is not null)
             {
                 Query.Add("status__in", string.Join(',', Status.Select(s => $"{s}".ToLowerInvariant())));
             }
@@ -75,7 +75,7 @@ namespace AWX.Cmdlets
             }
 
             var result = CreateResource<string>($"{WorkflowApproval.PATH}{Id}/{Command}/");
-            if (result == null)
+            if (result is null)
             {
                 return;
             }

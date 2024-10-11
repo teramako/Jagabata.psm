@@ -35,7 +35,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Kind != null)
+            if (Kind is not null)
             {
                 Query.Add("kind__in", string.Join(',', Kind));
             }
@@ -80,7 +80,7 @@ namespace AWX.Cmdlets
                 { "inputs", Inputs },
                 { "injectors", Injectors }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
 
             return sendData;
@@ -139,13 +139,13 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Kind != null)
+            if (Kind is not null)
                 sendData.Add("kind", Kind);
-            if (Inputs != null)
+            if (Inputs is not null)
                 sendData.Add("inputs", Inputs);
-            if (Injectors != null)
+            if (Injectors is not null)
                 sendData.Add("injectors", Injectors);
 
             return sendData;

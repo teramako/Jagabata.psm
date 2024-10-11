@@ -21,7 +21,7 @@ namespace AWX
             {
                 var msg = "YAML root should be dictionary.";
                 var current = parser.Current;
-                if (current != null)
+                if (current is not null)
                 {
                     msg += $": {current.GetType().Name} {{ Start: [{current.Start}] End: [{current.End}] }}";
                 }

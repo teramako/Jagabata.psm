@@ -81,11 +81,11 @@ namespace AWX.Cmdlets
                 { "description", Description },
                 { "image", Image },
             };
-            if (Organization != null)
+            if (Organization is not null)
                 sendData.Add("organization", Organization);
-            if (Credential != null)
+            if (Credential is not null)
                 sendData.Add("credential", Credential);
-            if (Pull != null)
+            if (Pull is not null)
                 sendData.Add("pull", Pull);
 
             return sendData;
@@ -136,15 +136,15 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Image != null)
+            if (Image is not null)
                 sendData.Add("image", Image);
-            if (Organization != null)
+            if (Organization is not null)
                 sendData.Add("organization", Organization == 0 ? null : Organization);
-            if (Credential != null)
+            if (Credential is not null)
                 sendData.Add("credential", Credential == 0 ? null : Credential);
-            if (Pull != null)
+            if (Pull is not null)
                 sendData.Add("pull", Pull);
 
             return sendData;

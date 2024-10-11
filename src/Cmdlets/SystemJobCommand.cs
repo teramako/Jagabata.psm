@@ -35,7 +35,7 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Status != null)
+            if (Status is not null)
             {
                 Query.Add("status__in", string.Join(',', Status));
             }

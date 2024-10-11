@@ -131,7 +131,7 @@ namespace AWX.Cmdlets
                     foreach (var key in dict.Keys)
                     {
                         var strKey = key as string;
-                        if (strKey == null) continue;
+                        if (strKey is null) continue;
                         switch (strKey.ToLowerInvariant())
                         {
                             case "type":

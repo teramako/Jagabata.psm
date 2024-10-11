@@ -57,7 +57,7 @@ namespace AWX.Cmdlets
         public IEnumerable<JobProgress?> GetJobLog()
         {
             List<Task<JobProgress?>> tasks = [];
-            foreach (var jp in GetAll().Where(jp => jp.Job != null && !jp.Completed))
+            foreach (var jp in GetAll().Where(jp => jp.Job is not null && !jp.Completed))
             {
                 switch (jp.Type)
                 {
@@ -79,7 +79,7 @@ namespace AWX.Cmdlets
             {
                 if (jp.SetComplete())
                 {
-                    if (jp.Job != null)
+                    if (jp.Job is not null)
                     {
                         completedJobs.Add(jp.Job);
                     }
@@ -140,7 +140,7 @@ namespace AWX.Cmdlets
 
         public async Task<JobProgress?> GetLogAsync()
         {
-            if (Job == null) return null;
+            if (Job is null) return null;
             if (Completed) return null;
             switch (Job.Type)
             {
@@ -163,7 +163,7 @@ namespace AWX.Cmdlets
 
         private void Update()
         {
-            if (Job == null) return;
+            if (Job is null) return;
             if (Completed) return;
             Progress.Activity = $"[{Job.Id}]{Job.Name}";
             Progress.StatusDescription = $"{Job.Status} Elapsed: {Job.Elapsed}";
@@ -254,7 +254,7 @@ namespace AWX.Cmdlets
             {
                 foreach (var node in apiResult.Contents.Results)
                 {
-                    if (node.SummaryFields.Job == null) continue;
+                    if (node.SummaryFields.Job is null) continue;
                     JobNodeSummary jobSummary = new(node);
                     if (Children.TryGetValue(jobSummary.Id, out var jp))
                     {
@@ -273,7 +273,7 @@ namespace AWX.Cmdlets
     {
         public JobNodeSummary(WorkflowJobNode node)
         {
-            if (node.SummaryFields.Job == null)
+            if (node.SummaryFields.Job is null)
             {
                 throw new ArgumentException($"{nameof(node.SummaryFields.Job)} is null");
             }

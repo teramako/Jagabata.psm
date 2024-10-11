@@ -96,7 +96,7 @@ namespace AWX.Cmdlets
             foreach (string key in collection.Keys)
             {
                 var values = collection.GetValues(key);
-                if (values == null) continue;
+                if (values is null) continue;
                 foreach (var val in values)
                 {
                     yield return new Filter(key, val);

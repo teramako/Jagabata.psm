@@ -11,7 +11,7 @@ public abstract class NewCommandBase<TResource> : APICmdletBase where TResource 
     {
         get
         {
-            if (_apiPath != null)
+            if (_apiPath is not null)
                 return _apiPath;
 
             _apiPath = GetApiPath(typeof(TResource));
@@ -28,13 +28,13 @@ public abstract class NewCommandBase<TResource> : APICmdletBase where TResource 
         result = default;
         var sendData = CreateSendData();
         var dataDescription = Json.Stringify(sendData, pretty: true);
-        if (action == null
+        if (action is null
                 ? ShouldProcess(dataDescription)
                 : ShouldProcess(dataDescription, action))
         {
             var apiResult = CreateResource<TResource>(path, sendData);
             result = apiResult.Contents;
-            return result != null;
+            return result is not null;
         }
         return false;
     }

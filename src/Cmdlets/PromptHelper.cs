@@ -224,7 +224,7 @@ namespace AWX.Cmdlets
             answer = null;
             string helpIndicator;
             string help = helpMessage;
-            if (defaultValue == null)
+            if (defaultValue is null)
             {
                 helpIndicator = """
                     (!? => Show help, !> => Suspend)
@@ -238,7 +238,7 @@ namespace AWX.Cmdlets
                 help += (string.IsNullOrEmpty(help) ? "" : "\n") + $"Default: {defaultValue}";
             }
 
-            printHeader(label, $"{defaultValue}", helpMessage, helpIndicator, showDefault: defaultValue != null);
+            printHeader(label, $"{defaultValue}", helpMessage, helpIndicator, showDefault: defaultValue is not null);
             if (string.IsNullOrEmpty(promptKey))
                 promptKey = label;
 
@@ -258,7 +258,7 @@ namespace AWX.Cmdlets
                             printHelp(label, help, helpIndicator);
                             continue;
                         case "!":
-                            if (defaultValue == null) break;
+                            if (defaultValue is null) break;
                             inputed = true;
                             inputString = string.Empty;
                             break;
@@ -272,12 +272,12 @@ namespace AWX.Cmdlets
                 }
                 if (string.IsNullOrEmpty(inputString))
                 {
-                    if (required && defaultValue == null)
+                    if (required && defaultValue is null)
                     {
                         WriteError("Empty value is not allowed.");
                         continue;
                     }
-                    if (defaultValue == null)
+                    if (defaultValue is null)
                     {
                         answer = new Answer<T>(default(T), !inputed);
                     }
@@ -492,9 +492,9 @@ namespace AWX.Cmdlets
             fd.SetParameterType(typeof(SecureString));
             var fdc = new Collection<FieldDescription>() { fd };
             Dictionary<string, PSObject>? result = _host.UI.Prompt("", "", fdc);
-            if (result != null && result.TryGetValue(promptKey, out PSObject? pso))
+            if (result is not null && result.TryGetValue(promptKey, out PSObject? pso))
             {
-                if (pso == null || pso.BaseObject == null)
+                if (pso is null || pso.BaseObject is null)
                 {
                     return false;
                 }
@@ -513,9 +513,9 @@ namespace AWX.Cmdlets
             fd.SetParameterType(typeof(string));
             var fdc = new Collection<FieldDescription>() { fd };
             Dictionary<string, PSObject?>? result = _host.UI.Prompt("", "", fdc);
-            if (result != null && result.TryGetValue(label, out PSObject? val))
+            if (result is not null && result.TryGetValue(label, out PSObject? val))
             {
-                if (val == null || val.BaseObject == null)
+                if (val is null || val.BaseObject is null)
                 {
                     return false;
                 }

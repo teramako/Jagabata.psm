@@ -13,7 +13,7 @@ public abstract class UpdateCommandBase<TResource> : APICmdletBase where TResour
     {
         get
         {
-            if (_apiPath != null)
+            if (_apiPath is not null)
                 return _apiPath;
 
             _apiPath = GetApiPath(typeof(TResource));

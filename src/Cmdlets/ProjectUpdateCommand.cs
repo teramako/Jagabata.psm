@@ -38,11 +38,11 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Name != null)
+            if (Name is not null)
             {
                 Query.Add("name__in", string.Join(',', Name));
             }
-            if (Status != null)
+            if (Status is not null)
             {
                 Query.Add("status__in", string.Join(',', Status));
             }
@@ -109,7 +109,7 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Project != null)
+            if (Project is not null)
             {
                 Id = Project.Id;
             }
@@ -141,7 +141,7 @@ namespace AWX.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (Project != null)
+            if (Project is not null)
             {
                 Id = Project.Id;
             }

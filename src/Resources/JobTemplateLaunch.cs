@@ -67,7 +67,7 @@ namespace AWX.Resources
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (Id != null)
+            if (Id is not null)
             {
                 sb.Append($"[{Id}]");
             }

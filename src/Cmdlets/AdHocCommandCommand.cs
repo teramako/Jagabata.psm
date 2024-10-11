@@ -119,15 +119,15 @@ namespace AWX.Cmdlets
             {
                 return $"{Inventory.PATH}{InventoryId}/ad_hoc_commands/";
             }
-            else if (Inventory != null)
+            else if (Inventory is not null)
             {
                 return $"{Inventory.PATH}{Inventory.Id}/ad_hoc_commands/";
             }
-            else if (Host != null)
+            else if (Host is not null)
             {
                 return $"{Host.PATH}{Host.Id}/ad_hoc_commands/";
             }
-            else if (Group != null)
+            else if (Group is not null)
             {
                 return $"{Group.PATH}{Group.Id}/ad_hoc_commands/";
             }
@@ -154,7 +154,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             AdHocCommand? job = Launch();
-            if (job == null)
+            if (job is null)
             {
                 return;
             }
@@ -174,7 +174,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             AdHocCommand? job = Launch();
-            if (job == null)
+            if (job is null)
             {
                 return;
             }

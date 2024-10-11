@@ -237,7 +237,7 @@ namespace AWX.Cmdlets
                 { "notification_configuration", Configuration },
                 { "messages", Messages }
             };
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
 
             return sendData;
@@ -285,15 +285,15 @@ namespace AWX.Cmdlets
             var sendData = new Dictionary<string, object?>();
             if (!string.IsNullOrEmpty(Name))
                 sendData.Add("name", Name);
-            if (Description != null)
+            if (Description is not null)
                 sendData.Add("description", Description);
-            if (Organization != null)
+            if (Organization is not null)
                 sendData.Add("organization", Organization);
-            if (Type != null)
+            if (Type is not null)
                 sendData.Add("notification_type", $"{Type}".ToLowerInvariant());
-            if (Configuration != null)
+            if (Configuration is not null)
                 sendData.Add("notification_configuration", Configuration);
-            if (Messages != null)
+            if (Messages is not null)
                 sendData.Add("messages", Messages.Count == 0 ? null : Messages);
 
             return sendData;

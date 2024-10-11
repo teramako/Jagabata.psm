@@ -26,7 +26,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     {
         get
         {
-            if (_apiPath != null)
+            if (_apiPath is not null)
                 return _apiPath;
 
             _apiPath = GetApiPath(typeof(TResource));
@@ -45,7 +45,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     /// </summary>
     protected void GatherResourceId()
     {
-        if (Type != null && Type != AcceptType)
+        if (Type is not null && Type != AcceptType)
         {
             return;
         }
@@ -87,7 +87,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     /// <param name="subPath">sub path</param>
     protected IEnumerable<TResource> GetResource(string subPath = "")
     {
-        if (Type != null && Type != AcceptType)
+        if (Type is not null && Type != AcceptType)
         {
             yield break;
         }

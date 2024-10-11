@@ -35,7 +35,7 @@ namespace AWX.Cmdlets
         {
             if (disposing && !_disposed)
             {
-                if (_waitHandle != null)
+                if (_waitHandle is not null)
                 {
                     _waitHandle.Dispose();
                     _waitHandle = null;

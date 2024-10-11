@@ -8,7 +8,7 @@ namespace AWX
         public static bool TryGetTypeFromPath(string path, Method method, out Type type)
         {
             var t = GetTypeFromPath(path, method);
-            if (t != null)
+            if (t is not null)
             {
                 type = t;
                 return true;
@@ -54,10 +54,10 @@ namespace AWX
                         break;
                     }
                 }
-                if (primaryAttr != null) break;
+                if (primaryAttr is not null) break;
             }
 
-            if (primaryAttr == null || resourceField == null)
+            if (primaryAttr is null || resourceField is null)
                 return null;
             if (paths.Length == 3)
             {

@@ -23,7 +23,7 @@ namespace AWX
         }
         ~ApiConfig()
         {
-            if (Token != null)
+            if (Token is not null)
             {
                 Token.Dispose();
             }
@@ -58,7 +58,7 @@ namespace AWX
         {
             get
             {
-                if (_instance != null) return _instance;
+                if (_instance is not null) return _instance;
                 return Load();
             }
         }
@@ -69,7 +69,7 @@ namespace AWX
         /// <param name="fileInfo"></param>
         public void Save(FileInfo? fileInfo = null)
         {
-            if (fileInfo == null)
+            if (fileInfo is null)
             {
                 File ??= new FileInfo(DefaultConfigPath);
                 fileInfo = File;
@@ -151,7 +151,7 @@ namespace AWX
         private string? _userName = null;
         internal User LoadUser(bool save = false, bool force = false)
         {
-            if (force || _user == null)
+            if (force || _user is null)
             {
                 var task = Resources.User.GetMe();
                 task.Wait();
@@ -159,7 +159,7 @@ namespace AWX
             }
             _userId = _user.Id;
             _userName = _user.Username;
-            if (save && File != null)
+            if (save && File is not null)
                 Save();
 
             return _user;
@@ -167,7 +167,7 @@ namespace AWX
         public ulong? UserId {
             get
             {
-                if (_userId == null)
+                if (_userId is null)
                     LoadUser(save: true);
                 return _userId;
             }
@@ -185,7 +185,7 @@ namespace AWX
 
         internal string? GetTokenString()
         {
-            if (Token == null)
+            if (Token is null)
                 return null;
 
             var str = System.Runtime.InteropServices.Marshal.PtrToStringUni(
