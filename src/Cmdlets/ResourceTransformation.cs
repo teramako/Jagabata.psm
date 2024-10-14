@@ -74,36 +74,6 @@ namespace AWX.Cmdlets
                     return TransformToResource(inputData);
             }
         }
-        protected ResourceType ToResourceType(object? data)
-        {
-            switch (data)
-            {
-                case ResourceType resType:
-                    return resType;
-                case string strType:
-                    if (Enum.TryParse<ResourceType>(strType, true, out var type))
-                        return type;
-                    break;
-                case int intType:
-                    return (ResourceType)intType;
-            }
-            throw new ArgumentException($"Could not convert to ResourcType: {data} ({data?.GetType().Name})");
-        }
-        protected ulong ToULong(object? data)
-        {
-            switch (data)
-            {
-                case int:
-                case long:
-                    if (ulong.TryParse($"{data}", out var id))
-                        return id;
-                    break;
-                case uint:
-                case ulong:
-                    return (ulong)data;
-            }
-            throw new ArgumentException($"Could not convert to ulong: {data} ({data?.GetType().Name})");
-        }
         protected IList<IResource> TransformToList(IList list)
         {
             var arr = new List<IResource>();
@@ -115,8 +85,10 @@ namespace AWX.Cmdlets
         }
         protected IResource TransformToResource(object inputData)
         {
-            if (inputData is PSObject pso)
+            if (inputData is PSObject pso && pso.BaseObject is not PSCustomObject)
                 inputData = pso.BaseObject;
+
+            (ResourceType Type, ulong Id) resourceData = (ResourceType.None, 0);
 
             switch (inputData)
             {
@@ -126,8 +98,6 @@ namespace AWX.Cmdlets
 
                     break;
                 case IDictionary dict:
-                    ResourceType type = ResourceType.None;;
-                    ulong id = 0;
                     foreach (var key in dict.Keys)
                     {
                         var strKey = key as string;
@@ -135,20 +105,78 @@ namespace AWX.Cmdlets
                         switch (strKey.ToLowerInvariant())
                         {
                             case "type":
-                                type = ToResourceType(dict[key]);
-                                continue;
+                                if (!LanguagePrimitives.TryConvertTo<ResourceType>(dict[key], out resourceData.Type))
+                                {
+                                    throw new ArgumentException($"Could not convert '{key}' to ResourcType: {dict[key]}");
+                                }
+                                break;
                             case "id":
-                                id = ToULong(dict[key]);
-                                continue;
+                                if (!LanguagePrimitives.TryConvertTo<ulong>(dict[key], out resourceData.Id))
+                                {
+                                    throw new ArgumentException($"Could not convert '{key}' to ulong: {dict[key]}");
+                                }
+                                break;
+                        }
+                        if (resourceData.Id > 0 && resourceData.Type > 0)
+                            break;
+                    }
+                    break;
+                case PSObject ps:
+                    foreach (var p in ps.Properties)
+                    {
+                        switch (p.Name.ToLowerInvariant())
+                        {
+                            case "type":
+                                if (!LanguagePrimitives.TryConvertTo<ResourceType>(p.Value, out resourceData.Type))
+                                {
+                                    throw new ArgumentException($"Could not convert '{p.Name}' to ResourcType: {p.Value}");
+                                }
+                                break;
+                            case "id":
+                                if (!LanguagePrimitives.TryConvertTo<ulong>(p.Value, out resourceData.Id))
+                                {
+                                    throw new ArgumentException($"Could not convert '{p.Name}' to ulong: {p.Value}");
+                                }
+                                break;
+                        }
+                        if (resourceData.Id > 0 && resourceData.Type > 0)
+                            break;
+                    }
+                    break;
+                default:
+                    {
+                        var t = inputData.GetType();
+                        var props = t.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                        foreach (var p in props)
+                        {
+                            switch (p.Name.ToLowerInvariant())
+                            {
+                                case "type":
+                                    var typeObj = p.GetValue(inputData);
+                                    if (!LanguagePrimitives.TryConvertTo<ResourceType>(typeObj, out resourceData.Type))
+                                    {
+                                        throw new ArgumentException($"Could not convert '{p.Name}' to ResourcType: {typeObj}");
+                                    }
+                                    break;
+                                case "id":
+                                    var idObj = p.GetValue(inputData);
+                                    if (!LanguagePrimitives.TryConvertTo<ulong>(idObj, out resourceData.Id))
+                                    {
+                                        throw new ArgumentException($"Could not convert '{p.Name}' to ulong: {idObj}");
+                                    }
+                                    break;
+                            }
+                            if (resourceData.Id > 0 && resourceData.Type > 0)
+                                break;
                         }
                     }
-                    var res = new Resource(type, id);
-                    if (Validate(res))
-                        return res;
-
                     break;
             }
-            throw new ArgumentException($"{nameof(inputData)} should be {nameof(IResource)} or {nameof(IDictionary)} has `Id` and `Type` keys." +
+            var res = new Resource(resourceData.Type, resourceData.Id);
+            if (Validate(res))
+                return res;
+
+            throw new ArgumentException($"{nameof(inputData)} should have `Id` and `Type` keys/properties." +
                                         $" And `Type` should be {string.Join(", ", AcceptableTypes)}");
         }
     }
