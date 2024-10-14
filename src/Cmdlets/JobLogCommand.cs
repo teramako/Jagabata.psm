@@ -16,12 +16,27 @@ namespace AWX.Cmdlets
         html
     }
 
-    [Cmdlet(VerbsCommon.Get, "JobLog", DefaultParameterSetName = "StdOut")]
-    [OutputType(typeof(string), ParameterSetName = ["StdOut"])]
-    [OutputType(typeof(FileInfo), ParameterSetName = ["Download"])]
+    [Cmdlet(VerbsCommon.Get, "JobLog", DefaultParameterSetName = "StdOutTypeAndId")]
+    [OutputType(typeof(string), ParameterSetName = ["StdOutTypeAndId", "StdOutResource"])]
+    [OutputType(typeof(FileInfo), ParameterSetName = ["DownloadTypeAndId", "DownloadResource"])]
     public class GetJobLogCommand : APICmdletBase
     {
-        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "StdOutTypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId", Position = 0)]
+        [ValidateSet(nameof(ResourceType.Job),
+                     nameof(ResourceType.ProjectUpdate),
+                     nameof(ResourceType.InventoryUpdate),
+                     nameof(ResourceType.SystemJob),
+                     nameof(ResourceType.WorkflowJob),
+                     nameof(ResourceType.AdHocCommand))]
+        public ResourceType Type { get; set; } = ResourceType.None;
+
+        [Parameter(Mandatory = true, ParameterSetName = "StdOutTypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId", Position = 1)]
+        public ulong Id { get; set; } = 0;
+
+        [Parameter(Mandatory = true, ParameterSetName = "StdOutResource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "DownloadResource", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Job,
                 ResourceType.ProjectUpdate,
@@ -32,7 +47,8 @@ namespace AWX.Cmdlets
         ])]
         public IResource Job { get; set; } = new Resource(0, 0);
 
-        [Parameter(Mandatory = true, ParameterSetName = "Download")]
+        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId")]
+        [Parameter(Mandatory = true, ParameterSetName = "DownloadResource")]
         public DirectoryInfo? Download { get; set; }
 
         [Parameter()]
@@ -87,6 +103,9 @@ namespace AWX.Cmdlets
 
         protected override void BeginProcessing()
         {
+            if (Id > 0 && Type > 0)
+                Job = new Resource(Type, Id);
+
             if (Download is not null)
             {
                 if (!Download.Exists)

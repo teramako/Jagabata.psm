@@ -12,12 +12,23 @@ Retrieve job logs.
 
 ## SYNTAX
 
-### StdOut (Default)
+### StdOutTypeAndId (Default)
+```
+Get-JobLog [-Type] <ResourceType> [-Id] <UInt64> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
+```
+
+### DownloadTypeAndId
+```
+Get-JobLog [-Type] <ResourceType> [-Id] <UInt64> -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark]
+ [<CommonParameters>]
+```
+
+### StdOutResource
 ```
 Get-JobLog [-Job] <IResource> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
-### Download
+### DownloadResource
 ```
 Get-JobLog [-Job] <IResource> -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
@@ -127,7 +138,7 @@ The only exception is SystemJob, which can only be downloaded as TEXT format.
 
 ```yaml
 Type: DirectoryInfo
-Parameter Sets: Download
+Parameter Sets: DownloadTypeAndId, DownloadResource
 Aliases:
 
 Required: True
@@ -160,10 +171,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Job
-UnifiedJob object.
+### -Id
+The ID of the Unified Job specified by the `-Type` parameter.
 
-"UnifiedJob" referes to following jobs:  
+```yaml
+Type: UInt64
+Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Job
+UnifiedJob resource object from which to retrieve log.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
 - `Job`             : JobTempalte's job  
 - `ProjectUpdate`   : Project's update job  
 - `InventoryUpdate` : InventorySource's update job  
@@ -173,7 +200,7 @@ UnifiedJob object.
 
 ```yaml
 Type: IResource
-Parameter Sets: (All)
+Parameter Sets: StdOutResource, DownloadResource
 Aliases:
 
 Required: True
@@ -183,30 +210,42 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -Type
+Resource type name of the target UnifiedJob.
+
+```yaml
+Type: ResourceType
+Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
+Aliases:
+Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, AdHocCommand
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.UInt64
-Input by `Id` property in the pipeline object.
-Database ID for the UnifiedJob.
+### AWX.Resources.IResource
+The object has `Id` and `Type` properties.
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
+And `Type` should be following value:  
 - `Job`  
 - `ProjectUpdate`  
 - `InventoryUpdate`  
 - `SystemJob`  
 - `WorkflowJob`  
-- `AdHocCommand`  
+- `AdHocCommand`
 
 ## OUTPUTS
 
 ### System.String
-Job log string. (when not doanloading)
+Job log string. (when not downloading)
 
 ### System.IO.FileInfo
 Downloaded file objects.
