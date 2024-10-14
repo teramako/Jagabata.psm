@@ -10,6 +10,7 @@ namespace AWX.Cmdlets
 {
     public enum JobLogFormat
     {
+        NotSpecified,
         txt,
         ansi,
         json,
@@ -52,7 +53,8 @@ namespace AWX.Cmdlets
         public DirectoryInfo? Download { get; set; }
 
         [Parameter()]
-        public JobLogFormat Format { get; set; } = JobLogFormat.txt;
+        [ValidateSet("txt", "ansi", "json", "html")]
+        public JobLogFormat Format { get; set; } = JobLogFormat.NotSpecified;
 
         [Parameter()]
         public SwitchParameter Dark { get; set; }
@@ -106,13 +108,31 @@ namespace AWX.Cmdlets
             if (Id > 0 && Type > 0)
                 Job = new Resource(Type, Id);
 
-            if (Download is not null)
+            if (Download is null)
+            {
+                if (CommandRuntime.Host?.UI.SupportsVirtualTerminal ?? false)
+                {
+                    if (Format == JobLogFormat.NotSpecified)
+                        Format = JobLogFormat.ansi;
+                }
+                else if (Format == JobLogFormat.ansi)
+                {
+                    WriteWarning("Your terminal does not support Virtual Terminal.");
+                    WriteWarning("Change format to \"txt\".");
+                    Format = JobLogFormat.txt;
+                }
+            }
+            else
             {
                 if (!Download.Exists)
                 {
                     throw new DirectoryNotFoundException($"Download directory is not found: {Download.FullName}");
                 }
-                if (Format == JobLogFormat.ansi)
+                if (Format == JobLogFormat.NotSpecified)
+                {
+                    Format = JobLogFormat.txt;
+                }
+                else if (Format == JobLogFormat.ansi)
                 {
                     WriteWarning($"Download text should not contain VT100 Escape Sequence.");
                     WriteWarning($"Download as \"txt\".");
