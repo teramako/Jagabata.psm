@@ -7,7 +7,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(IJobEventBase))]
     public class FindJobEventCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -15,9 +15,22 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.AdHocCommand),
                      nameof(ResourceType.Host),
                      nameof(ResourceType.Group))]
-        public override ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        public override ulong Id { get; set; }
+        public override ResourceType Type { get; set; } = ResourceType.None;
+
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        public override ulong Id { get; set; } = 0;
+
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Job,
+                ResourceType.ProjectUpdate,
+                ResourceType.InventoryUpdate,
+                ResourceType.SystemJob,
+                ResourceType.AdHocCommand,
+                ResourceType.Host,
+                ResourceType.Group
+        ])]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         public SwitchParameter AdHocCommandEvent { get; set; }
@@ -25,27 +38,23 @@ namespace AWX.Cmdlets
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["counter"];
 
-        private void FindJobEvent<T>(string path) where T : class
+        protected override void ProcessRecord()
         {
-            foreach (var resultSet in GetResultSet<T>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
-        }
-        protected override void EndProcessing()
-        {
+            if (Id > 0 && Type > 0)
+                Resource = new Resource(Type, Id);
+
             Query.Clear();
             SetupCommonQuery();
 
-            switch (Type)
+            switch (Resource.Type)
             {
                 case ResourceType.Job:
-                    FindJobEvent<JobEvent>($"{JobTemplateJob.PATH}{Id}/job_events/");
+                    Find<JobEvent>($"{JobTemplateJob.PATH}{Resource.Id}/job_events/");
                     break;
                 case ResourceType.Host:
                     if (AdHocCommandEvent)
                     {
-                        FindJobEvent<AdHocCommandJobEvent>($"{Host.PATH}{Id}/ad_hoc_command_events/");
+                        Find<AdHocCommandJobEvent>($"{Host.PATH}{Resource.Id}/ad_hoc_command_events/");
                     }
                     else
                     {
@@ -53,7 +62,7 @@ namespace AWX.Cmdlets
                         {
                             Query.Set("order_by", "-job,counter");
                         }
-                        FindJobEvent<JobEvent>($"{Host.PATH}{Id}/job_events/");
+                        Find<JobEvent>($"{Host.PATH}{Resource.Id}/job_events/");
                     }
                     break;
                 case ResourceType.Group:
@@ -61,19 +70,19 @@ namespace AWX.Cmdlets
                     {
                         Query.Set("order_by", "-job,counter");
                     }
-                    FindJobEvent<JobEvent>($"{Group.PATH}{Id}/job_events/");
+                    Find<JobEvent>($"{Group.PATH}{Resource.Id}/job_events/");
                     break;
                 case ResourceType.ProjectUpdate:
-                    FindJobEvent<ProjectUpdateJobEvent>($"{ProjectUpdateJob.PATH}{Id}/events/");
+                    Find<ProjectUpdateJobEvent>($"{ProjectUpdateJob.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.InventoryUpdate:
-                    FindJobEvent<InventoryUpdateJobEvent>($"{InventoryUpdateJob.PATH}{Id}/events/");
+                    Find<InventoryUpdateJobEvent>($"{InventoryUpdateJob.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.SystemJob:
-                    FindJobEvent<SystemJobEvent>($"{SystemJob.PATH}{Id}/events/");
+                    Find<SystemJobEvent>($"{SystemJob.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.AdHocCommand:
-                    FindJobEvent<AdHocCommandJobEvent>($"{AdHocCommand.PATH}{Id}/events/");
+                    Find<AdHocCommandJobEvent>($"{AdHocCommand.PATH}{Resource.Id}/events/");
                     break;
             }
         }
