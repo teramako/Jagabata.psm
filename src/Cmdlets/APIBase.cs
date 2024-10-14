@@ -78,12 +78,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     protected IEnumerable<ResultSet<TValue>> GetResultSet<TValue>(string path,
@@ -127,12 +131,16 @@ public abstract class APICmdletBase : Cmdlet
             }
             catch (AggregateException aex)
             {
-                if (aex.InnerException is RestAPIException ex)
+                switch (aex.InnerException)
                 {
-                    WriteVerboseResponse(ex.Response);
-                    throw ex;
+                    case RestAPIException ex:
+                        WriteVerboseResponse(ex.Response);
+                        throw ex;
+                    case HttpRequestException:
+                        throw aex.InnerException;
+                    default:
+                        throw;
                 }
-                throw;
             }
             var resultSet = result.Contents;
 
@@ -169,12 +177,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     /// <summary>
@@ -204,12 +216,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     /// <summary>
@@ -239,12 +255,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     /// <summary>
@@ -271,12 +291,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     /// <summary>
@@ -303,12 +327,16 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            if (aex.InnerException is RestAPIException ex)
+            switch(aex.InnerException)
             {
-                WriteVerboseResponse(ex.Response);
-                throw ex;
+                case RestAPIException ex:
+                    WriteVerboseResponse(ex.Response);
+                    throw ex;
+                case HttpRequestException:
+                    throw aex.InnerException;
+                default:
+                    throw;
             }
-            throw;
         }
     }
     protected void WriteVerboseRequest(string pathAndQuery, Method method)
