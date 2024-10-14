@@ -41,10 +41,7 @@ namespace AWX.Cmdlets
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/inventory_updates/",
                 _ => InventoryUpdateJob.PATH
             };
-            foreach (var resultSet in GetResultSet<InventoryUpdateJob>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<InventoryUpdateJob>(path);
         }
     }
 

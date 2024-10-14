@@ -55,10 +55,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/instance_groups/",
                 _ => InstanceGroup.PATH
             };
-            foreach (var resultSet in GetResultSet<InstanceGroup>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<InstanceGroup>(path);
         }
     }
 }

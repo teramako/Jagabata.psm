@@ -57,10 +57,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/labels/",
                 _ => Label.PATH
             };
-            foreach (var resultSet in GetResultSet<Label>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Label>(path);
         }
     }
 

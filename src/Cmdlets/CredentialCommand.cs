@@ -77,10 +77,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/credentials/",
                 _ => Credential.PATH
             };
-            foreach (var resultSet in GetResultSet<Credential>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Credential>(path);
         }
     }
 

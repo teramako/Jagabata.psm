@@ -41,10 +41,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             var path = Id > 0 ? $"{Organization.PATH}{Id}/workflow_job_templates/" : WorkflowJobTemplate.PATH;
-            foreach (var resultSet in GetResultSet<WorkflowJobTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<WorkflowJobTemplate>(path);
         }
     }
 

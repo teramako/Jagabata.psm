@@ -64,10 +64,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/workflow_jobs/",
                 _ => WorkflowJob.PATH
             };
-            foreach (var resultSet in GetResultSet<WorkflowJob>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<WorkflowJob>(path);
         }
     }
 

@@ -48,10 +48,7 @@ namespace AWX.Cmdlets
                 > 0 => $"{WorkflowApprovalTemplate.PATH}{Id}/approvals/",
                 _ => WorkflowApproval.PATH
             };
-            foreach (var resultSet in GetResultSet<WorkflowApproval>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<WorkflowApproval>(path);
         }
     }
 

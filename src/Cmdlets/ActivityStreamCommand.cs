@@ -77,10 +77,7 @@ namespace AWX.Cmdlets
                 ResourceType.ExecutionEnvironment => $"{ExecutionEnvironment.PATH}{Id}/activity_stream/",
                 _ => ActivityStream.PATH
             };
-            foreach (var resultSet in GetResultSet<ActivityStream>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<ActivityStream>(path);
         }
     }
 }

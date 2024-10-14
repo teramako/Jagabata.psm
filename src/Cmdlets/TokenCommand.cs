@@ -68,10 +68,7 @@ namespace AWX.Cmdlets
                 ResourceType.User => $"{User.PATH}{Id}/tokens/",
                 _ => OAuth2AccessToken.PATH
             };
-            foreach (var resultSet in GetResultSet<OAuth2AccessToken>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<OAuth2AccessToken>(path);
         }
     }
 

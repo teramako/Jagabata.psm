@@ -45,10 +45,7 @@ namespace AWX.Cmdlets
                 ResourceType.Team => $"{Team.PATH}{Id}/roles/",
                 _ => Role.PATH
             };
-            foreach (var resultSet in GetResultSet<Role>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Role>(path);
         }
     }
 
@@ -90,10 +87,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/object_roles/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<Role>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Role>(path);
         }
     }
 

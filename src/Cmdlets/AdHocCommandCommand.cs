@@ -46,10 +46,7 @@ namespace AWX.Cmdlets
                 ResourceType.Group => $"{Group.PATH}{Id}/ad_hoc_commands/",
                 _ => AdHocCommand.PATH
             };
-            foreach (var resultSet in GetResultSet<AdHocCommand>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<AdHocCommand>(path);
         }
     }
 

@@ -39,10 +39,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             var path = Id > 0 ? $"{InstanceGroup.PATH}{Id}/instances/" : Instance.PATH;
-            foreach (var resultSet in GetResultSet<Instance>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Instance>(path);
         }
     }
 }

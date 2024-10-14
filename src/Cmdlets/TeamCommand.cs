@@ -51,10 +51,7 @@ namespace AWX.Cmdlets
                 ResourceType.Role => $"{Role.PATH}{Id}/teams/",
                 _ => Team.PATH
             };
-            foreach (var resultSet in GetResultSet<Team>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Team>(path);
         }
     }
 

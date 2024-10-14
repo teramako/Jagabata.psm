@@ -49,10 +49,7 @@ namespace AWX.Cmdlets
                 ResourceType.Host => $"{Host.PATH}{Id}/inventory_sources/",
                 _ => InventorySource.PATH
             };
-            foreach (var resultSet in GetResultSet<InventorySource>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<InventorySource>(path);
         }
     }
 

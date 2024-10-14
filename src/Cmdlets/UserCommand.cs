@@ -79,10 +79,7 @@ namespace AWX.Cmdlets
                 ResourceType.Role => $"{Role.PATH}{Id}/users/",
                 _ => User.PATH
             };
-            foreach (var resultSet in GetResultSet<User>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<User>(path);
         }
     }
 
@@ -126,10 +123,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/access_list/",
                 _ => throw new ArgumentException($"Can't handle the type: {Type}")
             };
-            foreach (var resultSet in GetResultSet<User>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<User>(path);
         }
     }
 

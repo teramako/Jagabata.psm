@@ -42,10 +42,7 @@ namespace AWX.Cmdlets
                 ResourceType.User => $"{User.PATH}{Id}/applications/",
                 _ => Application.PATH
             };
-            foreach (var resultSet in GetResultSet<Application>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Application>(path);
         }
     }
 

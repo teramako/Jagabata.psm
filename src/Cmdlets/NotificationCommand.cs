@@ -55,10 +55,7 @@ namespace AWX.Cmdlets
                 ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{Id}/notifications/",
                 _ => Notification.PATH
             };
-            foreach (var resultSet in GetResultSet<Notification>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Notification>(path);
         }
     }
 }

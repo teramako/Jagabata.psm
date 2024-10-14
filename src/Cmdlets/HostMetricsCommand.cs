@@ -35,10 +35,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            foreach (var resultSet in GetResultSet<HostMetric>(HostMetric.PATH, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<HostMetric>(HostMetric.PATH);
         }
     }
 }

@@ -43,10 +43,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            foreach (var resultSet in GetResultSet<CredentialType>(CredentialType.PATH, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<CredentialType>(CredentialType.PATH);
         }
     }
 

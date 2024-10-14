@@ -73,10 +73,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_approvals/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(path);
         }
     }
 
@@ -114,10 +111,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_error/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(path);
         }
     }
 
@@ -155,10 +149,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_started/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(path);
         }
     }
 
@@ -196,10 +187,7 @@ namespace AWX.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_success/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(path);
         }
     }
 

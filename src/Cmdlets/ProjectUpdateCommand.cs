@@ -55,10 +55,7 @@ namespace AWX.Cmdlets
                 ResourceType.Project => $"{Project.PATH}{Id}/project_updates/",
                 _ => ProjectUpdateJob.PATH
             };
-            foreach (var resultSet in GetResultSet<ProjectUpdateJob>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<ProjectUpdateJob>(path);
         }
     }
 

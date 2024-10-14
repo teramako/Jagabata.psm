@@ -52,10 +52,7 @@ namespace AWX.Cmdlets
                 ResourceType.User => $"{User.PATH}{Id}/" + (Admin ? "admin_of_organizations/" : "organizations/"),
                 _ => Organization.PATH
             };
-            foreach (var resultSet in GetResultSet<Organization>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Organization>(path);
         }
     }
 

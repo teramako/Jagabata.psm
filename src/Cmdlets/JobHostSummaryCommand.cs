@@ -39,10 +39,7 @@ namespace AWX.Cmdlets
                 ResourceType.Group => $"{Group.PATH}{Id}/job_host_summaries/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<JobHostSummary>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<JobHostSummary>(path);
         }
     }
 }

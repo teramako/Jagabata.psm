@@ -68,10 +68,7 @@ namespace AWX.Cmdlets
                 ResourceType.Host => $"{Host.PATH}{Id}/smart_inventories/",
                 _ => Inventory.PATH
             };
-            foreach (var resultSet in GetResultSet<Inventory>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Inventory>(path);
         }
     }
 

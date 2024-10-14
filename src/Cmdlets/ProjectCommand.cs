@@ -47,10 +47,7 @@ namespace AWX.Cmdlets
                 ResourceType.Team => $"{Team.PATH}{Id}/projects/",
                 _ => Project.PATH
             };
-            foreach (var resultSet in GetResultSet<Project>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Project>(path);
         }
     }
 

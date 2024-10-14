@@ -39,10 +39,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             var path = Id > 0 ? $"{Organization.PATH}{Id}/execution_environments/" : ExecutionEnvironment.PATH;
-            foreach (var resultSet in GetResultSet<ExecutionEnvironment>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<ExecutionEnvironment>(path);
         }
     }
 

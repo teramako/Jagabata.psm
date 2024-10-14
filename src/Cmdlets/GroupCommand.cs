@@ -63,10 +63,7 @@ namespace AWX.Cmdlets
                 ResourceType.Host => $"{Host.PATH}{Id}/" + (OnlyParnets ? "groups/" : "all_groups/"),
                 _ => Group.PATH
             };
-            foreach (var resultSet in GetResultSet<Group>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<Group>(path);
         }
     }
 

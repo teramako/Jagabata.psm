@@ -43,10 +43,7 @@ namespace AWX.Cmdlets
                 > 0 => $"{WorkflowJob.PATH}{Id}/workflow_nodes/",
                 _ => WorkflowJobNode.PATH
             };
-            foreach (var resultSet in GetResultSet<WorkflowJobNode>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<WorkflowJobNode>(path);
         }
     }
 
@@ -84,10 +81,7 @@ namespace AWX.Cmdlets
                 NodeType.Success => $"{WorkflowJobNode.PATH}{Id}/success_nodes/",
                 _ => throw new ArgumentException()
             };
-            foreach (var resultSet in GetResultSet<WorkflowJobNode>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<WorkflowJobNode>(path);
         }
     }
 }

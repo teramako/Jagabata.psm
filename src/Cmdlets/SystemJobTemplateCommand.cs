@@ -38,11 +38,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = SystemJobTemplate.PATH;
-            foreach (var resultSet in GetResultSet<SystemJobTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<SystemJobTemplate>(SystemJobTemplate.PATH);
         }
     }
 

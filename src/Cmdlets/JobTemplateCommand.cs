@@ -56,10 +56,7 @@ namespace AWX.Cmdlets
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/job_templates/",
                 _ => JobTemplate.PATH
             };
-            foreach (var resultSet in GetResultSet<JobTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<JobTemplate>(path);
         }
     }
 

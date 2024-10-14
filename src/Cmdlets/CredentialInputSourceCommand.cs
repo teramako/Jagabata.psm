@@ -39,10 +39,7 @@ namespace AWX.Cmdlets
         protected override void ProcessRecord()
         {
             var path = Id > 0 ? $"{Credential.PATH}{Id}/input_sources/" : CredentialInputSource.PATH;
-            foreach (var resultSet in GetResultSet<CredentialInputSource>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<CredentialInputSource>(path);
         }
     }
 }
