@@ -18,9 +18,8 @@ namespace AWX
     /// <summary>
     /// Rest API client for AWX
     /// </summary>
-    public sealed class RestAPI
+    public static class RestAPI
     {
-        private RestAPI() { }
         /// <summary>
         /// Single HttpClient for AWX
         /// </summary>

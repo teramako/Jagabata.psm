@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace AWX
 {
-    public class Yaml
+    public static class Yaml
     {
         /// <summary>
         /// Deserialize YAML string to Dictionary
