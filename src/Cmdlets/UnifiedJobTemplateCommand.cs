@@ -37,12 +37,16 @@ namespace AWX.Cmdlets
                 }
                 catch (AggregateException aex)
                 {
-                    if (aex.InnerException is RestAPIException ex)
+                    switch (aex.InnerException)
                     {
-                        WriteVerboseResponse(ex.Response);
-                        throw ex;
+                        case RestAPIException ex:
+                            WriteVerboseResponse(ex.Response);
+                            throw ex;
+                        case HttpRequestException:
+                            throw aex.InnerException;
+                        default:
+                            throw;
                     }
-                    throw;
                 }
                 var resultSet = result.Contents;
 
