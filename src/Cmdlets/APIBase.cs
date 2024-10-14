@@ -337,8 +337,4 @@ public abstract class APICmdletBase : Cmdlet
             WriteDebug($"{indicator} {header.Key}: {string.Join(", ", header.Value)}");
         }
     }
-    protected void WriteApiError(RestAPIException ex)
-    {
-        WriteError(new ErrorRecord(ex, "APIError", ErrorCategory.InvalidResult, ex.Response));
-    }
 }
