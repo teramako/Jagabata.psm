@@ -54,12 +54,20 @@ namespace AWX.Cmdlets
     {
         public ResourceType[] AcceptableTypes { get; init; } = [];
 
-        private bool Validate(IResource resource)
+        private IResource Validate(IResource resource)
         {
-            if (resource.Id == 0) return false;
+            if (resource.Id == 0)
+            {
+                throw new ArgumentException("`Id` should be greater than 0");
+            }
             if (AcceptableTypes.Length != 0)
-                return AcceptableTypes.Any(type => resource.Type == type);
-            return true;
+            {
+                if (!AcceptableTypes.Any(type => resource.Type == type))
+                {
+                    throw new ArgumentException($"`Type` should be one of [{string.Join(", ", AcceptableTypes)}]: {resource.Type}");
+                }
+            }
+            return resource;
         }
 
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
@@ -93,10 +101,7 @@ namespace AWX.Cmdlets
             switch (inputData)
             {
                 case IResource resource:
-                    if (Validate(resource))
-                        return resource;
-
-                    break;
+                    return Validate(resource);
                 case IDictionary dict:
                     foreach (var key in dict.Keys)
                     {
@@ -172,12 +177,7 @@ namespace AWX.Cmdlets
                     }
                     break;
             }
-            var res = new Resource(resourceData.Type, resourceData.Id);
-            if (Validate(res))
-                return res;
-
-            throw new ArgumentException($"{nameof(inputData)} should have `Id` and `Type` keys/properties." +
-                                        $" And `Type` should be {string.Join(", ", AcceptableTypes)}");
+            return Validate(new Resource(resourceData.Type, resourceData.Id));
         }
     }
 }
