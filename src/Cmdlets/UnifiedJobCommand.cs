@@ -158,7 +158,7 @@ namespace AWX.Cmdlets
                 typeof(WorkflowJob))]
     public class WaitJobCommand : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -166,8 +166,20 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.AdHocCommand),
                      nameof(ResourceType.WorkflowJob))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Job", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                     ResourceType.Job,
+                     ResourceType.ProjectUpdate,
+                     ResourceType.InventoryUpdate,
+                     ResourceType.SystemJob,
+                     ResourceType.AdHocCommand,
+                     ResourceType.WorkflowJob
+        ])]
+        public IResource? Job { get; set; }
 
         [Parameter()]
         [ValidateRange(5, int.MaxValue)]
@@ -178,6 +190,12 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
+            if (Job is not null)
+            {
+                Type = Job.Type;
+                Id = Job.Id;
+            }
+
             JobProgressManager.Add(Id, new JobProgress(Id, Type));
         }
         protected override void EndProcessing()
