@@ -15,10 +15,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.AdHocCommand),
                      nameof(ResourceType.Host),
                      nameof(ResourceType.Group))]
-        public override ResourceType Type { get; set; } = ResourceType.None;
+        public ResourceType Type { get; set; } = ResourceType.None;
 
         [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
-        public override ulong Id { get; set; } = 0;
+        public ulong Id { get; set; } = 0;
 
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [

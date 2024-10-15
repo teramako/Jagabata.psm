@@ -22,9 +22,9 @@ namespace AWX.Cmdlets
     {
         [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true, DontShow = true)]
         [ValidateSet(nameof(ResourceType.WorkflowApprovalTemplate))]
-        public override ResourceType Type { get; set; } = ResourceType.WorkflowApproval;
+        public ResourceType Type { get; set; } = ResourceType.WorkflowApproval;
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter()]
         [ValidateSet(nameof(JobStatus.Pending), nameof(JobStatus.Successful), nameof(JobStatus.Failed))]

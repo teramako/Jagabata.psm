@@ -36,9 +36,9 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.Schedule),
                      nameof(ResourceType.WorkflowJobTemplateNode),
                      nameof(ResourceType.WorkflowJobNode))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter()]
         public string? Kind { get; set; }

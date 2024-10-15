@@ -25,9 +25,9 @@ namespace AWX.Cmdlets
     {
         [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
         [ValidateSet(nameof(ResourceType.InstanceGroup))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];

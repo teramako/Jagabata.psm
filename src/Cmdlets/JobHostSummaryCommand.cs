@@ -23,9 +23,9 @@ namespace AWX.Cmdlets
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.Host),
                      nameof(ResourceType.Group))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];

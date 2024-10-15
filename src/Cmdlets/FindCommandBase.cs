@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Web;
-using AWX.Resources;
 
 namespace AWX.Cmdlets;
 
@@ -18,9 +17,6 @@ namespace AWX.Cmdlets;
 /// <inheritdoc cref="APICmdletBase"/>
 public abstract class FindCommandBase : APICmdletBase
 {
-    public abstract ResourceType Type { get; set; }
-    public abstract ulong Id { get; set; }
-
     /// <summary>
     /// <c>"search"</c> query parameter for API.
     /// <br/>

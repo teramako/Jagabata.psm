@@ -25,9 +25,9 @@ namespace AWX.Cmdlets
     {
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
         [ValidateSet(nameof(ResourceType.User))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
         [Parameter(ParameterSetName = "AssociatedWith")]
         public SwitchParameter Admin { get; set; }
 

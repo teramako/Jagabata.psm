@@ -23,9 +23,6 @@ namespace AWX.Cmdlets
     [OutputType(typeof(HostMetric))]
     public class FindHostMetricCommand : FindCommandBase
     {
-        public override ResourceType Type { get; set; }
-        public override ulong Id { get; set; }
-
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
 

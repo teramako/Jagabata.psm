@@ -30,10 +30,10 @@ namespace AWX.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [

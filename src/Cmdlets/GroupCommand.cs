@@ -28,9 +28,9 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.Group),
                      nameof(ResourceType.InventorySource),
                      nameof(ResourceType.Host))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         /// <summary>
         /// List only root(Top-level) groups.

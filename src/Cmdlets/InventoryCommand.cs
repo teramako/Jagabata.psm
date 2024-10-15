@@ -27,9 +27,9 @@ namespace AWX.Cmdlets
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory),
                      nameof(ResourceType.Host))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter()]
         public InventoryKind Kind { get; set; } = InventoryKind.All;

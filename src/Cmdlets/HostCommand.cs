@@ -27,9 +27,9 @@ namespace AWX.Cmdlets
         [ValidateSet(nameof(ResourceType.Inventory),
                      nameof(ResourceType.InventorySource),
                      nameof(ResourceType.Group))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         /// <summary>
         /// List only directly member group.

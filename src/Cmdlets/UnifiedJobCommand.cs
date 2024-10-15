@@ -20,10 +20,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.Schedule),
                      nameof(ResourceType.Instance),
                      nameof(ResourceType.InstanceGroup))]
-        public override ResourceType Type { get; set; }
+        public ResourceType Type { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
+        public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
