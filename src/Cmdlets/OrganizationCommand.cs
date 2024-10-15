@@ -23,12 +23,11 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Organization))]
     public class FindOrganizationCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.User))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
-        [Parameter(ParameterSetName = "AssociatedWith")]
+        [Parameter(Mandatory = true, ParameterSetName = "User", ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        public ulong User { get; set; }
+
+        [Parameter(ParameterSetName = "User")]
         public SwitchParameter Admin { get; set; }
 
         [Parameter(Position = 0)]
@@ -47,11 +46,9 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Type switch
-            {
-                ResourceType.User => $"{User.PATH}{Id}/" + (Admin ? "admin_of_organizations/" : "organizations/"),
-                _ => Organization.PATH
-            };
+            var path = User > 0
+                ? $"{Resources.User.PATH}{User}/" + (Admin ? "admin_of_organizations/" : "organizations/")
+                : Organization.PATH;
             Find<Organization>(path);
         }
     }
