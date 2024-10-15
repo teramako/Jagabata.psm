@@ -207,11 +207,11 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Stop, "UnifiedJob", DefaultParameterSetName = "RequestCancel")]
+    [Cmdlet(VerbsLifecycle.Stop, "UnifiedJob", DefaultParameterSetName = "TypeAndId")]
     [OutputType(typeof(PSObject))]
     public class StopJobCommand : APICmdletBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -219,14 +219,32 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.AdHocCommand),
                      nameof(ResourceType.WorkflowJob))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Determine")]
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Job,
+                ResourceType.ProjectUpdate,
+                ResourceType.InventoryUpdate,
+                ResourceType.SystemJob,
+                ResourceType.AdHocCommand,
+                ResourceType.WorkflowJob
+        ])]
+        public IResource? Job { get; set; }
+
+        [Parameter()]
         public SwitchParameter Determine { get; set; }
 
         protected override void ProcessRecord()
         {
+            if (Job is not null)
+            {
+                Type = Job.Type;
+                Id = Job.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/cancel/",
