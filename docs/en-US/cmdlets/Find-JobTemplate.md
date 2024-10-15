@@ -18,11 +18,17 @@ Find-JobTemplate [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### TypeAndId
 ```
-Find-JobTemplate -Id <UInt64> -Type <ResourceType> [[-Name] <String[]>] [-OrderBy <String[]>]
+Find-JobTemplate [-Type] <ResourceType> [-Id] <UInt64> [[-Name] <String[]>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
+```
+
+### Resource
+```
+Find-JobTemplate [-Resource] <IResource> [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -107,13 +113,13 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -129,7 +135,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -169,6 +175,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object associated with the resource to be find.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Organization`  
+- `Inventory`
+
+```yaml
+Type: IResource
+Parameter Sets: Resource
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -194,14 +220,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 Accepted values: Organization, Inventory
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -210,17 +236,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### AWX.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Organization`  
 - `Inventory`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
 
 ## OUTPUTS
 

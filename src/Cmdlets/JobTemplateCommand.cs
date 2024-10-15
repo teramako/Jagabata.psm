@@ -27,14 +27,22 @@ namespace AWX.Cmdlets
     [OutputType(typeof(JobTemplate))]
     public class FindJobTemplateCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public override ulong Id { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory))]
         public override ResourceType Type { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        public override ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Organization,
+                ResourceType.Inventory
+        ])]
+        public IResource? Resource { get; set; }
+
+        [Parameter(Position = 2)]
         public string[]? Name { get; set; }
 
         [Parameter()]
@@ -50,6 +58,12 @@ namespace AWX.Cmdlets
         }
         protected override void EndProcessing()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Organization => $"{Organization.PATH}{Id}/job_templates/",
