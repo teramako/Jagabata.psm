@@ -8,7 +8,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(IUnifiedJob))]
     public class FindUnifiedJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", ValueFromPipelineByPropertyName = true)]
         [ValidateSet(nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate),
                      nameof(ResourceType.Project),
@@ -21,8 +21,25 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.Instance),
                      nameof(ResourceType.InstanceGroup))]
         public override ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", ValueFromPipelineByPropertyName = true)]
         public override ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.JobTemplate,
+                ResourceType.WorkflowJobTemplate,
+                ResourceType.Project,
+                ResourceType.InventorySource,
+                ResourceType.SystemJobTemplate,
+                ResourceType.Inventory,
+                ResourceType.Host,
+                ResourceType.Group,
+                ResourceType.Schedule,
+                ResourceType.Instance,
+                ResourceType.InstanceGroup
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
@@ -84,6 +101,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             switch (Type)
             {
                 case ResourceType.JobTemplate:

@@ -18,9 +18,15 @@ Find-UnifiedJob [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCo
  [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### TypeAndId
 ```
 Find-UnifiedJob -Type <ResourceType> -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### Resource
+```
+Find-UnifiedJob [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -108,7 +114,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 
 Required: True
@@ -152,6 +158,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object associated with the resource to be find.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Group`  
+- `Host`  
+- `Instance`  
+- `InstanceGroup`  
+- `Inventory`  
+- `InventorySource`  
+- `JobTemplate`  
+- `Project`  
+- `Schedule`  
+- `SystemJobTemplate`  
+- `WorkflowJobTemplate`
+
+```yaml
+Type: IResource
+Parameter Sets: Resource
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -177,7 +212,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 Accepted values: JobTemplate, WorkflowJobTemplate, Project, InventorySource, SystemJobTemplate, Inventory, Host, Group, Schedule, Instance, InstanceGroup
 
@@ -193,10 +228,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### AWX.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Group`  
 - `Host`  
 - `Instance`  
@@ -208,11 +243,6 @@ Acceptable values:
 - `Schedule`  
 - `SystemJobTemplate`  
 - `WorkflowJobTemplate`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
 
 ## OUTPUTS
 
