@@ -16,17 +16,15 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Job", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Job")]
     [OutputType(typeof(JobTemplateJob))]
     public class FindJobTemplateJobCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.JobTemplate))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.JobTemplate])]
         public ulong Id { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter(Position = 1)]
         public string[]? Name { get; set; }
 
         [Parameter()]

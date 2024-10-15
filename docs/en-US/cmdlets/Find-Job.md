@@ -12,16 +12,8 @@ Retrieve jobs for JobTemplate.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-Job [[-Name] <String[]>] [-Status <String[]>] [-LaunchType <String[]>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-Job [-Type <ResourceType>] -Id <UInt64> [[-Name] <String[]>] [-Status <String[]>] [-LaunchType <String[]>]
+Find-Job [[-Id] <UInt64>] [[-Name] <String[]>] [-Status <String[]>] [-LaunchType <String[]>]
  [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
  [-All] [<CommonParameters>]
 ```
@@ -110,18 +102,22 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
+JobTemplate ID or it's object.
+Filter to jobs in the JobTemplate for the specified ID.
+
+> [!TIP]  
+> Can specify `IResource` object.  
+> For example: `-Id (Get-JobTemplate -Id 3)`, `-Id $jobTemplate`
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -153,7 +149,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -228,37 +224,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: JobTemplate
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `JobTemplate` (only)
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `JobTemplate`
+### AWX.Resources.IResource
+JobTemplate ID or it's object.
 
 ## OUTPUTS
 
