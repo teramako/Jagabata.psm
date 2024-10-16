@@ -23,7 +23,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(ActivityStream))]
     public class FindActivityStreamCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.OAuth2Application),
                      nameof(ResourceType.OAuth2AccessToken),
                      nameof(ResourceType.Organization),
@@ -43,8 +43,31 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJob),
                      nameof(ResourceType.ExecutionEnvironment))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.OAuth2Application,
+                ResourceType.OAuth2AccessToken,
+                ResourceType.Organization,
+                ResourceType.User,
+                ResourceType.Project,
+                ResourceType.Team,
+                ResourceType.Credential,
+                ResourceType.CredentialType,
+                ResourceType.Inventory,
+                ResourceType.InventorySource,
+                ResourceType.Group,
+                ResourceType.Host,
+                ResourceType.JobTemplate,
+                ResourceType.Job,
+                ResourceType.AdHocCommand,
+                ResourceType.WorkflowJobTemplate,
+                ResourceType.WorkflowJob,
+                ResourceType.ExecutionEnvironment
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
@@ -55,6 +78,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.OAuth2Application => $"{Application.PATH}{Id}/activity_stream/",

@@ -18,9 +18,15 @@ Find-ActivityStream [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameVal
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### TypeAndId
 ```
-Find-ActivityStream -Type <ResourceType> -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-ActivityStream [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### Resource
+```
+Find-ActivityStream [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -128,13 +134,13 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -172,6 +178,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object to which the search target associated with.
+
+The resource is accepted following types:  
+- `OAuth2Application`  
+- `OAuth2AccessToken`  
+- `Organization`  
+- `User`  
+- `Project`  
+- `Team`  
+- `Credential`  
+- `CredentialType`  
+- `Inventory`  
+- `InventorySource`  
+- `Group`  
+- `Host`  
+- `JobTemplate`  
+- `Job`  
+- `AdHocCommand`  
+- `WorkflowJobTemplate`  
+- `WorkflowJob`  
+- `ExecutionEnvironment`
+
+```yaml
+Type: IResource
+Parameter Sets: Resource
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -197,14 +238,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 Accepted values: OAuth2Application, OAuth2AccessToken, Organization, User, Project, Team, Credential, CredentialType, Inventory, InventorySource, Group, Host, JobTemplate, Job, AdHocCommand, WorkflowJobTemplate, WorkflowJob, ExecutionEnvironment
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -213,33 +254,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### AWX.Resources.IResource
+Resource object to which the search target associated with.
 
-Acceptable values:  
-- `OAuth2Application`  
-- `OAuth2AccessToken`  
-- `Organization`  
-- `User`  
-- `Project`  
-- `Team`  
-- `Credential`  
-- `CredentialType`  
-- `Inventory`  
-- `InventorySource`  
-- `Group`  
-- `Host`  
-- `JobTemplate`  
-- `Job`  
-- `AdHocCommand`  
-- `WorkflowJobTemplate`  
-- `WorkflowJob`  
-- `ExecutionEnvironment`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+See: `-Resource` parameter.
 
 ## OUTPUTS
 
