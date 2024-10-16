@@ -98,11 +98,11 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "AccessList")]
+    [Cmdlet(VerbsCommon.Find, "AccessList", DefaultParameterSetName = "TypeAndId")]
     [OutputType(typeof(User))]
     public class FindAccessListCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, Position = 0, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.InstanceGroup),
                      nameof(ResourceType.Organization),
                      nameof(ResourceType.User),
@@ -113,8 +113,22 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, Position = 1, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.InstanceGroup,
+                ResourceType.Organization,
+                ResourceType.User,
+                ResourceType.Project,
+                ResourceType.Team,
+                ResourceType.Credential,
+                ResourceType.Inventory,
+                ResourceType.JobTemplate,
+                ResourceType.WorkflowJobTemplate
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -125,6 +139,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Id}/access_list/",
