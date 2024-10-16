@@ -18,11 +18,10 @@ Find-Organization [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### User
 ```
-Find-Organization -Type <ResourceType> -Id <UInt64> [-Admin] [[-Name] <String[]>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-Organization -User <UInt64> [-Admin] [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,14 +41,14 @@ PS C:\> Find-Organization
 
 ### Example 2
 ```powershell
-PS C:\> Find-Organization -Type User -Id 1
+PS C:\> Find-Organization -User 1
 ```
 
 Retrieve Organizations which the User of ID 1 belong to.
 
 ### Example 3
 ```powershell
-PS C:\> Find-JobTemplate -Type User -Id 1 -Admin
+PS C:\> Find-JobTemplate -User 1 -Admin
 ```
 
 Retrieve Organizations administrered by the User of ID 1.
@@ -61,7 +60,7 @@ Filter to Organizations administerted by the target User.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith
+Parameter Sets: User
 Aliases:
 
 Required: False
@@ -120,22 +119,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -210,20 +193,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
+### -User
+User ID or it's object.
+Retrieve Organizations which the User belong to.
+
+> [!TIP]  
+> Can specify `IResource` object.  
+> For example: `-Id (Get-User -Id 3)`, `-Id $users[1]`
 
 ```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
+Type: UInt64
+Parameter Sets: User
 Aliases:
-Accepted values: User
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
