@@ -152,9 +152,6 @@ Retrieve jobs for WorkflowJobTemplate.
 ### [Find-WorkflowJobNode](Find-WorkflowJobNode.md)
 Retrieve nodes for WorkflowJob.
 
-### [Find-WorkflowJobNodeFor](Find-WorkflowJobNodeFor.md)
-Retrieve WorkflowJobNodes linked to the target WorkflowJobNode.
-
 ### [Find-WorkflowJobTemplate](Find-WorkflowJobTemplate.md)
 Retrieve WorkflowJobTemplates.
 

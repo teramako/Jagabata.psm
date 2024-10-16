@@ -371,10 +371,6 @@
 - [Find-WorkflowJobNode](./cmdlets/Find-WorkflowJobNode.md)
 - [Get-WorkflowJobNode](./cmdlets/Get-WorkflowJobNode.md)
 
-## WorkflowJobNodeFor
-
-- [Find-WorkflowJobNodeFor](./cmdlets/Find-WorkflowJobNodeFor.md)
-
 ## WorkflowJobTemplate
 
 - [Find-WorkflowJobTemplate](./cmdlets/Find-WorkflowJobTemplate.md)
