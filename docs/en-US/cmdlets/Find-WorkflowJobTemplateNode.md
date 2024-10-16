@@ -26,7 +26,7 @@ Find-WorkflowJobTemplateNode [-Template] <UInt64> [-OrderBy <String[]>] [-Search
 
 ### WorkflowJobTemplateNode
 ```
-Find-WorkflowJobTemplateNode [-Node] <UInt64> [-Linked] <WorkflowLinkState> [-OrderBy <String[]>]
+Find-WorkflowJobTemplateNode [-Node] <UInt64> [-Linked] <WorkflowJobNodeLinkState> [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
 ```
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 Specifies at which state the WorkflowJobTemplateNode is linked.
 
 ```yaml
-Type: WorkflowLinkState
+Type: WorkflowJobNodeLinkState
 Parameter Sets: WorkflowJobTemplateNode
 Aliases:
 Accepted values: Always, Failure, Success

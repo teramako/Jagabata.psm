@@ -26,8 +26,9 @@ Find-WorkflowJobNode [-Job] <UInt64> [-OrderBy <String[]>] [-Search <String[]>] 
 
 ### WorkflowJobNode
 ```
-Find-WorkflowJobNode [-Node] <UInt64> [-Linked] <WorkflowLinkState> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-WorkflowJobNode [-Node] <UInt64> [-Linked] <WorkflowJobNodeLinkState> [-OrderBy <String[]>]
+ [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -141,7 +142,7 @@ Accept wildcard characters: False
 Specifies at which state the WorkflowJobNode is linked.
 
 ```yaml
-Type: WorkflowLinkState
+Type: WorkflowJobNodeLinkState
 Parameter Sets: WorkflowJobNode
 Aliases:
 Accepted values: Always, Failure, Success

@@ -32,15 +32,10 @@ namespace AWX.Cmdlets
         public ulong Node { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobNode", Position = 1)]
-        public WorkflowLinkState Linked { get; set; }
+        public WorkflowJobNodeLinkState Linked { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
-
-        public enum WorkflowLinkState
-        {
-            Always, Failure, Success
-        }
 
         protected override void BeginProcessing()
         {
@@ -57,9 +52,9 @@ namespace AWX.Cmdlets
             {
                 path = Linked switch
                 {
-                    WorkflowLinkState.Always => $"{WorkflowJobNode.PATH}{Node}/always_nodes/",
-                    WorkflowLinkState.Failure => $"{WorkflowJobNode.PATH}{Node}/failure_nodes/",
-                    WorkflowLinkState.Success => $"{WorkflowJobNode.PATH}{Node}/success_nodes/",
+                    WorkflowJobNodeLinkState.Always => $"{WorkflowJobNode.PATH}{Node}/always_nodes/",
+                    WorkflowJobNodeLinkState.Failure => $"{WorkflowJobNode.PATH}{Node}/failure_nodes/",
+                    WorkflowJobNodeLinkState.Success => $"{WorkflowJobNode.PATH}{Node}/success_nodes/",
                     _ => throw new ArgumentException()
                 };
             }
