@@ -391,7 +391,3 @@
 - [Unregister-WorkflowJobTemplateNode](./cmdlets/Unregister-WorkflowJobTemplateNode.md)
 - [Update-WorkflowJobTemplateNode](./cmdlets/Update-WorkflowJobTemplateNode.md)
 
-## WorkflowJobTemplateNodeFor
-
-- [Find-WorkflowJobTemplateNodeFor](./cmdlets/Find-WorkflowJobTemplateNodeFor.md)
-

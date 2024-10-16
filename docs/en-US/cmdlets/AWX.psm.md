@@ -158,9 +158,6 @@ Retrieve WorkflowJobTemplates.
 ### [Find-WorkflowJobTemplateNode](Find-WorkflowJobTemplateNode.md)
 Retrieve WorkflowJobTemplateNodes.
 
-### [Find-WorkflowJobTemplateNodeFor](Find-WorkflowJobTemplateNodeFor.md)
-Retrieve WorkflowJobTemplateNodes linked to the target WorkflowJobTemplateNode.
-
 ### [Get-ActivityStream](Get-ActivityStream.md)
 Retrieves ActivityStreams by ID(s).
 
