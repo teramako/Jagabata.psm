@@ -39,19 +39,28 @@ namespace AWX.Cmdlets
     [OutputType(typeof(User))]
     public class FindUserCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Team),
                      nameof(ResourceType.Credential),
                      nameof(ResourceType.Role))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Organization,
+                ResourceType.Team,
+                ResourceType.Credential,
+                ResourceType.Role
+        ])]
+        public IResource? Resource { get; set; }
+
+        [Parameter(Position = 2)]
         public string[]? UserName { get; set; }
 
-        [Parameter(Position = 1)]
+        [Parameter(Position = 3)]
         public string[]? Email { get; set; }
 
         [Parameter()]
@@ -71,6 +80,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Organization => $"{Organization.PATH}{Id}/users/",

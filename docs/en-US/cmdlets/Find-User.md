@@ -18,11 +18,18 @@ Find-User [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>] [
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### TypeAndId
 ```
-Find-User -Type <ResourceType> -Id <UInt64> [[-UserName] <String[]>] [[-Email] <String[]>]
+Find-User [-Type] <ResourceType> [-Id] <UInt64> [[-UserName] <String[]>] [[-Email] <String[]>]
  [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
  [-All] [<CommonParameters>]
+```
+
+### Resource
+```
+Find-User [-Resource] <IResource> [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
+ [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +39,8 @@ Implementation of following API:
 - `/api/v2/users/`  
 - `/api/v2/organizations/{id}/users/`  
 - `/api/v2/teams/{id}/users/`  
-- `/api/v2/credentials/{id}/users/`
+- `/api/v2/credentials/{id}/users/`  
+- `/api/v2/roles/{id}/users/`
 
 ## EXAMPLES
 
@@ -91,7 +99,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -125,13 +133,13 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -169,6 +177,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object to which the search target associated with. 
+
+The resource is accepted following types:  
+- `Organization`  
+- `Team`  
+- `Credential`  
+- `Role`
+
+```yaml
+Type: IResource
+Parameter Sets: Resource
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -194,14 +223,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: AssociatedWith
+Parameter Sets: TypeAndId
 Aliases:
 Accepted values: Organization, Team, Credential, Role
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -216,7 +245,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -227,19 +256,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### AWX.Resources.IResource
+Resource object to which the search target associated with. 
 
-Acceptable values:  
-- `Organization`  
-- `Team`  
-- `Credential`  
-- `Role`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+See: `-Resource` parameter.
 
 ## OUTPUTS
 
