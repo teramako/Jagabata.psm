@@ -23,47 +23,21 @@ namespace AWX.Cmdlets
     [OutputType(typeof(WorkflowJobNode))]
     public class FindWorkflowJobNodeCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.WorkflowJob))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(Mandatory = true, ParameterSetName = "WorkflowJob", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJob])]
+        public ulong Job { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobNode", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobNode])]
+        public ulong Node { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobNode", Position = 1)]
+        public WorkflowLinkState Linked { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
 
-        protected override void BeginProcessing()
-        {
-            SetupCommonQuery();
-        }
-        protected override void ProcessRecord()
-        {
-            var path = Id switch
-            {
-                > 0 => $"{WorkflowJob.PATH}{Id}/workflow_nodes/",
-                _ => WorkflowJobNode.PATH
-            };
-            Find<WorkflowJobNode>(path);
-        }
-    }
-
-    [Cmdlet(VerbsCommon.Find, "WorkflowJobNodeFor")]
-    [OutputType(typeof(WorkflowJobNode))]
-    public class FindWorkflowJobNodeForCommand : FindCommandBase
-    {
-        [Parameter(ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.WorkflowJobNode))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, Position = 0)]
-        public NodeType For { get; set; }
-
-        [Parameter()]
-        public override string[] OrderBy { get; set; } = ["!id"];
-
-        public enum NodeType
+        public enum WorkflowLinkState
         {
             Always, Failure, Success
         }
@@ -74,13 +48,21 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = For switch
+            var path = WorkflowJobNode.PATH;
+            if (Job > 0)
             {
-                NodeType.Always => $"{WorkflowJobNode.PATH}{Id}/always_nodes/",
-                NodeType.Failure => $"{WorkflowJobNode.PATH}{Id}/failure_nodes/",
-                NodeType.Success => $"{WorkflowJobNode.PATH}{Id}/success_nodes/",
-                _ => throw new ArgumentException()
-            };
+                path = $"{WorkflowJob.PATH}{Job}/workflow_nodes/";
+            }
+            else if (Node > 0)
+            {
+                path = Linked switch
+                {
+                    WorkflowLinkState.Always => $"{WorkflowJobNode.PATH}{Node}/always_nodes/",
+                    WorkflowLinkState.Failure => $"{WorkflowJobNode.PATH}{Node}/failure_nodes/",
+                    WorkflowLinkState.Success => $"{WorkflowJobNode.PATH}{Node}/success_nodes/",
+                    _ => throw new ArgumentException()
+                };
+            }
             Find<WorkflowJobNode>(path);
         }
     }

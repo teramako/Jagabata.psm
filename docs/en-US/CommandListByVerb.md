@@ -69,7 +69,6 @@
 - [Find-WorkflowApprovalRequest](./cmdlets/Find-WorkflowApprovalRequest.md)
 - [Find-WorkflowJob](./cmdlets/Find-WorkflowJob.md)
 - [Find-WorkflowJobNode](./cmdlets/Find-WorkflowJobNode.md)
-- [Find-WorkflowJobNodeFor](./cmdlets/Find-WorkflowJobNodeFor.md)
 - [Find-WorkflowJobTemplate](./cmdlets/Find-WorkflowJobTemplate.md)
 - [Find-WorkflowJobTemplateNode](./cmdlets/Find-WorkflowJobTemplateNode.md)
 - [Find-WorkflowJobTemplateNodeFor](./cmdlets/Find-WorkflowJobTemplateNodeFor.md)
