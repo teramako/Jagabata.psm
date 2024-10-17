@@ -20,7 +20,13 @@ Find-InstanceGroup [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValu
 
 ### AssociatedWith
 ```
-Find-InstanceGroup -Type <ResourceType> -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-InstanceGroup [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-InstanceGroup [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -115,9 +121,9 @@ Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -155,6 +161,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object to which the search target associated with.
+
+The resource is accepted following types:  
+- `Instance`  
+- `Organization`  
+- `Inventory`  
+- `JobTemplate`  
+- `Schedule`  
+- `WorkflowJobTemplateNode`  
+- `WorkflowJobNode`
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -185,9 +215,9 @@ Aliases:
 Accepted values: Instance, Organization, Inventory, JobTemplate, Schedule, WorkflowJobTemplateNode, WorkflowJobNode
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -196,22 +226,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
-- `Instance`  
-- `Organization`  
-- `Inventory`  
-- `JobTemplate`  
-- `Schedule`  
-- `WorkflowJobTemplateNode`  
-- `WorkflowJobNode`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+### AWX.Resources.IResource
+Resource object to which the search target associated with.
+See: `-Resource` parameter.
 
 ## OUTPUTS
 

@@ -23,7 +23,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(InstanceGroup))]
     public class FindInstanceGroupCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Instance),
                      nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory),
@@ -32,8 +32,20 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJobTemplateNode),
                      nameof(ResourceType.WorkflowJobNode))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Instance,
+                ResourceType.Organization,
+                ResourceType.Inventory,
+                ResourceType.JobTemplate,
+                ResourceType.Schedule,
+                ResourceType.WorkflowJobTemplateNode,
+                ResourceType.WorkflowJobNode
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -44,6 +56,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Instance => $"{Instance.PATH}{Id}/instance_groups/",
