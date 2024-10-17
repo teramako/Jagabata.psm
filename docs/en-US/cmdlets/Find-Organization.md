@@ -218,15 +218,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `User` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `User`
+User ID or it's object.
+See: `-User` parameter.
 
 ## OUTPUTS
 
