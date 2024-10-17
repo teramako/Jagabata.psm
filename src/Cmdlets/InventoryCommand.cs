@@ -23,13 +23,22 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Inventory))]
     public class FindInventoryCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory),
                      nameof(ResourceType.Host))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Organization,
+                ResourceType.Inventory,
+                ResourceType.Host
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public InventoryKind Kind { get; set; } = InventoryKind.All;
@@ -61,6 +70,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Organization => $"{Organization.PATH}{Id}/inventories/",
