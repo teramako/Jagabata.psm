@@ -23,12 +23,20 @@ namespace AWX.Cmdlets
     [OutputType(typeof(OAuth2AccessToken))]
     public class FindTokenCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.OAuth2Application),
                      nameof(ResourceType.User))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.OAuth2Application,
+                ResourceType.User
+        ])]
+        public IResource? Resource { get; set; }
 
         /// <summary>
         /// Filter by Personal Access Token(<c>Personal</c>) or
@@ -48,6 +56,12 @@ namespace AWX.Cmdlets
 
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             Query.Clear();
             if (Type != ResourceType.OAuth2Application)
             {

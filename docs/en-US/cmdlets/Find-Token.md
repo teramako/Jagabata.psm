@@ -20,9 +20,15 @@ Find-Token [-TokenType <ETokenType>] [-OrderBy <String[]>] [-Search <String[]>] 
 
 ### AssociatedWith
 ```
-Find-Token -Type <ResourceType> -Id <UInt64> [-TokenType <ETokenType>] [-OrderBy <String[]>]
+Find-Token [-Type] <ResourceType> [-Id] <UInt64> [-TokenType <ETokenType>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-Token [-Resource] <IResource> [-TokenType <ETokenType>] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -111,9 +117,9 @@ Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -148,6 +154,25 @@ Required: False
 Position: Named
 Default value: 1
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Resource
+Resource object to which the search target associated with.
+
+The resource is accepted following types:  
+- `OAuth2Application`  
+- `User`
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -197,9 +222,9 @@ Aliases:
 Accepted values: OAuth2Application, User
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -208,17 +233,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
-- `OAuth2Application`  
-- `User`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+### AWX.Resources.IResource
+Resource object to which the search target associated with.
+See: `-Resource` parameter.
 
 ## OUTPUTS
 
