@@ -23,11 +23,8 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Instance))]
     public class FindInstanceCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.InstanceGroup))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true)]
+        public ulong InstanceGroup { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -38,7 +35,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{InstanceGroup.PATH}{Id}/instances/" : Instance.PATH;
+            var path = InstanceGroup > 0 ? $"{Resources.InstanceGroup.PATH}{InstanceGroup}/instances/" : Instance.PATH;
             Find<Instance>(path);
         }
     }
