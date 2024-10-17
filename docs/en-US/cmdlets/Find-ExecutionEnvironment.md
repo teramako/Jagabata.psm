@@ -12,15 +12,8 @@ Retrieve ExecutionEnvironments.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-ExecutionEnvironment [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-ExecutionEnvironment [-Type <ResourceType>] -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-ExecutionEnvironment [[-Organization] <UInt64>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -40,16 +33,10 @@ PS C:\> Find-ExecutionEnvironment
 
 ### Example 2
 ```powershell
-PS C:\> Find-ExecutionEnvironment -Type Organization -Id 1
+PS C:\> Find-ExecutionEnvironment -Organization 1
 ```
 
 Retrieve ExecutionEnvironments associated with the Organization of ID 1.
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-Organization -Id 1 | Find-ExecutionEnvironment
-
-and also can omit `-Type` parameter:  
-    Find-ExecutionEnvironment -Id 1
 
 ## PARAMETERS
 
@@ -105,21 +92,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target Organization resource.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -136,6 +108,22 @@ Required: False
 Position: Named
 Default value: ["id"]
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Organization
+Organization ID or it's object.
+Retrieve ExecutionEnvironments which the Organization associated with.
+
+```yaml
+Type: UInt64
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -173,23 +161,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -201,9 +172,8 @@ Input by `Type` property in the pipeline object.
 Acceptable values: `Organization` (only)
 
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `Organization`
+Organization ID or it's object.
+See: `-Organization` parameter.
 
 ## OUTPUTS
 
