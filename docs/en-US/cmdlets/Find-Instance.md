@@ -12,15 +12,8 @@ Retrieve Instances.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-Instance [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
- [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-Instance [-Type <ResourceType>] -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-Instance [-InstanceGroup <UInt64>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -40,16 +33,10 @@ PS C:\> Find-Instance
 
 ### Example 2
 ```powershell
-PS C:\> Find-Instance -Type InstanceGroup -Id 1
+PS C:\> Find-Instance -InstanceGroup 1
 ```
 
 Retrieve Instances associated with the InstanceGroup of ID 1.
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-InstanceGroup -Id 1 | Find-Instance
-
-and also can omit `-Type` parameter:  
-    Find-Instance -Id 1
 
 ## PARAMETERS
 
@@ -105,18 +92,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target InstanceGroup resource.
+### -InstanceGroup
+InstanceGroup ID or it's object.
+Retrieve Instances which the InstanceGroup associated with.
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -173,37 +161,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: InstanceGroup
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `InstanceGroup` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `InstanceGroup`
+InstanceGroup ID or it's object.
+See `-InstanceGroup` parameter.
 
 ## OUTPUTS
 
