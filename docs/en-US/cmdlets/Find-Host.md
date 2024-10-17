@@ -187,7 +187,12 @@ Accept wildcard characters: False
 ```
 
 ### -Resource
-{{ Fill Resource Description }}
+Resource object to which the search target associated with.
+
+The resource is accepted following types:  
+- `Inventory`  
+- `InventorySource`  
+- `Group`
 
 ```yaml
 Type: IResource
@@ -242,18 +247,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
-- `Inventory`  
-- `InventorySource`  
-- `Group`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+### AWX.Resources.IResource
+Resource object to which the search target associated with.
+See: `-Resource` parameter.
 
 ## OUTPUTS
 
