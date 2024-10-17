@@ -23,7 +23,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Notification))]
     public class FindNotificationCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.NotificationTemplate),
                      nameof(ResourceType.Job),
                      nameof(ResourceType.WorkflowJob),
@@ -32,8 +32,21 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.InventoryUpdate),
                      nameof(ResourceType.AdHocCommand))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.NotificationTemplate,
+                ResourceType.Job,
+                ResourceType.WorkflowJob,
+                ResourceType.SystemJob,
+                ResourceType.ProjectUpdate,
+                ResourceType.InventoryUpdate,
+                ResourceType.AdHocCommand
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
@@ -44,6 +57,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.NotificationTemplate => $"{NotificationTemplate.PATH}{Id}/notifications/",
