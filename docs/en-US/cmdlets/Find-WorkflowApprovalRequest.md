@@ -12,16 +12,10 @@ Retrieve request jobs for WorkflowApproval.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-WorkflowApprovalRequest [-Status <JobStatus[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-WorkflowApprovalRequest -Id <UInt64> [-Status <JobStatus[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-WorkflowApprovalRequest [[-WorkflowApprovalTemplate] <UInt64>] [-Status <JobStatus[]>]
+ [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
+ [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -94,21 +88,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Filter by ID number of WorkflowApprovalTemplate.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -178,20 +157,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WorkflowApprovalTemplate
+WorkflowApprovalTemplate ID or it's object.
+
+```yaml
+Type: UInt64
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `WorkflowApprovalTemplate` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `WorkflowApprovalTemplate`
+WorkflowApprovalTemplate ID or it's object.
 
 ## OUTPUTS
 

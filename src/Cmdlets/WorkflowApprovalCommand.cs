@@ -16,15 +16,13 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "WorkflowApprovalRequest", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "WorkflowApprovalRequest")]
     [OutputType(typeof(WorkflowApproval))]
     public class FindWorkflowApprovalRequestCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true, DontShow = true)]
-        [ValidateSet(nameof(ResourceType.WorkflowApprovalTemplate))]
-        public ResourceType Type { get; set; } = ResourceType.WorkflowApproval;
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApprovalTemplate])]
+        public ulong WorkflowApprovalTemplate { get; set; }
 
         [Parameter()]
         [ValidateSet(nameof(JobStatus.Pending), nameof(JobStatus.Successful), nameof(JobStatus.Failed))]
@@ -43,9 +41,9 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id switch
+            var path = WorkflowApprovalTemplate switch
             {
-                > 0 => $"{WorkflowApprovalTemplate.PATH}{Id}/approvals/",
+                > 0 => $"{Resources.WorkflowApprovalTemplate.PATH}{WorkflowApprovalTemplate}/approvals/",
                 _ => WorkflowApproval.PATH
             };
             Find<WorkflowApproval>(path);
