@@ -19,15 +19,12 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "ExecutionEnvironment", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "ExecutionEnvironment")]
     [OutputType(typeof(ExecutionEnvironment))]
     public class FindExecutionEnvironmentCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.Organization))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        public ulong Organization { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -38,7 +35,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{Organization.PATH}{Id}/execution_environments/" : ExecutionEnvironment.PATH;
+            var path = Organization > 0 ? $"{Resources.Organization.PATH}{Organization}/execution_environments/" : ExecutionEnvironment.PATH;
             Find<ExecutionEnvironment>(path);
         }
     }
