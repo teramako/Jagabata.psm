@@ -12,14 +12,14 @@ Retrieve Job Events.
 
 ## SYNTAX
 
-### TypeAndId
+### AssociatedWith
 ```
 Find-JobEvent [-Type] <ResourceType> [-Id] <UInt64> [-AdHocCommandEvent] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
 ```
 
-### Resource
+### PipelineInput
 ```
 Find-JobEvent [-Resource] <IResource> [-AdHocCommandEvent] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
@@ -130,7 +130,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
@@ -189,7 +189,7 @@ And `Type` should be following value:
 
 ```yaml
 Type: IResource
-Parameter Sets: Resource
+Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
@@ -224,7 +224,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, Host, Group
 

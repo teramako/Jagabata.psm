@@ -18,13 +18,13 @@ Find-ActivityStream [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameVal
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### TypeAndId
+### AssociatedWith
 ```
 Find-ActivityStream [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### Resource
+### PipelineInput
 ```
 Find-ActivityStream [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
@@ -134,7 +134,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
@@ -203,7 +203,7 @@ The resource is accepted following types:
 
 ```yaml
 Type: IResource
-Parameter Sets: Resource
+Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
@@ -238,7 +238,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: OAuth2Application, OAuth2AccessToken, Organization, User, Project, Team, Credential, CredentialType, Inventory, InventorySource, Group, Host, JobTemplate, Job, AdHocCommand, WorkflowJobTemplate, WorkflowJob, ExecutionEnvironment
 

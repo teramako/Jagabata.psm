@@ -8,7 +8,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(IUnifiedJob))]
     public class FindUnifiedJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate),
                      nameof(ResourceType.Project),
@@ -22,10 +22,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.InstanceGroup))]
         public ResourceType Type { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.JobTemplate,
                 ResourceType.WorkflowJobTemplate,
@@ -158,7 +158,7 @@ namespace AWX.Cmdlets
                 typeof(WorkflowJob))]
     public class WaitJobCommand : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -167,10 +167,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJob))]
         public ResourceType Type { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Job", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                      ResourceType.Job,
                      ResourceType.ProjectUpdate,
@@ -207,11 +207,11 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Stop, "UnifiedJob", DefaultParameterSetName = "TypeAndId")]
+    [Cmdlet(VerbsLifecycle.Stop, "UnifiedJob", DefaultParameterSetName = "AssociatedWith")]
     [OutputType(typeof(PSObject))]
     public class StopJobCommand : APICmdletBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -220,10 +220,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJob))]
         public ResourceType Type { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Job,
                 ResourceType.ProjectUpdate,

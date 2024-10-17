@@ -12,13 +12,13 @@ Wait until jobs are finished.
 
 ## SYNTAX
 
-### TypeAndId
+### AssociatedWith
 ```
 Wait-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-IntervalSeconds <Int32>] [-SuppressJobLog]
  [<CommonParameters>]
 ```
 
-### Job
+### PipelineInput
 ```
 Wait-UnifiedJob [-Job] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
@@ -69,7 +69,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
@@ -109,7 +109,7 @@ And `Type` should be following value:
 
 ```yaml
 Type: IResource
-Parameter Sets: Job
+Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
@@ -150,7 +150,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, WorkflowJob
 

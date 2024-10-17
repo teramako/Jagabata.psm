@@ -39,16 +39,16 @@ namespace AWX.Cmdlets
     [OutputType(typeof(User))]
     public class FindUserCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Team),
                      nameof(ResourceType.Credential),
                      nameof(ResourceType.Role))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Organization,
                 ResourceType.Team,
@@ -98,11 +98,11 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "AccessList", DefaultParameterSetName = "TypeAndId")]
+    [Cmdlet(VerbsCommon.Find, "AccessList", DefaultParameterSetName = "AssociatedWith")]
     [OutputType(typeof(User))]
     public class FindAccessListCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.InstanceGroup),
                      nameof(ResourceType.Organization),
                      nameof(ResourceType.User),
@@ -113,10 +113,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.InstanceGroup,
                 ResourceType.Organization,

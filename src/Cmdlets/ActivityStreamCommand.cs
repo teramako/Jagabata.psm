@@ -23,7 +23,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(ActivityStream))]
     public class FindActivityStreamCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.OAuth2Application),
                      nameof(ResourceType.OAuth2AccessToken),
                      nameof(ResourceType.Organization),
@@ -43,10 +43,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJob),
                      nameof(ResourceType.ExecutionEnvironment))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.OAuth2Application,
                 ResourceType.OAuth2AccessToken,

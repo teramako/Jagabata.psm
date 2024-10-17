@@ -27,15 +27,15 @@ namespace AWX.Cmdlets
     [OutputType(typeof(JobTemplate))]
     public class FindJobTemplateCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.Inventory))]
         public ResourceType Type { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Organization,
                 ResourceType.Inventory

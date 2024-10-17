@@ -7,7 +7,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(IJobEventBase))]
     public class FindJobEventCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.ProjectUpdate),
                      nameof(ResourceType.InventoryUpdate),
@@ -17,10 +17,10 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.Group))]
         public ResourceType Type { get; set; } = ResourceType.None;
 
-        [Parameter(Mandatory = true, ParameterSetName = "TypeAndId", Position = 1)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; } = 0;
 
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Job,
                 ResourceType.ProjectUpdate,

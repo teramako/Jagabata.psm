@@ -12,12 +12,12 @@ Stop (cancel) a running job.
 
 ## SYNTAX
 
-### TypeAndId (Default)
+### AssociatedWith (Default)
 ```
 Stop-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-Determine] [<CommonParameters>]
 ```
 
-### Resource
+### PipelineInput
 ```
 Stop-UnifiedJob [-Job] <IResource> [-Determine] [<CommonParameters>]
 ```
@@ -101,7 +101,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
@@ -125,7 +125,7 @@ And `Type` should be following value:
 
 ```yaml
 Type: IResource
-Parameter Sets: Resource
+Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
@@ -141,7 +141,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, WorkflowJob
 

@@ -18,14 +18,14 @@ Find-User [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>] [
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### TypeAndId
+### AssociatedWith
 ```
 Find-User [-Type] <ResourceType> [-Id] <UInt64> [[-UserName] <String[]>] [[-Email] <String[]>]
  [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
  [-All] [<CommonParameters>]
 ```
 
-### Resource
+### PipelineInput
 ```
 Find-User [-Resource] <IResource> [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
@@ -133,7 +133,7 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
@@ -188,7 +188,7 @@ The resource is accepted following types:
 
 ```yaml
 Type: IResource
-Parameter Sets: Resource
+Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
@@ -223,7 +223,7 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: TypeAndId
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Organization, Team, Credential, Role
 
