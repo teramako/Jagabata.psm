@@ -19,15 +19,13 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "CredentialInputSource", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "CredentialInputSource")]
     [OutputType(typeof(CredentialInputSource))]
     public class FindCredentialInputSourceCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.Credential))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        public ulong Credential { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -38,7 +36,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{Credential.PATH}{Id}/input_sources/" : CredentialInputSource.PATH;
+            var path = Credential > 0 ? $"{Resources.Credential.PATH}{Credential}/input_sources/" : CredentialInputSource.PATH;
             Find<CredentialInputSource>(path);
         }
     }
