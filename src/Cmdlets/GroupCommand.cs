@@ -23,20 +23,31 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Group))]
     public class FindGroupCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Inventory),
                      nameof(ResourceType.Group),
                      nameof(ResourceType.InventorySource),
                      nameof(ResourceType.Host))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [
+                ResourceType.Inventory,
+                ResourceType.Group,
+                ResourceType.InventorySource,
+                ResourceType.Host
+        ])]
+        public IResource? Resource { get; set; }
 
         /// <summary>
         /// List only root(Top-level) groups.
         /// Only affected for an Inventory Type
         /// </summary>
         [Parameter(ParameterSetName = "AssociatedWith")]
+        [Parameter(ParameterSetName = "PipelineInput")]
         public SwitchParameter OnlyRoot { get; set; }
 
         /// <summary>
@@ -44,6 +55,7 @@ namespace AWX.Cmdlets
         /// Only affected for a Host Type
         /// </summary>
         [Parameter(ParameterSetName = "AssociatedWith")]
+        [Parameter(ParameterSetName = "PipelineInput")]
         public SwitchParameter OnlyParnets { get; set; }
 
         [Parameter()]
@@ -55,6 +67,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/" + (OnlyRoot ? "root_groups/" : "groups/"),
