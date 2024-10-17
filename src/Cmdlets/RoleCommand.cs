@@ -23,12 +23,20 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Role))]
     public class FindRoleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.User),
                      nameof(ResourceType.Team))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.User,
+                ResourceType.Team
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -39,6 +47,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.User => $"{User.PATH}{Id}/roles/",
@@ -49,11 +63,11 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "ObjectRole", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "ObjectRole", DefaultParameterSetName = "AssociatedWith")]
     [OutputType(typeof(Role))]
     public class FindObjectRoleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.InstanceGroup),
                      nameof(ResourceType.Organization),
                      nameof(ResourceType.Project),
@@ -63,8 +77,22 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.InstanceGroup,
+                ResourceType.Organization,
+                ResourceType.Project,
+                ResourceType.Team,
+                ResourceType.Credential,
+                ResourceType.Inventory,
+                ResourceType.JobTemplate,
+                ResourceType.WorkflowJobTemplate
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -75,6 +103,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Id}/object_roles/",
