@@ -20,7 +20,13 @@ Find-Host [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollecti
 
 ### AssociatedWith
 ```
-Find-Host -Type <ResourceType> -Id <UInt64> [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
+Find-Host [-Type] <ResourceType> [-Id] <UInt64> [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-Host [-Resource] <IResource> [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -124,9 +130,9 @@ Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -136,7 +142,7 @@ Only affected for a Group Type
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith
+Parameter Sets: AssociatedWith, PipelineInput
 Aliases:
 
 Required: False
@@ -180,6 +186,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+{{ Fill Resource Description }}
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -210,9 +231,9 @@ Aliases:
 Accepted values: Inventory, InventorySource, Group
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
