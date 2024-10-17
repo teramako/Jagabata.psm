@@ -20,15 +20,13 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "NotificationTemplate", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "NotificationTemplate")]
     [OutputType(typeof(NotificationTemplate))]
     public class FindNotificationTemplateCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.Organization))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        public ulong Organization { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -39,7 +37,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{Organization.PATH}{Id}/notification_templates/" : NotificationTemplate.PATH;
+            var path = Organization > 0 ? $"{Resources.Organization.PATH}{Organization}/notification_templates/" : NotificationTemplate.PATH;
             foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
             {
                 WriteObject(resultSet.Results, true);

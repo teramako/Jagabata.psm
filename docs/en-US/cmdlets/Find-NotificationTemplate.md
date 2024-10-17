@@ -12,15 +12,8 @@ Retrieve NotificationTemplates.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-NotificationTemplate [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-NotificationTemplate [-Type <ResourceType>] -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-NotificationTemplate [[-Organization] <UInt64>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -40,16 +33,10 @@ PS C:\> Find-NotificationTemplate
 
 ### Example 2
 ```powershell
-PS C:\> Find-NotificationTemplate -Type Organization -Id 1
+PS C:\> Find-NotificationTemplate -Organization 1
 ```
 
 Retrieve NotificationTemplates associated with the Organization of ID 1.
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-Organization -Id 1 | Find-NotificationTemplate
-
-and also can omit `-Type` parameter:  
-    Find-NotificationTemplate -Id 1
 
 ## PARAMETERS
 
@@ -105,22 +92,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -137,6 +108,22 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Organization
+Organization ID or it's object.
+Filter to NotoficationTemplates in the Organization for the specified ID.
+
+```yaml
+Type: UInt64
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -174,37 +161,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `Organization` (only)
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `Organization`
+### AWX.Resources.IResource
+Organization ID or it's object.
 
 ## OUTPUTS
 
