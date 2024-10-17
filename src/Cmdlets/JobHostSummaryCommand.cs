@@ -15,23 +15,38 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "JobHostSummary")]
+    [Cmdlet(VerbsCommon.Find, "JobHostSummary", DefaultParameterSetName = "AssociatedWith")]
     [OutputType(typeof(JobHostSummary))]
     public class FindJobHostSummaryCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Job),
                      nameof(ResourceType.Host),
                      nameof(ResourceType.Group))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Job,
+                ResourceType.Host,
+                ResourceType.Group
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["!id"];
 
-        protected override void EndProcessing()
+        protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/job_host_summaries/",
