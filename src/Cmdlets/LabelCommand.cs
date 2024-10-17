@@ -23,7 +23,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Label))]
     public class FindLabelCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Inventory),
                      nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.Job),
@@ -33,8 +33,21 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJobTemplateNode),
                      nameof(ResourceType.WorkflowJobNode))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Inventory,
+                ResourceType.JobTemplate,
+                ResourceType.Job,
+                ResourceType.Schedule,
+                ResourceType.WorkflowJobTemplate,
+                ResourceType.WorkflowJob,
+                ResourceType.WorkflowJobTemplateNode,
+                ResourceType.WorkflowJobNode
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -45,6 +58,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/labels/",
