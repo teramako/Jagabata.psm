@@ -23,14 +23,23 @@ namespace AWX.Cmdlets
     [OutputType(typeof(InventorySource))]
     public class FindInventorySourceCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Project),
                      nameof(ResourceType.Inventory),
                      nameof(ResourceType.Group),
                      nameof(ResourceType.Host))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Project,
+                ResourceType.Inventory,
+                ResourceType.Group,
+                ResourceType.Host
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -41,6 +50,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Project => $"{Project.PATH}{Id}/scm_inventory_sources/",
