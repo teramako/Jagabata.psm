@@ -19,14 +19,22 @@ namespace AWX.Cmdlets
     [OutputType(typeof(WorkflowJob))]
     public class FindWorkflowJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.JobTemplate,
+                ResourceType.WorkflowApprovalTemplate
+        ])]
+        public IResource? Resource { get; set; }
+
+        [Parameter()]
         public string[]? Name { get; set; }
 
         [Parameter()]
@@ -58,6 +66,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/slice_workflow_jobs/",
