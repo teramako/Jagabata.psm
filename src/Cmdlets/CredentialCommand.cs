@@ -24,7 +24,7 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Credential))]
     public class FindCredentialCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Organization),
                      nameof(ResourceType.User),
                      nameof(ResourceType.Team),
@@ -37,8 +37,24 @@ namespace AWX.Cmdlets
                      nameof(ResourceType.WorkflowJobTemplateNode),
                      nameof(ResourceType.WorkflowJobNode))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Organization,
+                ResourceType.User,
+                ResourceType.Team,
+                ResourceType.CredentialType,
+                ResourceType.InventorySource,
+                ResourceType.InventoryUpdate,
+                ResourceType.JobTemplate,
+                ResourceType.Job,
+                ResourceType.Schedule,
+                ResourceType.WorkflowJobTemplateNode,
+                ResourceType.WorkflowJobNode
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public string? Kind { get; set; }
@@ -62,6 +78,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Organization => $"{Organization.PATH}{Id}/" + (Galaxy ? "galaxy_credentials/" : "credentials/"),

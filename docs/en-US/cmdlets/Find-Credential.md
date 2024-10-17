@@ -20,9 +20,15 @@ Find-Credential [-Kind <String>] [-Galaxy] [-OrderBy <String[]>] [-Search <Strin
 
 ### AssociatedWith
 ```
-Find-Credential -Type <ResourceType> -Id <UInt64> [-Kind <String>] [-Galaxy] [-OrderBy <String[]>]
+Find-Credential [-Type] <ResourceType> [-Id] <UInt64> [-Kind <String>] [-Galaxy] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-Credential [-Resource] <IResource> [-Kind <String>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -148,9 +154,9 @@ Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -164,7 +170,8 @@ Examples.)
 `azure_kv`, `centrify_vault_kv`, `conjur`, `hashivault_kv`, `hashivault_ssh`, `thycotic_dsv`,
 `thycotic_tss`
 
-Caution: the `kind` field of a Credential corresponds to `namespace` field of a CredentialType.
+> [!NOTE]  
+> The `kind` field of a Credential corresponds to `namespace` field of a CredentialType.
 
 ```yaml
 Type: String
@@ -212,6 +219,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object to which the search target associated with.
+
+The resource is accepted following types:  
+- `Organization`  
+- `User`  
+- `Team`  
+- `CredentialType`  
+- `InventorySource`  
+- `InventoryUpdate`  
+- `JobTemplate`  
+- `Job`  
+- `Schedule`  
+- `WorkflowJobTemplateNode`  
+- `WorkflowJobNode`
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -242,9 +277,9 @@ Aliases:
 Accepted values: Organization, User, Team, CredentialType, InventorySource, InventoryUpdate, JobTemplate, Job, Schedule, WorkflowJobTemplateNode, WorkflowJobNode
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -253,26 +288,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### AWX.Resources.IResource
+Resource object to which the search target associated with.
 
-Acceptable values:  
-- `Organization`  
-- `User`  
-- `Team`  
-- `CredentialType`  
-- `InventorySource`  
-- `InventoryUpdate`  
-- `JobTemplate`  
-- `Job`  
-- `Schedule`  
-- `WorkflowJobTemplateNode`  
-- `WorkflowJobNode`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+See: `-Resource` parameter.
 
 ## OUTPUTS
 
