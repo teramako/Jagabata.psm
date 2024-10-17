@@ -13,7 +13,7 @@ Retrieve jobs for JobTemplate.
 ## SYNTAX
 
 ```
-Find-Job [[-Id] <UInt64>] [[-Name] <String[]>] [-Status <String[]>] [-LaunchType <String[]>]
+Find-Job [[-JobTemplate] <UInt64>] [[-Name] <String[]>] [-Status <String[]>] [-LaunchType <String[]>]
  [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
  [-All] [<CommonParameters>]
 ```
@@ -36,16 +36,10 @@ Retreive running jobs.
 
 ### Example 2
 ```powershell
-PS C:\> Find-Job -Type JobTemplate -Id 1
+PS C:\> Find-Job -JobTemplate 1
 ```
 
 Retrieve jobs associated with the JobTemplate of ID 1
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-JobTemplate -Id 1 | Find-Job
-
-and also can omit `-Type` parameter:  
-    Find-Job -Id 1
 
 ## PARAMETERS
 
@@ -101,13 +95,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
+### -JobTemplate
 JobTemplate ID or it's object.
 Filter to jobs in the JobTemplate for the specified ID.
 
 > [!TIP]  
 > Can specify `IResource` object.  
-> For example: `-Id (Get-JobTemplate -Id 3)`, `-Id $jobTemplate`
+> For example: `-JobTemplate (Get-JobTemplate -Id 3)`, `-JobTemplate $jobTemplate`
 
 ```yaml
 Type: UInt64

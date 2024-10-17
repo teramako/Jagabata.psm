@@ -22,7 +22,7 @@ namespace AWX.Cmdlets
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.JobTemplate])]
-        public ulong Id { get; set; }
+        public ulong JobTemplate { get; set; }
 
         [Parameter(Position = 1)]
         public string[]? Name { get; set; }
@@ -57,7 +57,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{JobTemplate.PATH}{Id}/jobs/" : JobTemplateJob.PATH;
+            var path = JobTemplate > 0 ? $"{Resources.JobTemplate.PATH}{JobTemplate}/jobs/" : JobTemplateJob.PATH;
             Find<JobTemplateJob>(path);
         }
     }
