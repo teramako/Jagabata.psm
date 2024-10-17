@@ -23,15 +23,26 @@ namespace AWX.Cmdlets
     [OutputType(typeof(Schedule))]
     public class FindScheduleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
         [ValidateSet(nameof(ResourceType.Project),
                      nameof(ResourceType.InventorySource),
                      nameof(ResourceType.JobTemplate),
                      nameof(ResourceType.SystemJobTemplate),
                      nameof(ResourceType.WorkflowJobTemplate))]
         public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Project,
+                ResourceType.InventorySource,
+                ResourceType.JobTemplate,
+                ResourceType.SystemJobTemplate,
+                ResourceType.WorkflowJobTemplate
+        ])]
+        public IResource? Resource { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -42,6 +53,12 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
             var path = Type switch
             {
                 ResourceType.Project => $"{Project.PATH}{Id}/schedules/",
