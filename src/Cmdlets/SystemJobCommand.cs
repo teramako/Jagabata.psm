@@ -15,15 +15,13 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "SystemJob", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "SystemJob")]
     [OutputType(typeof(SystemJob))]
     public class FindSystemJobCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.SystemJobTemplate))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.SystemJobTemplate])]
+        public ulong SystemJobTemplate { get; set; }
 
         [Parameter()]
         [ValidateSet(typeof(EnumValidateSetGenerator<JobStatus>))]
@@ -43,7 +41,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{SystemJobTemplate.PATH}{Id}/jobs/" : SystemJob.PATH;
+            var path = SystemJobTemplate > 0 ? $"{Resources.SystemJobTemplate.PATH}{SystemJobTemplate}/jobs/" : SystemJob.PATH;
             Find<SystemJob>(path);
         }
     }
