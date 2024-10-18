@@ -21,15 +21,13 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "WorkflowJobTemplate", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "WorkflowJobTemplate")]
     [OutputType(typeof(WorkflowJobTemplate))]
     public class FindWorkflowJobTemplateCommand : FindCommandBase
     {
-        [Parameter(ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.Organization))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        public ulong Organization { get; set; }
 
         [Parameter()]
         public override string[] OrderBy { get; set; } = ["id"];
@@ -40,7 +38,7 @@ namespace AWX.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Id > 0 ? $"{Organization.PATH}{Id}/workflow_job_templates/" : WorkflowJobTemplate.PATH;
+            var path = Organization > 0 ? $"{Resources.Organization.PATH}{Organization}/workflow_job_templates/" : WorkflowJobTemplate.PATH;
             Find<WorkflowJobTemplate>(path);
         }
     }
