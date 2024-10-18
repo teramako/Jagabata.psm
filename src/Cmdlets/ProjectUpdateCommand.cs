@@ -15,17 +15,15 @@ namespace AWX.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "ProjectUpdateJob", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "ProjectUpdateJob")]
     [OutputType(typeof(ProjectUpdateJob))]
     public class FindProjectUpdateJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        [ValidateSet(nameof(ResourceType.Project))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", ValueFromPipelineByPropertyName = true)]
-        public ulong Id { get; set; }
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        public ulong Project { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter()]
         public string[]? Name { get; set; }
 
         [Parameter()]
@@ -50,11 +48,7 @@ namespace AWX.Cmdlets
         }
         protected override void EndProcessing()
         {
-            var path = Type switch
-            {
-                ResourceType.Project => $"{Project.PATH}{Id}/project_updates/",
-                _ => ProjectUpdateJob.PATH
-            };
+            var path = Project > 0 ? $"{Resources.Project.PATH}{Project}/project_updates/" : ProjectUpdateJob.PATH;
             Find<ProjectUpdateJob>(path);
         }
     }
