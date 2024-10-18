@@ -47,6 +47,7 @@ namespace AWX.Cmdlets
             var path =Resources.WorkflowJobTemplateNode.PATH;
             if (Template > 0)
             {
+                path = $"{WorkflowJobTemplate.PATH}{Template}/workflow_nodes/";
             }
             else if (Node > 0)
             {
