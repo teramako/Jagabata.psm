@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -110,7 +110,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -240,7 +240,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.IResource
+### Jagabata.Resources.IResource
 The object has `Id` and `Type` properties.
 
 And `Type` should be following value:  
@@ -254,13 +254,13 @@ And `Type` should be following value:
 
 ## OUTPUTS
 
-### AWX.Resources.IJobEventBase
+### Jagabata.Resources.IJobEventBase
 JobEvent objects that extend `IJobEventBase` interface.  
-- Job             : `AWX.Resources.JobEvent`  
-- ProjectUpdate   : `AWX.Resources.ProjectUpdateJobEvent`  
-- InventoryUpdate : `AWX.Resources.InventoryUpdateJobEvent`  
-- SystemJob       : `AWX.Resources.SystemJobEvent`  
-- AdHocCommand    : `AWX.Resources.AdHocCommandJobEvent`
+- Job             : `Jagabata.Resources.JobEvent`  
+- ProjectUpdate   : `Jagabata.Resources.ProjectUpdateJobEvent`  
+- InventoryUpdate : `Jagabata.Resources.InventoryUpdateJobEvent`  
+- SystemJob       : `Jagabata.Resources.SystemJobEvent`  
+- AdHocCommand    : `Jagabata.Resources.AdHocCommandJobEvent`
 
 ## NOTES
 

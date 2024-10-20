@@ -1,6 +1,6 @@
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 public abstract class RegistrationCommandBase<TResource> : APICmdletBase where TResource: class
 {

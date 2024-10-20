@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Management.Automation;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     class ResourceIdTransformationAttribute : ResourceTransformationAttribute
     {

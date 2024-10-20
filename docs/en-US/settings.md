@@ -21,9 +21,9 @@ create configuration using [`New-ApiConfig`](./cmdlets/New-ApiConfig.md) command
        - ⚠️ Caution: the token value is shown **only at the time**. Don't close until following registration or save other place
  3. Launch Powershell 7 and register the PAT
     1. Launch PowerShell 7
-    2. Import `AWX.psm` module
+    2. Import `Jagabata.psm` module
        ```powershell
-       Import-Module path\to\dir\AWX.psm.psd1
+       Import-Module path\to\dir\Jagabata.psm.psd1
        ```
     3. Execute `New-ApiConfig` command
        ```powershell
@@ -54,10 +54,10 @@ Use [`Switch-ApiConfig`](./cmdlets/Switch-ApiConfig.md) command
 Onece the above registration is completed, only module importing is required thereafter.
 
 ```powershell
-Import-Module path\to\dir\AWX.psm
+Import-Module path\to\dir\Jagabata.psm
 ```
 
-You may/can put the AWX.psm module directory(`path\to\dir\`) into `$env:PSModulePath`,
+You may/can put the Jagabata.psm module directory(`path\to\dir\`) into `$env:PSModulePath`,
 and import implicitly.
 
 ### Add prefix
@@ -66,7 +66,7 @@ Some commands (such as `Get-Host` and `Get-Credential`) conflict with PowerShell
 You may need to run `Import-Module` command with `-Prefix` parameter.
 
 ```powershell
-Import-Module -Prefix AWX path\to\dir\AWX.psm
+Import-Module -Prefix AWX path\to\dir\Jagabata.psm
 ```
 In this case, **ALL** imported commands will be added `AWX` prefix (_verb-`AWX`Noun_).
-You can run `Get-Host` as PowerShell native command, `Get-AWXHost` as AWX.psm's command.
+You can run `Get-Host` as PowerShell native command, `Get-AWXHost` as Jagabata.psm's command.

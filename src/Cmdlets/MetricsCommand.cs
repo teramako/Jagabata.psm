@@ -1,7 +1,7 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     public class MetricItem(string name, string description, string type, Dictionary<string, string> labels, double value, string? sampleType)
     {

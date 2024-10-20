@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     [Flags]
     public enum JobTemplateAskOnLaunch

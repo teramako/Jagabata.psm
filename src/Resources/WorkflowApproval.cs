@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class WorkflowApproval(ulong id, ResourceType type, string url, RelatedDictionary related,
                                   WorkflowApproval.Summary summaryFields, DateTime created, DateTime? modified,

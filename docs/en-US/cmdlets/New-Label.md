@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -103,7 +103,7 @@ Label name.
 
 ## OUTPUTS
 
-### AWX.Resources.Label
+### Jagabata.Resources.Label
 New created Label object.
 
 ## NOTES

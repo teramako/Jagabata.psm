@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{637CEAC9-F9DF-44A2-A51D-BF09C6956C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWX", "src\AWX.csproj", "{E023AD34-1324-4DD5-B526-B4906B26E32C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jagabata", "src\Jagabata.csproj", "{E023AD34-1324-4DD5-B526-B4906B26E32C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

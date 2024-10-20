@@ -13,7 +13,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$modulePath = Join-Path -Path $PSScriptRoot -ChildPath .. -AdditionalChildPath out, AWX.psm
+$modulePath = Join-Path -Path $PSScriptRoot -ChildPath .. -AdditionalChildPath out, Jagabata.psm
 $module = Import-Module $modulePath -PassThru -Verbose:$false
 
 function Out-CommandList 

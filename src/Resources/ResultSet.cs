@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public abstract class ResultSetBase(int count, string? next, string? previous)
     {

@@ -1,11 +1,11 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 using System.Security;
 using System.Text;
 using System.Text.Json;
 using System.Web;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "JobTemplate")]
     [OutputType(typeof(JobTemplate))]

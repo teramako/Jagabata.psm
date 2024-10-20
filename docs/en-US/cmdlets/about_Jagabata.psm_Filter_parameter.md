@@ -1,5 +1,5 @@
 # About `-Filter` parameter
-About `-Filter` parameter on AWX.psm's cmdlets.
+About `-Filter` parameter on Jagabata.psm's cmdlets.
 
 Many command, especially those with "File-" have `-Filter` parameter.
 This allows you to filter the reults using a various set of contiditions.
@@ -47,7 +47,7 @@ The specification is almost same as "Type string".
 
 ### Type "IDictionary"
 
-Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conversion from PowerShell to the following `AWX.Cmdlets.Filter` type.
+Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conversion from PowerShell to the following `Jagabata.Cmdlets.Filter` type.
 
 #### For example:
 
@@ -62,10 +62,10 @@ Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conv
 - `@{ name = "created"; value = Get-Date 2024-01-01; type = "gt" }` => `creeated__gt=2024-01-01T00:00:00.0000000{TimeZone}`; `DateTime` object is converted to ISO Date string.
 - `@{ name = "id__in"; value = 1,2,3 }` => `id__in=1,2,3`; `IList` object is converted to commas separeted string.
 
-### Type "AWX.Cmdlets.Filter"
+### Type "Jagabata.Cmdlets.Filter"
 
 This is the most primitive object of this filtering mechanism.
-All of the above types, `string`, `NameValueCollection` and `IDictionary`, are converted once into this `AWX.Cmdlets.Filter` type.
+All of the above types, `string`, `NameValueCollection` and `IDictionary`, are converted once into this `Jagabata.Cmdlets.Filter` type.
 
 This type has following properties:
 
@@ -93,11 +93,11 @@ This type has following properties:
 
 #### For example:
 
-- `[AWX.Cmdlets.Filter]::new("field", "xyz")` => `field=xyz`.
-- `[AWX.Cmdlets.Filter]::new("field", "xyz", "icontains")` => `field_icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("field", "xyz", "icontains", $true)` => `or__field__icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("field", "xyz", "icontains", $true, $true)` => `or__not__field__icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("field", "xyz", "icontains", $false, $true)` => `not__field__icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("field__icontains", "xyz")` => `field__icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("or__field__icontains", "xyz")` => `or__field__icontains=xyz`.
-- `[AWX.Cmdlets.Filter]::new("or__not__field__icontains", "xyz")` => `or__not__field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field", "xyz")` => `field=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains")` => `field_icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $true)` => `or__field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $true, $true)` => `or__not__field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $false, $true)` => `not__field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("field__icontains", "xyz")` => `field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("or__field__icontains", "xyz")` => `or__field__icontains=xyz`.
+- `[Jagabata.Cmdlets.Filter]::new("or__not__field__icontains", "xyz")` => `or__not__field__icontains=xyz`.

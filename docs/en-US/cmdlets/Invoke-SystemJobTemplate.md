@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -164,12 +164,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.UInt64
 SystemJobTemplate ID to be launched.
 
-### AWX.Resources.SystemJobTemplate
+### Jagabata.Resources.SystemJobTemplate
 SystemJobTemplate object to be launched.
 
 ## OUTPUTS
 
-### AWX.Resources.SystemJob
+### Jagabata.Resources.SystemJob
 The result job object of lanched the SystemJobTemplate.
 
 ## NOTES

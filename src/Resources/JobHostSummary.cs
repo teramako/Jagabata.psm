@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
 
     public class JobHostSummary(ulong id, ResourceType type, string url, RelatedDictionary related, JobHostSummary.Summary summaryFields,

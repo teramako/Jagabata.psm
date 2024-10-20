@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -162,7 +162,7 @@ Credential ID.
 
 ## OUTPUTS
 
-### AWX.Resources.Credential
+### Jagabata.Resources.Credential
 Updated Credential object.
 
 ## NOTES

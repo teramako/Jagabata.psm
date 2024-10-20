@@ -1,9 +1,9 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 using System.Text;
 using System.Text.Json;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "WorkflowJobTemplate")]
     [OutputType(typeof(WorkflowJobTemplate))]

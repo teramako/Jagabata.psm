@@ -1,4 +1,4 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Management.Automation;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Web;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsLifecycle.Invoke, "API", DefaultParameterSetName = "NonSendData")]
     public class InvokeAPICommand : APICmdletBase

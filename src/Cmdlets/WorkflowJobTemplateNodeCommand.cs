@@ -1,8 +1,8 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "WorkflowJobTemplateNode")]
     [OutputType(typeof(WorkflowJobTemplateNode))]

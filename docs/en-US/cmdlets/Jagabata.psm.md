@@ -1,16 +1,16 @@
 ---
-Module Name: AWX.psm
+Module Name: Jagabata.psm
 Module Guid: a60acf94-7e42-4b77-bf97-1cdaf17b822b
 Download Help Link: null
 Help Version: 1.1.0
 Locale: en-US
 ---
 
-# AWX.psm Module
+# Jagabata.psm Module
 ## Description
 PowerShell module to operate AWX/AnsibleTower using Rest API.
 
-## AWX.psm Cmdlets
+## Jagabata.psm Cmdlets
 ### [Approve-WorkflowApprovalRequest](Approve-WorkflowApprovalRequest.md)
 Approve requests for WorkflowApproval.
 

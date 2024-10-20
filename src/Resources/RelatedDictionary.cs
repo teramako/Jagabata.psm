@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     /// <summary>
     /// 基本的には 

@@ -1,7 +1,7 @@
 using System.Reflection;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX
+namespace Jagabata
 {
     public class APIPath
     {

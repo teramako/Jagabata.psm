@@ -1,5 +1,5 @@
-# AWX.psm
-## about_AWX.psm
+# Jagabata.psm
+## about_Jagabata.psm
 
 # SHORT DESCRIPTION
 PowerShell module to operate AWX/AnsibleTower using Rest API.

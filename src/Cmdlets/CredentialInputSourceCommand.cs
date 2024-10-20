@@ -1,7 +1,7 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "CredentialInputSource")]
     [OutputType(typeof(CredentialInputSource))]

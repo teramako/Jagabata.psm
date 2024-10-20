@@ -2,7 +2,7 @@ using System.Collections;
 using System.Management.Automation;
 using System.Text;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     /// <summary>
     /// Lookup Type for <see cref="Filter"/>

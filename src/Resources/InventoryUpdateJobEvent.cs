@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class InventoryUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
                                          InventoryUpdateJobEvent.Summary summaryFields, DateTime created,

@@ -1,4 +1,4 @@
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 /// <summary>
 /// Link status between nodes for WorkflowJobNode and WorkflowJobTemplateNode

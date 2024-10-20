@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     /// <summary>
     /// <code>
