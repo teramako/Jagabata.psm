@@ -1,7 +1,7 @@
 using System.Management.Automation;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "VariableData")]
     [OutputType(typeof(Dictionary<string, object?>))]

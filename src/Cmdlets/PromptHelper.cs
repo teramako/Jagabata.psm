@@ -4,7 +4,7 @@ using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Security;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     internal class AskPrompt
     {

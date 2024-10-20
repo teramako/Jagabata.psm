@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Web;
 
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 /// <summary>
 /// Abstract class for <c>Find-*</c> Cmdlet

@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class WorkflowJobTemplateLaunchRequirements(bool canStartWithoutUserInput, bool askInventoryOnLaunch,
                                                        bool askLimitOnLaunch, bool askScmBranchOnLaunch,

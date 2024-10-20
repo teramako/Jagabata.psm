@@ -1,4 +1,4 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Management.Automation;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
-namespace AWX
+namespace Jagabata
 {
     public static class Json
     {

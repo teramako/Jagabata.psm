@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace AWX
+namespace Jagabata
 {
     public class Utils
     {

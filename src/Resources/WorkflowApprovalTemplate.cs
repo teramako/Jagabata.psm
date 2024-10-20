@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class WorkflowApprovalTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
                                           WorkflowApprovalTemplate.Summary summaryFields, DateTime created,

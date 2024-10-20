@@ -5,7 +5,7 @@
     <View>
       <Name>ApiHelp</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.ApiHelp</TypeName>
+        <TypeName>Jagabata.Resources.ApiHelp</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -39,7 +39,7 @@
     <View>
       <Name>Dashboard</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Dashboard</TypeName>
+        <TypeName>Jagabata.Resources.Dashboard</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -63,7 +63,7 @@
     <View>
       <Name>JobStatistics</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobStatistics</TypeName>
+        <TypeName>Jagabata.Resources.JobStatistics</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -94,7 +94,7 @@
     <View>
       <Name>Survey</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Survey</TypeName>
+        <TypeName>Jagabata.Resources.Survey</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -116,12 +116,12 @@
     <View>
       <Name>UnifiedJobTemplate</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobTemplate</TypeName>
-        <TypeName>AWX.Resources.Project</TypeName>
-        <TypeName>AWX.Resources.InventorySource</TypeName>
-        <TypeName>AWX.Resources.SystemJobTemplate</TypeName>
-        <TypeName>AWX.Resources.WorkflowJobTemplate</TypeName>
-        <TypeName>AWX.Resources.WorkflowApprovalTemplate</TypeName>
+        <TypeName>Jagabata.Resources.JobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.Project</TypeName>
+        <TypeName>Jagabata.Resources.InventorySource</TypeName>
+        <TypeName>Jagabata.Resources.SystemJobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowJobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowApprovalTemplate</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -183,7 +183,7 @@
     <View>
       <Name>Application</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Application</TypeName>
+        <TypeName>Jagabata.Resources.Application</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -240,7 +240,7 @@
     <View>
       <Name>Token</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.OAuth2AccessToken</TypeName>
+        <TypeName>Jagabata.Resources.OAuth2AccessToken</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -308,7 +308,7 @@
     <View>
       <Name>Instance</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Instance</TypeName>
+        <TypeName>Jagabata.Resources.Instance</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -390,7 +390,7 @@
     <View>
       <Name>InstanceGroup</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.InstanceGroup</TypeName>
+        <TypeName>Jagabata.Resources.InstanceGroup</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -440,7 +440,7 @@
     <View>
       <Name>Organization</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Organization</TypeName>
+        <TypeName>Jagabata.Resources.Organization</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -538,7 +538,7 @@
     <View>
       <Name>User</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.User</TypeName>
+        <TypeName>Jagabata.Resources.User</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -614,7 +614,7 @@
     <View>
       <Name>Project</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Project</TypeName>
+        <TypeName>Jagabata.Resources.Project</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -684,7 +684,7 @@
     <View>
       <Name>Team</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Team</TypeName>
+        <TypeName>Jagabata.Resources.Team</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -732,7 +732,7 @@
     <View>
       <Name>Credential</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Credential</TypeName>
+        <TypeName>Jagabata.Resources.Credential</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -799,7 +799,7 @@
     <View>
       <Name>CredentialType</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.CredentialType</TypeName>
+        <TypeName>Jagabata.Resources.CredentialType</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -858,7 +858,7 @@
     <View>
       <Name>Inventory</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Inventory</TypeName>
+        <TypeName>Jagabata.Resources.Inventory</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -922,7 +922,7 @@
     <View>
       <Name>InventorySource</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.InventorySource</TypeName>
+        <TypeName>Jagabata.Resources.InventorySource</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -992,7 +992,7 @@
     <View>
       <Name>Group</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Group</TypeName>
+        <TypeName>Jagabata.Resources.Group</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1045,7 +1045,7 @@
     <View>
       <Name>Host</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Host</TypeName>
+        <TypeName>Jagabata.Resources.Host</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1106,7 +1106,7 @@
     <View>
       <Name>JobTemplate</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.JobTemplate</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1186,12 +1186,12 @@
     <View>
       <Name>UnifiedJob</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobTemplateJob</TypeName>
-        <TypeName>AWX.Resources.ProjectUpdateJob</TypeName>
-        <TypeName>AWX.Resources.InventoryUpdateJob</TypeName>
-        <TypeName>AWX.Resources.AdHocCommand</TypeName>
-        <TypeName>AWX.Resources.SystemJob</TypeName>
-        <TypeName>AWX.Resources.WorkflowJob</TypeName>
+        <TypeName>Jagabata.Resources.JobTemplateJob</TypeName>
+        <TypeName>Jagabata.Resources.ProjectUpdateJob</TypeName>
+        <TypeName>Jagabata.Resources.InventoryUpdateJob</TypeName>
+        <TypeName>Jagabata.Resources.AdHocCommand</TypeName>
+        <TypeName>Jagabata.Resources.SystemJob</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowJob</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1264,11 +1264,11 @@
     <View>
       <Name>JobEvent</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobEvent</TypeName>
-        <TypeName>AWX.Resources.ProjectUpdateJobEvent</TypeName>
-        <TypeName>AWX.Resources.InventoryUpdateJobEvent</TypeName>
-        <TypeName>AWX.Resources.SystemJobEvent</TypeName>
-        <TypeName>AWX.Resources.AdHocCommandJobEvent</TypeName>
+        <TypeName>Jagabata.Resources.JobEvent</TypeName>
+        <TypeName>Jagabata.Resources.ProjectUpdateJobEvent</TypeName>
+        <TypeName>Jagabata.Resources.InventoryUpdateJobEvent</TypeName>
+        <TypeName>Jagabata.Resources.SystemJobEvent</TypeName>
+        <TypeName>Jagabata.Resources.AdHocCommandJobEvent</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1338,7 +1338,7 @@
     <View>
       <Name>JobHostSummary</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.JobHostSummary</TypeName>
+        <TypeName>Jagabata.Resources.JobHostSummary</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1455,7 +1455,7 @@
     <View>
       <Name>SystemJobTemplate</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.SystemJobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.SystemJobTemplate</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1509,7 +1509,7 @@
     <View>
       <Name>Schedule</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Schedule</TypeName>
+        <TypeName>Jagabata.Resources.Schedule</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1578,7 +1578,7 @@
     <View>
       <Name>Role</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Role</TypeName>
+        <TypeName>Jagabata.Resources.Role</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1630,7 +1630,7 @@
     <View>
       <Name>NotificationTemplate</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.NotificationTemplate</TypeName>
+        <TypeName>Jagabata.Resources.NotificationTemplate</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1678,7 +1678,7 @@
     <View>
       <Name>Notification</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Notification</TypeName>
+        <TypeName>Jagabata.Resources.Notification</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1732,7 +1732,7 @@
     <View>
       <Name>Label</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.Label</TypeName>
+        <TypeName>Jagabata.Resources.Label</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1774,7 +1774,7 @@
     <View>
       <Name>ActivityStream</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.ActivityStream</TypeName>
+        <TypeName>Jagabata.Resources.ActivityStream</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1833,7 +1833,7 @@
     <View>
       <Name>WorkflowJobTemplate</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.WorkflowJobTemplate</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowJobTemplate</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1913,7 +1913,7 @@
     <View>
       <Name>WorkflowJobTemplateNode</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.WorkflowJobTemplateNode</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowJobTemplateNode</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -1979,7 +1979,7 @@
     <View>
       <Name>WorkflowJobNode</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.WorkflowJobNode</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowJobNode</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -2064,7 +2064,7 @@
     <View>
       <Name>CredentialInputSource</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.CredentialInputSource</TypeName>
+        <TypeName>Jagabata.Resources.CredentialInputSource</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -2116,7 +2116,7 @@
     <View>
       <Name>ExecutionEnvironment</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.ExecutionEnvironment</TypeName>
+        <TypeName>Jagabata.Resources.ExecutionEnvironment</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -2170,7 +2170,7 @@
     <View>
       <Name>HostMetric</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.HostMetric</TypeName>
+        <TypeName>Jagabata.Resources.HostMetric</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -2232,7 +2232,7 @@
     <View>
       <Name>Metric</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Cmdlets.MetricItem</TypeName>
+        <TypeName>Jagabata.Cmdlets.MetricItem</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -2276,7 +2276,7 @@
     <View>
       <Name>WorkflowApproval</Name>
       <ViewSelectedBy>
-        <TypeName>AWX.Resources.WorkflowApproval</TypeName>
+        <TypeName>Jagabata.Resources.WorkflowApproval</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>

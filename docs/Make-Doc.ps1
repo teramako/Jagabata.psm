@@ -8,12 +8,12 @@ param(
     [switch] $New
 )
 Import-Module platyPS
-$moduleName = "AWX.psm"
+$moduleName = "Jagabata.psm"
 $module = Get-Module $moduleName
 if ($null -eq $module)
 {
-    # $ModulePath = Resolve-Path -RelativeBasePath $PSScriptRoot -Path ..\src\bin\Debug\net8.0\AWX.psm.psd1;
-    $ModulePath = Resolve-Path -RelativeBasePath $PSScriptRoot -Path ..\out\AWX.psm
+    # $ModulePath = Resolve-Path -RelativeBasePath $PSScriptRoot -Path ..\src\bin\Debug\net8.0\Jagabata.psm.psd1;
+    $ModulePath = Resolve-Path -RelativeBasePath $PSScriptRoot -Path ..\out\Jagabata.psm
     Import-Module $ModulePath -Force
     $module = Get-Module $moduleName
 }

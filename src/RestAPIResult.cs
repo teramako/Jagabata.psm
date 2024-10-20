@@ -1,7 +1,7 @@
 using System.Collections.Frozen;
 using System.Net;
 
-namespace AWX
+namespace Jagabata
 {
     public interface IRestAPIResponse
     {

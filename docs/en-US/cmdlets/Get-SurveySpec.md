@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -74,7 +74,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
+### Jagabata.Resources.ResourceType
 Input by `Type` property in the pipeline object.
 
 Acceptable values:  
@@ -88,7 +88,7 @@ Database ID for the ResourceType
 
 ## OUTPUTS
 
-### AWX.Resources.Survey
+### Jagabata.Resources.Survey
 ## NOTES
 
 ## RELATED LINKS

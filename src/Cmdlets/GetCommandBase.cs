@@ -1,9 +1,9 @@
 using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Web;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 public abstract class GetCommandBase<TResource> : APICmdletBase where TResource: class
 {

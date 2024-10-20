@@ -1,8 +1,8 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Collections.Specialized;
 using System.Management.Automation;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Find, "UnifiedJobTemplate")]
     [OutputType(typeof(IUnifiedJobTemplate))]

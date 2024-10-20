@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class JobTemplateLaunchRequirements(bool canStartWithoutUserInput, string[] passwordsNeededToStart,
                                                bool askScmBranchOnLaunch, bool askVariablesOnLaunch,

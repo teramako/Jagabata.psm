@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
 using System.Web;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public interface IUnifiedJobSummary
     {

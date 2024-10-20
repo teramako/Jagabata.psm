@@ -2,9 +2,9 @@ using System.Management.Automation;
 using System.Security;
 using System.Text;
 using System.Text.Json;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 public abstract class LaunchJobCommandBase : APICmdletBase
 {

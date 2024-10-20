@@ -1,11 +1,11 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-namespace AWX
+namespace Jagabata
 {
     public enum AcceptType
     {

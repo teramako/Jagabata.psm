@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace AWX.Cmdlets;
+namespace Jagabata.Cmdlets;
 
 public abstract class UpdateCommandBase<TResource> : APICmdletBase where TResource : class
 {

@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class Role(ulong id,
                       ResourceType type,

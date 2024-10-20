@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     [JsonConverter(typeof(Json.EnumUpperCamelCaseStringConverter<JobStatus>))]
     public enum JobStatus

@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class SystemJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
                                 SystemJobEvent.Summary summaryFields, DateTime created, DateTime? modified,

@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -403,7 +403,7 @@ InventorySource ID.
 
 ## OUTPUTS
 
-### AWX.Resources.InventorySource
+### Jagabata.Resources.InventorySource
 Updated InventorySource object.
 
 ## NOTES

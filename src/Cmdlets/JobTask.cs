@@ -1,8 +1,8 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 using System.Web;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     public class JobProgressManager : Dictionary<ulong, JobProgress>
     {

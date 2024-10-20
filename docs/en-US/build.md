@@ -9,14 +9,14 @@
 
 ```powershell
 cd path\to\project
-dotnet build .\src\AWX.csproj -t:Build -p:Configuration=Release
+dotnet build .\src\Jagabata.csproj -t:Build -p:Configuration=Release
 ```
 
 ## Build Powershell module
 
 ```powershell
 cd path\to\project
-dotnet build .\src\AWX.csproj -t:PSM -p:Configuration=Release
+dotnet build .\src\Jagabata.csproj -t:PSM -p:Configuration=Release
 ```
 
 module files are created into `out` directory
@@ -25,7 +25,7 @@ module files are created into `out` directory
 
 ```powershell
 cd path\to\project
-dotnet build .\src\AWX.csproj -t:docs -p:Configuration=Release
+dotnet build .\src\Jagabata.csproj -t:docs -p:Configuration=Release
 ```
 
 or

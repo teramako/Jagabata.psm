@@ -1,9 +1,9 @@
 using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using AWX.Resources;
+using Jagabata.Resources;
 
-namespace AWX
+namespace Jagabata
 {
     public class ApiConfig
     {

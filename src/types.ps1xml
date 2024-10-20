@@ -2,7 +2,7 @@
 <Types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd">
   <Type>
-    <Name>AWX.Resources.ResultSetBase</Name>
+    <Name>Jagabata.Resources.ResultSetBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -21,7 +21,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Application</Name>
+    <Name>Jagabata.Resources.Application</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -58,7 +58,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.OAuth2AccessToken</Name>
+    <Name>Jagabata.Resources.OAuth2AccessToken</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -92,7 +92,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Instance</Name>
+    <Name>Jagabata.Resources.Instance</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -135,7 +135,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.InstanceGroup</Name>
+    <Name>Jagabata.Resources.InstanceGroup</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -170,7 +170,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Organization</Name>
+    <Name>Jagabata.Resources.Organization</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -228,7 +228,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.User</Name>
+    <Name>Jagabata.Resources.User</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -257,7 +257,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Project</Name>
+    <Name>Jagabata.Resources.Project</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -332,7 +332,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.ProjectUpdateJob</Name>
+    <Name>Jagabata.Resources.ProjectUpdateJob</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -410,7 +410,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.ProjectUpdateJob+Detail</Name>
+    <Name>Jagabata.Resources.ProjectUpdateJob+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -461,7 +461,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Team</Name>
+    <Name>Jagabata.Resources.Team</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -488,7 +488,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Credential</Name>
+    <Name>Jagabata.Resources.Credential</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -526,7 +526,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.CredentialType</Name>
+    <Name>Jagabata.Resources.CredentialType</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -552,7 +552,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Inventory</Name>
+    <Name>Jagabata.Resources.Inventory</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -587,7 +587,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.InventorySource</Name>
+    <Name>Jagabata.Resources.InventorySource</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -660,7 +660,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.InventoryUpdateJob</Name>
+    <Name>Jagabata.Resources.InventoryUpdateJob</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -748,7 +748,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.InventoryUpdateJob+Detail</Name>
+    <Name>Jagabata.Resources.InventoryUpdateJob+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -809,7 +809,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Group</Name>
+    <Name>Jagabata.Resources.Group</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -836,7 +836,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Host</Name>
+    <Name>Jagabata.Resources.Host</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -874,7 +874,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.JobTemplate</Name>
+    <Name>Jagabata.Resources.JobTemplate</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -971,7 +971,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.JobTemplateJob</Name>
+    <Name>Jagabata.Resources.JobTemplateJob</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1080,7 +1080,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.JobTemplateJob+Detail</Name>
+    <Name>Jagabata.Resources.JobTemplateJob+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1152,7 +1152,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.JobEvent</Name>
+    <Name>Jagabata.Resources.JobEvent</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1208,7 +1208,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.ProjectUpdateJobEvent</Name>
+    <Name>Jagabata.Resources.ProjectUpdateJobEvent</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1268,7 +1268,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.InventoryUpdateJobEvent</Name>
+    <Name>Jagabata.Resources.InventoryUpdateJobEvent</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1302,7 +1302,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.SystemJobEvent</Name>
+    <Name>Jagabata.Resources.SystemJobEvent</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1336,7 +1336,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.AdHocCommandJobEvent</Name>
+    <Name>Jagabata.Resources.AdHocCommandJobEvent</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1393,7 +1393,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.JobHostSummary</Name>
+    <Name>Jagabata.Resources.JobHostSummary</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1449,7 +1449,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.AdHocCommand</Name>
+    <Name>Jagabata.Resources.AdHocCommand</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1516,7 +1516,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.AdHocCommand+Detail</Name>
+    <Name>Jagabata.Resources.AdHocCommand+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1567,7 +1567,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.SystemJobTemplate</Name>
+    <Name>Jagabata.Resources.SystemJobTemplate</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1605,7 +1605,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.SystemJob</Name>
+    <Name>Jagabata.Resources.SystemJob</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1659,7 +1659,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.SystemJob+Detail</Name>
+    <Name>Jagabata.Resources.SystemJob+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1701,7 +1701,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Schedule</Name>
+    <Name>Jagabata.Resources.Schedule</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1757,7 +1757,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Role</Name>
+    <Name>Jagabata.Resources.Role</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1796,7 +1796,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.NotificationTemplate</Name>
+    <Name>Jagabata.Resources.NotificationTemplate</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1859,7 +1859,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Notification</Name>
+    <Name>Jagabata.Resources.Notification</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1900,7 +1900,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.Label</Name>
+    <Name>Jagabata.Resources.Label</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1926,7 +1926,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowJobTemplate</Name>
+    <Name>Jagabata.Resources.WorkflowJobTemplate</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1998,7 +1998,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowJob</Name>
+    <Name>Jagabata.Resources.WorkflowJob</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2075,7 +2075,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowJob+Detail</Name>
+    <Name>Jagabata.Resources.WorkflowJob+Detail</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2127,7 +2127,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.ActivityStream</Name>
+    <Name>Jagabata.Resources.ActivityStream</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2157,7 +2157,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowJobTemplateNode</Name>
+    <Name>Jagabata.Resources.WorkflowJobTemplateNode</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2211,7 +2211,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowJobNode</Name>
+    <Name>Jagabata.Resources.WorkflowJobNode</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2282,7 +2282,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.CredentialInputSource</Name>
+    <Name>Jagabata.Resources.CredentialInputSource</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2336,7 +2336,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.ExecutionEnvironment</Name>
+    <Name>Jagabata.Resources.ExecutionEnvironment</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2367,7 +2367,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.HostMetrics</Name>
+    <Name>Jagabata.Resources.HostMetrics</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2391,7 +2391,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Cmdlets.MetricsItem</Name>
+    <Name>Jagabata.Cmdlets.MetricsItem</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2412,7 +2412,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowApprovalTemplate</Name>
+    <Name>Jagabata.Resources.WorkflowApprovalTemplate</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2453,7 +2453,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>AWX.Resources.WorkflowApproval</Name>
+    <Name>Jagabata.Resources.WorkflowApproval</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>

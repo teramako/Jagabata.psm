@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class LaunchedBy(ulong? id, string type, string name, string url)
     {

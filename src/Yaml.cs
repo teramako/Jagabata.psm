@@ -2,7 +2,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using System.Collections;
 
-namespace AWX
+namespace Jagabata
 {
     public static class Yaml
     {

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public abstract record SummaryBase
     {

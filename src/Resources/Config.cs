@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     /// <summary>
     /// Resource for <c>/api/v2/config/</c> (GET)

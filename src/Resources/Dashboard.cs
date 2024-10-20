@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     /// <summary>
     /// Dashboard details

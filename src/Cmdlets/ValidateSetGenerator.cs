@@ -1,6 +1,6 @@
 using System.Management.Automation;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     public class EnumValidateSetGenerator<TEnum> : IValidateSetValuesGenerator
         where TEnum : Enum

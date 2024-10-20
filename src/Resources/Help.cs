@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class ApiHelp(string name,
                          string description,

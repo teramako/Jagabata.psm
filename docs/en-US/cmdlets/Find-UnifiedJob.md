@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -94,7 +94,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -228,7 +228,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.IResource
+### Jagabata.Resources.IResource
 The object has `Id` and `Type` properties.
 
 And `Type` should be following value:  
@@ -246,7 +246,7 @@ And `Type` should be following value:
 
 ## OUTPUTS
 
-### AWX.Resources.IUnifiedJob
+### Jagabata.Resources.IUnifiedJob
 Unified Job objects which are following instances implemented `IUnifiedJob`:  
 - `Job`             : JobTemplate's job  
 - `ProjectUpdate`   : Project Update job  

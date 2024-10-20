@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\AWX.csproj" />
+    <ProjectReference Include="..\src\Jagabata.csproj" />
   </ItemGroup>
 
   <ItemGroup>

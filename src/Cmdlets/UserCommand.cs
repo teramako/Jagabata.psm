@@ -1,9 +1,9 @@
-using AWX.Resources;
+using Jagabata.Resources;
 using System.Management.Automation;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
 
     [Cmdlet(VerbsCommon.Get, "Me")]

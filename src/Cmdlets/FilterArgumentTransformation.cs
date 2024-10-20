@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Web;
 
-namespace AWX.Cmdlets
+namespace Jagabata.Cmdlets
 {
     /// <summary>
     /// Transform <c>-Filter</c> parameter values to <see cref="NameValueCollection"/>.

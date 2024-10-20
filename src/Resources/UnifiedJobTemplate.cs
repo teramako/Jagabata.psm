@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 using System.Web;
 
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     /// <summary>
     /// Template Status

@@ -1,4 +1,4 @@
-namespace AWX.Resources
+namespace Jagabata.Resources
 {
     public class JobLog(JobLog.JobLogRange range, string content)
     {
