@@ -2,7 +2,7 @@ using Jagabata.Resources;
 using System.Management.Automation;
 using System.Web;
 
-namespace Jagabata.Cmdlets
+namespace Jagabata.Cmdlets.Utilities
 {
     public class JobProgressManager : Dictionary<ulong, JobProgress>
     {
