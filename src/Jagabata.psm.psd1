@@ -33,7 +33,7 @@ Copyright = '(c) teramako. All rights reserved.'
 Description = 'PowerShell module to operate AWX/AnsibleTower using Rest API.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.3'
+PowerShellVersion = '7.4'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
