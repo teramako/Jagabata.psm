@@ -1,5 +1,6 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Resources;
+using Jagabata.YAML;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 

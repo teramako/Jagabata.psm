@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Jagabata.csproj" />
+    <ProjectReference Include="..\src\Jagabata\Jagabata.csproj" />
   </ItemGroup>
 
   <ItemGroup>
