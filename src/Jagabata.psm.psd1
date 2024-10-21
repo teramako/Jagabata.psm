@@ -15,7 +15,7 @@ RootModule = 'Jagabata.psm.dll'
 ModuleVersion = '0.0.1'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('Core')
 
 # ID used to uniquely identify this module
 GUID = 'a60acf94-7e42-4b77-bf97-1cdaf17b822b'
@@ -69,16 +69,214 @@ FormatsToProcess = @('formats.ps1xml')
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = @()
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+CmdletsToExport = @(
+    'Approve-WorkflowApprovalRequest',
+    'Deny-WorkflowApprovalRequest',
+    'Disable-NotificationTemplate',
+    'Enable-NotificationTemplate',
+    'Find-AccessList',
+    'Find-ActivityStream',
+    'Find-AdHocCommandJob',
+    'Find-Application',
+    'Find-Credential',
+    'Find-CredentialInputSource',
+    'Find-CredentialType',
+    'Find-ExecutionEnvironment',
+    'Find-Group',
+    'Find-Host',
+    'Find-HostMetric',
+    'Find-Instance',
+    'Find-InstanceGroup',
+    'Find-Inventory',
+    'Find-InventorySource',
+    'Find-InventoryUpdateJob',
+    'Find-Job',
+    'Find-JobEvent',
+    'Find-JobHostSummary',
+    'Find-JobTemplate',
+    'Find-Label',
+    'Find-Notification',
+    'Find-NotificationTemplate',
+    'Find-NotificationTemplateForApproval',
+    'Find-NotificationTemplateForError',
+    'Find-NotificationTemplateForStarted',
+    'Find-NotificationTemplateForSuccess',
+    'Find-ObjectRole',
+    'Find-Organization',
+    'Find-Project',
+    'Find-ProjectUpdateJob',
+    'Find-Role',
+    'Find-Schedule',
+    'Find-SystemJob',
+    'Find-SystemJobTemplate',
+    'Find-Team',
+    'Find-Token',
+    'Find-UnifiedJob',
+    'Find-UnifiedJobTemplate',
+    'Find-User',
+    'Find-WorkflowApprovalRequest',
+    'Find-WorkflowJob',
+    'Find-WorkflowJobNode',
+    'Find-WorkflowJobTemplate',
+    'Find-WorkflowJobTemplateNode',
+    'Get-ActivityStream',
+    'Get-AdHocCommandJob',
+    'Get-ApiConfig',
+    'Get-ApiHelp',
+    'Get-Application',
+    'Get-Config',
+    'Get-Credential',
+    'Get-CredentialInputSource',
+    'Get-CredentialType',
+    'Get-Dashboard',
+    'Get-ExecutionEnvironment',
+    'Get-Group',
+    'Get-Host',
+    'Get-HostFactsCache',
+    'Get-HostMetric',
+    'Get-Instance',
+    'Get-InstanceGroup',
+    'Get-Inventory',
+    'Get-InventoryFile',
+    'Get-InventorySource',
+    'Get-InventoryUpdateJob',
+    'Get-Job',
+    'Get-JobHostSummary',
+    'Get-JobLog',
+    'Get-JobStatistics',
+    'Get-JobTemplate',
+    'Get-Label',
+    'Get-Me',
+    'Get-Metric',
+    'Get-Notification',
+    'Get-NotificationTemplate',
+    'Get-Organization',
+    'Get-Ping',
+    'Get-Playbook',
+    'Get-Project',
+    'Get-ProjectUpdateJob',
+    'Get-Role',
+    'Get-Schedule',
+    'Get-Setting',
+    'Get-SurveySpec',
+    'Get-SystemJob',
+    'Get-SystemJobTemplate',
+    'Get-Team',
+    'Get-Token',
+    'Get-User',
+    'Get-VariableData',
+    'Get-WorkflowApprovalRequest',
+    'Get-WorkflowApprovalTemplate',
+    'Get-WorkflowJob',
+    'Get-WorkflowJobNode',
+    'Get-WorkflowJobTemplate',
+    'Get-WorkflowJobTemplateNode',
+    'Grant-Role',
+    'Invoke-AdHocCommand',
+    'Invoke-API',
+    'Invoke-InventoryUpdate',
+    'Invoke-JobTemplate',
+    'Invoke-ProjectUpdate',
+    'Invoke-SystemJobTemplate',
+    'Invoke-WorkflowJobTemplate',
+    'New-ApiConfig',
+    'New-Application',
+    'New-Credential',
+    'New-CredentialType',
+    'New-ExecutionEnvironment',
+    'New-Group',
+    'New-Host',
+    'New-Inventory',
+    'New-InventorySource',
+    'New-JobTemplate',
+    'New-Label',
+    'New-NotificationTemplate',
+    'New-Organization',
+    'New-Project',
+    'New-Schedule',
+    'New-Team',
+    'New-Token',
+    'New-User',
+    'New-WorkflowJobTemplate',
+    'New-WorkflowJobTemplateNode',
+    'Register-Credential',
+    'Register-Group',
+    'Register-Host',
+    'Register-Label',
+    'Register-SurveySpec',
+    'Register-User',
+    'Register-WorkflowJobTemplateNode',
+    'Remove-AdHocCommandJob',
+    'Remove-Application',
+    'Remove-Credential',
+    'Remove-CredentialType',
+    'Remove-ExecutionEnvironment',
+    'Remove-Group',
+    'Remove-Host',
+    'Remove-Inventory',
+    'Remove-InventorySource',
+    'Remove-InventoryUpdateJob',
+    'Remove-Job',
+    'Remove-JobTemplate',
+    'Remove-NotificationTemplate',
+    'Remove-Organization',
+    'Remove-Project',
+    'Remove-ProjectUpdateJob',
+    'Remove-Schedule',
+    'Remove-SurveySpec',
+    'Remove-SystemJob',
+    'Remove-Team',
+    'Remove-Token',
+    'Remove-User',
+    'Remove-WorkflowApprovalRequest',
+    'Remove-WorkflowJob',
+    'Remove-WorkflowJobTemplate',
+    'Remove-WorkflowJobTemplateNode',
+    'Revoke-Role',
+    'Start-AdHocCommand',
+    'Start-InventoryUpdate',
+    'Start-JobTemplate',
+    'Start-ProjectUpdate',
+    'Start-SystemJobTemplate',
+    'Start-WorkflowJobTemplate',
+    'Stop-UnifiedJob',
+    'Switch-ApiConfig',
+    'Unregister-Credential',
+    'Unregister-Group',
+    'Unregister-Host',
+    'Unregister-Label',
+    'Unregister-User',
+    'Unregister-WorkflowJobTemplateNode',
+    'Update-Application',
+    'Update-Credential',
+    'Update-CredentialType',
+    'Update-ExecutionEnvironment',
+    'Update-Group',
+    'Update-Host',
+    'Update-Inventory',
+    'Update-InventorySource',
+    'Update-JobTemplate',
+    'Update-Label',
+    'Update-NotificationTemplate',
+    'Update-Organization',
+    'Update-Project',
+    'Update-Schedule',
+    'Update-Team',
+    'Update-Token',
+    'Update-User',
+    'Update-WorkflowJobTemplate',
+    'Update-WorkflowJobTemplateNode',
+    'Wait-UnifiedJob'
+)
 
 # Variables to export from this module
-VariablesToExport = '*'
+# VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = @()
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -95,13 +293,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('PSEdition_Core', 'Ansible', 'AWX', 'AnsibleTower')
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/teramako/AWX.psm/blob/main/LICENSE'
+        LicenseUri = 'https://github.com/teramako/Jagabata.psm/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/teramako/AWX.psm'
+        ProjectUri = 'https://github.com/teramako/Jagabata.psm'
 
         # A URL to an icon representing this module.
         # IconUri = ''
