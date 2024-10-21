@@ -2,6 +2,7 @@ using System.Management.Automation;
 using System.Security;
 using System.Text;
 using System.Text.Json;
+using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;

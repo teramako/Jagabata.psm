@@ -1,4 +1,4 @@
-namespace Jagabata.Cmdlets
+namespace Jagabata.Cmdlets.Utilities
 {
     internal class Sleep : IDisposable
     {
