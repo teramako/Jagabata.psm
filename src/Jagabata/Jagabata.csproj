@@ -11,14 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jagabata.Yaml\Jagabata.Yaml.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Management.Automation">
-      <HintPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">C:\Program Files\PowerShell\7\System.Management.Automation.dll</HintPath>
-      <HintPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">/opt/microsoft/powershell/7/System.Management.Automation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <PackageReference Include="System.Management.Automation" Version="7.4.*" PrivateAssets="All"/>
   </ItemGroup>
 
   <PropertyGroup>
