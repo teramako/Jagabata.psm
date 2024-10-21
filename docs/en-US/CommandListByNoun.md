@@ -46,17 +46,15 @@
 
 - [Get-Config](./cmdlets/Get-Config.md)
 
-## Credentail
-
-- [Update-Credentail](./cmdlets/Update-Credentail.md)
-
 ## Credential
 
-- [Add-Credential](./cmdlets/Add-Credential.md)
 - [Find-Credential](./cmdlets/Find-Credential.md)
 - [Get-Credential](./cmdlets/Get-Credential.md)
 - [New-Credential](./cmdlets/New-Credential.md)
+- [Register-Credential](./cmdlets/Register-Credential.md)
 - [Remove-Credential](./cmdlets/Remove-Credential.md)
+- [Unregister-Credential](./cmdlets/Unregister-Credential.md)
+- [Update-Credential](./cmdlets/Update-Credential.md)
 
 ## CredentialInputSource
 
@@ -85,20 +83,22 @@
 
 ## Group
 
-- [Add-Group](./cmdlets/Add-Group.md)
 - [Find-Group](./cmdlets/Find-Group.md)
 - [Get-Group](./cmdlets/Get-Group.md)
 - [New-Group](./cmdlets/New-Group.md)
+- [Register-Group](./cmdlets/Register-Group.md)
 - [Remove-Group](./cmdlets/Remove-Group.md)
+- [Unregister-Group](./cmdlets/Unregister-Group.md)
 - [Update-Group](./cmdlets/Update-Group.md)
 
 ## Host
 
-- [Add-Host](./cmdlets/Add-Host.md)
 - [Find-Host](./cmdlets/Find-Host.md)
 - [Get-Host](./cmdlets/Get-Host.md)
 - [New-Host](./cmdlets/New-Host.md)
+- [Register-Host](./cmdlets/Register-Host.md)
 - [Remove-Host](./cmdlets/Remove-Host.md)
+- [Unregister-Host](./cmdlets/Unregister-Host.md)
 - [Update-Host](./cmdlets/Update-Host.md)
 
 ## HostFactsCache
@@ -186,11 +186,11 @@
 
 ## Label
 
-- [Add-Label](./cmdlets/Add-Label.md)
 - [Find-Label](./cmdlets/Find-Label.md)
 - [Get-Label](./cmdlets/Get-Label.md)
 - [New-Label](./cmdlets/New-Label.md)
-- [Remove-Label](./cmdlets/Remove-Label.md)
+- [Register-Label](./cmdlets/Register-Label.md)
+- [Unregister-Label](./cmdlets/Unregister-Label.md)
 - [Update-Label](./cmdlets/Update-Label.md)
 
 ## Me
@@ -337,11 +337,12 @@
 
 ## User
 
-- [Add-User](./cmdlets/Add-User.md)
 - [Find-User](./cmdlets/Find-User.md)
 - [Get-User](./cmdlets/Get-User.md)
 - [New-User](./cmdlets/New-User.md)
+- [Register-User](./cmdlets/Register-User.md)
 - [Remove-User](./cmdlets/Remove-User.md)
+- [Unregister-User](./cmdlets/Unregister-User.md)
 - [Update-User](./cmdlets/Update-User.md)
 
 ## VariableData

@@ -1,13 +1,5 @@
 # Command List By Verb
 
-## Add
-
-- [Add-Credential](./cmdlets/Add-Credential.md)
-- [Add-Group](./cmdlets/Add-Group.md)
-- [Add-Host](./cmdlets/Add-Host.md)
-- [Add-Label](./cmdlets/Add-Label.md)
-- [Add-User](./cmdlets/Add-User.md)
-
 ## Approve
 
 - [Approve-WorkflowApprovalRequest](./cmdlets/Approve-WorkflowApprovalRequest.md)
@@ -166,7 +158,12 @@
 
 ## Register
 
+- [Register-Credential](./cmdlets/Register-Credential.md)
+- [Register-Group](./cmdlets/Register-Group.md)
+- [Register-Host](./cmdlets/Register-Host.md)
+- [Register-Label](./cmdlets/Register-Label.md)
 - [Register-SurveySpec](./cmdlets/Register-SurveySpec.md)
+- [Register-User](./cmdlets/Register-User.md)
 - [Register-WorkflowJobTemplateNode](./cmdlets/Register-WorkflowJobTemplateNode.md)
 
 ## Remove
@@ -183,7 +180,6 @@
 - [Remove-InventoryUpdateJob](./cmdlets/Remove-InventoryUpdateJob.md)
 - [Remove-Job](./cmdlets/Remove-Job.md)
 - [Remove-JobTemplate](./cmdlets/Remove-JobTemplate.md)
-- [Remove-Label](./cmdlets/Remove-Label.md)
 - [Remove-NotificationTemplate](./cmdlets/Remove-NotificationTemplate.md)
 - [Remove-Organization](./cmdlets/Remove-Organization.md)
 - [Remove-Project](./cmdlets/Remove-Project.md)
@@ -222,12 +218,17 @@
 
 ## Unregister
 
+- [Unregister-Credential](./cmdlets/Unregister-Credential.md)
+- [Unregister-Group](./cmdlets/Unregister-Group.md)
+- [Unregister-Host](./cmdlets/Unregister-Host.md)
+- [Unregister-Label](./cmdlets/Unregister-Label.md)
+- [Unregister-User](./cmdlets/Unregister-User.md)
 - [Unregister-WorkflowJobTemplateNode](./cmdlets/Unregister-WorkflowJobTemplateNode.md)
 
 ## Update
 
 - [Update-Application](./cmdlets/Update-Application.md)
-- [Update-Credentail](./cmdlets/Update-Credentail.md)
+- [Update-Credential](./cmdlets/Update-Credential.md)
 - [Update-CredentialType](./cmdlets/Update-CredentialType.md)
 - [Update-ExecutionEnvironment](./cmdlets/Update-ExecutionEnvironment.md)
 - [Update-Group](./cmdlets/Update-Group.md)
