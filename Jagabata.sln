@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{637CEAC9-F9DF-44A2-A51D-BF09C6956C68}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{94DA011A-DA9E-46D7-8CB3-9148E5B78C1F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jagabata", "src\Jagabata\Jagabata.csproj", "{43C57149-90BE-4180-A589-1331270C2BFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jagabata.Yaml", "src\Jagabata.Yaml\Jagabata.Yaml.csproj", "{7FAA361A-54AC-4CE0-AF7B-1B31796D3B03}"
@@ -35,9 +33,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7BAE838-23B9-494C-A47D-5FB21E5DB2A9}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{43C57149-90BE-4180-A589-1331270C2BFF} = {94DA011A-DA9E-46D7-8CB3-9148E5B78C1F}
-		{7FAA361A-54AC-4CE0-AF7B-1B31796D3B03} = {94DA011A-DA9E-46D7-8CB3-9148E5B78C1F}
 	EndGlobalSection
 EndGlobal
