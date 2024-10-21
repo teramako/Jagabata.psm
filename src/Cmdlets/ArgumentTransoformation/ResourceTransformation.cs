@@ -2,7 +2,7 @@ using System.Collections;
 using System.Management.Automation;
 using Jagabata.Resources;
 
-namespace Jagabata.Cmdlets
+namespace Jagabata.Cmdlets.ArgumentTransformation
 {
     class ResourceIdTransformationAttribute : ResourceTransformationAttribute
     {
