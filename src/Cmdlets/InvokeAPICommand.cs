@@ -109,7 +109,7 @@ namespace Jagabata.Cmdlets
             WriteVerboseResponse(result.Response);
             if (!AsRawString && result.Response.ContentType == "application/json" && result.Contents is not null)
             {
-                if (APIPath.TryGetTypeFromPath(pathAndQuery, Method, out var type))
+                if (Utils.TryGetTypeFromPath(pathAndQuery, Method, out var type))
                 {
                     if (type != typeof(string))
                     {
