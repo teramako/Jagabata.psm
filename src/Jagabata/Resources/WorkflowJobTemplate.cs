@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
-using Jagabata.YAML;
 
 namespace Jagabata.Resources
 {

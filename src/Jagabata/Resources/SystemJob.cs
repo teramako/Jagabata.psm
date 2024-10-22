@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using Jagabata.YAML;
 
 namespace Jagabata.Resources
 {

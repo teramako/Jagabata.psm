@@ -2,7 +2,7 @@ using System.Collections;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 
-namespace Jagabata.YAML;
+namespace Jagabata.AlcEngine;
 
 public static class Yaml
 {

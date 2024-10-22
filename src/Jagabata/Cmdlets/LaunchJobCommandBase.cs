@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
-using Jagabata.YAML;
 
 namespace Jagabata.Cmdlets;
 
