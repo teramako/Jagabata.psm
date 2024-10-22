@@ -302,10 +302,10 @@ PrivateData = @{
         ProjectUri = 'https://github.com/teramako/Jagabata.psm'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/teramako/Jagabata.psm/refs/heads/develop/docs/img/Jagabata_x85.png'
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://github.com/teramako/Jagabata.psm/releases'
 
         # Prerelease string of this module
         # Prerelease = ''
