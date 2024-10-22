@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -138,7 +138,7 @@ Group Id.
 
 ## OUTPUTS
 
-### AWX.Resources.Group
+### Jagabata.Resources.Group
 Updated Group object.
 
 ## NOTES
@@ -151,6 +151,8 @@ Updated Group object.
 
 [New-Group](New-Group.md)
 
-[Add-Group](Add-Group.md)
+[Register-Group](Register-Group.md)
+
+[Unregister-Group](Unregister-Group.md)
 
 [Remove-Group](Remove-Group.md)

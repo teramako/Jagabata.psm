@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -13,17 +13,14 @@ Remove a User
 ## SYNTAX
 
 ```
-Remove-User [-Id] <UInt64> [-From <IResource>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-User [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Remove a Team or disassociate from the target resource.
+Remove a User.
 
 Implements following Rest API:  
-- `/api/v2/users/{id}/` (DELETE)  
-- `/api/v2/organization/{id}/users/` (POST)  
-- `/api/v2/teams/{id}/users/` (POST)  
-- `/api/v2/roles/{id}/users/` (POST)
+- `/api/v2/users/{id}/` (DELETE)
 
 ## EXAMPLES
 
@@ -34,13 +31,6 @@ PS C:\> Remove-User -Id 2
 
 Remove the User of ID 2 completely.
 
-### Example 2
-```powershell
-PS C:\> Remove-User -Id 2 -From (Get-Organization -Id 1)
-```
-
-Disassociate the User of ID 2 from the Organization of ID 1.
-
 ## PARAMETERS
 
 ### -Force
@@ -48,26 +38,6 @@ Don't confirm. (Ignore `-Confirm` and `-WhatIf`)
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -From
-Target resource to be disassosicated from.
-
-Following resource is available:  
-- `Organization`  
-- `Team`  
-- `Role`
-
-```yaml
-Type: IResource
 Parameter Sets: (All)
 Aliases:
 
@@ -145,6 +115,8 @@ User ID.
 
 [New-User](New-User.md)
 
-[Add-User](Add-User.md)
-
 [Update-User](Update-User.md)
+
+[Register-User](Register-User.md)
+
+[Unregister-User](Unregister-User.md)

@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -166,7 +166,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None
 ## OUTPUTS
 
-### AWX.Resources.Host
+### Jagabata.Resources.Host
 New created Host object.
 
 ## NOTES
@@ -177,8 +177,10 @@ New created Host object.
 
 [Find-Host](Find-Host.md)
 
-[Add-Host](Add-Host.md)
-
 [Update-Host](Update-Host.md)
+
+[Register-Host](Register-Host.md)
+
+[Unregister-Host](Unregister-Host.md)
 
 [Remove-Host](Remove-Host.md)

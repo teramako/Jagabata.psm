@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Remove a Credential.
 ## SYNTAX
 
 ```
-Remove-Credential [-Id] <UInt64> [-From <IResource>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-Credential [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,28 +36,6 @@ Don't confirm. (Ignore `-Confirm` and `-WhatIf`)
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -From
-Target resource to be removed from.
-
-Following resource is available:  
-- `Organization` (galaxy-token only)  
-- `InventorySource`  
-- `JobTemplate`  
-- `Schedule`  
-- `WorkflowJobTemplateNode`
-
-```yaml
-Type: IResource
 Parameter Sets: (All)
 Aliases:
 
@@ -135,6 +113,8 @@ Credential ID.
 
 [New-Credential](New-Credential.md)
 
-[Add-Credential](Add-Credential.md)
-
 [Update-Credential](Update-Credential.md)
+
+[Register-Credential](Register-Credential.md)
+
+[Unregister-Credential](Unregister-Credential.md)

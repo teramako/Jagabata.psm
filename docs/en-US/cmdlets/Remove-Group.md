@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -13,26 +13,18 @@ Remove a Group.
 ## SYNTAX
 
 ```
-Remove-Group [-Id] <UInt64> [-FromGroup <UInt64>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-Group [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Remove the Group or disassociate from a group.
+Remove the Group.
 
 Implements following Rest API:  
 - `/api/v2/groups/{id}/` (DELETE)  
-- `/api/v2/groups/{id}/children/` (POST)
 
 ## EXAMPLES
 
 ### Example 1
-```powershell
-PS C:\> Remove-Group -Id 3 -FromGroup 1
-```
-
-Disassociate the Group of ID 3 from the parent Group ID 1.
-
-### Example 2
 ```powershell
 PS C:\> Remove-Group -Id 3
 ```
@@ -46,21 +38,6 @@ Don't confirm. (Ignore `-Confirm` and `-WhatIf`)
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -FromGroup
-The parent Group ID.
-
-```yaml
-Type: UInt64
 Parameter Sets: (All)
 Aliases:
 
@@ -138,6 +115,8 @@ Group Id.
 
 [New-Group](New-Group.md)
 
-[Add-Group](Add-Group.md)
-
 [Update-Group](Update-Group.md)
+
+[Register-Group](Register-Group.md)
+
+[Unregister-Group](Unregister-Group.md)

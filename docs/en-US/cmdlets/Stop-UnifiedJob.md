@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -12,14 +12,14 @@ Stop (cancel) a running job.
 
 ## SYNTAX
 
-### RequestCancel (Default)
-```
-Stop-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [<CommonParameters>]
-```
-
-### Determine
+### AssociatedWith (Default)
 ```
 Stop-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-Determine] [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Stop-UnifiedJob [-Job] <IResource> [-Determine] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -85,10 +85,10 @@ Determine whether the job is canelable, instead of requesting cancel.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Determine
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -101,13 +101,37 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Job
+UnifiedJob resource object from which to stop.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Job`             : JobTempalte's job  
+- `ProjectUpdate`   : Project's update job  
+- `InventoryUpdate` : InventorySource's update job  
+- `AdHocCommand`    : AdHocCommand's job  
+- `WorkflowJob`     : WorkflowJobTemplate's job  
+- `SystemJob`       : SystemJobTemplate's job
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -117,14 +141,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, WorkflowJob
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -133,21 +157,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### Jagabata.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Job`  
 - `ProjectUpdate`  
 - `InventoryUpdate`  
 - `SystemJob`  
 - `AdHocCommand`  
 - `WorkflowJob`
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Job ID for the ResourceType
 
 ## OUTPUTS
 
@@ -171,3 +190,5 @@ The results of requested to cancel or determine whether cancelable.
 [Start-WorkflowJobTemplate](Start-WorkflowJobTemplate.md)
 
 [Find-UnifiedJob](Find-UnifiedJob.md)
+
+[Wait-UnifiedJob](Wait-UnifiedJob.md)

@@ -1,0 +1,61 @@
+using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Resources;
+using System.Management.Automation;
+
+namespace Jagabata.Cmdlets
+{
+    [Cmdlet(VerbsCommon.Get, "JobHostSummary")]
+    [OutputType(typeof(JobHostSummary))]
+    public class GetJobHostSummaryCommand : GetCommandBase<JobHostSummary>
+    {
+        protected override ResourceType AcceptType => ResourceType.JobHostSummary;
+
+        protected override void ProcessRecord()
+        {
+            WriteObject(GetResource(), true);
+        }
+    }
+
+    [Cmdlet(VerbsCommon.Find, "JobHostSummary", DefaultParameterSetName = "AssociatedWith")]
+    [OutputType(typeof(JobHostSummary))]
+    public class FindJobHostSummaryCommand : FindCommandBase
+    {
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
+        [ValidateSet(nameof(ResourceType.Job),
+                     nameof(ResourceType.Host),
+                     nameof(ResourceType.Group))]
+        public ResourceType Type { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
+        public ulong Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [
+                ResourceType.Job,
+                ResourceType.Host,
+                ResourceType.Group
+        ])]
+        public IResource? Resource { get; set; }
+
+        [Parameter()]
+        public override string[] OrderBy { get; set; } = ["!id"];
+
+        protected override void ProcessRecord()
+        {
+            if (Resource is not null)
+            {
+                Type = Resource.Type;
+                Id = Resource.Id;
+            }
+
+            var path = Type switch
+            {
+                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/job_host_summaries/",
+                ResourceType.Host => $"{Host.PATH}{Id}/job_host_summaries/",
+                ResourceType.Group => $"{Group.PATH}{Id}/job_host_summaries/",
+                _ => throw new ArgumentException()
+            };
+            Find<JobHostSummary>(path);
+        }
+    }
+}

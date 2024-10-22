@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -110,12 +110,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.UInt64
 Project ID to be updated.
 
-### AWX.Resources.Project
+### Jagabata.Resources.Project
 Project object to be updated.
 
 ## OUTPUTS
 
-### AWX.Resources.ProjectUpdateJob+Detail
+### Jagabata.Resources.ProjectUpdateJob+Detail
 The result job object of updated the Project (non-completed status).
 
 ### System.Management.Automation.PSObject

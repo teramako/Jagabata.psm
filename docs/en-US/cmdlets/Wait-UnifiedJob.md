@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -12,9 +12,15 @@ Wait until jobs are finished.
 
 ## SYNTAX
 
+### AssociatedWith
 ```
 Wait-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-IntervalSeconds <Int32>] [-SuppressJobLog]
  [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Wait-UnifiedJob [-Job] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,13 +69,13 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -86,6 +92,30 @@ Required: False
 Position: Named
 Default value: 5
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Job
+UnifiedJob resource object from which to wait.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Job`             : JobTempalte's job  
+- `ProjectUpdate`   : Project's update job  
+- `InventoryUpdate` : InventorySource's update job  
+- `AdHocCommand`    : AdHocCommand's job  
+- `WorkflowJob`     : WorkflowJobTemplate's job  
+- `SystemJob`       : SystemJobTemplate's job
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -120,14 +150,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, WorkflowJob
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -136,10 +166,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### Jagabata.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Job`  
 - `ProjectUpdate`  
 - `InventoryUpdate`  
@@ -147,17 +177,14 @@ Acceptable values:
 - `AdHocCommand`  
 - `WorkflowJob`
 
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
 ## OUTPUTS
 
-### AWX.Resources.JobTemplateJob
-### AWX.Resources.ProjectUpdateJob
-### AWX.Resources.InventoryUpdateJob
-### AWX.Resources.SystemJob
-### AWX.Resources.AdHocCommand
-### AWX.Resources.WorkflowJob
+### Jagabata.Resources.JobTemplateJob
+### Jagabata.Resources.ProjectUpdateJob
+### Jagabata.Resources.InventoryUpdateJob
+### Jagabata.Resources.SystemJob
+### Jagabata.Resources.AdHocCommand
+### Jagabata.Resources.WorkflowJob
 ## NOTES
 
 ## RELATED LINKS

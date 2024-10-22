@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -62,7 +62,7 @@ One or more database IDs.
 
 ## OUTPUTS
 
-### AWX.Resources.WorkflowApprovalTemplate
+### Jagabata.Resources.WorkflowApprovalTemplate
 ## NOTES
 
 To get the ID number of the WorkflowApprovalTemplate, see `Template ID` column in the nodes from `Find-WorkflowJobTemplateNode` command or `ApprovalTemplate` column in the jobs from `Find-WorkflowApprovalRequest` command.

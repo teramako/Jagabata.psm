@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -12,17 +12,10 @@ Retrieve jobs for ProjectUpdate.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-ProjectUpdateJob [[-Name] <String[]>] [-Status <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-ProjectUpdateJob -Type <ResourceType> -Id <UInt64> [[-Name] <String[]>] [-Status <String[]>]
- [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
- [-All] [<CommonParameters>]
+Find-ProjectUpdateJob [[-Project] <UInt64>] [-Name <String[]>] [-Status <String[]>] [-OrderBy <String[]>]
+ [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,16 +36,10 @@ Retreive successfully completed ProjectUpdate jobs.
 
 ### Example 2
 ```powershell
-PS C:\> Find-ProjectUpdateJob -Type Project -Id 1
+PS C:\> Find-ProjectUpdateJob -Project 1
 ```
 
 Retrieve ProjectUpdate jobs associated with the Project of ID 1
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-Project -Id 1 | Find-ProjectUpdateJob
-
-and also can omit `-Type` parameter:  
-    Find-ProjectUpdateJob -Id 1
 
 ## PARAMETERS
 
@@ -94,7 +81,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -105,22 +92,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -136,7 +107,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -176,6 +147,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Project
+Project ID or it's object.
+Filter to ProjectUpdateJobs of the Project for the specified ID.
+
+> [!TIP]  
+> Can specify `IResource` object.  
+> For example: `-Project (Get-Project -Id 3)`, `-Project $project`
+
+```yaml
+Type: UInt64
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -211,41 +202,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Project
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `Project` (only)
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `Project`
+### Jagabata.Resources.IResource
+Project ID or it's object.
 
 ## OUTPUTS
 
-### AWX.Resources.ProjectUpdateJob
+### Jagabata.Resources.ProjectUpdateJob
 ## NOTES
 
 ## RELATED LINKS

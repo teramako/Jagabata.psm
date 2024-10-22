@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Jagabata.psm</AssemblyName>
+    <RootNamespace>Jagabata</RootNamespace>
+    <VersionPrefix>2.0.0</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jagabata.Yaml\Jagabata.Yaml.csproj" />
+    <PackageReference Include="System.Management.Automation" Version="7.4.*" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PowerShellExe>pwsh</PowerShellExe>
+    <DestDir>..\..\out\$(AssemblyName)\</DestDir>
+  </PropertyGroup>
+
+  <Target AfterTargets="Clean" Name="CleanDestDir">
+    <RemoveDir Directories="$(DestDir)" />
+  </Target>
+
+  <Target DependsOnTargets="Build" AfterTargets="Build" Name="PSM">
+    <PropertyGroup>
+      <DllFile>$(OutDir)$(AssemblyName).dll</DllFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <PowerShellModules Include="..\*.psd1;..\*.ps1xml" />
+      <DllYaml Include="..\Jagabata.Yaml\bin\$(Configuration)\$(TargetFramework)\*.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(DestDir)" Condition="!Exists('$(DestDir)')" />
+    <MakeDir Directories="$(DestDir)\libs" Condition="!Exists('$(DestDir)\libs')" />
+
+    <Message Text="Copy built file: $(DllFile)" Importance="high" />
+    <Copy SourceFiles="$(DllFile)" DestinationFolder="$(DestDir)" />
+
+    <Message Text="Copy Yaml: @(DllYaml)" Importance="high" />
+    <Copy SourceFiles="@(DllYaml)" DestinationFolder="$(DestDir)\libs" />
+
+    <Message Text="Copy *.psd1 and *.ps1xml files: @(PowerShellModules)" Importance="high" />
+    <Copy SourceFiles="@(PowerShellModules)" DestinationFolder="$(DestDir)" />
+
+    <Message Text="Update Module Version: $(Version)" Importance="high" />
+    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { Update-ModuleManifest -Path $(DestDir)$(AssemblyName).psd1 -ModuleVersion $(Version) }&quot;" />
+  </Target>
+
+  <Target Name="docs" DependsOnTargets="PSM">
+    <PropertyGroup>
+      <ScriptLocation>../../docs/Make-Doc.ps1</ScriptLocation>
+    </PropertyGroup>
+    <Message Text="Update documents (using platyPS)" Importance="high" />
+    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { $(ScriptLocation) }&quot;" />
+  </Target>
+</Project>

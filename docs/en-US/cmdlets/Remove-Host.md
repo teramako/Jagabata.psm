@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -13,26 +13,18 @@ Remove a Host
 ## SYNTAX
 
 ```
-Remove-Host [-Id] <UInt64> [-FromGroup <UInt64>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-Host [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Remove a Host or disassociate from the group.
+Remove a Host.
 
 Implements following Rest API:  
-- `/api/v2/hosts/{id}/` (DELETE)  
-- `/api/v2/groups/{id}/hosts/` (POST)
+- `/api/v2/hosts/{id}/` (DELETE)
 
 ## EXAMPLES
 
 ### Example 1
-```powershell
-PS C:\> Remove-Host -Id 3 -FromGroup 1
-```
-
-Disassociate the Host of ID 3 from the Group ID 1.
-
-### Example 2
 ```powershell
 PS C:\> Remove-Host -Id 3
 ```
@@ -46,21 +38,6 @@ Don't confirm. (Ignore `-Confirm` and `-WhatIf`)
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -FromGroup
-Group ID.
-
-```yaml
-Type: UInt64
 Parameter Sets: (All)
 Aliases:
 
@@ -138,6 +115,8 @@ Host Id.
 
 [New-Host](New-Host.md)
 
-[Add-Host](Add-Host.md)
-
 [Update-Host](Update-Host.md)
+
+[Register-Host](Register-Host.md)
+
+[Unregister-Host](Unregister-Host.md)

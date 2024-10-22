@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -58,7 +58,7 @@ One or more database IDs.
 
 ## OUTPUTS
 
-### AWX.Resources.Credential
+### Jagabata.Resources.Credential
 ## NOTES
 
 ## RELATED LINKS
@@ -69,6 +69,8 @@ One or more database IDs.
 
 [Update-Credential](Update-Credential.md)
 
-[Add-Credential](Add-Credential.md)
+[Register-Credential](Register-Credential.md)
+
+[Unregister-Credential](Unregister-Credential.md)
 
 [Remove-Credential](Remove-Credential.md)

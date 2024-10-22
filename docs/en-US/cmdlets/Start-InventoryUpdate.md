@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -114,15 +114,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.UInt64
 InventorySource ID
 
-### AWX.Resources.InventorySource
+### Jagabata.Resources.InventorySource
 InventorySource object
 
-### AWX.Resources.Inventory
+### Jagabata.Resources.Inventory
 Inventory object containing the InventorySources to be updated.
 
 ## OUTPUTS
 
-### AWX.Resources.InventoryUpdateJob+Detail
+### Jagabata.Resources.InventoryUpdateJob+Detail
 InventoryUpdate job object (non-completed status)
 
 ### System.Management.Automation.PSObject

@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -20,7 +20,13 @@ Find-UnifiedJob [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCo
 
 ### AssociatedWith
 ```
-Find-UnifiedJob -Type <ResourceType> -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-UnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-UnifiedJob [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -88,7 +94,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -112,9 +118,9 @@ Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -152,6 +158,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Resource object associated with the resource to be find.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Group`  
+- `Host`  
+- `Instance`  
+- `InstanceGroup`  
+- `Inventory`  
+- `InventorySource`  
+- `JobTemplate`  
+- `Project`  
+- `Schedule`  
+- `SystemJobTemplate`  
+- `WorkflowJobTemplate`
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -182,9 +217,9 @@ Aliases:
 Accepted values: JobTemplate, WorkflowJobTemplate, Project, InventorySource, SystemJobTemplate, Inventory, Host, Group, Schedule, Instance, InstanceGroup
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -193,10 +228,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### Jagabata.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Group`  
 - `Host`  
 - `Instance`  
@@ -209,14 +244,9 @@ Acceptable values:
 - `SystemJobTemplate`  
 - `WorkflowJobTemplate`
 
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
-
 ## OUTPUTS
 
-### AWX.Resources.IUnifiedJob
+### Jagabata.Resources.IUnifiedJob
 Unified Job objects which are following instances implemented `IUnifiedJob`:  
 - `Job`             : JobTemplate's job  
 - `ProjectUpdate`   : Project Update job  

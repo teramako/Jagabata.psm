@@ -20,7 +20,7 @@ namespace API_Test
                 Console.WriteLine("    {0}: {1}", header.Key, string.Join(", ", header.Value));
             }
             Console.WriteLine("Request Header:");
-            if (res.RequestHeaders == null) return;
+            if (res.RequestHeaders is null) return;
             foreach (var header in res.RequestHeaders)
             {
                 Console.WriteLine("    {0}: {1}", header.Key, string.Join(", ", header.Value));
@@ -228,7 +228,7 @@ namespace API_Test
         {
             Console.WriteLine("-----SummaryFields-----");
             Console.WriteLine($"Actor : [{summary.Actor?.Id}] {summary.Actor?.Username}");
-            if (summary.ExtensionData != null)
+            if (summary.ExtensionData is not null)
                 Util.DumpObject(summary.ExtensionData);
         }
         [TestMethod]
@@ -933,7 +933,7 @@ namespace API_Test
             var id = createdUser.Id;
             var deleteResult = await RestAPI.DeleteAsync($"/api/v2/users/{id}/");
             Assert.IsTrue(deleteResult.Response.ContentLength == 0);
-            if (deleteResult.Contents != null)
+            if (deleteResult.Contents is not null)
                 Util.DumpObject(deleteResult.Contents);
             else
                 Console.WriteLine($"{nameof(deleteResult.Contents)} is null");
@@ -1944,7 +1944,7 @@ namespace API_Test
             {
                 Console.WriteLine($"  [{job.Id}] {job.Name} {job.Status} {job.Finished}");
             }
-            if (summary.LastJob != null) {
+            if (summary.LastJob is not null) {
                 Console.WriteLine($"LastJob: [{summary.LastJob.Id}] {summary.LastJob.Name} [{summary.LastJob.JobTemplateId}]{summary.LastJob.JobTemplateName}");
             }
             Console.WriteLine();
@@ -2618,9 +2618,9 @@ namespace API_Test
             Console.WriteLine($"{res.Id} [{res.Type}] {res.Name} - {res.Description}");
             Console.WriteLine($"RRule   : {res.Rrule}");
             Console.WriteLine($"Job     : {res.UnifiedJobTemplate}");
-            Console.WriteLine($"Start   : {res.DTStart}");
+            Console.WriteLine($"Start   : {res.DtStart}");
             Console.WriteLine($"NextRun : {res.NextRun}");
-            Console.WriteLine($"End     : {res.DTEnd}");
+            Console.WriteLine($"End     : {res.DtEnd}");
         }
         static void DumpSummary(Schedule.Summary summary)
         {
@@ -2687,7 +2687,7 @@ namespace API_Test
             Console.WriteLine($"NotificationType : {res.NotificationType}");
             Console.WriteLine($"NotificationConfig:");
             Util.DumpObject(res.NotificationConfiguration);
-            if (res.Messages != null)
+            if (res.Messages is not null)
                 Util.DumpObject(res.Messages);
 
         }
@@ -2698,8 +2698,8 @@ namespace API_Test
             Console.WriteLine($"CreatedBy          : [{summary.CreatedBy?.Id}] {summary.CreatedBy?.Username}");
             Console.WriteLine($"ModifiedBy         : [{summary.ModifiedBy?.Id}] {summary.ModifiedBy?.Username}");
             Console.WriteLine($"Caps               : {summary.UserCapabilities}");
-            Console.WriteLine($"RecentNotification : ({summary.RecentNotification.Length})");
-            foreach (var notification in summary.RecentNotification)
+            Console.WriteLine($"RecentNotification : ({summary.RecentNotifications.Length})");
+            foreach (var notification in summary.RecentNotifications)
             {
                 Console.WriteLine($"[{notification.Id,3:d}] {notification.Status} Error: {notification.Error}");
             }

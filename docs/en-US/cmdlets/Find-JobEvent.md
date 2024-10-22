@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -12,10 +12,17 @@ Retrieve Job Events.
 
 ## SYNTAX
 
+### AssociatedWith
 ```
 Find-JobEvent [-Type] <ResourceType> [-Id] <UInt64> [-AdHocCommandEvent] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
+```
+
+### PipelineInput
+```
+Find-JobEvent [-Resource] <IResource> [-AdHocCommandEvent] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -103,7 +110,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -123,13 +130,13 @@ Use in conjection with the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -167,6 +174,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Resource
+Target resource object from which to retrieve JobEvent.
+
+A resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Job`             : JobTempalte's job  
+- `ProjectUpdate`   : Project's update job  
+- `InventoryUpdate` : InventorySource's update job  
+- `AdHocCommand`    : AdHocCommand's job  
+- `SystemJob`       : SystemJobTemplate's job  
+- `Host`            : Host (Retrieve events for jobs or ad-hoc-command jobs run on the host.)  
+- `Group`           : Group (Retrieve events for jobs run on hosts belonging to the group.)
+
+```yaml
+Type: IResource
+Parameter Sets: PipelineInput
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Search
 Search words. (case-insensitive)
 
@@ -192,14 +224,14 @@ Use in conjection with the `-Id` parameter.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: (All)
+Parameter Sets: AssociatedWith
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, Host, Group
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -208,10 +240,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
+### Jagabata.Resources.IResource
+The object has `Id` and `Type` properties.
 
-Acceptable values:  
+And `Type` should be following value:  
 - `Job`  
 - `ProjectUpdate`  
 - `InventoryUpdate`  
@@ -220,20 +252,15 @@ Acceptable values:
 - `Host`  
 - `Group`
 
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
-
 ## OUTPUTS
 
-### AWX.Resources.IJobEventBase
+### Jagabata.Resources.IJobEventBase
 JobEvent objects that extend `IJobEventBase` interface.  
-- Job             : `AWX.Resources.JobEvent`  
-- ProjectUpdate   : `AWX.Resources.ProjectUpdateJobEvent`  
-- InventoryUpdate : `AWX.Resources.InventoryUpdateJobEvent`  
-- SystemJob       : `AWX.Resources.SystemJobEvent`  
-- AdHocCommand    : `AWX.Resources.AdHocCommandJobEvent`
+- Job             : `Jagabata.Resources.JobEvent`  
+- ProjectUpdate   : `Jagabata.Resources.ProjectUpdateJobEvent`  
+- InventoryUpdate : `Jagabata.Resources.InventoryUpdateJobEvent`  
+- SystemJob       : `Jagabata.Resources.SystemJobEvent`  
+- AdHocCommand    : `Jagabata.Resources.AdHocCommandJobEvent`
 
 ## NOTES
 

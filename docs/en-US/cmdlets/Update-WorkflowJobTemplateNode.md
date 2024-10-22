@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -339,7 +339,7 @@ WorkflowJobTemplateNode ID.
 
 ## OUTPUTS
 
-### AWX.Resources.WorkflowJobTemplateNode
+### Jagabata.Resources.WorkflowJobTemplateNode
 Updated WorkflowJobTemplateNode object.
 
 ## NOTES

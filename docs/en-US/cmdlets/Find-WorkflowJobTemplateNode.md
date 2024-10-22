@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -18,10 +18,17 @@ Find-WorkflowJobTemplateNode [-OrderBy <String[]>] [-Search <String[]>] [-Filter
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### WorkflowJobTemplate
 ```
-Find-WorkflowJobTemplateNode [-Type <ResourceType>] -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
+Find-WorkflowJobTemplateNode [-Template] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### WorkflowJobTemplateNode
+```
+Find-WorkflowJobTemplateNode [-Node] <UInt64> [-Linked] <WorkflowJobNodeLinkState> [-OrderBy <String[]>]
+ [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,7 +36,10 @@ Retrieve the list of WorkflowJobTemplates.
 
 Implementation of following API:  
 - `/api/v2/workflow_job_template_nodes/`  
-- `/api/v2/workflow_job_templates/{id}/workflow_nodes/`
+- `/api/v2/workflow_job_templates/{id}/workflow_nodes/`  
+- `/api/v2/workflow_job_template_nodes/{id}/always_nodes/`  
+- `/api/v2/workflow_job_template_nodes/{id}/success_nodes/`  
+- `/api/v2/workflow_job_template_nodes/{id}/failure_nodes/`
 
 ## EXAMPLES
 
@@ -40,16 +50,17 @@ PS C:\> Find-WorkflowJobTemplateNode
 
 ### Example 2
 ```powershell
-PS C:\> Find-WorkflowJobTemplateNode -Type WorkflowJobTemplate -Id 1
+PS C:\> Find-WorkflowJobTemplateNode -Template 1
 ```
 
 Retrieve WorkflowJobTemplateNodes associated with the WorkflowJobTemplate of ID 1
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-WorkflowJobTemplate -Id 1 | Find-WorkflowJobTemplateNode
+### Example 3
+```powershell
+PS C:\> Find-WorkflowJobTemplateNode -Node 1 -For Always
+```
 
-and also can omit `-Type` parameter:  
-    Find-WorkflowJobTemplateNode -Id 1
+Retrieve WorkflowJobTemplateNodes linked to always state of the WorkflowJobTemplateNode of ID 1.
 
 ## PARAMETERS
 
@@ -91,7 +102,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -105,19 +116,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
+### -Linked
+Specifies at which state the WorkflowJobTemplateNode is linked.
+
+```yaml
+Type: WorkflowJobNodeLinkState
+Parameter Sets: WorkflowJobTemplateNode
+Aliases:
+Accepted values: Always, Failure, Success
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Node
+WorkflowJobTemplateNode ID or it's resource object.
+Search for child nodes linked to that WorkflowJobTemplateNode.
+
+> [!TIP]  
+> Can specify an object which has `Type` and `Id`.  
+> Example 1: `-Node (Get-WorkflowJobTemplateNode -Id 10)`  
+> Example 2: `-Node @{type="workflowjobtemplatenode"; id=10}`  
+> Example 3: `-Node $nodes[0]`
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: WorkflowJobTemplateNode
 Aliases:
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -174,20 +207,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
+### -Template
+WorkflowJobTemplate ID or it's resource object.
+Find within the WorkflowJobTemplate.
+
+> [!TIP]  
+> Can specify an object which has `Type` and `Id`.  
+> Example 1: `-Template (Get-WorkflowJobTemplate -Id 3)`  
+> Example 2: `-Template @{type="workflowjobtemplate"; id=3}`  
+> Example 3: `-Template $wjt[0]`
 
 ```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
+Type: UInt64
+Parameter Sets: WorkflowJobTemplate
 Aliases:
-Accepted values: WorkflowJobTemplate
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -196,19 +234,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `WorkflowJobTemplate` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `WorkflowJobTemplate`
+WorkflowJobTemplate ID or WorkflowJobTemplateNode ID.
+See `-Template` and `-Node` parameters.
 
 ## OUTPUTS
 
-### AWX.Resources.WorkflowJobTemplateNode
+### Jagabata.Resources.WorkflowJobTemplateNode
 ## NOTES
 
 ## RELATED LINKS

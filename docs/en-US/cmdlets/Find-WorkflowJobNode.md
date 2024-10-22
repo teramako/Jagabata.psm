@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -18,10 +18,17 @@ Find-WorkflowJobNode [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameVa
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### WorkflowJob
 ```
-Find-WorkflowJobNode [-Type <ResourceType>] -Id <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-WorkflowJobNode [-Job] <UInt64> [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
+ [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+```
+
+### WorkflowJobNode
+```
+Find-WorkflowJobNode [-Node] <UInt64> [-Linked] <WorkflowJobNodeLinkState> [-OrderBy <String[]>]
+ [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,7 +36,10 @@ Retrieve the list of WorkflowJobNodes.
 
 Implementation of following API:  
 - `/api/v2/workflow_job_nodes/`  
-- `/api/v2/workflow_jobs/{id}/workflow_nodes/`
+- `/api/v2/workflow_jobs/{id}/workflow_nodes/`  
+- `/api/v2/workflow_job_nodes/{id}/always_nodes/`  
+- `/api/v2/workflow_job_nodes/{id}/success_nodes/`  
+- `/api/v2/workflow_job_nodes/{id}/failure_nodes/`
 
 ## EXAMPLES
 
@@ -40,16 +50,17 @@ PS C:\> Find-WorkflowJobNode
 
 ### Example 2
 ```powershell
-PS C:\> Find-WorkflowJobNode -Type WorkflowJob -Id 10
+PS C:\> Find-WorkflowJobNode -Job 10
 ```
 
 Retrieve nodes associated with the WorkflowJob of ID 10
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-WorkflowJob -Id 10 | Find-WorkflowJobNode
+### Example 3
+```powershell
+PS C:\> Find-WorkflowJobNode -Node 1 -LinkType Always
+```
 
-and also can omit `-Type` parameter:  
-    Find-WorkflowJobNode -Id 10
+Retrieve WorkflowJobNodes linked to always state of the WorkflowJobNode of ID 1.
 
 ## PARAMETERS
 
@@ -91,7 +102,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -105,19 +116,63 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
+### -Job
+WorkflowJob ID or it's resource object.
+Find within the WorkflowJob.
+
+> [!TIP]  
+> Can specify an object which has `Type` and `Id`.  
+> Example 1: `-Job (Get-WorkflowJob -Id 3)`  
+> Example 2: `-Job @{type="workflowjob"; id=3}`  
+> Example 3: `-Job $workflowJobs[0]`
 
 ```yaml
 Type: UInt64
-Parameter Sets: AssociatedWith
+Parameter Sets: WorkflowJob
 Aliases:
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Linked
+Specifies at which state the WorkflowJobNode is linked.
+
+```yaml
+Type: WorkflowJobNodeLinkState
+Parameter Sets: WorkflowJobNode
+Aliases:
+Accepted values: Always, Failure, Success
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Node
+WorkflowJobNode ID or it's resource object.
+Search for child nodes linked to that WorkflowJobNode.
+
+> [!TIP]  
+> Can specify an object which has `Type` and `Id`.  
+> Example 1: `-Node (Get-WorkflowJobNode -Id 10)`  
+> Example 2: `-Node @{type="workflowjobnode"; id=10}`  
+> Example 3: `-Node $nodes[0]`
+
+```yaml
+Type: UInt64
+Parameter Sets: WorkflowJobNode
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -174,41 +229,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: WorkflowJob
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `WorkflowJob` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `WorkflowJob`
+WorkflowJob ID or WorkflowJobNode ID.
+See `-Job` and `-Node` parameters.
 
 ## OUTPUTS
 
-### AWX.Resources.WorkflowJobNode
+### Jagabata.Resources.WorkflowJobNode
 ## NOTES
 
 ## RELATED LINKS

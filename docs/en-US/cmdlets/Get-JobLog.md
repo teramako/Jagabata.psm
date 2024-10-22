@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -12,15 +12,25 @@ Retrieve job logs.
 
 ## SYNTAX
 
-### StdOut (Default)
+### StdOutTypeAndId (Default)
 ```
-Get-JobLog -Id <UInt64> [-Type <ResourceType>] [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
+Get-JobLog [-Type] <ResourceType> [-Id] <UInt64> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
-### Download
+### DownloadTypeAndId
 ```
-Get-JobLog -Id <UInt64> [-Type <ResourceType>] -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark]
+Get-JobLog [-Type] <ResourceType> [-Id] <UInt64> -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark]
  [<CommonParameters>]
+```
+
+### StdOutResource
+```
+Get-JobLog [-Job] <IResource> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
+```
+
+### DownloadResource
+```
+Get-JobLog [-Job] <IResource> -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,7 +63,7 @@ Implements following Rest API:
 
 ### Example 1
 ```powershell
-PS C:\> Get-JobLog -Type Job -Id 10
+PS C:\> Get-JobLog @{ type = "job"; id = 10 }
 ==> [10] Job
 
 PLAY [Hello World Sample] ******************************************************
@@ -74,7 +84,7 @@ Show the log for Job of ID 10 as text format.
 
 ### Example 2
 ```powershell
-PS C:\> Get-JobLog -Type Job -Id 10 -Format html -Download .
+PS C:\> Get-JobLog @{ type = job; id = 10 } -Format html -Download .
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
@@ -128,7 +138,7 @@ The only exception is SystemJob, which can only be downloaded as TEXT format.
 
 ```yaml
 Type: DirectoryInfo
-Parameter Sets: Download
+Parameter Sets: DownloadTypeAndId, DownloadResource
 Aliases:
 
 Required: True
@@ -162,17 +172,41 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Database ID for UnifiedJob.
+The ID of the Unified Job specified by the `-Type` parameter.
 
 ```yaml
 Type: UInt64
-Parameter Sets: (All)
+Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Job
+UnifiedJob resource object from which to retrieve log.
+
+The resource is an object with `Id` and `Type` properties.
+And `Type` should be following value:  
+- `Job`             : JobTempalte's job  
+- `ProjectUpdate`   : Project's update job  
+- `InventoryUpdate` : InventorySource's update job  
+- `AdHocCommand`    : AdHocCommand's job  
+- `WorkflowJob`     : WorkflowJobTemplate's job  
+- `SystemJob`       : SystemJobTemplate's job
+
+```yaml
+Type: IResource
+Parameter Sets: StdOutResource, DownloadResource
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -181,14 +215,14 @@ Resource type name of the target UnifiedJob.
 
 ```yaml
 Type: ResourceType
-Parameter Sets: (All)
+Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
 Aliases:
 Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, AdHocCommand
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -197,25 +231,21 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.UInt64
-Input by `Id` property in the pipeline object.
-Database ID for the UnifiedJob.
+### Jagabata.Resources.IResource
+The object has `Id` and `Type` properties.
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
+And `Type` should be following value:  
 - `Job`  
 - `ProjectUpdate`  
 - `InventoryUpdate`  
 - `SystemJob`  
 - `WorkflowJob`  
-- `AdHocCommand`  
+- `AdHocCommand`
 
 ## OUTPUTS
 
 ### System.String
-Job log string. (when not doanloading)
+Job log string. (when not downloading)
 
 ### System.IO.FileInfo
 Downloaded file objects.

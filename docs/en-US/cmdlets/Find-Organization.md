@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -18,11 +18,10 @@ Find-Organization [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
-### AssociatedWith
+### User
 ```
-Find-Organization -Type <ResourceType> -Id <UInt64> [-Admin] [[-Name] <String[]>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-Organization -User <UInt64> [-Admin] [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,14 +41,14 @@ PS C:\> Find-Organization
 
 ### Example 2
 ```powershell
-PS C:\> Find-Organization -Type User -Id 1
+PS C:\> Find-Organization -User 1
 ```
 
 Retrieve Organizations which the User of ID 1 belong to.
 
 ### Example 3
 ```powershell
-PS C:\> Find-JobTemplate -Type User -Id 1 -Admin
+PS C:\> Find-JobTemplate -User 1 -Admin
 ```
 
 Retrieve Organizations administrered by the User of ID 1.
@@ -61,7 +60,7 @@ Filter to Organizations administerted by the target User.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith
+Parameter Sets: User
 Aliases:
 
 Required: False
@@ -109,7 +108,7 @@ For examples:
 - `"name_ in=test,demo", created _gt=2024-01-01`: "name" field is "test" or "demo" and created after 2024-01-01.  
 - `@{ Name = "name"; Value = "test"; Type = "Contains"; Not = $true }`: "name" field NOT contains "test"
 
-For more details, see [about_AWX.psm_Filter_parameter](about_AWX.psm_Filter_parameter.md).
+For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
 Type: NameValueCollection
@@ -120,22 +119,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -210,20 +193,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
+### -User
+User ID or it's object.
+Retrieve Organizations which the User belong to.
+
+> [!TIP]  
+> Can specify `IResource` object.  
+> For example: `-Id (Get-User -Id 3)`, `-Id $users[1]`
 
 ```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
+Type: UInt64
+Parameter Sets: User
 Aliases:
-Accepted values: User
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -232,19 +218,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### AWX.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `User` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `User`
+User ID or it's object.
+See: `-User` parameter.
 
 ## OUTPUTS
 
-### AWX.Resources.Organization
+### Jagabata.Resources.Organization
 ## NOTES
 
 ## RELATED LINKS

@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cmdlet_Test
 {
@@ -111,7 +105,7 @@ namespace Cmdlet_Test
             foreach (string key in github.Keys)
             {
                 var val = github[key];
-                Console.WriteLine($"{key}: {(val == null ? "null" : "\"" + val + '"')}");
+                Console.WriteLine($"{key}: {(val is null ? "null" : "\"" + val + '"')}");
             }
         }
     }

@@ -1,6 +1,6 @@
 ---
-external help file: AWX.psm.dll-Help.xml
-Module Name: AWX.psm
+external help file: Jagabata.psm.dll-Help.xml
+Module Name: Jagabata.psm
 online version:
 schema: 2.0.0
 ---
@@ -168,7 +168,7 @@ Host Id.
 
 ## OUTPUTS
 
-### AWX.Resources.Host
+### Jagabata.Resources.Host
 Updated Host object.
 
 ## NOTES
@@ -181,6 +181,8 @@ Updated Host object.
 
 [New-Host](New-Host.md)
 
-[Add-Host](Add-Host.md)
+[Register-Host](Register-Host.md)
+
+[Unregister-Host](Unregister-Host.md)
 
 [Remove-Host](Remove-Host.md)
