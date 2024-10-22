@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Jagabata.psm</AssemblyName>
     <RootNamespace>Jagabata</RootNamespace>
-    <VersionPrefix>1.3.0</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
