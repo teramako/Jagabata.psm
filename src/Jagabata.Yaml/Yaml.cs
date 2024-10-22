@@ -11,21 +11,25 @@ public static class Yaml
     /// </summary>
     /// <param name="yaml">YAML or JSON string</param>
     /// <returns>Dictionary object</returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="InvalidDataException"></exception>
     public static Dictionary<string, object?> DeserializeToDict(string yaml)
     {
+        if (string.IsNullOrWhiteSpace(yaml))
+        {
+            return new Dictionary<string, object?>();
+        }
         var parser = new Parser(new StringReader(yaml));
         parser.Consume<StreamStart>();
         parser.Consume<DocumentStart>();
         if (!parser.TryConsume<MappingStart>(out _))
         {
-            var msg = "YAML root should be dictionary.";
-            var current = parser.Current;
-            if (current is not null)
+            // parsed as `Scalar` if the string is only document separator such as "---\n".
+            // returns empty Dictionary in this case.
+            if (parser.Current is Scalar scalar && string.IsNullOrWhiteSpace(scalar.Value))
             {
-                msg += $": {current.GetType().Name} {{ Start: [{current.Start}] End: [{current.End}] }}";
+                return new Dictionary<string, object?>();
             }
-            throw new ArgumentException(msg);
+            throw new InvalidDataException($"YAML root is not dictionary.: {parser.Current}");
         }
         try
         {
@@ -33,7 +37,7 @@ public static class Yaml
         }
         catch (Exception ex)
         {
-            throw new ArgumentException("Faild to deserialize YAML", ex);
+            throw new InvalidDataException("Faild to deserialize YAML", ex);
         }
     }
 
