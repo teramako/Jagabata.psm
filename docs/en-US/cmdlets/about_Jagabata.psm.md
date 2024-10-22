@@ -9,31 +9,45 @@ PowerShell module to operate AWX/AnsibleTower using Rest API.
 Can get various information, execute jobs (JobTemplate, Project, InventorySource, AdHocCommand, WorkflowJobTemplate or SystemJobTemplate)
 from AWX/AnsibleTower using Rest API.
 
-Has a much number of commands (nearly 200). See: Command list [by verb] or [by nouns].
+### Commands:
+Much number of commands are available (nearly 200).
 
-- Retrieve various information (`Get-*`, `Find-*`)
-- Launch, wait or stop jobs such as JobTemplate, WorkflowJobTemplate, etc (`Start-*`, `Invoke-*`, `Wait-`, `Stop-*`)
-- Creating new resources such as Users, JobTemplates, Credential, etc. (`New-*`)
-- Update existing resources (`Update-*`)
-- Associate or Unassociate a resource with another resource (`Register-*`, `Unregister-*`)
+- Retrieve various information (Verbs: Get-, Find-)
+- Launch, wait or stop jobs such as JobTemplate, WorkflowJobTemplate, etc (Verbs: Start-, Invoke-, Wait-, Stop-)
+- Creating new resources such as Users, JobTemplates, Credential, etc. (Verbs: New-)
+- Update existing resources (Verbs: Update-)
+- Associate or Unassociate a resource with another resource (Verbs: Register-, Unregister-)
+- Remove resources (Vers: Remove-)
 
-[by verb]: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CommandListByVerb.md
-[by noun]: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CommandListByNoun.md
+### Command list:
+- by verb: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CommandListByVerb.md
+- by noun: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CommandListByNoun.md
+
 
 # GET STARTED
 
-1. Install and Import Jagabata.psm (You probably already have this item in place.)
-   ```powershell
-   Install-Module -Name Jagabata.psm -Scope CurrentUser
-   Import-Module Jagabata.psm
-   ```
-2. Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
-   create a configuration file with the [New-ApiConfig] command.  
-   See [Settings] for more details.
-3. Now you are ready. Now execute your favorite command!
+## 1. Install and Import Jagabata.psm
 
-[New-ApiConfig]: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/cmdlets/New-ApiConfig.md
-[Settings]: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/settings.md
+You probably already have this item in place.
+
+```powershell
+Install-Module -Name Jagabata.psm -Scope CurrentUser
+Import-Module Jagabata.psm
+```
+
+## 2. Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
+
+create a configuration file with the [New-ApiConfig] command.
+See [Settings] for more details.
+
+### Related links:
+- New-ApiConfig: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/cmdlets/New-ApiConfig.md
+- Settings: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/settings.md
+
+## 3. Completed settings
+
+Now you are ready. Now execute your favorite command!
+
 
 # EXAMPLES
 
