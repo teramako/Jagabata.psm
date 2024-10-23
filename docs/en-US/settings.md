@@ -60,13 +60,13 @@ Import-Module path\to\dir\Jagabata.psm
 You may/can put the Jagabata.psm module directory(`path\to\dir\`) into `$env:PSModulePath`,
 and import implicitly.
 
-### Add prefix
+### Change prefix
 
-Some commands (such as `Get-Host` and `Get-Credential`) conflict with PowerShell default commands.
-You may need to run `Import-Module` command with `-Prefix` parameter.
+By default, "Ansible" command prefix is added.
+If you want to change the prefix, use `-Prefix` parameter
 
 ```powershell
-Import-Module -Prefix AWX path\to\dir\Jagabata.psm
+Import-Module path\to\dir\Jagabata.psm -Prefix Awx
 ```
 In this case, **ALL** imported commands will be added `AWX` prefix (_verb-`AWX`Noun_).
-You can run `Get-Host` as PowerShell native command, `Get-AWXHost` as Jagabata.psm's command.
+You can run `Get-Host` as PowerShell native command, `Get-AwxHost` as Jagabata.psm's command.
