@@ -20,15 +20,38 @@ PowerShell module to operate AWX/AnsibleTower using [Rest API].
 
 ## 🚀 Get Started
 
-1. Install Jagabata.psm from [PowerShell Gallery].
-   ```powershell
-   Install-Module -Name Jagabata.psm -Scope CurrentUser
-   Import-Module Jagabata.psm
-   ```
-2. Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
-   create a configuration file with the [New-ApiConfig](./docs/en-US/cmdlets/New-ApiConfig.md) command.  
-   See [Settings](./docs/en-US/settings.md) for more details.
-3. Now you are ready. Now execute your favorite command!
+### 1. Install Jagabata.psm from [PowerShell Gallery].
+
+```powershell
+Install-Module -Name Jagabata.psm -Scope CurrentUser
+```
+
+### 2. Import module
+
+```powershell
+Import-Module Jagabata.psm
+```
+
+All commands of Jagabata.psm are added "Ansible" prefix by default, like `Get-Host` -> `Get-AnsibleHost`
+
+> [!TIP]
+> Please use the `-Prefix` parameter to change the prefix.
+> For example:
+> ```powershell
+> Import-Module Jagabata.psm -Prefix Awx
+> ```
+> All commands of Jagabata.psm will be added "Awx" prefix instead of "Ansibl", like `Get-Host` -> `Get-AwxHost`.
+
+### 3. Get Poersonal Access Token
+
+Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
+create a configuration file with the [New-AnsibleApiConfig](./docs/en-US/cmdlets/New-AnsibleApiConfig.md) command.
+
+See [Settings](./docs/en-US/settings.md) for more details.
+
+### 4. Completed
+
+Now you are ready. Now execute your favorite command!
 
 ## 🚧 Build
 
