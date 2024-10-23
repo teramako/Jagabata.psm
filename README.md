@@ -23,7 +23,7 @@ PowerShell module to operate AWX/AnsibleTower using [Rest API].
 ### 1. Install Jagabata.psm from [PowerShell Gallery].
 
 ```powershell
-Install-Module -Name Jagabata.psm -Scope CurrentUser -AllowClobber
+Install-Module -Name Jagabata.psm -Scope CurrentUser
 ```
 
 ### 2. Import module
@@ -45,7 +45,7 @@ All commands of Jagabata.psm are added "Ansible" prefix by default, like `Get-Ho
 ### 3. Get Poersonal Access Token
 
 Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
-create a configuration file with the [New-ApiConfig](./docs/en-US/cmdlets/New-ApiConfig.md) command.  
+create a configuration file with the [New-AnsibleApiConfig](./docs/en-US/cmdlets/New-AnsibleApiConfig.md) command.
 
 See [Settings](./docs/en-US/settings.md) for more details.
 
