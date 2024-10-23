@@ -13,8 +13,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$modulePath = Join-Path -Path $PSScriptRoot -ChildPath .. -AdditionalChildPath out, Jagabata.psm
+$moduleName = "Jagabata.psm"
+$modulePath = Join-Path -Path $PSScriptRoot -ChildPath .. -AdditionalChildPath out, $moduleName
 $module = Import-Module $modulePath -PassThru -Verbose:$false
+$cmds = Get-Command -Module $moduleName
 
 function Out-CommandList 
 {
@@ -43,7 +45,7 @@ function Out-CommandList
             ForEach-Object -Begin {
                 "# Command List By $GroupName", "" | Write-Output
             } -Process {
-                ("## {0}" -f $_.Name),
+                ("## {0}" -f ($_.Name -replace ("^" + $module.Prefix), "")),
                 "",
                 (
                     $_.Group | ForEach-Object { "- [{0}](./cmdlets/{0}.md)" -f $_.Name }
@@ -57,6 +59,6 @@ function Out-CommandList
     }
 }
 
-$module.ExportedCommands.Values | Out-CommandList -GroupName Noun
-$module.ExportedCommands.Values | Out-CommandList -GroupName Verb
+$cmds | Out-CommandList -GroupName Noun
+$cmds | Out-CommandList -GroupName Verb
 
