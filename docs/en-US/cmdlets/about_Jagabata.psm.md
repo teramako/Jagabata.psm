@@ -37,11 +37,11 @@ Import-Module Jagabata.psm
 
 ## 2. Login to AWX/AnsibleTower to obtain a Personal Access Token (PAT) and
 
-create a configuration file with the [New-ApiConfig] command.
+create a configuration file with the [New-AnsibleApiConfig] command.
 See [Settings] for more details.
 
 ### Related links:
-- New-ApiConfig: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/cmdlets/New-ApiConfig.md
+- New-AnsibleApiConfig: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/cmdlets/New-AnsibleApiConfig.md
 - Settings: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/settings.md
 
 ## 3. Completed settings
@@ -54,7 +54,7 @@ Now you are ready. Now execute your favorite command!
 ## 1. Find User
 
 ```powershell
-PS C:\> Find-User -Search teramako
+PS C:\> Find-AnsibleUser -Search teramako
 
 Id Type Username Email              FirstName LastName IsSuperuser IsSystemAuditor Created            Modified            LastLogin           LdapDn ExternalAccount
 -- ---- -------- -----              --------- -------- ----------- --------------- -------            --------            ---------           ------ ---------------
@@ -65,7 +65,7 @@ Id Type Username Email              FirstName LastName IsSuperuser IsSystemAudit
 ## 2. Invoke JobTemplate
 
 ```powershell
-PS C:\> Invoke-JobTemplate -Id 7
+PS C:\> Invoke-AnsibleJobTemplate -Id 7
 [7] Demo Job Template -
              Inventory : [1] Demo Inventory
             Extra vars : ---
@@ -100,14 +100,14 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
 ## 3. Retreive running job and wait for completed
 
 ```powershell
-PS C:\> Find-Job -Status running -OutVariable jobs
+PS C:\> Find-AnsibleJob -Status running -OutVariable jobs
 
  Id Type Name              JobType LaunchType   Status Finished   Elapsed LaunchedBy     Template  Note
  -- ---- ----              ------- ----------   ------ --------   ------- ----------     --------  ----
 121  Job Demo 2                Run     Manual  Running ...            ... ...            ...       ...
 120  Job Demo Job Template     Run     Manual  Running ...            ... ...            ...       ...
 
-PS C:\> $jobs | Wait-UnifiedJob
+PS C:\> $jobs | Wait-AnsibleUnifiedJob
 ====== [120] Demo Job Template ======
 
 (snip)

@@ -11,593 +11,593 @@ Locale: en-US
 PowerShell module to operate AWX/AnsibleTower using Rest API.
 
 ## Jagabata.psm Cmdlets
-### [Approve-WorkflowApprovalRequest](Approve-WorkflowApprovalRequest.md)
+### [Approve-AnsibleWorkflowApprovalRequest](Approve-AnsibleWorkflowApprovalRequest.md)
 Approve requests for WorkflowApproval.
 
-### [Deny-WorkflowApprovalRequest](Deny-WorkflowApprovalRequest.md)
+### [Deny-AnsibleWorkflowApprovalRequest](Deny-AnsibleWorkflowApprovalRequest.md)
 Deny requests for WorkflowApproval.
 
-### [Disable-NotificationTemplate](Disable-NotificationTemplate.md)
+### [Disable-AnsibleNotificationTemplate](Disable-AnsibleNotificationTemplate.md)
 Disable a NotificationTemplate.
 
-### [Enable-NotificationTemplate](Enable-NotificationTemplate.md)
+### [Enable-AnsibleNotificationTemplate](Enable-AnsibleNotificationTemplate.md)
 Enable a NotificationTemplate.
 
-### [Find-AccessList](Find-AccessList.md)
+### [Find-AnsibleAccessList](Find-AnsibleAccessList.md)
 Retrieve Users accessible to a resource.
 
-### [Find-ActivityStream](Find-ActivityStream.md)
+### [Find-AnsibleActivityStream](Find-AnsibleActivityStream.md)
 Retrieve ActivityStreams.
 
-### [Find-AdHocCommandJob](Find-AdHocCommandJob.md)
+### [Find-AnsibleAdHocCommandJob](Find-AnsibleAdHocCommandJob.md)
 Retrieve jobs for AdHocCommand.
 
-### [Find-Application](Find-Application.md)
+### [Find-AnsibleApplication](Find-AnsibleApplication.md)
 Retrieve (OAuth2) Applications.
 
-### [Find-Credential](Find-Credential.md)
+### [Find-AnsibleCredential](Find-AnsibleCredential.md)
 Retrieve Credentials.
 
-### [Find-CredentialInputSource](Find-CredentialInputSource.md)
+### [Find-AnsibleCredentialInputSource](Find-AnsibleCredentialInputSource.md)
 Retrieve CredentialsInputSources.
 
-### [Find-CredentialType](Find-CredentialType.md)
+### [Find-AnsibleCredentialType](Find-AnsibleCredentialType.md)
 Retrieve CredentialTypes.
 
-### [Find-ExecutionEnvironment](Find-ExecutionEnvironment.md)
+### [Find-AnsibleExecutionEnvironment](Find-AnsibleExecutionEnvironment.md)
 Retrieve ExecutionEnvironments.
 
-### [Find-Group](Find-Group.md)
+### [Find-AnsibleGroup](Find-AnsibleGroup.md)
 Retrieve Groups.
 
-### [Find-Host](Find-Host.md)
+### [Find-AnsibleHost](Find-AnsibleHost.md)
 Retrieve Hosts.
 
-### [Find-HostMetric](Find-HostMetric.md)
+### [Find-AnsibleHostMetric](Find-AnsibleHostMetric.md)
 Retrieve HostMerics.
 
-### [Find-Instance](Find-Instance.md)
+### [Find-AnsibleInstance](Find-AnsibleInstance.md)
 Retrieve Instances.
 
-### [Find-InstanceGroup](Find-InstanceGroup.md)
+### [Find-AnsibleInstanceGroup](Find-AnsibleInstanceGroup.md)
 Retrieve InstanceGroups.
 
-### [Find-Inventory](Find-Inventory.md)
+### [Find-AnsibleInventory](Find-AnsibleInventory.md)
 Retrieve Inventories.
 
-### [Find-InventorySource](Find-InventorySource.md)
+### [Find-AnsibleInventorySource](Find-AnsibleInventorySource.md)
 Retrieve InventorySources.
 
-### [Find-InventoryUpdateJob](Find-InventoryUpdateJob.md)
+### [Find-AnsibleInventoryUpdateJob](Find-AnsibleInventoryUpdateJob.md)
 Retrieve jobs for InventoryUpdate.
 
-### [Find-Job](Find-Job.md)
+### [Find-AnsibleJob](Find-AnsibleJob.md)
 Retrieve jobs for JobTemplate.
 
-### [Find-JobEvent](Find-JobEvent.md)
+### [Find-AnsibleJobEvent](Find-AnsibleJobEvent.md)
 Retrieve Job Events.
 
-### [Find-JobHostSummary](Find-JobHostSummary.md)
+### [Find-AnsibleJobHostSummary](Find-AnsibleJobHostSummary.md)
 Retrieve JobHostSummaries.
 
-### [Find-JobTemplate](Find-JobTemplate.md)
+### [Find-AnsibleJobTemplate](Find-AnsibleJobTemplate.md)
 Retrieve JobTemplates.
 
-### [Find-Label](Find-Label.md)
+### [Find-AnsibleLabel](Find-AnsibleLabel.md)
 Retrieve Labels.
 
-### [Find-Notification](Find-Notification.md)
+### [Find-AnsibleNotification](Find-AnsibleNotification.md)
 Retrieve Notifications.
 
-### [Find-NotificationTemplate](Find-NotificationTemplate.md)
+### [Find-AnsibleNotificationTemplate](Find-AnsibleNotificationTemplate.md)
 Retrieve NotificationTemplates.
 
-### [Find-NotificationTemplateForApproval](Find-NotificationTemplateForApproval.md)
+### [Find-AnsibleNotificationTemplateForApproval](Find-AnsibleNotificationTemplateForApproval.md)
 Retrieve Approval NotificationTemplates.
 
-### [Find-NotificationTemplateForError](Find-NotificationTemplateForError.md)
+### [Find-AnsibleNotificationTemplateForError](Find-AnsibleNotificationTemplateForError.md)
 Retrieve Error NotificationTemplates.
 
-### [Find-NotificationTemplateForStarted](Find-NotificationTemplateForStarted.md)
+### [Find-AnsibleNotificationTemplateForStarted](Find-AnsibleNotificationTemplateForStarted.md)
 Retrieve Started NotificationTemplates.
 
-### [Find-NotificationTemplateForSuccess](Find-NotificationTemplateForSuccess.md)
+### [Find-AnsibleNotificationTemplateForSuccess](Find-AnsibleNotificationTemplateForSuccess.md)
 Retrieve Success NotificationTemplates.
 
-### [Find-ObjectRole](Find-ObjectRole.md)
+### [Find-AnsibleObjectRole](Find-AnsibleObjectRole.md)
 Retrieve Roles for the target resource.
 
-### [Find-Organization](Find-Organization.md)
+### [Find-AnsibleOrganization](Find-AnsibleOrganization.md)
 Retrieve Organizations.
 
-### [Find-Project](Find-Project.md)
+### [Find-AnsibleProject](Find-AnsibleProject.md)
 Retrieve Projects.
 
-### [Find-ProjectUpdateJob](Find-ProjectUpdateJob.md)
+### [Find-AnsibleProjectUpdateJob](Find-AnsibleProjectUpdateJob.md)
 Retrieve jobs for ProjectUpdate.
 
-### [Find-Role](Find-Role.md)
+### [Find-AnsibleRole](Find-AnsibleRole.md)
 Retrieve Roles all or granted to the target resource.
 
-### [Find-Schedule](Find-Schedule.md)
+### [Find-AnsibleSchedule](Find-AnsibleSchedule.md)
 Retrieve Schedules.
 
-### [Find-SystemJob](Find-SystemJob.md)
+### [Find-AnsibleSystemJob](Find-AnsibleSystemJob.md)
 Retrieve jobs for SystemJobTemplate.
 
-### [Find-SystemJobTemplate](Find-SystemJobTemplate.md)
+### [Find-AnsibleSystemJobTemplate](Find-AnsibleSystemJobTemplate.md)
 Retrieve SystemJobTemplates.
 
-### [Find-Team](Find-Team.md)
+### [Find-AnsibleTeam](Find-AnsibleTeam.md)
 Retrieve Teams.
 
-### [Find-Token](Find-Token.md)
+### [Find-AnsibleToken](Find-AnsibleToken.md)
 Retrieve (OAuth2) AccessTokens.
 
-### [Find-UnifiedJob](Find-UnifiedJob.md)
+### [Find-AnsibleUnifiedJob](Find-AnsibleUnifiedJob.md)
 Retrieve Unified Jobs.
 
-### [Find-UnifiedJobTemplate](Find-UnifiedJobTemplate.md)
+### [Find-AnsibleUnifiedJobTemplate](Find-AnsibleUnifiedJobTemplate.md)
 Retrieve Unified Job Templates.
 
-### [Find-User](Find-User.md)
+### [Find-AnsibleUser](Find-AnsibleUser.md)
 Retrieve Users.
 
-### [Find-WorkflowApprovalRequest](Find-WorkflowApprovalRequest.md)
+### [Find-AnsibleWorkflowApprovalRequest](Find-AnsibleWorkflowApprovalRequest.md)
 Retrieve request jobs for WorkflowApproval.
 
-### [Find-WorkflowJob](Find-WorkflowJob.md)
+### [Find-AnsibleWorkflowJob](Find-AnsibleWorkflowJob.md)
 Retrieve jobs for WorkflowJobTemplate.
 
-### [Find-WorkflowJobNode](Find-WorkflowJobNode.md)
+### [Find-AnsibleWorkflowJobNode](Find-AnsibleWorkflowJobNode.md)
 Retrieve nodes for WorkflowJob.
 
-### [Find-WorkflowJobTemplate](Find-WorkflowJobTemplate.md)
+### [Find-AnsibleWorkflowJobTemplate](Find-AnsibleWorkflowJobTemplate.md)
 Retrieve WorkflowJobTemplates.
 
-### [Find-WorkflowJobTemplateNode](Find-WorkflowJobTemplateNode.md)
+### [Find-AnsibleWorkflowJobTemplateNode](Find-AnsibleWorkflowJobTemplateNode.md)
 Retrieve WorkflowJobTemplateNodes.
 
-### [Get-ActivityStream](Get-ActivityStream.md)
+### [Get-AnsibleActivityStream](Get-AnsibleActivityStream.md)
 Retrieves ActivityStreams by ID(s).
 
-### [Get-AdHocCommandJob](Get-AdHocCommandJob.md)
+### [Get-AnsibleAdHocCommandJob](Get-AnsibleAdHocCommandJob.md)
 Retrieve AdHocCommand job details by ID(s).
 
-### [Get-ApiConfig](Get-ApiConfig.md)
+### [Get-AnsibleApiConfig](Get-AnsibleApiConfig.md)
 Get loaded config data currently.
 
-### [Get-ApiHelp](Get-ApiHelp.md)
+### [Get-AnsibleApiHelp](Get-AnsibleApiHelp.md)
 Get and show Ansible's API Help.
 
-### [Get-Application](Get-Application.md)
+### [Get-AnsibleApplication](Get-AnsibleApplication.md)
 Retrieve Applications by the ID(s).
 
-### [Get-Config](Get-Config.md)
+### [Get-AnsibleConfig](Get-AnsibleConfig.md)
 Retrieve various sitewide configuration settings.
 
-### [Get-Credential](Get-Credential.md)
+### [Get-AnsibleCredential](Get-AnsibleCredential.md)
 Retrieve Credentials by the ID(s).
 
-### [Get-CredentialInputSource](Get-CredentialInputSource.md)
+### [Get-AnsibleCredentialInputSource](Get-AnsibleCredentialInputSource.md)
 Retrieve CredentialInputSources by the ID(s).
 
-### [Get-CredentialType](Get-CredentialType.md)
+### [Get-AnsibleCredentialType](Get-AnsibleCredentialType.md)
 Retrieve CredentialTypes by the ID(s).
 
-### [Get-Dashboard](Get-Dashboard.md)
+### [Get-AnsibleDashboard](Get-AnsibleDashboard.md)
 Retrieve Dashboard.
 
-### [Get-ExecutionEnvironment](Get-ExecutionEnvironment.md)
+### [Get-AnsibleExecutionEnvironment](Get-AnsibleExecutionEnvironment.md)
 Retrieve ExecutionEnvironments by the ID(s).
 
-### [Get-Group](Get-Group.md)
+### [Get-AnsibleGroup](Get-AnsibleGroup.md)
 Retrieve Groups by the ID(s).
 
-### [Get-Host](Get-Host.md)
+### [Get-AnsibleHost](Get-AnsibleHost.md)
 Retrieve Hosts by the ID(s).
 
-### [Get-HostFactsCache](Get-HostFactsCache.md)
+### [Get-AnsibleHostFactsCache](Get-AnsibleHostFactsCache.md)
 Retrieve Ansible Facts for a Host.
 
-### [Get-HostMetric](Get-HostMetric.md)
+### [Get-AnsibleHostMetric](Get-AnsibleHostMetric.md)
 Retrieve HostMetrics by the ID(s).
 
-### [Get-Instance](Get-Instance.md)
+### [Get-AnsibleInstance](Get-AnsibleInstance.md)
 Retrieve Instances by the ID(s).
 
-### [Get-InstanceGroup](Get-InstanceGroup.md)
+### [Get-AnsibleInstanceGroup](Get-AnsibleInstanceGroup.md)
 Retrieve InstanceGroups by the ID(s).
 
-### [Get-Inventory](Get-Inventory.md)
+### [Get-AnsibleInventory](Get-AnsibleInventory.md)
 Retrieve Inventories by the ID(s).
 
-### [Get-InventoryFile](Get-InventoryFile.md)
+### [Get-AnsibleInventoryFile](Get-AnsibleInventoryFile.md)
 Retrieve inventory files.
 
-### [Get-InventorySource](Get-InventorySource.md)
+### [Get-AnsibleInventorySource](Get-AnsibleInventorySource.md)
 Retrieve InventorySources by the ID(s).
 
-### [Get-InventoryUpdateJob](Get-InventoryUpdateJob.md)
+### [Get-AnsibleInventoryUpdateJob](Get-AnsibleInventoryUpdateJob.md)
 Retrieve InventoryUpdate job details by ID(s).
 
-### [Get-Job](Get-Job.md)
+### [Get-AnsibleJob](Get-AnsibleJob.md)
 Retrieve JobTemplate's job details by ID(s).
 
-### [Get-JobHostSummary](Get-JobHostSummary.md)
+### [Get-AnsibleJobHostSummary](Get-AnsibleJobHostSummary.md)
 Retrieve JobHostSummaries by ID(s).
 
-### [Get-JobLog](Get-JobLog.md)
+### [Get-AnsibleJobLog](Get-AnsibleJobLog.md)
 Retrieve job logs.
 
-### [Get-JobStatistics](Get-JobStatistics.md)
+### [Get-AnsibleJobStatistics](Get-AnsibleJobStatistics.md)
 Retrieve statistics for job runs.
 
-### [Get-JobTemplate](Get-JobTemplate.md)
+### [Get-AnsibleJobTemplate](Get-AnsibleJobTemplate.md)
 Retrieve JobTemplates by the ID(s).
 
-### [Get-Label](Get-Label.md)
+### [Get-AnsibleLabel](Get-AnsibleLabel.md)
 Retrieve Labels by the ID(s).
 
-### [Get-Me](Get-Me.md)
+### [Get-AnsibleMe](Get-AnsibleMe.md)
 Retrieve the current user.
 
-### [Get-Metric](Get-Metric.md)
+### [Get-AnsibleMetric](Get-AnsibleMetric.md)
 Retrieve Metrics.
 
-### [Get-Notification](Get-Notification.md)
+### [Get-AnsibleNotification](Get-AnsibleNotification.md)
 Retrieve Notifications by the ID(s).
 
-### [Get-NotificationTemplate](Get-NotificationTemplate.md)
+### [Get-AnsibleNotificationTemplate](Get-AnsibleNotificationTemplate.md)
 Retrieve NotificationTemplates by the ID(s).
 
-### [Get-Organization](Get-Organization.md)
+### [Get-AnsibleOrganization](Get-AnsibleOrganization.md)
 Retrieve Organizations by the ID(s).
 
-### [Get-Ping](Get-Ping.md)
+### [Get-AnsiblePing](Get-AnsiblePing.md)
 Retrieve some basic information about the instance.
 
-### [Get-Playbook](Get-Playbook.md)
+### [Get-AnsiblePlaybook](Get-AnsiblePlaybook.md)
 Retrieve playbooks.
 
-### [Get-Project](Get-Project.md)
+### [Get-AnsibleProject](Get-AnsibleProject.md)
 Retrieve Projects by the ID(s).
 
-### [Get-ProjectUpdateJob](Get-ProjectUpdateJob.md)
+### [Get-AnsibleProjectUpdateJob](Get-AnsibleProjectUpdateJob.md)
 Retrieve ProjectUpdate job details by ID(s).
 
-### [Get-Role](Get-Role.md)
+### [Get-AnsibleRole](Get-AnsibleRole.md)
 Retrieve Roles by the ID(s).
 
-### [Get-Schedule](Get-Schedule.md)
+### [Get-AnsibleSchedule](Get-AnsibleSchedule.md)
 Retrieve Schedules by the ID(s).
 
-### [Get-Setting](Get-Setting.md)
+### [Get-AnsibleSetting](Get-AnsibleSetting.md)
 Retrieve Settings.
 
-### [Get-SurveySpec](Get-SurveySpec.md)
+### [Get-AnsibleSurveySpec](Get-AnsibleSurveySpec.md)
 Retrieve Survey specifications.
 
-### [Get-SystemJob](Get-SystemJob.md)
+### [Get-AnsibleSystemJob](Get-AnsibleSystemJob.md)
 Retrieve SystemJob details by ID(s).
 
-### [Get-SystemJobTemplate](Get-SystemJobTemplate.md)
+### [Get-AnsibleSystemJobTemplate](Get-AnsibleSystemJobTemplate.md)
 Retrieve SystemJobTemplates by the ID(s).
 
-### [Get-Team](Get-Team.md)
+### [Get-AnsibleTeam](Get-AnsibleTeam.md)
 Retrieve Teams by the ID(s).
 
-### [Get-Token](Get-Token.md)
+### [Get-AnsibleToken](Get-AnsibleToken.md)
 Retrieve (OAuth2) AccessTokens by the ID(s).
 
-### [Get-User](Get-User.md)
+### [Get-AnsibleUser](Get-AnsibleUser.md)
 Retrieve Users by the ID(s).
 
-### [Get-VariableData](Get-VariableData.md)
+### [Get-AnsibleVariableData](Get-AnsibleVariableData.md)
 Retrieve Variable Data
 
-### [Get-WorkflowApprovalRequest](Get-WorkflowApprovalRequest.md)
+### [Get-AnsibleWorkflowApprovalRequest](Get-AnsibleWorkflowApprovalRequest.md)
 Retrieve request jobs for WorkflowApproval by ID(s).
 
-### [Get-WorkflowApprovalTemplate](Get-WorkflowApprovalTemplate.md)
+### [Get-AnsibleWorkflowApprovalTemplate](Get-AnsibleWorkflowApprovalTemplate.md)
 Retrieve WorkflowApprovalTemplates by the ID(s).
 
-### [Get-WorkflowJob](Get-WorkflowJob.md)
+### [Get-AnsibleWorkflowJob](Get-AnsibleWorkflowJob.md)
 Retrieve WorkflowJob details by ID(s).
 
-### [Get-WorkflowJobNode](Get-WorkflowJobNode.md)
+### [Get-AnsibleWorkflowJobNode](Get-AnsibleWorkflowJobNode.md)
 Retrieve nodes for WorkflowJob by ID(s).
 
-### [Get-WorkflowJobTemplate](Get-WorkflowJobTemplate.md)
+### [Get-AnsibleWorkflowJobTemplate](Get-AnsibleWorkflowJobTemplate.md)
 Retrieve WorkflowJobTemplates by the ID(s).
 
-### [Get-WorkflowJobTemplateNode](Get-WorkflowJobTemplateNode.md)
+### [Get-AnsibleWorkflowJobTemplateNode](Get-AnsibleWorkflowJobTemplateNode.md)
 Retrieve nodes for WorkflowJobTemplate by ID(s).
 
-### [Grant-Role](Grant-Role.md)
+### [Grant-AnsibleRole](Grant-AnsibleRole.md)
 Grant Roles.
 
-### [Invoke-AdHocCommand](Invoke-AdHocCommand.md)
+### [Invoke-AnsibleAdHocCommand](Invoke-AnsibleAdHocCommand.md)
 Invoke (launch) an AdHocCommand and wait until the job is finished.
 
-### [Invoke-API](Invoke-API.md)
+### [Invoke-AnsibleAPI](Invoke-AnsibleAPI.md)
 Execute Ansible's (low-level) Rest API.
 
-### [Invoke-InventoryUpdate](Invoke-InventoryUpdate.md)
+### [Invoke-AnsibleInventoryUpdate](Invoke-AnsibleInventoryUpdate.md)
 Invoke (update) an InventorySource and wait until the job is finished.
 
-### [Invoke-JobTemplate](Invoke-JobTemplate.md)
+### [Invoke-AnsibleJobTemplate](Invoke-AnsibleJobTemplate.md)
 Invoke (launch) a JobTemplate and wait unti the job is finished.
 
-### [Invoke-ProjectUpdate](Invoke-ProjectUpdate.md)
+### [Invoke-AnsibleProjectUpdate](Invoke-AnsibleProjectUpdate.md)
 Invoke (update) a Project and wait until the job is finished.
 
-### [Invoke-SystemJobTemplate](Invoke-SystemJobTemplate.md)
+### [Invoke-AnsibleSystemJobTemplate](Invoke-AnsibleSystemJobTemplate.md)
 Invoke (launch) a SystemJobTemplate and wait unti the job is finished.
 
-### [Invoke-WorkflowJobTemplate](Invoke-WorkflowJobTemplate.md)
+### [Invoke-AnsibleWorkflowJobTemplate](Invoke-AnsibleWorkflowJobTemplate.md)
 Invoke (update) a WorkflowJobTemplate and wait until the job is finished.
 
-### [New-ApiConfig](New-ApiConfig.md)
+### [New-AnsibleApiConfig](New-AnsibleApiConfig.md)
 Create config file that should be used by this module.
 
-### [New-Application](New-Application.md)
+### [New-AnsibleApplication](New-AnsibleApplication.md)
 Create an Application.
 
-### [New-Credential](New-Credential.md)
+### [New-AnsibleCredential](New-AnsibleCredential.md)
 Create a Credential.
 
-### [New-CredentialType](New-CredentialType.md)
+### [New-AnsibleCredentialType](New-AnsibleCredentialType.md)
 Create a CredentialType.
 
-### [New-ExecutionEnvironment](New-ExecutionEnvironment.md)
+### [New-AnsibleExecutionEnvironment](New-AnsibleExecutionEnvironment.md)
 Create an ExecutionEnvironment.
 
-### [New-Group](New-Group.md)
+### [New-AnsibleGroup](New-AnsibleGroup.md)
 Create a Group.
 
-### [New-Host](New-Host.md)
+### [New-AnsibleHost](New-AnsibleHost.md)
 Create a Host.
 
-### [New-Inventory](New-Inventory.md)
+### [New-AnsibleInventory](New-AnsibleInventory.md)
 Create an Inventory.
 
-### [New-InventorySource](New-InventorySource.md)
+### [New-AnsibleInventorySource](New-AnsibleInventorySource.md)
 Create an InventorySource.
 
-### [New-JobTemplate](New-JobTemplate.md)
+### [New-AnsibleJobTemplate](New-AnsibleJobTemplate.md)
 Create a JobTemplate.
 
-### [New-Label](New-Label.md)
+### [New-AnsibleLabel](New-AnsibleLabel.md)
 Create a Label.
 
-### [New-NotificationTemplate](New-NotificationTemplate.md)
+### [New-AnsibleNotificationTemplate](New-AnsibleNotificationTemplate.md)
 Create a NotificationTemplate.
 
-### [New-Organization](New-Organization.md)
+### [New-AnsibleOrganization](New-AnsibleOrganization.md)
 Create an Organization.
 
-### [New-Project](New-Project.md)
+### [New-AnsibleProject](New-AnsibleProject.md)
 Create a Project.
 
-### [New-Schedule](New-Schedule.md)
+### [New-AnsibleSchedule](New-AnsibleSchedule.md)
 Create a Schedule.
 
-### [New-Team](New-Team.md)
+### [New-AnsibleTeam](New-AnsibleTeam.md)
 Create a Team.
 
-### [New-Token](New-Token.md)
+### [New-AnsibleToken](New-AnsibleToken.md)
 Create an AccessToken.
 
-### [New-User](New-User.md)
+### [New-AnsibleUser](New-AnsibleUser.md)
 Create a User.
 
-### [New-WorkflowJobTemplate](New-WorkflowJobTemplate.md)
+### [New-AnsibleWorkflowJobTemplate](New-AnsibleWorkflowJobTemplate.md)
 Create a WorkflowJobTemplate.
 
-### [New-WorkflowJobTemplateNode](New-WorkflowJobTemplateNode.md)
+### [New-AnsibleWorkflowJobTemplateNode](New-AnsibleWorkflowJobTemplateNode.md)
 Create a WorkflowJobTemplateNode.
 
-### [Register-Credential](Register-Credential.md)
+### [Register-AnsibleCredential](Register-AnsibleCredential.md)
 Register a Credential.
 
-### [Register-Group](Register-Group.md)
+### [Register-AnsibleGroup](Register-AnsibleGroup.md)
 Register a Group to another Group.
 
-### [Register-Host](Register-Host.md)
+### [Register-AnsibleHost](Register-AnsibleHost.md)
 Register a Host to a Group.
 
-### [Register-Label](Register-Label.md)
+### [Register-AnsibleLabel](Register-AnsibleLabel.md)
 Register a Label to other resource.
 
-### [Register-SurveySpec](Register-SurveySpec.md)
+### [Register-AnsibleSurveySpec](Register-AnsibleSurveySpec.md)
 Register SurveySpecs.
 
-### [Register-User](Register-User.md)
+### [Register-AnsibleUser](Register-AnsibleUser.md)
 Register a Uesr to other resource.
 
-### [Register-WorkflowJobTemplateNode](Register-WorkflowJobTemplateNode.md)
+### [Register-AnsibleWorkflowJobTemplateNode](Register-AnsibleWorkflowJobTemplateNode.md)
 Link WorkflowJobTemplateNode to the parent.
 
-### [Remove-AdHocCommandJob](Remove-AdHocCommandJob.md)
+### [Remove-AnsibleAdHocCommandJob](Remove-AnsibleAdHocCommandJob.md)
 Remove an AdHocCommand job.
 
-### [Remove-Application](Remove-Application.md)
+### [Remove-AnsibleApplication](Remove-AnsibleApplication.md)
 Remove an Application.
 
-### [Remove-Credential](Remove-Credential.md)
+### [Remove-AnsibleCredential](Remove-AnsibleCredential.md)
 Remove a Credential.
 
-### [Remove-CredentialType](Remove-CredentialType.md)
+### [Remove-AnsibleCredentialType](Remove-AnsibleCredentialType.md)
 Remove a CredentialType.
 
-### [Remove-ExecutionEnvironment](Remove-ExecutionEnvironment.md)
+### [Remove-AnsibleExecutionEnvironment](Remove-AnsibleExecutionEnvironment.md)
 Remove an ExecutionEnvironment.
 
-### [Remove-Group](Remove-Group.md)
+### [Remove-AnsibleGroup](Remove-AnsibleGroup.md)
 Remove a Group.
 
-### [Remove-Host](Remove-Host.md)
+### [Remove-AnsibleHost](Remove-AnsibleHost.md)
 Remove a Host
 
-### [Remove-Inventory](Remove-Inventory.md)
+### [Remove-AnsibleInventory](Remove-AnsibleInventory.md)
 Remove an Inventory.
 
-### [Remove-InventorySource](Remove-InventorySource.md)
+### [Remove-AnsibleInventorySource](Remove-AnsibleInventorySource.md)
 Remove an InventorySource.
 
-### [Remove-InventoryUpdateJob](Remove-InventoryUpdateJob.md)
+### [Remove-AnsibleInventoryUpdateJob](Remove-AnsibleInventoryUpdateJob.md)
 Remove an InventoryUpdate job.
 
-### [Remove-Job](Remove-Job.md)
+### [Remove-AnsibleJob](Remove-AnsibleJob.md)
 Remove a JobTemplate job.
 
-### [Remove-JobTemplate](Remove-JobTemplate.md)
+### [Remove-AnsibleJobTemplate](Remove-AnsibleJobTemplate.md)
 Remove a JobTemplate.
 
-### [Remove-NotificationTemplate](Remove-NotificationTemplate.md)
+### [Remove-AnsibleNotificationTemplate](Remove-AnsibleNotificationTemplate.md)
 Remove a NotificationTemplate.
 
-### [Remove-Organization](Remove-Organization.md)
+### [Remove-AnsibleOrganization](Remove-AnsibleOrganization.md)
 Remove an Organization.
 
-### [Remove-Project](Remove-Project.md)
+### [Remove-AnsibleProject](Remove-AnsibleProject.md)
 Remove a Project.
 
-### [Remove-ProjectUpdateJob](Remove-ProjectUpdateJob.md)
+### [Remove-AnsibleProjectUpdateJob](Remove-AnsibleProjectUpdateJob.md)
 Remove a ProjectUpdate Job.
 
-### [Remove-Schedule](Remove-Schedule.md)
+### [Remove-AnsibleSchedule](Remove-AnsibleSchedule.md)
 Remove a Schedule.
 
-### [Remove-SurveySpec](Remove-SurveySpec.md)
+### [Remove-AnsibleSurveySpec](Remove-AnsibleSurveySpec.md)
 Remove SurveySpecs.
 
-### [Remove-SystemJob](Remove-SystemJob.md)
+### [Remove-AnsibleSystemJob](Remove-AnsibleSystemJob.md)
 Remove a System job.
 
-### [Remove-Team](Remove-Team.md)
+### [Remove-AnsibleTeam](Remove-AnsibleTeam.md)
 Remove a Team
 
-### [Remove-Token](Remove-Token.md)
+### [Remove-AnsibleToken](Remove-AnsibleToken.md)
 Remove an AccessToken.
 
-### [Remove-User](Remove-User.md)
+### [Remove-AnsibleUser](Remove-AnsibleUser.md)
 Remove a User
 
-### [Remove-WorkflowApprovalRequest](Remove-WorkflowApprovalRequest.md)
+### [Remove-AnsibleWorkflowApprovalRequest](Remove-AnsibleWorkflowApprovalRequest.md)
 Remove a WorkflowApproval.
 
-### [Remove-WorkflowJob](Remove-WorkflowJob.md)
+### [Remove-AnsibleWorkflowJob](Remove-AnsibleWorkflowJob.md)
 Remove a Workflow job.
 
-### [Remove-WorkflowJobTemplate](Remove-WorkflowJobTemplate.md)
+### [Remove-AnsibleWorkflowJobTemplate](Remove-AnsibleWorkflowJobTemplate.md)
 Remove a WorkflowJobTemplate.
 
-### [Remove-WorkflowJobTemplateNode](Remove-WorkflowJobTemplateNode.md)
+### [Remove-AnsibleWorkflowJobTemplateNode](Remove-AnsibleWorkflowJobTemplateNode.md)
 Remove a WorkflowJobTemplateNode.
 
-### [Revoke-Role](Revoke-Role.md)
+### [Revoke-AnsibleRole](Revoke-AnsibleRole.md)
 Revoke Roles.
 
-### [Start-AdHocCommand](Start-AdHocCommand.md)
+### [Start-AnsibleAdHocCommand](Start-AnsibleAdHocCommand.md)
 Invoke (launch) an AdHocCommand.
 
-### [Start-InventoryUpdate](Start-InventoryUpdate.md)
+### [Start-AnsibleInventoryUpdate](Start-AnsibleInventoryUpdate.md)
 Invoke (update) InventorySources.
 
-### [Start-JobTemplate](Start-JobTemplate.md)
+### [Start-AnsibleJobTemplate](Start-AnsibleJobTemplate.md)
 Invoke (launch) a JobTemplate.
 
-### [Start-ProjectUpdate](Start-ProjectUpdate.md)
+### [Start-AnsibleProjectUpdate](Start-AnsibleProjectUpdate.md)
 Invoke (update) Project.
 
-### [Start-SystemJobTemplate](Start-SystemJobTemplate.md)
+### [Start-AnsibleSystemJobTemplate](Start-AnsibleSystemJobTemplate.md)
 Invoke (launch) a SystemJobTemplate.
 
-### [Start-WorkflowJobTemplate](Start-WorkflowJobTemplate.md)
+### [Start-AnsibleWorkflowJobTemplate](Start-AnsibleWorkflowJobTemplate.md)
 Invoke (update) a WorkflowJobTemplate.
 
-### [Stop-UnifiedJob](Stop-UnifiedJob.md)
+### [Stop-AnsibleUnifiedJob](Stop-AnsibleUnifiedJob.md)
 Stop (cancel) a running job.
 
-### [Switch-ApiConfig](Switch-ApiConfig.md)
+### [Switch-AnsibleApiConfig](Switch-AnsibleApiConfig.md)
 Switch to anothor config.
 
-### [Unregister-Credential](Unregister-Credential.md)
+### [Unregister-AnsibleCredential](Unregister-AnsibleCredential.md)
 Remove a Credential.
 
-### [Unregister-Group](Unregister-Group.md)
+### [Unregister-AnsibleGroup](Unregister-AnsibleGroup.md)
 Unregister a Group from parent Group.
 
-### [Unregister-Host](Unregister-Host.md)
+### [Unregister-AnsibleHost](Unregister-AnsibleHost.md)
 Remove a Host
 
-### [Unregister-Label](Unregister-Label.md)
+### [Unregister-AnsibleLabel](Unregister-AnsibleLabel.md)
 Unregister a Label from other resource.
 
-### [Unregister-User](Unregister-User.md)
+### [Unregister-AnsibleUser](Unregister-AnsibleUser.md)
 Unregister a User from other resource.
 
-### [Unregister-WorkflowJobTemplateNode](Unregister-WorkflowJobTemplateNode.md)
+### [Unregister-AnsibleWorkflowJobTemplateNode](Unregister-AnsibleWorkflowJobTemplateNode.md)
 Unlink WorkflowJobTemplateNode from the parent.
 
-### [Update-Application](Update-Application.md)
+### [Update-AnsibleApplication](Update-AnsibleApplication.md)
 Update an Application.
 
-### [Update-Credential](Update-Credential.md)
+### [Update-AnsibleCredential](Update-AnsibleCredential.md)
 Update a Credential.
 
-### [Update-CredentialType](Update-CredentialType.md)
+### [Update-AnsibleCredentialType](Update-AnsibleCredentialType.md)
 Update a CredentialType.
 
-### [Update-ExecutionEnvironment](Update-ExecutionEnvironment.md)
+### [Update-AnsibleExecutionEnvironment](Update-AnsibleExecutionEnvironment.md)
 Update an ExecutionEnvironment.
 
-### [Update-Group](Update-Group.md)
+### [Update-AnsibleGroup](Update-AnsibleGroup.md)
 Update a Group.
 
-### [Update-Host](Update-Host.md)
+### [Update-AnsibleHost](Update-AnsibleHost.md)
 Update a Host.
 
-### [Update-Inventory](Update-Inventory.md)
+### [Update-AnsibleInventory](Update-AnsibleInventory.md)
 Update an Inventory.
 
-### [Update-InventorySource](Update-InventorySource.md)
+### [Update-AnsibleInventorySource](Update-AnsibleInventorySource.md)
 Update an InventorySource.
 
-### [Update-JobTemplate](Update-JobTemplate.md)
+### [Update-AnsibleJobTemplate](Update-AnsibleJobTemplate.md)
 Update a JobTemplate.
 
-### [Update-Label](Update-Label.md)
+### [Update-AnsibleLabel](Update-AnsibleLabel.md)
 Update a Label.
 
-### [Update-NotificationTemplate](Update-NotificationTemplate.md)
+### [Update-AnsibleNotificationTemplate](Update-AnsibleNotificationTemplate.md)
 Update a NotificationTemplate.
 
-### [Update-Organization](Update-Organization.md)
+### [Update-AnsibleOrganization](Update-AnsibleOrganization.md)
 Update an Organization.
 
-### [Update-Project](Update-Project.md)
+### [Update-AnsibleProject](Update-AnsibleProject.md)
 Update a Project.
 
-### [Update-Schedule](Update-Schedule.md)
+### [Update-AnsibleSchedule](Update-AnsibleSchedule.md)
 Update a Schedule.
 
-### [Update-Team](Update-Team.md)
+### [Update-AnsibleTeam](Update-AnsibleTeam.md)
 Update a Team.
 
-### [Update-Token](Update-Token.md)
+### [Update-AnsibleToken](Update-AnsibleToken.md)
 Update an AccessToken.
 
-### [Update-User](Update-User.md)
+### [Update-AnsibleUser](Update-AnsibleUser.md)
 Update a User.
 
-### [Update-WorkflowJobTemplate](Update-WorkflowJobTemplate.md)
+### [Update-AnsibleWorkflowJobTemplate](Update-AnsibleWorkflowJobTemplate.md)
 Update a WorkflowJobTemplate.
 
-### [Update-WorkflowJobTemplateNode](Update-WorkflowJobTemplateNode.md)
+### [Update-AnsibleWorkflowJobTemplateNode](Update-AnsibleWorkflowJobTemplateNode.md)
 Update a WorkflowJobTemplateNode.
 
-### [Wait-UnifiedJob](Wait-UnifiedJob.md)
+### [Wait-AnsibleUnifiedJob](Wait-AnsibleUnifiedJob.md)
 Wait until jobs are finished.
