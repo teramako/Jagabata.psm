@@ -19,7 +19,8 @@ create configuration using [`New-AnsibleApiConfig`](./cmdlets/New-AnsibleApiConf
     5. When done, click `Save` or `Cancel` to abandon your changes.
        After the token is saved, the newly created token displays with the token information.
        - ⚠️ Caution: the token value is shown **only at the time**. Don't close until following registration or save other place
- 3. Launch Powershell 7 and register the PAT
+ 3. Launch Powershell 7 and register the PAT  
+    ![demo](../demo/demo_0_CreateConfig.gif)
     1. Launch PowerShell 7
     2. Import `Jagabata.psm` module
        ```powershell

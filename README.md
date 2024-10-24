@@ -16,7 +16,10 @@ PowerShell module to operate AWX/AnsibleTower using [Rest API].
 [by verb]: docs/en-US/CommandListByVerb.md
 [by noun]: docs/en-US/CommandListByNoun.md
 
-![demo1](docs/img/Jagabata.psm-demo-1.gif)
+## 🎥 Demo
+![demo1](docs/demo/demo_1_invoke_jobtemplate.gif)
+
+See: [All demo movies](docs/demo/)
 
 ## 🚀 Get Started
 
