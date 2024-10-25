@@ -143,8 +143,9 @@ namespace Jagabata
                 }
             }
         }
-        const string ENV_CONFIG = "ANSIBLE_API_CONFIG";
-        const string DEFULT_CONFIG_NAME = ".ansible_api_config.json";
+
+        private const string ENV_CONFIG = "ANSIBLE_API_CONFIG";
+        private const string DEFULT_CONFIG_NAME = ".ansible_api_config.json";
 
         private User? _user = null;
         private ulong? _userId = null;

@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Jagabata.Cmdlets.Completer;
 
-class ApiPathCompleter : IArgumentCompleter
+internal class ApiPathCompleter : IArgumentCompleter
 {
     public IEnumerable<CompletionResult> CompleteArgument(string commandName, string parameterName,
                                                           string wordToComplete, CommandAst commandAst,

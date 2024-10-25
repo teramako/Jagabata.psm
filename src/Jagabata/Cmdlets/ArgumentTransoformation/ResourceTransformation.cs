@@ -4,7 +4,7 @@ using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation
 {
-    class ResourceIdTransformationAttribute : ResourceTransformationAttribute
+    internal class ResourceIdTransformationAttribute : ResourceTransformationAttribute
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
@@ -50,7 +50,7 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
         }
     }
 
-    class ResourceTransformationAttribute : ArgumentTransformationAttribute
+    internal class ResourceTransformationAttribute : ArgumentTransformationAttribute
     {
         public ResourceType[] AcceptableTypes { get; init; } = [];
 

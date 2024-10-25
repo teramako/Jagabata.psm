@@ -210,7 +210,7 @@ namespace Jagabata.Resources
         }
     }
 
-    class CredentialInputFieldConverter : JsonConverter<CredentialInputField>
+    internal class CredentialInputFieldConverter : JsonConverter<CredentialInputField>
     {
         public override CredentialInputField? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

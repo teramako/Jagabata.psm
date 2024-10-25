@@ -44,7 +44,7 @@ namespace Jagabata.Resources
         }
     }
 
-    class SurveySpecConverter : JsonConverter<SurveySpec>
+    internal class SurveySpecConverter : JsonConverter<SurveySpec>
     {
         public override SurveySpec? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         public FileInfo SaveAs { get; set; } = new FileInfo(ApiConfig.DefaultConfigPath);
 
-        const string banner = """
+        private const string banner = """
                  _                   _           _
                 | | __ _  __ _  __ _| |__   __ _| |_ __ _   _ __  ___ _ __ ___
              _  | |/ _` |/ _` |/ _` | '_ \ / _` | __/ _` | | '_ \/ __| '_ ` _ \
