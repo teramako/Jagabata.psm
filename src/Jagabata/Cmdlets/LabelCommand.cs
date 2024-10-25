@@ -70,7 +70,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/labels/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/labels/",
                 ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/labels/",
-                ResourceType.Schedule => $"{Schedule.PATH}{Id}/labels/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/labels/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/labels/",
                 ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Id}/labels/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/labels/",
@@ -135,7 +135,7 @@ namespace Jagabata.Cmdlets
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{To.Id}/labels/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{To.Id}/labels/",
-                ResourceType.Schedule => $"{Schedule.PATH}{To.Id}/labels/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{To.Id}/labels/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{To.Id}/labels/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{To.Id}/labels/",
                 _ => throw new ArgumentException($"Invalid resource type: {To.Type}")
@@ -168,7 +168,7 @@ namespace Jagabata.Cmdlets
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{From.Id}/labels/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{From.Id}/labels/",
-                ResourceType.Schedule => $"{Schedule.PATH}{From.Id}/labels/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{From.Id}/labels/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{From.Id}/labels/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{From.Id}/labels/",
                 _ => throw new ArgumentException($"Invalid resource type: {From.Type}")

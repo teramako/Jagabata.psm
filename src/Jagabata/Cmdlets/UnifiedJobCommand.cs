@@ -136,7 +136,7 @@ namespace Jagabata.Cmdlets
                     WriteResultSet<AdHocCommand>($"{Group.PATH}{Id}/ad_hoc_commands/");
                     break;
                 case ResourceType.Schedule:
-                    WriteResultSet($"{Schedule.PATH}{Id}/jobs/");
+                    WriteResultSet($"{Resources.Schedule.PATH}{Id}/jobs/");
                     break;
                 case ResourceType.Instance:
                     WriteResultSet($"{Instance.PATH}{Id}/jobs/");

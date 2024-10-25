@@ -95,7 +95,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/credentials/",
                 ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/credentials/",
-                ResourceType.Schedule => $"{Schedule.PATH}{Id}/credentials/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/credentials/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/credentials/",
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/credentials/",
                 _ => Credential.PATH
@@ -200,7 +200,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Organization => $"{Organization.PATH}{To.Id}/galaxy_credentials/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{To.Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{To.Id}/credentials/",
-                ResourceType.Schedule => $"{Schedule.PATH}{To.Id}/credentials/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{To.Id}/credentials/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{To.Id}/credentials/",
                 _ => throw new ArgumentException($"Invalid resource type: {To.Type}")
             };
@@ -231,7 +231,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Organization => $"{Organization.PATH}{From.Id}/galaxy_credentials/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{From.Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{From.Id}/credentials/",
-                ResourceType.Schedule => $"{Schedule.PATH}{From.Id}/credentials/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{From.Id}/credentials/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{From.Id}/credentials/",
                 _ => throw new ArgumentException($"Invalid resource type: {From.Type}")
             };

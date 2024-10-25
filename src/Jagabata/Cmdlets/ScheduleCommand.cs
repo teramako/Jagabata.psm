@@ -5,8 +5,8 @@ using System.Management.Automation;
 namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "Schedule")]
-    [OutputType(typeof(Schedule))]
-    public class GetScheduleCommand : GetCommandBase<Schedule>
+    [OutputType(typeof(Resources.Schedule))]
+    public class GetScheduleCommand : GetCommandBase<Resources.Schedule>
     {
         protected override ResourceType AcceptType => ResourceType.Schedule;
 
@@ -21,7 +21,7 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Find, "Schedule", DefaultParameterSetName = "All")]
-    [OutputType(typeof(Schedule))]
+    [OutputType(typeof(Resources.Schedule))]
     public class FindScheduleCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
@@ -67,15 +67,15 @@ namespace Jagabata.Cmdlets
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/schedules/",
                 ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Id}/schedules/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/schedules/",
-                _ => Schedule.PATH
+                _ => Resources.Schedule.PATH
             };
-            Find<Schedule>(path);
+            base.Find<Resources.Schedule>(path);
         }
     }
 
     [Cmdlet(VerbsCommon.New, "Schedule", SupportsShouldProcess = true)]
-    [OutputType(typeof(Schedule))]
-    public class NewScheduleCommand : NewCommandBase<Schedule>
+    [OutputType(typeof(Resources.Schedule))]
+    public class NewScheduleCommand : NewCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true)]
         public string Name { get; set; } = string.Empty;
@@ -210,8 +210,8 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsData.Update, "Schedule", SupportsShouldProcess = true)]
-    [OutputType(typeof(Schedule))]
-    public class UpdateScheduleCommand : UpdateCommandBase<Schedule>
+    [OutputType(typeof(Resources.Schedule))]
+    public class UpdateScheduleCommand : UpdateCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
@@ -332,7 +332,7 @@ namespace Jagabata.Cmdlets
 
     [Cmdlet(VerbsCommon.Remove, "Schedule", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
     [OutputType(typeof(void))]
-    public class RemoveScheduleCommand : RemoveCommandBase<Schedule>
+    public class RemoveScheduleCommand : RemoveCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
