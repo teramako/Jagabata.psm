@@ -39,6 +39,19 @@ PS C:\> $rrule = "DTSTART;TZID=Asia/Tokyo:20250310T213000 RRULE:INTERVAL=1;FREQ=
 PS C:\> New-AnsibleSchedule -Name ScheduleName -RRrule $rrule -Template $jt
 ```
 
+### Example 2
+```powershell
+PS C:\> $jt = Get-AnsibleJobTemplate -Id 10
+PS C:\> $calendar = [Jagabata.Schedule.Calendar]::new([datetime]"2025-03-10 21:30")
+PS C:\> $rule1 = ([Jagabata.Schedule.RRule]@{ Freq = "Yearly"; }).SetMonth(4).SetMonthDay(1)
+PS C:\> $calendar.RRules.Add($rule1)
+PS C:\> $calendar.ToString();
+DTSTART;TZID=Asia/Tokyo:20250310T213000 RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTHDAY=1;BYMONTH=4
+PS C:\> New-AnsibleSchedule -Name ScheduleName -RRrule $calendar -Template $jt
+```
+
+The result is the same as in Example 1, but the scheduling rules can be make from `Jagabata.Schedule.Calendar` and `Jagabata.Schedule.RRule`.
+
 ## PARAMETERS
 
 ### -Description
@@ -213,9 +226,19 @@ Accept wildcard characters: False
 ```
 
 ### -RRule
-Recurrence Rule.
+Scheduling data which has Recurrence Rule a.k.a `RRULE` and starting datetime a.k.a `DTSTART`.
 
 See: [RFC5545 - 3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10)
+
+> [!TIP]  
+> Scheduling data can be made from `Jagabata.Schedule.Calendar` and `Jagabata.Schedule.RRule`.  
+> ```powershell  
+> $calendar = [Jagabata.Schedule.Calendar]::new([datetime]"2025-03-10 21:30") # DTSTART  
+> $rule1 = ([Jagabata.Schedule.RRule]@{ Freq = "Yearly"; }).SetMonth(4).SetMonthDay(1) # April 1 of each year  
+> $rule2 = ([Jagabata.Schedule.RRule]@{ Freq = "Monthly"; Interval = 3 }).SetWeekDay("SA").SetPos(1) # First Saturday of every three months  
+> $calendar.RRules.Add($rule1)  
+> $calendar.RRules.Add($rule2)  
+> ```
 
 ```yaml
 Type: String
