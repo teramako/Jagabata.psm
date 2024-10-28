@@ -1,5 +1,9 @@
 namespace Jagabata.Schedule;
 
+/// <summary>
+/// a part of RRule's BYDAY value
+/// </summary>
+/// <seealso cref="WeekDay.Week" />
 public enum RRuleWeek
 {
     /// <summary>
