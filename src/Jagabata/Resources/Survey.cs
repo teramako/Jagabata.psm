@@ -27,13 +27,29 @@ namespace Jagabata.Resources
     [JsonConverter(typeof(SurveySpecConverter))]
     public class SurveySpec
     {
+        public SurveySpec()
+        { }
+        public SurveySpec(SurveySpecType type)
+        {
+            Type = type;
+        }
+        public SurveySpec(SurveySpecType type, string variableName) : this(type)
+        {
+            Name = variableName;
+            Variable = variableName;
+        }
+        public SurveySpec(SurveySpecType type, string name, string variableName) : this(type)
+        {
+            Name = name;
+            Variable = variableName;
+        }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public SurveySpecType Type { get; set; }
+        public SurveySpecType Type { get; internal set; }
         public bool Required { get; set; } = false;
         public string Variable { get; set; } = string.Empty;
-        public object? Default { get; set; }
-        public object Choices { get; set; } = string.Empty;
+        public virtual object? Default { get; set; }
+        public virtual object Choices { get; set; } = string.Empty;
         public int Min { get; set; } = 0;
         public int Max { get; set; } = 1024;
         public bool NewQuestion { get; set; }
