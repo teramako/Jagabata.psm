@@ -148,7 +148,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
             _ => throw new ArgumentException($"Invalid Resource Type: {type}")
         };
 
-        var survey = GetResource<Survey>(surveyPath);
+        var survey = GetResource<Resources.Survey>(surveyPath);
         var extraVars = sendData.ContainsKey("extra_vars")
             ? Yaml.DeserializeToDict(sendData["extra_vars"] as string ?? "")
             : new Dictionary<string, object?>();
