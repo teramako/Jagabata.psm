@@ -1576,6 +1576,37 @@
       </TableControl>
     </View>
     <View>
+      <Name>SchedulePreview</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.SchedulePreview</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Local</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Utc</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap>true</Wrap>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>$_.Local -join "`n"</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>$_.Utc -join "`n"</ScriptBlock>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>Role</Name>
       <ViewSelectedBy>
         <TypeName>Jagabata.Resources.Role</TypeName>
