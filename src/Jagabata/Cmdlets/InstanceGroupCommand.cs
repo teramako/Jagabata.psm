@@ -69,7 +69,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Organization => $"{Organization.PATH}{Id}/instance_groups/",
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/instance_groups/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/instance_groups/",
-                ResourceType.Schedule => $"{Schedule.PATH}{Id}/instance_groups/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/instance_groups/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/instance_groups/",
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/instance_groups/",
                 _ => InstanceGroup.PATH
