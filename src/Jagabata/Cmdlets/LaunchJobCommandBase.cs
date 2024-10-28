@@ -171,10 +171,10 @@ public abstract class LaunchJobCommandBase : APICmdletBase
                 if (onlyRequired && !spec.Required)
                     continue;
 
-                var label = $"Survey {spec.QuestionName}";
+                var label = $"Survey {spec.Name}";
                 var key = $"extra_vars.{varName}";
                 var description = $"Variable: [{varName}]"
-                    + (string.IsNullOrEmpty(spec.QuestionDescription) ? "" : $", Description: {spec.QuestionDescription}");
+                    + (string.IsNullOrEmpty(spec.Description) ? "" : $", Description: {spec.Description}");
                 switch (spec.Type)
                 {
                     case SurveySpecType.Text:
