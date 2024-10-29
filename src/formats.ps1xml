@@ -114,6 +114,68 @@
       </ListControl>
     </View>
     <View>
+      <Name>SurveySepec</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.SurveySpec</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader/><!-- Name -->
+          <TableColumnHeader/><!-- Description -->
+          <TableColumnHeader><!-- Type -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Required -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Variable -->
+          <TableColumnHeader><!-- Default -->
+            <Label>Default</Label>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Choices -->
+          <TableColumnHeader><!-- Min -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Max -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Type</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Required</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Variable</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($_.Type -eq "MultiSelect") { $_.Default -split "`n" } else { $_.Default }</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Choices</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Min</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Max</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>UnifiedJobTemplate</Name>
       <ViewSelectedBy>
         <TypeName>Jagabata.Resources.JobTemplate</TypeName>
