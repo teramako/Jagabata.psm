@@ -343,4 +343,27 @@ namespace Jagabata.Cmdlets
             TryDelete(Id);
         }
     }
+
+    [Cmdlet(VerbsCommon.Show, "Schedule")]
+    [OutputType(typeof(SchedulePreview))]
+    public class TestSchedule : APICmdletBase
+    {
+        [Parameter(Mandatory = true, ParameterSetName = "RRule", ValueFromPipeline = true, Position = 0)]
+        public string? RRule { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "Schedule", ValueFromPipeline = true, Position = 0)]
+        public Resources.Schedule? Schedule { get; set; }
+
+        protected override void ProcessRecord()
+        {
+            var sendData = new Dictionary<string, string>();
+            if (RRule is not null)
+                sendData.Add("rrule", RRule);
+            else if (Schedule is not null)
+                sendData.Add("rrule", Schedule.Rrule);
+
+            var res = CreateResource<SchedulePreview>(SchedulePreview.PATH, sendData);
+            WriteObject(res.Contents, false);
+        }
+    }
 }

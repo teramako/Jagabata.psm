@@ -16,8 +16,8 @@ Create a Schedule.
 New-AnsibleSchedule -Name <String> [-Description <String>] -RRule <String> [-Disabled] -Template <IResource>
  [-ExtraData <String>] [-Inventory <UInt64>] [-ScmBranch <String>] [-JobType <JobType>] [-Tags <String>]
  [-SkipTags <String>] [-Limit <String>] [-DiffMode <Boolean>] [-Verbosity <JobVerbosity>] [-Forks <Int32>]
- [-ExecutionEnvironment <UInt64>] [-JobSliceCount <Int32>] [-Timeout <Int32>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ExecutionEnvironment <UInt64>] [-JobSliceCount <Int32>] [-Timeout <Int32>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -230,14 +230,15 @@ Scheduling data which has Recurrence Rule a.k.a `RRULE` and starting datetime a.
 
 See: [RFC5545 - 3.3.10. Recurrence Rule](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10)
 
-> [!TIP]  
-> Scheduling data can be made from `Jagabata.Schedule.Calendar` and `Jagabata.Schedule.RRule`.  
-> ```powershell  
-> $calendar = [Jagabata.Schedule.Calendar]::new([datetime]"2025-03-10 21:30") # DTSTART  
-> $rule1 = ([Jagabata.Schedule.RRule]@{ Freq = "Yearly"; }).SetMonth(4).SetMonthDay(1) # April 1 of each year  
-> $rule2 = ([Jagabata.Schedule.RRule]@{ Freq = "Monthly"; Interval = 3 }).SetWeekDay("SA").SetPos(1) # First Saturday of every three months  
-> $calendar.RRules.Add($rule1)  
-> $calendar.RRules.Add($rule2)  
+> [!TIP]
+> Scheduling data can be made from `Jagabata.Schedule.Calendar` and `Jagabata.Schedule.RRule`.
+> 
+> ```powershell
+> $calendar = [Jagabata.Schedule.Calendar]::new([datetime]"2025-03-10 21:30") # DTSTART
+> $rule1 = ([Jagabata.Schedule.RRule]@{ Freq = "Yearly"; }).SetMonth(4).SetMonthDay(1) # April 1 of each year
+> $rule2 = ([Jagabata.Schedule.RRule]@{ Freq = "Monthly"; Interval = 3 }).SetWeekDay("SA").SetPos(1) # First Saturday of every three months
+> $calendar.RRules.Add($rule1)
+> $calendar.RRules.Add($rule2)
 > ```
 
 ```yaml
@@ -403,3 +404,5 @@ New created Schedule object.
 [Update-AnsibleSchedule](Update-AnsibleSchedule.md)
 
 [Remove-AnsibleSchedule](Remove-AnsibleSchedule.md)
+
+[Show-AnsibleSchedule](Show-AnsibleSchedule.md)

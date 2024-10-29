@@ -462,7 +462,7 @@ namespace Jagabata.Resources
         [ResourceSubPath("jobs", typeof(ResultSet), Description = "List Unified Jobs for a Schedule")]
         [ResourceSubPath("labels", typeof(ResultSet<Label>), Description = "List Labels for a Schedule")]
         [ResourceSubPath("labels", typeof(Label), Method = Method.POST, Description = "Create a Label for a Schedule")]
-        [ResourceSubPath("preview", typeof(Dictionary<string, string[]>), Method = Method.POST, Description = "", IsSubPathOfId = false)]
+        [ResourceSubPath("preview", typeof(SchedulePreview), Method = Method.POST, Description = "Preview the scheduled datetimes (Max 10)", IsSubPathOfId = false)]
         [ResourceSubPath("zoneinfo", typeof(Dictionary<string, string[]>), Description = "Retrieve Time Zone information", IsSubPathOfId = false)]
         Schedule,
         [ResourcePath("roles", typeof(ResultSet<Role>), Description = "List Roles")]

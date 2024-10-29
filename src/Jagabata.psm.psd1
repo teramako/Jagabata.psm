@@ -236,6 +236,7 @@ CmdletsToExport = @(
     'Remove-WorkflowJobTemplate',
     'Remove-WorkflowJobTemplateNode',
     'Revoke-Role',
+    'Show-Schedule',
     'Start-AdHocCommand',
     'Start-InventoryUpdate',
     'Start-JobTemplate',
