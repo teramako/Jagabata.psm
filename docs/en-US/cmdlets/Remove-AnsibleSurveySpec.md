@@ -13,8 +13,7 @@ Remove SurveySpecs.
 ## SYNTAX
 
 ```
-Remove-AnsibleSurveySpec [-Template] <IResource> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleSurveySpec [-Template] <IResource> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

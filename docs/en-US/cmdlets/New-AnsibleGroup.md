@@ -13,8 +13,8 @@ Create a Group.
 ## SYNTAX
 
 ```
-New-AnsibleGroup [-Inventory] <UInt64> [-Name] <String> [-Description <String>] [-Variables <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AnsibleGroup [-Inventory] <UInt64> [-Name] <String> [-Description <String>] [-Variables <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

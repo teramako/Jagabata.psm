@@ -13,8 +13,7 @@ Create config file that should be used by this module.
 ## SYNTAX
 
 ```
-New-AnsibleApiConfig [-Uri] <Uri> [-SaveAs <FileInfo>]
- [<CommonParameters>]
+New-AnsibleApiConfig [-Uri] <Uri> [-SaveAs <FileInfo>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

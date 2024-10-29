@@ -21,8 +21,8 @@ New-AnsibleInventory [-Organization] <UInt64> [-Name] <String> [-Description <St
 ### SmartInventory
 ```
 New-AnsibleInventory [-Organization] <UInt64> [-Name] <String> [-Description <String>] [-Variables <String>]
- [-PreventInstanceGroupFallback] [-AsSmartInventory] -HostFilter <String>
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-PreventInstanceGroupFallback] [-AsSmartInventory] -HostFilter <String> [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

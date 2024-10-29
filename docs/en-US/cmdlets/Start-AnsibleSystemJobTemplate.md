@@ -14,14 +14,12 @@ Invoke (launch) a SystemJobTemplate.
 
 ### Id
 ```
-Start-AnsibleSystemJobTemplate [-Id] <UInt64> [-ExtraVars <IDictionary>]
- [<CommonParameters>]
+Start-AnsibleSystemJobTemplate [-Id] <UInt64> [-ExtraVars <IDictionary>] [<CommonParameters>]
 ```
 
 ### Template
 ```
-Start-AnsibleSystemJobTemplate [-SystemJobTemplate] <IResource> [-ExtraVars <IDictionary>]
- [<CommonParameters>]
+Start-AnsibleSystemJobTemplate [-SystemJobTemplate] <IResource> [-ExtraVars <IDictionary>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

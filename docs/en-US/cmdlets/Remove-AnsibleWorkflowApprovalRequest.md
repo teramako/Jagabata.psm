@@ -13,8 +13,7 @@ Remove a WorkflowApproval.
 ## SYNTAX
 
 ```
-Remove-AnsibleWorkflowApprovalRequest [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleWorkflowApprovalRequest [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

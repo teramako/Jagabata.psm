@@ -21,8 +21,7 @@ Find-AnsibleWorkflowJobNode [-OrderBy <String[]>] [-Search <String[]>] [-Filter 
 ### WorkflowJob
 ```
 Find-AnsibleWorkflowJobNode [-Job] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### WorkflowJobNode

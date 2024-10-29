@@ -17,8 +17,8 @@ Update-AnsibleProject [-Id] <UInt64> [-Name <String>] [-Description <String>] [-
  [-ScmType <String>] [-DefaultEnvironment <UInt64>] [-SignatureValidationCredential <UInt64>]
  [-LocalPath <String>] [-ScmUrl <String>] [-ScmBranch <String>] [-ScmRefspec <String>] [-Credential <UInt64>]
  [-ScmClean <Boolean>] [-ScmDeleteOnUpdate <Boolean>] [-ScmTrackSubmodules <Boolean>]
- [-ScmUpdateOnLaunch <Boolean>] [-AllowOverride <Boolean>] [-Timeout <Int32>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ScmUpdateOnLaunch <Boolean>] [-AllowOverride <Boolean>] [-Timeout <Int32>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

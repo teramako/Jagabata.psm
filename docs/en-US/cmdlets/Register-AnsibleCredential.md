@@ -13,8 +13,7 @@ Register a Credential.
 ## SYNTAX
 
 ```
-Register-AnsibleCredential [-Id] <UInt64> [-To] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Register-AnsibleCredential [-Id] <UInt64> [-To] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

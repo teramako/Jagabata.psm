@@ -18,16 +18,14 @@ New-AnsibleWorkflowJobTemplateNode [-WorkflowJobtemplate] <UInt64> [[-ParentNode
  [[-RunUpon] <String>] [-UnifiedJobTemplate] <UInt64> [-ExtraData <String>] [-Inventory <UInt64>]
  [-ScmBranch <String>] [-JobType <String>] [-Tags <String>] [-SkipTags <String>] [-Limit <String>] [-DiffMode]
  [-Verbosity <JobVerbosity>] [-ExecutionEnvironment <UInt64>] [-Forks <Int32>] [-JobSliceCount <Int32>]
- [-Timeout <Int32>] [-AllParentsMustConverge] [-Identifier <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Timeout <Int32>] [-AllParentsMustConverge] [-Identifier <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### WorkflowApproval
 ```
 New-AnsibleWorkflowJobTemplateNode [-WorkflowJobtemplate] <UInt64> [[-ParentNode] <UInt64>]
  [[-RunUpon] <String>] -ApprovalName <String> [-Description <String>] [-Timeout <Int32>]
- [-AllParentsMustConverge] [-Identifier <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-AllParentsMustConverge] [-Identifier <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

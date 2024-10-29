@@ -14,8 +14,7 @@ Retrieve job logs.
 
 ### StdOutTypeAndId (Default)
 ```
-Get-AnsibleJobLog [-Type] <ResourceType> [-Id] <UInt64> [-Format <JobLogFormat>] [-Dark]
- [<CommonParameters>]
+Get-AnsibleJobLog [-Type] <ResourceType> [-Id] <UInt64> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
 ### DownloadTypeAndId
@@ -26,8 +25,7 @@ Get-AnsibleJobLog [-Type] <ResourceType> [-Id] <UInt64> -Download <DirectoryInfo
 
 ### StdOutResource
 ```
-Get-AnsibleJobLog [-Job] <IResource> [-Format <JobLogFormat>] [-Dark]
- [<CommonParameters>]
+Get-AnsibleJobLog [-Job] <IResource> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
 ### DownloadResource

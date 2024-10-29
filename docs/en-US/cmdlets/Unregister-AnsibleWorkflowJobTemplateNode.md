@@ -13,8 +13,8 @@ Unlink WorkflowJobTemplateNode from the parent.
 ## SYNTAX
 
 ```
-Unregister-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> -From <UInt64>
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Unregister-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> -From <UInt64> [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

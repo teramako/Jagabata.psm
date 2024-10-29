@@ -13,8 +13,7 @@ Remove an InventorySource.
 ## SYNTAX
 
 ```
-Remove-AnsibleInventorySource [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleInventorySource [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -14,8 +14,7 @@ Invoke (update) a Project and wait until the job is finished.
 
 ### Id
 ```
-Invoke-AnsibleProjectUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64>
- [<CommonParameters>]
+Invoke-AnsibleProjectUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [<CommonParameters>]
 ```
 
 ### Project
@@ -31,8 +30,7 @@ Invoke-AnsibleProjectUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
 
 ### CheckProject
 ```
-Invoke-AnsibleProjectUpdate [-Project] <IResource> [-Check]
- [<CommonParameters>]
+Invoke-AnsibleProjectUpdate [-Project] <IResource> [-Check] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

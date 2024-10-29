@@ -13,8 +13,7 @@ Unregister a Label from other resource.
 ## SYNTAX
 
 ```
-Unregister-AnsibleLabel [-Id] <UInt64> [-From] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Unregister-AnsibleLabel [-Id] <UInt64> [-From] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

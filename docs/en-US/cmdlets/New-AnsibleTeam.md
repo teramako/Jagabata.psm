@@ -13,8 +13,8 @@ Create a Team.
 ## SYNTAX
 
 ```
-New-AnsibleTeam -Organization <UInt64> -Name <String> [-Description <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AnsibleTeam -Organization <UInt64> -Name <String> [-Description <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

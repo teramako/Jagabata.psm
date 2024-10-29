@@ -13,8 +13,7 @@ Register a Group to another Group.
 ## SYNTAX
 
 ```
-Register-AnsibleGroup [-Id] <UInt64> [-To] <UInt64> [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Register-AnsibleGroup [-Id] <UInt64> [-To] <UInt64> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -13,8 +13,8 @@ Link WorkflowJobTemplateNode to the parent.
 ## SYNTAX
 
 ```
-Register-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> -To <UInt64> [-RunUpon <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Register-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> -To <UInt64> [-RunUpon <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

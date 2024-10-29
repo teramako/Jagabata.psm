@@ -13,8 +13,7 @@ Remove a Group.
 ## SYNTAX
 
 ```
-Remove-AnsibleGroup [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleGroup [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

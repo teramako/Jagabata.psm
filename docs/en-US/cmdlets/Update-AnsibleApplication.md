@@ -14,8 +14,8 @@ Update an Application.
 
 ```
 Update-AnsibleApplication [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Organization <UInt64>]
- [-RedirectUris <String>] [-ClientType <ApplicationClientType>] [-SkipAuthorization]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-RedirectUris <String>] [-ClientType <ApplicationClientType>] [-SkipAuthorization] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

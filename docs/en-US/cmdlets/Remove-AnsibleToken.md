@@ -13,8 +13,7 @@ Remove an AccessToken.
 ## SYNTAX
 
 ```
-Remove-AnsibleToken [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleToken [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

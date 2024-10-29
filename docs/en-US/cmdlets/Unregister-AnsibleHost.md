@@ -13,8 +13,7 @@ Remove a Host
 ## SYNTAX
 
 ```
-Unregister-AnsibleHost [-Id] <UInt64> [-From] <UInt64> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Unregister-AnsibleHost [-Id] <UInt64> [-From] <UInt64> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

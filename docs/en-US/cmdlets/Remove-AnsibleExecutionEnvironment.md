@@ -13,8 +13,7 @@ Remove an ExecutionEnvironment.
 ## SYNTAX
 
 ```
-Remove-AnsibleExecutionEnvironment [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleExecutionEnvironment [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -13,8 +13,7 @@ Remove a WorkflowJobTemplateNode.
 ## SYNTAX
 
 ```
-Remove-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleWorkflowJobTemplateNode [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -14,8 +14,7 @@ Invoke (update) an InventorySource and wait until the job is finished.
 
 ### Id
 ```
-Invoke-AnsibleInventoryUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64>
- [<CommonParameters>]
+Invoke-AnsibleInventoryUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [<CommonParameters>]
 ```
 
 ### Resource
@@ -31,8 +30,7 @@ Invoke-AnsibleInventoryUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
 
 ### CheckResource
 ```
-Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-Check]
- [<CommonParameters>]
+Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-Check] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

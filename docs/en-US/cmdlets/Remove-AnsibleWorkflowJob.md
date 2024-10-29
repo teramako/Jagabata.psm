@@ -13,8 +13,7 @@ Remove a Workflow job.
 ## SYNTAX
 
 ```
-Remove-AnsibleWorkflowJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleWorkflowJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

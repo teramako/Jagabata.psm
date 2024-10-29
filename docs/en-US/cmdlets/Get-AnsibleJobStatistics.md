@@ -13,8 +13,7 @@ Retrieve statistics for job runs.
 ## SYNTAX
 
 ```
-Get-AnsibleJobStatistics [[-Period] <String>] [[-JobType] <String>]
- [<CommonParameters>]
+Get-AnsibleJobStatistics [[-Period] <String>] [[-JobType] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

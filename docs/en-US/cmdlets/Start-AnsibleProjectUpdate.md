@@ -29,8 +29,7 @@ Start-AnsibleProjectUpdate [-Project] <IResource> [<CommonParameters>]
 
 ### CheckProject
 ```
-Start-AnsibleProjectUpdate [-Project] <IResource> [-Check]
- [<CommonParameters>]
+Start-AnsibleProjectUpdate [-Project] <IResource> [-Check] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

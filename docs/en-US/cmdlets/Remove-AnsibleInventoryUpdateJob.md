@@ -13,8 +13,7 @@ Remove an InventoryUpdate job.
 ## SYNTAX
 
 ```
-Remove-AnsibleInventoryUpdateJob [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleInventoryUpdateJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

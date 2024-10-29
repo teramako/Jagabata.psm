@@ -13,8 +13,7 @@ Register a Uesr to other resource.
 ## SYNTAX
 
 ```
-Register-AnsibleUser [-Id] <UInt64> [-To] <IResource> [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Register-AnsibleUser [-Id] <UInt64> [-To] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

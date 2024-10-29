@@ -13,8 +13,7 @@ Remove a Project.
 ## SYNTAX
 
 ```
-Remove-AnsibleProject [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleProject [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

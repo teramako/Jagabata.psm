@@ -13,8 +13,7 @@ Remove a System job.
 ## SYNTAX
 
 ```
-Remove-AnsibleSystemJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleSystemJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

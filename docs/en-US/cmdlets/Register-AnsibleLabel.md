@@ -13,8 +13,7 @@ Register a Label to other resource.
 ## SYNTAX
 
 ```
-Register-AnsibleLabel [-Id] <UInt64> [-To] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Register-AnsibleLabel [-Id] <UInt64> [-To] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -14,8 +14,7 @@ Update a Host.
 
 ```
 Update-AnsibleHost [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Enabled <Boolean>]
- [-InstanceId <String>] [-Variables <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-InstanceId <String>] [-Variables <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

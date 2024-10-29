@@ -13,8 +13,7 @@ Remove an Organization.
 ## SYNTAX
 
 ```
-Remove-AnsibleOrganization [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleOrganization [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

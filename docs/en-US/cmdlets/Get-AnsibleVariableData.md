@@ -13,8 +13,7 @@ Retrieve Variable Data
 ## SYNTAX
 
 ```
-Get-AnsibleVariableData [-Type] <ResourceType> [-Id] <UInt64>
- [<CommonParameters>]
+Get-AnsibleVariableData [-Type] <ResourceType> [-Id] <UInt64> [<CommonParameters>]
 ```
 
 ## DESCRIPTION

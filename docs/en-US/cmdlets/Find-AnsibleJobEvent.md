@@ -22,8 +22,7 @@ Find-AnsibleJobEvent [-Type] <ResourceType> [-Id] <UInt64> [-AdHocCommandEvent] 
 ### PipelineInput
 ```
 Find-AnsibleJobEvent [-Resource] <IResource> [-AdHocCommandEvent] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -15,8 +15,7 @@ Retrieve JobTemplates.
 ### All (Default)
 ```
 Find-AnsibleJobTemplate [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### AssociatedWith
@@ -29,8 +28,7 @@ Find-AnsibleJobTemplate [-Type] <ResourceType> [-Id] <UInt64> [[-Name] <String[]
 ### PipelineInput
 ```
 Find-AnsibleJobTemplate [-Resource] <IResource> [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

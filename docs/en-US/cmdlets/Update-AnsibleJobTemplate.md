@@ -23,8 +23,8 @@ Update-AnsibleJobTemplate [-Id] <UInt64> [-Name <String>] [-Description <String>
  [-AskCredential <Boolean>] [-AskExecutionEnvironment <Boolean>] [-AskLabels <Boolean>] [-AskForks <Boolean>]
  [-AskJobSliceCount <Boolean>] [-SurveyEnabled <Boolean>] [-BecomeEnabled <Boolean>] [-DiffMode <Boolean>]
  [-AllowSimultaneous <Boolean>] [-JobSliceCount <Int32>] [-WebhookService <String>]
- [-WebhookCredential <UInt64>] [-PreventInstanceGroupFallback <Boolean>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WebhookCredential <UInt64>] [-PreventInstanceGroupFallback <Boolean>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

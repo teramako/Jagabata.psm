@@ -13,8 +13,7 @@ Remove a CredentialType.
 ## SYNTAX
 
 ```
-Remove-AnsibleCredentialType [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleCredentialType [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

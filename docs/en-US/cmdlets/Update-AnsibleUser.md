@@ -14,8 +14,8 @@ Update a User.
 
 ```
 Update-AnsibleUser [-Id] <UInt64> [-UserName <String>] [-FirstName <String>] [-LastName <String>]
- [-Email <String>] [-IsSuperUser <Boolean>] [-IsSystemAuditor <Boolean>] [-Password <SecureString>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Email <String>] [-IsSuperUser <Boolean>] [-IsSystemAuditor <Boolean>] [-Password <SecureString>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

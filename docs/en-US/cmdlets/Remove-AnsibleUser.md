@@ -13,8 +13,7 @@ Remove a User
 ## SYNTAX
 
 ```
-Remove-AnsibleUser [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleUser [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

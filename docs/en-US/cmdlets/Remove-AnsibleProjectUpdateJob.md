@@ -13,8 +13,7 @@ Remove a ProjectUpdate Job.
 ## SYNTAX
 
 ```
-Remove-AnsibleProjectUpdateJob [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleProjectUpdateJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

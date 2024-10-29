@@ -13,8 +13,8 @@ Disable a NotificationTemplate.
 ## SYNTAX
 
 ```
-Disable-AnsibleNotificationTemplate [-Id] <UInt64> [-For] <IResource> [-On] <String[]>
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Disable-AnsibleNotificationTemplate [-Id] <UInt64> [-For] <IResource> [-On] <String[]> [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

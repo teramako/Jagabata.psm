@@ -15,8 +15,7 @@ Retrieve Credentials.
 ### All (Default)
 ```
 Find-AnsibleCredential [-Kind <String>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### AssociatedWith
