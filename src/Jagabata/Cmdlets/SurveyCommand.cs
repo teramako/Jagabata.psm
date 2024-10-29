@@ -39,16 +39,19 @@ namespace Jagabata.Cmdlets
         ])]
         public IResource Template { get; set; } = new Resource(0, 0);
 
-        [Parameter()]
+        [Parameter(ParameterSetName = "Spec")]
         [AllowEmptyString]
         public string Name { get; set; } = string.Empty;
 
-        [Parameter()]
+        [Parameter(ParameterSetName = "Spec")]
         [AllowEmptyString]
         public string Description { get; set; } = string.Empty;
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, ParameterSetName = "Spec")]
         public SurveySpec[] Spec { get; set; } = [];
+
+        [Parameter(Mandatory = true, ParameterSetName = "Survey")]
+        public Resources.Survey? Survey { get; set; }
 
         protected override void ProcessRecord()
         {
@@ -58,7 +61,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Template.Id}/survey_spec/",
                 _ => throw new ArgumentException($"Invalid Resource Type: {Template.Type}")
             };
-            var sendData = new Resources.Survey() { Name = Name, Description = Description, Spec = Spec };
+            var sendData = Survey is not null ? Survey : new Resources.Survey() { Name = Name, Description = Description, Spec = Spec };
             var dataDescription = Json.Stringify(sendData, pretty: true);
             if (ShouldProcess(dataDescription, $"Register Survey to {Template.Type} [{Template.Id}]"))
             {
