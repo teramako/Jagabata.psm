@@ -27,20 +27,36 @@ namespace Jagabata.Resources
     [JsonConverter(typeof(SurveySpecConverter))]
     public class SurveySpec
     {
-        public string QuestionName { get; set; } = string.Empty;
-        public string QuestionDescription { get; set; } = string.Empty;
-        public SurveySpecType Type { get; set; }
+        public SurveySpec()
+        { }
+        public SurveySpec(SurveySpecType type)
+        {
+            Type = type;
+        }
+        public SurveySpec(SurveySpecType type, string variableName) : this(type)
+        {
+            Name = variableName;
+            Variable = variableName;
+        }
+        public SurveySpec(SurveySpecType type, string name, string variableName) : this(type)
+        {
+            Name = name;
+            Variable = variableName;
+        }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public SurveySpecType Type { get; internal set; }
         public bool Required { get; set; } = false;
         public string Variable { get; set; } = string.Empty;
-        public object? Default { get; set; }
-        public object Choices { get; set; } = string.Empty;
+        public virtual object? Default { get; set; }
+        public virtual object Choices { get; set; } = string.Empty;
         public int Min { get; set; } = 0;
         public int Max { get; set; } = 1024;
         public bool NewQuestion { get; set; }
 
         public override string ToString()
         {
-            return $"{{ Name = {QuestionName}, Type = {Type}, Variable = {Variable}, Default = {Default} }}";
+            return $"{{ Name = {Name}, Type = {Type}, Variable = {Variable}, Default = {Default} }}";
         }
     }
 
@@ -114,10 +130,10 @@ namespace Jagabata.Resources
                         spec.NewQuestion = reader.GetBoolean();
                         break;
                     case "question_name":
-                        spec.QuestionName = reader.GetString() ?? "";
+                        spec.Name = reader.GetString() ?? "";
                         break;
                     case "question_description":
-                        spec.QuestionDescription = reader.GetString() ?? "";
+                        spec.Description = reader.GetString() ?? "";
                         break;
                 }
             }
@@ -127,8 +143,8 @@ namespace Jagabata.Resources
         public override void Write(Utf8JsonWriter writer, SurveySpec value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteString("question_name", value.QuestionName);
-            writer.WriteString("question_description", value.QuestionDescription);
+            writer.WriteString("question_name", value.Name);
+            writer.WriteString("question_description", value.Description);
             writer.WriteString("type", value.Type.ToString().ToLowerInvariant());
             writer.WriteBoolean("required", value.Required);
             writer.WriteString("variable", value.Variable);

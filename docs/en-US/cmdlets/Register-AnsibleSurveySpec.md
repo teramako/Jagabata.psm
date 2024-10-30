@@ -12,9 +12,15 @@ Register SurveySpecs.
 
 ## SYNTAX
 
+### Spec
 ```
 Register-AnsibleSurveySpec [-Template] <IResource> [-Name <String>] [-Description <String>]
  -Spec <SurveySpec[]> [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Survey
+```
+Register-AnsibleSurveySpec [-Template] <IResource> -Survey <Survey> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,18 +35,29 @@ Implements following Rest API:
 ### Example 1
 ```powershell
 PS C:\> $jt = Get-AnsibleJobTemplate -Id 10
-PS C:\> Register-AnsibleSurveySpec $jt -Spec @{QuestionName="User name";Variable="user";Required=$true},@{QuestionName="Password";Variable="pass";Type="password";Required=$true}
+PS C:\> Register-AnsibleSurveySpec $jt -Spec @{Name="User name";Variable="user";Required=$true},@{Name="Password";Variable="pass";Type="password";Required=$true}
 ```
 
 ### Example 2
 ```powershell
 PS C:\> $jt = Get-AnsibleJobTemplate -Id 10
 PS C:\> $survey = $jt | Get-AnsibleSurveySpec
-PS C:\> $survey.Spec += @{ QuestionName="Select an animal"; Variable="animal"; Choices=@("cat","doc"); Type="multiplechoice" }
+PS C:\> $survey.Spec += @{ Name="Select an animal"; Variable="animal"; Choices=@("cat","doc"); Type="multiplechoice" }
 PS C:\> $jt | Register-AnsibleSurveySpec -Spec $survey.Spec
 ```
 
 Add multiple choice survey and re-register.
+
+### Example 3
+```powershell
+PS C:\> $jt = Get-AnsibleJobTemplate -Id 10
+PS C:\> $survey = New-Object Jagabata.Survey.Survey -Property @{ Name = "Survey Name"; Description = "" }
+PS C:\> $survey.Spec += New-Object Jagabata.Survey.TextSpec -ArgumentList "1.User","username" -Property @{ Required = $true; Default = "user1" }
+PS C:\> $survey.Spec += New-Object Jagabata.Survey.PasswordSpec -ArgumentList "2.Password","pass" -Property @{ Required = $true; }
+PS C:\> $jt | Register-AnsibleSurveySpec -Spec $survey
+```
+
+Register surveys created with Class.
 
 ## PARAMETERS
 
@@ -49,7 +66,7 @@ Optional description of the Survey.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Spec
 Aliases:
 
 Required: False
@@ -64,7 +81,7 @@ Optional name of the Survey.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Spec
 Aliases:
 
 Required: False
@@ -86,8 +103,8 @@ Array of `SurveySpec` objects.
   - `Float`: For survey questions expecting a decimal number.  
   - `MultipleChoice`: For survey questions where one option from a list is required.  
   - `MultiSelect`: For survey questions where multiple items from a presented list can be selected.  
-- `QuestionName`: The question to ask the user.  
-- `QuestionDescription`: Optional description of the question.  
+- `Name`: The question to ask the user.  
+- `Description`: Optional description of the question.  
 - `Variable`: Variable name to store the response. This is the variable to be used by the playbook. Variable names cannot contain spaces.  
 - `Required`: Whether or not an answer to the question is required.  
 - `Default`: Default value of the question  
@@ -97,7 +114,22 @@ Array of `SurveySpec` objects.
 
 ```yaml
 Type: SurveySpec[]
-Parameter Sets: (All)
+Parameter Sets: Spec
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Survey
+Object containing a `Spec` array, `Name` and `Description` which can create with `Jagabata.Survey.Survey` or `Jagabata.Resources.Survey`.
+
+```yaml
+Type: Survey
+Parameter Sets: Survey
 Aliases:
 
 Required: True

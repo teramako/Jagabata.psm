@@ -148,7 +148,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase
             _ => throw new ArgumentException($"Invalid Resource Type: {type}")
         };
 
-        var survey = GetResource<Survey>(surveyPath);
+        var survey = GetResource<Resources.Survey>(surveyPath);
         var extraVars = sendData.ContainsKey("extra_vars")
             ? Yaml.DeserializeToDict(sendData["extra_vars"] as string ?? "")
             : new Dictionary<string, object?>();
@@ -171,10 +171,10 @@ public abstract class LaunchJobCommandBase : APICmdletBase
                 if (onlyRequired && !spec.Required)
                     continue;
 
-                var label = $"Survey {spec.QuestionName}";
+                var label = $"Survey {spec.Name}";
                 var key = $"extra_vars.{varName}";
                 var description = $"Variable: [{varName}]"
-                    + (string.IsNullOrEmpty(spec.QuestionDescription) ? "" : $", Description: {spec.QuestionDescription}");
+                    + (string.IsNullOrEmpty(spec.Description) ? "" : $", Description: {spec.Description}");
                 switch (spec.Type)
                 {
                     case SurveySpecType.Text:
