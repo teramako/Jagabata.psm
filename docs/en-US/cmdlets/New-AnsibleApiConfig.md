@@ -13,7 +13,7 @@ Create config file that should be used by this module.
 ## SYNTAX
 
 ```
-New-AnsibleApiConfig [-Uri] <Uri> [-SaveAs <FileInfo>] [<CommonParameters>]
+New-AnsibleApiConfig [-Uri] <Uri> [-SaveAs <FileInfo>] [-Lang <CultureInfo>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,6 +47,27 @@ http://localhost:8013/ 2024/08/06 7:42:02 C:\Users\*****\.ansible_api_config.jso
 Create new configuration file.
 
 ## PARAMETERS
+
+### -Lang
+Language information.
+Set in the HTTP request header (`Accept-Language`) primary, part of the API response will be localized.
+
+For example:
+
+- `-Lang ja-JP`
+- `-Lang $Host.CurrentCulture`
+
+```yaml
+Type: CultureInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -SaveAs
 Configuration file path
