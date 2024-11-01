@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Security;
@@ -22,8 +23,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, Position = 0)]
         public Uri? Uri { get; set; }
+
         [Parameter()]
         public FileInfo SaveAs { get; set; } = new FileInfo(ApiConfig.DefaultConfigPath);
+
+        [Parameter()]
+        public CultureInfo? Lang { get; set; }
 
         private const string banner = """
                  _                   _           _
@@ -69,7 +74,7 @@ namespace Jagabata.Cmdlets
                 WriteVerbose("Canceled.");
                 return;
             }
-            config = new ApiConfig(Uri, secureString);
+            config = new ApiConfig(Uri, secureString, Lang?.ToString());
         }
         protected override void EndProcessing()
         {
