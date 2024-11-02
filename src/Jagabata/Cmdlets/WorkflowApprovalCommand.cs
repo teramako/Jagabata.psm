@@ -55,13 +55,11 @@ namespace Jagabata.Cmdlets
     {
         protected abstract string Command { get; }
 
-        [Parameter(ValueFromPipelineByPropertyName = true, DontShow = true)]
-        [ValidateSet(nameof(ResourceType.WorkflowApproval))]
-        public ResourceType Type { get; set; } = ResourceType.WorkflowApproval;
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApproval])]
         public ulong Id { get; set; }
 
-        protected readonly HashSet<ulong> treatedIds = [];
+        private readonly HashSet<ulong> treatedIds = [];
 
         protected override void ProcessRecord()
         {
