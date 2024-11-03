@@ -40,6 +40,7 @@ namespace Jagabata
                     DefaultRequestVersion = HttpVersion.Version11,
                 };
                 _client.DefaultRequestHeaders.Add("Accept", "application/json");
+                _client.DefaultRequestHeaders.Add("Accept-Language", CreateAcceptLanguages(config.Lang));
                 var token = config.GetTokenString();
                 if (!string.IsNullOrEmpty(token))
                 {
@@ -73,12 +74,33 @@ namespace Jagabata
             }
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept-Language", CreateAcceptLanguages(config.Lang));
             var token = config.GetTokenString();
             if (!string.IsNullOrEmpty(token))
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
             }
         }
+
+        private static IEnumerable<string> CreateAcceptLanguages(string? primaryLanguage = null)
+        {
+            var q = 1.0;
+            if (string.IsNullOrEmpty(primaryLanguage) || primaryLanguage is "C" or "en" or "en-US")
+            {
+                yield return "en-US";
+            }
+            else
+            {
+                yield return primaryLanguage;
+                q -= 0.1;
+                yield return $"en-US;q={q}";
+            }
+            q -= 0.1;
+            yield return $"en;q={q}";
+            q -= 0.1;
+            yield return $"*;q={q}";
+        }
+
         private static async Task<RestAPIException> CreateException(HttpResponseMessage response, string contentType)
         {
             var msg1 = $"{response.StatusCode:d} ({response.ReasonPhrase}): ";

@@ -284,6 +284,7 @@
 - [Get-AnsibleSchedule](./cmdlets/Get-AnsibleSchedule.md)
 - [New-AnsibleSchedule](./cmdlets/New-AnsibleSchedule.md)
 - [Remove-AnsibleSchedule](./cmdlets/Remove-AnsibleSchedule.md)
+- [Show-AnsibleSchedule](./cmdlets/Show-AnsibleSchedule.md)
 - [Update-AnsibleSchedule](./cmdlets/Update-AnsibleSchedule.md)
 
 ## Setting

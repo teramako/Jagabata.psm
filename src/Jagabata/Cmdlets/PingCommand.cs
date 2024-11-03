@@ -7,7 +7,7 @@ namespace Jagabata.Cmdlets
     [OutputType([typeof(Ping)])]
     public class GetPingCommand : APICmdletBase
     {
-        const string Path = "/api/v2/ping/";
+        private const string Path = "/api/v2/ping/";
         protected override void EndProcessing()
         {
             var pong = GetResource<Ping>(Path);

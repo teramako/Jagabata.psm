@@ -12,7 +12,7 @@ namespace Jagabata.Resources
         ResourceType Type { get; }
     }
 
-    record struct Resource(ResourceType Type, ulong Id) : IResource;
+    public record struct Resource(ResourceType Type, ulong Id) : IResource;
 
     public interface IResource<TSummary> : IResource
     {

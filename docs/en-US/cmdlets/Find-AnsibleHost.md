@@ -28,8 +28,7 @@ Find-AnsibleHost [-Type] <ResourceType> [-Id] <UInt64> [-OnlyChildren] [-OrderBy
 ### PipelineInput
 ```
 Find-AnsibleHost [-Resource] <IResource> [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

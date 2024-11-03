@@ -13,8 +13,7 @@ Unregister a User from other resource.
 ## SYNTAX
 
 ```
-Unregister-AnsibleUser [-Id] <UInt64> [-From] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Unregister-AnsibleUser [-Id] <UInt64> [-From] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

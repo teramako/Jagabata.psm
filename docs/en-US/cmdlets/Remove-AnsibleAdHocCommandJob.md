@@ -13,8 +13,7 @@ Remove an AdHocCommand job.
 ## SYNTAX
 
 ```
-Remove-AnsibleAdHocCommandJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleAdHocCommandJob [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

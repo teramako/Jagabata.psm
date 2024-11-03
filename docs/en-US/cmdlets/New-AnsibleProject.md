@@ -24,8 +24,8 @@ New-AnsibleProject [-Local] -Name <String> [-Description <String>] -Organization
 New-AnsibleProject [-Git] -Name <String> [-Description <String>] -Organization <UInt64>
  [-DefaultEnvironment <UInt64>] [-SignatureValidationCredential <UInt64>] -ScmUrl <String>
  [-ScmBranch <String>] [-ScmRefspec <String>] [-Credential <UInt64>] [-ScmClean] [-ScmDeleteOnUpdate]
- [-ScmTrackSubmodules] [-ScmUpdateOnLaunch] [-AllowOverride] [-Timeout <Int32>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ScmTrackSubmodules] [-ScmUpdateOnLaunch] [-AllowOverride] [-Timeout <Int32>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Svn
@@ -33,16 +33,14 @@ New-AnsibleProject [-Git] -Name <String> [-Description <String>] -Organization <
 New-AnsibleProject [-Subversion] -Name <String> [-Description <String>] -Organization <UInt64>
  [-DefaultEnvironment <UInt64>] [-SignatureValidationCredential <UInt64>] -ScmUrl <String>
  [-ScmBranch <String>] [-Credential <UInt64>] [-ScmClean] [-ScmDeleteOnUpdate] [-ScmUpdateOnLaunch]
- [-AllowOverride] [-Timeout <Int32>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-AllowOverride] [-Timeout <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Insights
 ```
 New-AnsibleProject [-Insights] -Name <String> [-Description <String>] -Organization <UInt64>
  [-DefaultEnvironment <UInt64>] [-SignatureValidationCredential <UInt64>] -Credential <UInt64> [-ScmClean]
- [-ScmDeleteOnUpdate] [-ScmUpdateOnLaunch] [-Timeout <Int32>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-ScmDeleteOnUpdate] [-ScmUpdateOnLaunch] [-Timeout <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Archive

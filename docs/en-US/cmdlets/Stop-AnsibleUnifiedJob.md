@@ -14,14 +14,12 @@ Stop (cancel) a running job.
 
 ### AssociatedWith (Default)
 ```
-Stop-AnsibleUnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-Determine]
- [<CommonParameters>]
+Stop-AnsibleUnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-Determine] [<CommonParameters>]
 ```
 
 ### PipelineInput
 ```
-Stop-AnsibleUnifiedJob [-Job] <IResource> [-Determine]
- [<CommonParameters>]
+Stop-AnsibleUnifiedJob [-Job] <IResource> [-Determine] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

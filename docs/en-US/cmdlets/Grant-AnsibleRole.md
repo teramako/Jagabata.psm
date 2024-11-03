@@ -13,8 +13,7 @@ Grant Roles.
 ## SYNTAX
 
 ```
-Grant-AnsibleRole [-Roles] <IResource[]> [-To] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Grant-AnsibleRole [-Roles] <IResource[]> [-To] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

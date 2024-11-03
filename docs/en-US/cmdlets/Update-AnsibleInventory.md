@@ -14,8 +14,7 @@ Update an Inventory.
 
 ```
 Update-AnsibleInventory [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Variables <String>]
- [-HostFilter <String>] [-PreventInstanceGroupFallback <Boolean>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-HostFilter <String>] [-PreventInstanceGroupFallback <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

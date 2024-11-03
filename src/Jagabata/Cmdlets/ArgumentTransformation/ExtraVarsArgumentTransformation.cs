@@ -2,7 +2,7 @@ using System.Collections;
 using System.Management.Automation;
 using System.Text.Json;
 
-namespace Jagabata.Cmdlets
+namespace Jagabata.Cmdlets.ArgumentTransformation
 {
     public class ExtraVarsArgumentTransformationAttribute : ArgumentTransformationAttribute
     {

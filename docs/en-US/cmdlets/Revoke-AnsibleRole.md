@@ -13,8 +13,7 @@ Revoke Roles.
 ## SYNTAX
 
 ```
-Revoke-AnsibleRole [-Roles] <IResource[]> [-From] <IResource> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Revoke-AnsibleRole [-Roles] <IResource[]> [-From] <IResource> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

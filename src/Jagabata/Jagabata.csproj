@@ -6,7 +6,8 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Jagabata.psm</AssemblyName>
     <RootNamespace>Jagabata</RootNamespace>
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -52,6 +53,6 @@
       <ScriptLocation>../../docs/Make-Doc.ps1</ScriptLocation>
     </PropertyGroup>
     <Message Text="Update documents (using platyPS)" Importance="high" />
-    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { $(ScriptLocation) }&quot;" />
+    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { $(ScriptLocation) -Markdown }&quot;" />
   </Target>
 </Project>

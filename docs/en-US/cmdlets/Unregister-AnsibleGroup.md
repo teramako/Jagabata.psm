@@ -13,8 +13,7 @@ Unregister a Group from parent Group.
 ## SYNTAX
 
 ```
-Unregister-AnsibleGroup [-Id] <UInt64> [-From] <UInt64> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Unregister-AnsibleGroup [-Id] <UInt64> [-From] <UInt64> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

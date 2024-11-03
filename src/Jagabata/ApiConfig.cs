@@ -9,14 +9,18 @@ namespace Jagabata
     {
 
         [JsonConstructor]
-        public ApiConfig(Uri origin, SecureString token, DateTime? lastSaved) : this(origin, token)
+        public ApiConfig(Uri origin, SecureString token, DateTime? lastSaved, string? lang) : this(origin, token, lang)
         {
             LastSaved = lastSaved;
         }
-        public ApiConfig(Uri uri, SecureString token)
+        public ApiConfig(Uri uri, SecureString token, string? lang = null)
         {
             Origin = new Uri($"{uri.Scheme}://{uri.Authority}");
             Token = token;
+            if (!string.IsNullOrEmpty(lang))
+            {
+                Lang = lang;
+            }
         }
         public ApiConfig()
         {
@@ -42,6 +46,11 @@ namespace Jagabata
         public SecureString? Token { get; private set; }
         [JsonPropertyName("last_saved")]
         public DateTime? LastSaved { get; private set; }
+        /// <summary>
+        /// For the first directive of <c>Accept-Language</c> HTTP request header
+        /// </summary>
+        [JsonPropertyName("lang")]
+        public string? Lang { get; private set; }
         /// <summary>
         /// Save to or Loaded file
         /// </summary>
@@ -143,8 +152,9 @@ namespace Jagabata
                 }
             }
         }
-        const string ENV_CONFIG = "ANSIBLE_API_CONFIG";
-        const string DEFULT_CONFIG_NAME = ".ansible_api_config.json";
+
+        private const string ENV_CONFIG = "ANSIBLE_API_CONFIG";
+        private const string DEFULT_CONFIG_NAME = ".ansible_api_config.json";
 
         private User? _user = null;
         private ulong? _userId = null;
@@ -164,23 +174,25 @@ namespace Jagabata
 
             return _user;
         }
-        public ulong? UserId {
+        public ulong? UserId
+        {
             get
             {
                 if (_userId is null)
                     LoadUser(save: true);
                 return _userId;
             }
-            init { _userId = value; }
+            init => _userId = value;
         }
-        public string? UserName {
+        public string? UserName
+        {
             get
             {
                 if (string.IsNullOrEmpty(_userName))
                     LoadUser(save: true);
                 return _userName;
             }
-            init { _userName = value; }
+            init => _userName = value;
         }
 
         internal string? GetTokenString()

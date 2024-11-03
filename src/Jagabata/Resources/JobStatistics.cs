@@ -61,7 +61,7 @@ namespace Jagabata.Resources
         /// <c>[ UnixEpochTime(double), Count(uint) ]</c> &lt;=&gt;
         /// <see cref="Item">Item</see> Converter
         /// </summary>
-        class EpochCountConverter : JsonConverter<Item>
+        private class EpochCountConverter : JsonConverter<Item>
         {
             public override Item Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {

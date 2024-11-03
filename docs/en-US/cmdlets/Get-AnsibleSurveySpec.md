@@ -13,8 +13,7 @@ Retrieve Survey specifications.
 ## SYNTAX
 
 ```
-Get-AnsibleSurveySpec [-Type] <ResourceType> [-Id] <UInt64>
- [<CommonParameters>]
+Get-AnsibleSurveySpec [-Type] <ResourceType> [-Id] <UInt64> [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -14,8 +14,7 @@ Update a Credential.
 
 ```
 Update-AnsibleCredential [-Id] <UInt64> [-Name <String>] [-Description <String>] [-CredentialType <UInt64>]
- [-Inputs <IDictionary>] [-Organization <UInt64>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-Inputs <IDictionary>] [-Organization <UInt64>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

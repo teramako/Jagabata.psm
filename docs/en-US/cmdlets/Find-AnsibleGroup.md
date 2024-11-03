@@ -28,8 +28,7 @@ Find-AnsibleGroup [-Type] <ResourceType> [-Id] <UInt64> [-OnlyRoot] [-OnlyParnet
 ### PipelineInput
 ```
 Find-AnsibleGroup [-Resource] <IResource> [-OnlyRoot] [-OnlyParnets] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

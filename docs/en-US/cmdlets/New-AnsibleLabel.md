@@ -13,8 +13,7 @@ Create a Label.
 ## SYNTAX
 
 ```
-New-AnsibleLabel -Name <String> -Organization <UInt64> [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-AnsibleLabel -Name <String> -Organization <UInt64> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

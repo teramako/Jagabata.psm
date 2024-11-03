@@ -14,8 +14,8 @@ Create a NotificationTemplate.
 
 ```
 New-AnsibleNotificationTemplate [-Name] <String> [-Description <String>] -Organization <UInt64>
- -Type <NotificationType> [-Configuration <IDictionary>] [-Messages <IDictionary>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ -Type <NotificationType> [-Configuration <IDictionary>] [-Messages <IDictionary>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

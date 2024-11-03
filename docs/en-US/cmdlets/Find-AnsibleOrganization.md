@@ -15,8 +15,7 @@ Retrieve Organizations.
 ### All (Default)
 ```
 Find-AnsibleOrganization [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### User

@@ -15,15 +15,13 @@ Invoke (launch) an AdHocCommand and wait until the job is finished.
 ### Host
 ```
 Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Host] <Host> [-ModuleName] <String>
- [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check]
- [<CommonParameters>]
+ [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check] [<CommonParameters>]
 ```
 
 ### Group
 ```
 Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Group] <Group> [-ModuleName] <String>
- [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check]
- [<CommonParameters>]
+ [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check] [<CommonParameters>]
 ```
 
 ### Inventory

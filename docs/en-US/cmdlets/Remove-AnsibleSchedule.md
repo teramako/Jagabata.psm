@@ -13,8 +13,7 @@ Remove a Schedule.
 ## SYNTAX
 
 ```
-Remove-AnsibleSchedule [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleSchedule [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

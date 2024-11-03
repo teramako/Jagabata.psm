@@ -13,8 +13,7 @@ Register a Host to a Group.
 ## SYNTAX
 
 ```
-Register-AnsibleHost [-Id] <UInt64> [-To] <UInt64> [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Register-AnsibleHost [-Id] <UInt64> [-To] <UInt64> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

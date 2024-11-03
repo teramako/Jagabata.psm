@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Security;
@@ -22,16 +23,20 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, Position = 0)]
         public Uri? Uri { get; set; }
+
         [Parameter()]
         public FileInfo SaveAs { get; set; } = new FileInfo(ApiConfig.DefaultConfigPath);
 
-        const string banner = """
-                _        _    ____
-               / \      / \  |  _ \       _ __  ___ _ __ ___
-              / _ \    / _ \ | |_) |     | '_ \/ __| '_ ` _ \
-             / ___ \  / ___ \|  __/   _  | |_) \__ \ | | | | |
-            /_/   \_\/_/   \_\_|     (_) | .__/|___/_| |_| |_|
-                                         |_|
+        [Parameter()]
+        public CultureInfo? Lang { get; set; }
+
+        private const string banner = """
+                 _                   _           _
+                | | __ _  __ _  __ _| |__   __ _| |_ __ _   _ __  ___ _ __ ___
+             _  | |/ _` |/ _` |/ _` | '_ \ / _` | __/ _` | | '_ \/ __| '_ ` _ \
+            | |_| | (_| | (_| | (_| | |_) | (_| | || (_| |_| |_) \__ \ | | | | |
+             \___/ \__,_|\__, |\__,_|_.__/ \__,_|\__\__,_(_) .__/|___/_| |_| |_|
+                         |___/                             |_|
 
             """;
         private ApiConfig? config = null;
@@ -69,7 +74,7 @@ namespace Jagabata.Cmdlets
                 WriteVerbose("Canceled.");
                 return;
             }
-            config = new ApiConfig(Uri, secureString);
+            config = new ApiConfig(Uri, secureString, Lang?.ToString());
         }
         protected override void EndProcessing()
         {

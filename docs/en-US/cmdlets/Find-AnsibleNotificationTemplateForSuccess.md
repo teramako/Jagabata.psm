@@ -22,8 +22,7 @@ Find-AnsibleNotificationTemplateForSuccess [-Type] <ResourceType> [-Id] <UInt64>
 ### PipelineInput
 ```
 Find-AnsibleNotificationTemplateForSuccess [-OrderBy <String[]>] [-Resource] <IResource> [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

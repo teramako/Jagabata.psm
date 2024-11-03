@@ -14,8 +14,7 @@ Create a Host.
 
 ```
 New-AnsibleHost [-Inventory] <UInt64> [-Name] <String> [-Description <String>] [-InstanceId <String>]
- [-Variables <String>] [-Disabled] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-Variables <String>] [-Disabled] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -14,8 +14,7 @@ Retrieve CredentialTypes.
 
 ```
 Find-AnsibleCredentialType [-Kind <CredentialTypeKind[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

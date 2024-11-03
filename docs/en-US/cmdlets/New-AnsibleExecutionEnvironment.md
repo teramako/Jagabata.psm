@@ -14,8 +14,7 @@ Create an ExecutionEnvironment.
 
 ```
 New-AnsibleExecutionEnvironment -Name <String> [-Description <String>] -Image <String> [-Organization <UInt64>]
- [-Credential <UInt64>] [-Pull <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-Credential <UInt64>] [-Pull <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

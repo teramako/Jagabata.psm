@@ -14,8 +14,7 @@ Update an ExecutionEnvironment.
 
 ```
 Update-AnsibleExecutionEnvironment [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Image <String>]
- [-Organization <UInt64>] [-Credential <UInt64>] [-Pull <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Organization <UInt64>] [-Credential <UInt64>] [-Pull <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -13,8 +13,7 @@ Remove a Team
 ## SYNTAX
 
 ```
-Remove-AnsibleTeam [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleTeam [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

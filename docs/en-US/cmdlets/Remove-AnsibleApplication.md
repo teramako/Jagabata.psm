@@ -13,8 +13,7 @@ Remove an Application.
 ## SYNTAX
 
 ```
-Remove-AnsibleApplication [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleApplication [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

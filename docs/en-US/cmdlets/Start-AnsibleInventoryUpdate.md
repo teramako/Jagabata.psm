@@ -29,8 +29,7 @@ Start-AnsibleInventoryUpdate [-Source] <IResource> [<CommonParameters>]
 
 ### CheckResource
 ```
-Start-AnsibleInventoryUpdate [-Source] <IResource> [-Check]
- [<CommonParameters>]
+Start-AnsibleInventoryUpdate [-Source] <IResource> [-Check] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -13,8 +13,8 @@ Update a Label.
 ## SYNTAX
 
 ```
-Update-AnsibleLabel [-Id] <UInt64> [-Name <String>] [-Organization <UInt64>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-AnsibleLabel [-Id] <UInt64> [-Name <String>] [-Organization <UInt64>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

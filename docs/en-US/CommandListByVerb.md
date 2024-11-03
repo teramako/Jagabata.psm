@@ -199,6 +199,10 @@
 
 - [Revoke-AnsibleRole](./cmdlets/Revoke-AnsibleRole.md)
 
+## Show
+
+- [Show-AnsibleSchedule](./cmdlets/Show-AnsibleSchedule.md)
+
 ## Start
 
 - [Start-AnsibleAdHocCommand](./cmdlets/Start-AnsibleAdHocCommand.md)

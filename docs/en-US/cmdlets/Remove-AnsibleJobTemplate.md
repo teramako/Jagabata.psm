@@ -13,8 +13,7 @@ Remove a JobTemplate.
 ## SYNTAX
 
 ```
-Remove-AnsibleJobTemplate [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleJobTemplate [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

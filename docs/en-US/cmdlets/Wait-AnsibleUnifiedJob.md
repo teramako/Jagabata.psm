@@ -20,8 +20,7 @@ Wait-AnsibleUnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-IntervalSeconds <
 
 ### PipelineInput
 ```
-Wait-AnsibleUnifiedJob [-Job] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog]
- [<CommonParameters>]
+Wait-AnsibleUnifiedJob [-Job] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

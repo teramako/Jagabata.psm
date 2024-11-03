@@ -13,8 +13,8 @@ Update an AccessToken.
 ## SYNTAX
 
 ```
-Update-AnsibleToken [-Id] <UInt64> [-Description <String>] [-Scope <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-AnsibleToken [-Id] <UInt64> [-Description <String>] [-Scope <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

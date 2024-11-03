@@ -13,8 +13,7 @@ Remove an Inventory.
 ## SYNTAX
 
 ```
-Remove-AnsibleInventory [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleInventory [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

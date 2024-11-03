@@ -13,8 +13,7 @@ Remove a NotificationTemplate.
 ## SYNTAX
 
 ```
-Remove-AnsibleNotificationTemplate [-Id] <UInt64> [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AnsibleNotificationTemplate [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

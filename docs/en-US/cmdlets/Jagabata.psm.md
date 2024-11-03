@@ -500,6 +500,9 @@ Remove a WorkflowJobTemplateNode.
 ### [Revoke-AnsibleRole](Revoke-AnsibleRole.md)
 Revoke Roles.
 
+### [Show-AnsibleSchedule](Show-AnsibleSchedule.md)
+Preview scheduled datetimes
+
 ### [Start-AnsibleAdHocCommand](Start-AnsibleAdHocCommand.md)
 Invoke (launch) an AdHocCommand.
 

@@ -14,14 +14,14 @@ Create an AccessToken.
 
 ### Application (Default)
 ```
-New-AnsibleToken [-Application] <UInt64> [-Scope <String>] [-Description <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AnsibleToken [-Application] <UInt64> [-Scope <String>] [-Description <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### User
 ```
-New-AnsibleToken [-ForMe] [[-Application] <UInt64>] [-Scope <String>] [-Description <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AnsibleToken [-ForMe] [[-Application] <UInt64>] [-Scope <String>] [-Description <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

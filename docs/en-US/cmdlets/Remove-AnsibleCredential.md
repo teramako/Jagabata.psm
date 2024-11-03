@@ -13,8 +13,7 @@ Remove a Credential.
 ## SYNTAX
 
 ```
-Remove-AnsibleCredential [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-AnsibleCredential [-Id] <UInt64> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

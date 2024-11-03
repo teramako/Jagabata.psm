@@ -378,6 +378,7 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Enable, "NotificationTemplate", SupportsShouldProcess = true)]
+    [OutputType(typeof(void))]
     public class EnableNotificationTemplateCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
@@ -442,6 +443,7 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsLifecycle.Disable, "NotificationTemplate", SupportsShouldProcess = true)]
+    [OutputType(typeof(void))]
     public class DisableNotificationTemplateCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]

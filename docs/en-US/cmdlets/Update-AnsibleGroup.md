@@ -13,8 +13,8 @@ Update a Group.
 ## SYNTAX
 
 ```
-Update-AnsibleGroup [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Variables <String>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-AnsibleGroup [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Variables <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

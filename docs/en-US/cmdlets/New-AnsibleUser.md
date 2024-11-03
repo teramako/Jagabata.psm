@@ -15,15 +15,13 @@ Create a User.
 ### Credential (Default)
 ```
 New-AnsibleUser [-Credential] <PSCredential> [-FirstName <String>] [-LastName <String>] [-Email <String>]
- [-IsSuperUser] [-IsSystemAuditor] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-IsSuperUser] [-IsSystemAuditor] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### SecureString
 ```
 New-AnsibleUser [-UserName] <String> [-Password <SecureString>] [-FirstName <String>] [-LastName <String>]
- [-Email <String>] [-IsSuperUser] [-IsSystemAuditor] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-Email <String>] [-IsSuperUser] [-IsSystemAuditor] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

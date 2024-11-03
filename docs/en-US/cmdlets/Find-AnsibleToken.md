@@ -15,8 +15,7 @@ Retrieve (OAuth2) AccessTokens.
 ### All (Default)
 ```
 Find-AnsibleToken [-TokenType <ETokenType>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### AssociatedWith
@@ -29,8 +28,7 @@ Find-AnsibleToken [-Type] <ResourceType> [-Id] <UInt64> [-TokenType <ETokenType>
 ### PipelineInput
 ```
 Find-AnsibleToken [-Resource] <IResource> [-TokenType <ETokenType>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
