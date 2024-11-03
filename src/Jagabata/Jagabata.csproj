@@ -53,6 +53,6 @@
       <ScriptLocation>../../docs/Make-Doc.ps1</ScriptLocation>
     </PropertyGroup>
     <Message Text="Update documents (using platyPS)" Importance="high" />
-    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { $(ScriptLocation) }&quot;" />
+    <Exec Command="$(PowerShellExe) -NoProfile -Command &quot;&amp; { $(ScriptLocation) -Markdown }&quot;" />
   </Target>
 </Project>

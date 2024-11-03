@@ -5,7 +5,9 @@ Create Documents with platyPS
 [CmdletBinding()]
 param(
     [string] $Locale = "en-US",
-    [switch] $New
+    [switch] $New,
+    [switch] $Markdown,
+    [switch] $ExternalHelp
 )
 Import-Module platyPS
 $moduleName = "Jagabata.psm"
@@ -169,54 +171,62 @@ function New-AboutHelp {
 if (-not (Test-Path -Path $OutputFolder -PathType Container)) {
     New-Item -Path $OutputFolder -ItemType Directory
     $New = $true
+    $Markdown = $true
 }
 
-if ($New) {
-    New-MarkdownAboutHelp -OutputFolder $OutputFolder -AboutName $module.Name
-    $NewParams = @{
-        Module = $moduleName;
-        OutputFolder = $OutputFolder;
-        AlphabeticParamsOrder = $true;
-        ExcludeDontShow = $true;
-        Encoding = $Utf8NoBomEncoding;
+
+if ($Markdown)
+{
+    if ($New) {
+        New-MarkdownAboutHelp -OutputFolder $OutputFolder -AboutName $module.Name
+        $NewParams = @{
+            Module = $moduleName;
+            OutputFolder = $OutputFolder;
+            AlphabeticParamsOrder = $true;
+            ExcludeDontShow = $true;
+            Encoding = $Utf8NoBomEncoding;
+        }
+        $resultFiles = New-MarkdownHelp @NewParams
+    } else {
+        $UpdateParams = @{
+            Path = $OutputFolder;
+            RefreshModulePage = $true;
+            AlphabeticParamsOrder = $true;
+            ExcludeDontShow = $true;
+            UpdateInputOutput = $false;
+            Encoding = $Utf8NoBomEncoding;
+        }
+        $resultFiles = Update-MarkdownHelpModule @UpdateParams
     }
-    $resultFiles = New-MarkdownHelp @NewParams
-} else {
-    $UpdateParams = @{
+
+    if ($resultFiles.Count -gt 0) {
+        Repair-PlatyPSMarkdown -Path $resultFiles
+    }
+
+    $moduleMarkdownFile = Join-Path $OutputFolder "$moduleName.md"
+    if (-not $IsWindows -and (Test-Path -Path $moduleMarkdownFile -PathType Leaf)) {
+        $content = (Get-Content -Path $moduleMarkdownFile -Raw).TrimEnd() -replace "`r?`n", "`n"
+        $content | Out-File -FilePath $moduleMarkdownFile -Encoding utf8NoBOM
+    }
+}
+
+if ($ExternalHelp)
+{
+    # $externalHelpDirPath = Join-Path $PSScriptRoot ..\out\$Locale
+    $externalHelpDirPath = Join-Path $module.ModuleBase $Locale
+        $externalHelpDir = if (-not (Test-Path -Path $externalHelpDirPath -PathType Container)) {
+            New-Item -Path $externalHelpDirPath -ItemType Directory
+        } else {
+            Get-Item -Path $externalHelpDirPath
+        }
+    $externalHelpParams = @{
         Path = $OutputFolder;
-        RefreshModulePage = $true;
-        AlphabeticParamsOrder = $true;
-        ExcludeDontShow = $true;
-        UpdateInputOutput = $false;
+        OutputPath = $externalHelpDir;
         Encoding = $Utf8NoBomEncoding;
+        Force = $true;
     }
-    $resultFiles = Update-MarkdownHelpModule @UpdateParams
-}
+    New-ExternalHelp @externalHelpParams
 
-if ($resultFiles.Count -gt 0) {
-    Repair-PlatyPSMarkdown -Path $resultFiles
+    Get-Item -Path $OutputFolder\about_*.md -Exclude "about_$ModuleName.md" |
+        New-AboutHelp -OutDir $externalHelpDir
 }
-
-$moduleMarkdownFile = Join-Path $OutputFolder "$moduleName.md"
-if (-not $IsWindows -and (Test-Path -Path $moduleMarkdownFile -PathType Leaf)) {
-    $content = (Get-Content -Path $moduleMarkdownFile -Raw).TrimEnd() -replace "`r?`n", "`n"
-    $content | Out-File -FilePath $moduleMarkdownFile -Encoding utf8NoBOM
-}
-
-# $externalHelpDirPath = Join-Path $PSScriptRoot ..\out\$Locale
-$externalHelpDirPath = Join-Path $module.ModuleBase $Locale
-$externalHelpDir = if (-not (Test-Path -Path $externalHelpDirPath -PathType Container)) {
-    New-Item -Path $externalHelpDirPath -ItemType Directory
-} else {
-    Get-Item -Path $externalHelpDirPath
-}
-$externalHelpParams = @{
-    Path = $OutputFolder;
-    OutputPath = $externalHelpDir;
-    Encoding = $Utf8NoBomEncoding;
-    Force = $true;
-}
-New-ExternalHelp @externalHelpParams
-
-Get-Item -Path $OutputFolder\about_*.md -Exclude "about_$ModuleName.md" |
-    New-AboutHelp -OutDir $externalHelpDir
