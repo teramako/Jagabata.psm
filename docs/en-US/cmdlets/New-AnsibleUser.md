@@ -47,14 +47,14 @@ Input UserName and Password via prompts.
 
 ### Example 2
 ```powershell
-PS C:\> New-AnsibleUser -Credential (Microsoft.PowerShell.Security\Get-AnsibleCredential -UserName user2)
+PS C:\> New-AnsibleUser -Credential (Get-Credential -UserName user2)
 
 PowerShell credential request
 Enter your credentials.
 Password for user user2: ********
 ```
 
-Input UserName and Password via `Microsoft.PowerShell.Security\Get-AnsibleCredential`.
+Input UserName and Password via `Microsoft.PowerShell.Security\Get-Credential`.
 
 ### Example 3
 ```powershell
@@ -71,7 +71,7 @@ Input Password via a prompt.
 ### -Credential
 Credential (UserName and Password)
 
-See: `Get-AnsibleHelp Microsoft.PowerShell.Security\Get-AnsibleCredential`.
+See: `Get-Help Get-Credential`.
 
 ```yaml
 Type: PSCredential
