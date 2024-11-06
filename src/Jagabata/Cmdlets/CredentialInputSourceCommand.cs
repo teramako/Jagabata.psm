@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -29,6 +30,8 @@ namespace Jagabata.Cmdlets
         public ulong Credential { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "description", "input_field_name",
+                                   "metadata", "target_credential", "source_credential"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
