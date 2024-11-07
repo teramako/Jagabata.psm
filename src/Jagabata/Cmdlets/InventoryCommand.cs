@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -45,6 +46,11 @@ namespace Jagabata.Cmdlets
         public InventoryKind Kind { get; set; } = InventoryKind.All;
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization", "kind",
+                                   "host_filter", "variables", "has_active_failures", "total_hosts",
+                                   "hosts_with_active_failures", "total_groups", "has_inventory_sources",
+                                   "total_inventory_sources", "inventory_sources_with_failures", "pending_deletion",
+                                   "prevent_instance_group_fallback", "created_by", "modified_by"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         public enum InventoryKind
