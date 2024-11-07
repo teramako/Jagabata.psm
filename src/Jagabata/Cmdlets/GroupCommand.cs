@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -60,6 +61,8 @@ namespace Jagabata.Cmdlets
         public SwitchParameter OnlyParnets { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "inventory", "variables",
+                                   "parents", "created_by", "modified_by", "children", "hosts"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
