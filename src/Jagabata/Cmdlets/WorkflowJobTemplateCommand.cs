@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Management.Automation;
@@ -32,6 +33,15 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "last_job_run",
+                                   "last_job_failed", "next_job_run", "status", "organization", "survey_enabled",
+                                   "allow_simultaneous", "ask_variables_on_launch", "inventory",
+                                   "ask_inventory_on_launch", "ask_scm_branch_on_launch", "ask_limit_on_launch",
+                                   "webhook_service", "webhook_credential", "ask_labels_on_launch",
+                                   "ask_skip_tags_on_launch", "ask_tags_on_launch", "notification_templates_error",
+                                   "notification_templates_success", "notification_templates_approvals",
+                                   "notification_templates_started", "inventory", "organization", "last_job",
+                                   "schedules", "created_by", "modified_by", "labels", "next_schedule"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
