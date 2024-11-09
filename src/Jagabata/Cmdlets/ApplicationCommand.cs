@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -38,6 +39,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "name", "description", "client_type", "redirect_uris",
+                                   "authorization_grant_type", "skip_authorization", "organization", "user"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

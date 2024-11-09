@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
 using System.Management.Automation;
@@ -64,6 +65,8 @@ namespace Jagabata.Cmdlets
         /// Only affected for an Organization
         /// </summary>
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
+                                   "credential_type", "managed", "created_by", "modified_by"])]
         public SwitchParameter Galaxy { get; set; }
 
         [Parameter()]

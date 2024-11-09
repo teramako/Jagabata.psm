@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Management.Automation;
@@ -66,6 +67,9 @@ namespace Jagabata.Cmdlets
         public string[]? Email { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
+                                   "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
+                                   "roles", "profile"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -133,6 +137,9 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
+                                   "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
+                                   "roles", "profile"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -207,7 +214,7 @@ namespace Jagabata.Cmdlets
                 _user = Credential.UserName;
                 _password = Credential.Password;
             }
-            else 
+            else
             {
                 _user = UserName;
                 if (Password is not null)

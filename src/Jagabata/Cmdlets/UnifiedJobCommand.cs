@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Collections.Specialized;
@@ -44,6 +45,11 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "unified_job_template",
+                                   "launch_type", "status", "execution_environment", "failed", "started", "finished",
+                                   "canceled_on", "elapsed", "job_explanation", "execution_node", "controller_node",
+                                   "work_unit_id", "notifications", "organization", "schedule", "created_by",
+                                   "modified_by", "credentials", "instance_group", "labels"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         private IEnumerable<ResultSet> GetResultSet(string path,

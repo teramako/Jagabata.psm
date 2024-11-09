@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
@@ -37,6 +38,9 @@ namespace Jagabata.Cmdlets
         public WorkflowJobNodeLinkState Linked { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "extra_data", "inventory", "execution_environment",
+                                   "workflow_job_template", "unified_job_template", "success_nodes", "failure_nodes",
+                                   "always_nodes", "all_parents_must_converge", "identifier", "instance_groups", "labels"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

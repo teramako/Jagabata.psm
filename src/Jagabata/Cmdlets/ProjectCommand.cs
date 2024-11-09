@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -42,6 +43,12 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "local_path", "scm_type",
+                                   "scm_url", "scm_branch", "scm_refspec", "scm_clean", "scm_track_submodules",
+                                   "scm_delete_on_update", "credential", "timeout", "scm_revision", "last_job_run",
+                                   "last_job_failed", "next_job_run", "status", "organization", "scm_update_on_launch",
+                                   "scm_update_cache_timeout", "allow_override", "default_environment",
+                                   "signature_validation_credential", "last_update_failed", "last_updated"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
