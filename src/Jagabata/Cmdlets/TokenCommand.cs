@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -48,6 +49,8 @@ namespace Jagabata.Cmdlets
         public ETokenType TokenType { get; set; } = ETokenType.Both;
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "description", "user",
+                                   "application", "expires", "scope"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         public enum ETokenType
