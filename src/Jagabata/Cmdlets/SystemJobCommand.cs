@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -29,6 +30,11 @@ namespace Jagabata.Cmdlets
         public string[]? Status { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "unified_job_template",
+                                   "launch_type", "status", "execution_environment", "failed", "started", "finished",
+                                   "canceled_on", "elapsed", "job_explanation", "execution_node", "work_unit_id",
+                                   "system_job_template", "job_type", "schedule", "notifications", "created_by",
+                                   "modified_by", "dependent_jobs", "labels", "instance_group"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 
