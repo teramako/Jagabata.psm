@@ -59,6 +59,10 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [Alias("Kind")]
+        public CredentialTypeKind[]? CredentialTypeKind { get; set; }
+
+        [Parameter()]
         [ArgumentCompletions("aim", "aws", "aws_secretsmanager_credential", "azure_kv", "azure_rm", "centrify_vault_kv",
                              "conjur", "controller", "galaxy_api_token", "gce", "github_token", "gitlab_token",
                              "gpg_public_key", "hashivault_kv", "hashivault_ssh", "insights", "kubernetes_bearer_token",
@@ -80,6 +84,10 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
+            if (CredentialTypeKind is not null)
+            {
+                Query.Add("credential_type__kind__in", string.Join(',', CredentialTypeKind));
+            }
             if (CredentialTypeNamespace is not null)
             {
                 Query.Add("credential_type__namespace__in", string.Join(',', CredentialTypeNamespace));

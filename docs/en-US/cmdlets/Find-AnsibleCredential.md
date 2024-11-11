@@ -14,23 +14,23 @@ Retrieve Credentials.
 
 ### All (Default)
 ```
-Find-AnsibleCredential [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-AnsibleCredential [-CredentialTypeKind <CredentialTypeKind[]>] [-CredentialTypeNamespace <String[]>]
+ [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
+ [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### AssociatedWith
 ```
-Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-CredentialTypeNamespace <String[]>] [-Galaxy]
- [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
- [-All] [<CommonParameters>]
+Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-CredentialTypeKind <CredentialTypeKind[]>]
+ [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### PipelineInput
 ```
-Find-AnsibleCredential [-Resource] <IResource> [-CredentialTypeNamespace <String[]>] [-Galaxy]
- [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
- [-All] [<CommonParameters>]
+Find-AnsibleCredential [-Resource] <IResource> [-CredentialTypeKind <CredentialTypeKind[]>]
+ [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,6 +104,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: 20
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialTypeKind
+Filter with CredentialType's `kind` field.
+This parameter is the same as `-Filter credential_type__kind__in=...`.
+
+```yaml
+Type: CredentialTypeKind[]
+Parameter Sets: (All)
+Aliases: Kind
+Accepted values: ssh, vault, net, scm, cloud, registry, token, insights, external, kubernetes, galaxy, cryptography
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
