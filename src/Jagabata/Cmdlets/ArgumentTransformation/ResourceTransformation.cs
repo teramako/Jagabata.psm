@@ -18,7 +18,7 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                     return TransformToId(inputData);
             }
         }
-        private IList<ulong> TransformList(IList list)
+        private List<ulong> TransformList(IList list)
         {
             var arr = new List<ulong>();
             foreach (var inputItem in list)
@@ -30,7 +30,9 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
         private ulong TransformToId(object inputData)
         {
             if (inputData is PSObject pso)
+            {
                 inputData = pso.BaseObject;
+            }
 
             switch (inputData)
             {
@@ -94,7 +96,9 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
         protected IResource TransformToResource(object inputData)
         {
             if (inputData is PSObject pso && pso.BaseObject is not PSCustomObject)
+            {
                 inputData = pso.BaseObject;
+            }
 
             (ResourceType Type, ulong Id) resourceData = (ResourceType.None, 0);
 
@@ -105,8 +109,11 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                 case IDictionary dict:
                     foreach (var key in dict.Keys)
                     {
-                        var strKey = key as string;
-                        if (strKey is null) continue;
+                        if (key is not string strKey)
+                        {
+                            continue;
+                        }
+
                         switch (strKey.ToLowerInvariant())
                         {
                             case "type":
@@ -123,7 +130,9 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                                 break;
                         }
                         if (resourceData.Id > 0 && resourceData.Type > 0)
+                        {
                             break;
+                        }
                     }
                     break;
                 case PSObject ps:
@@ -145,7 +154,9 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                                 break;
                         }
                         if (resourceData.Id > 0 && resourceData.Type > 0)
+                        {
                             break;
+                        }
                     }
                     break;
                 default:
@@ -172,7 +183,9 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                                     break;
                             }
                             if (resourceData.Id > 0 && resourceData.Type > 0)
+                            {
                                 break;
+                            }
                         }
                     }
                     break;
