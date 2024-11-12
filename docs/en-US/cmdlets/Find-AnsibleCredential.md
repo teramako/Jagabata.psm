@@ -14,22 +14,23 @@ Retrieve Credentials.
 
 ### All (Default)
 ```
-Find-AnsibleCredential [-Kind <String>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-AnsibleCredential [-CredentialTypeKind <CredentialTypeKind[]>] [-CredentialTypeNamespace <String[]>]
+ [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
+ [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### AssociatedWith
 ```
-Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-Kind <String>] [-Galaxy] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-CredentialTypeKind <CredentialTypeKind[]>]
+ [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### PipelineInput
 ```
-Find-AnsibleCredential [-Resource] <IResource> [-Kind <String>] [-Galaxy] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-AnsibleCredential [-Resource] <IResource> [-CredentialTypeKind <CredentialTypeKind[]>]
+ [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -107,6 +108,49 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -CredentialTypeKind
+Filter with CredentialType's `kind` field.
+This parameter is the same as `-Filter credential_type__kind__in=...`.
+
+```yaml
+Type: CredentialTypeKind[]
+Parameter Sets: (All)
+Aliases: Kind
+Accepted values: ssh, vault, net, scm, cloud, registry, token, insights, external, kubernetes, galaxy, cryptography
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialTypeNamespace
+Filter with `kind` field.
+This parameter is the same as `-Filter credential_type__namespace__in=...`.
+
+Examples.)
+`ssh`, `scm`, `vault`, `net`, `awx`, `openstack`, `vmware`, `satellite6`, `gce`, `azure_rm`,
+`github_token`, `gitlab_token`, `insights`, `rhv`, `controller`, `kubernetes_bearer_token`,
+`registry`, `galaxy_api_token`, `gpg_public_key`, `aim`, `aws_secretsmanager_credential`,
+`azure_kv`, `centrify_vault_kv`, `conjur`, `hashivault_kv`, `hashivault_ssh`, `thycotic_dsv`,
+`thycotic_tss`
+
+> [!NOTE]  
+> The `kind` field of a Credential corresponds to `namespace` field of a CredentialType.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Namespace
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Filter
 Filtering various fields.
 
@@ -156,31 +200,6 @@ Aliases:
 
 Required: True
 Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Kind
-Filter with `kind` field.
-
-Examples.)
-`ssh`, `scm`, `vault`, `net`, `awx`, `openstack`, `vmware`, `satellite6`, `gce`, `azure_rm`,
-`github_token`, `gitlab_token`, `insights`, `rhv`, `controller`, `kubernetes_bearer_token`,
-`registry`, `galaxy_api_token`, `gpg_public_key`, `aim`, `aws_secretsmanager_credential`,
-`azure_kv`, `centrify_vault_kv`, `conjur`, `hashivault_kv`, `hashivault_ssh`, `thycotic_dsv`,
-`thycotic_tss`
-
-> [!NOTE]  
-> The `kind` field of a Credential corresponds to `namespace` field of a CredentialType.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

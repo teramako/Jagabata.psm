@@ -59,7 +59,17 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        public string? Kind { get; set; }
+        [Alias("Kind")]
+        public CredentialTypeKind[]? CredentialTypeKind { get; set; }
+
+        [Parameter()]
+        [ArgumentCompletions("aim", "aws", "aws_secretsmanager_credential", "azure_kv", "azure_rm", "centrify_vault_kv",
+                             "conjur", "controller", "galaxy_api_token", "gce", "github_token", "gitlab_token",
+                             "gpg_public_key", "hashivault_kv", "hashivault_ssh", "insights", "kubernetes_bearer_token",
+                             "net", "openstack", "registry", "rhv", "satellite6", "scm", "ssh", "thycotic_dsv",
+                             "thycotic_tss", "vault", "vmware")]
+        [Alias("Namespace")]
+        public string[]? CredentialTypeNamespace { get; set; }
 
         /// <summary>
         /// Only affected for an Organization
@@ -74,9 +84,13 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Kind is not null)
+            if (CredentialTypeKind is not null)
             {
-                Query.Add("chain__credential_type__namespace__icontains", Kind);
+                Query.Add("credential_type__kind__in", string.Join(',', CredentialTypeKind));
+            }
+            if (CredentialTypeNamespace is not null)
+            {
+                Query.Add("credential_type__namespace__in", string.Join(',', CredentialTypeNamespace));
             }
             SetupCommonQuery();
         }
