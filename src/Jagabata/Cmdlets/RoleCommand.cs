@@ -33,7 +33,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.User,
                 ResourceType.Team
@@ -85,7 +85,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.InstanceGroup,
                 ResourceType.Organization,
