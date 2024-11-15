@@ -189,7 +189,8 @@ namespace Jagabata.Resources
                                              string? Format,
                                              bool Secret = false,
                                              bool Multiline = false,
-                                             string? Default = null)
+                                             string? Default = null,
+                                             bool AskAtRuntime = false)
         : CredentialInputField(Id, Label, Type, HelpText)
     {
         public override string ToString()
@@ -204,6 +205,7 @@ namespace Jagabata.Resources
             if (Format is not null) sb.Append($", Format = {Format}");
             if (Secret) sb.Append(", Secret = True");
             if (Multiline) sb.Append(", Multiline = True");
+            if (AskAtRuntime) sb.Append(", AskAtRuntime = True");
             if (HelpText is not null) sb.Append($", HelpText = {HelpText}");
             sb.Append(" }");
             return sb.ToString();
@@ -212,10 +214,14 @@ namespace Jagabata.Resources
 
     internal class CredentialInputFieldConverter : JsonConverter<CredentialInputField>
     {
-        public override CredentialInputField? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override CredentialInputField? Read(ref Utf8JsonReader reader,
+                                                   Type typeToConvert,
+                                                   JsonSerializerOptions options)
         {
-            (string id, string label, string? help_text, string[]? choices, string? format, string type, bool secret, bool multiline) =
-                ("", "", null, null, null, "string", false, false);
+            (
+             string id, string label, string? help_text, string[]? choices, string? format,
+             string type, bool secret, bool multiline, bool askAtRuntime
+            ) = ("", "", null, null, null, "string", false, false, false);
             string? defaultString = null;
             bool? defaultBool = null;
             while (reader.Read())
@@ -228,8 +234,8 @@ namespace Jagabata.Resources
                             return new CredentialBoolInputField(id, label, type, help_text, defaultBool);
                         case "string":
                         default:
-                            return new CredentialStringInputField(
-                                    id, label, type, help_text, choices, format, secret, multiline, defaultString);
+                            return new CredentialStringInputField(id, label, type, help_text, choices, format, secret,
+                                                                  multiline, defaultString, askAtRuntime);
                     }
                 }
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -263,6 +269,9 @@ namespace Jagabata.Resources
                         break;
                     case "type":
                         type = reader.GetString() ?? "string";
+                        break;
+                    case "ask_at_runtime":
+                        askAtRuntime = reader.GetBoolean();
                         break;
                     case "default":
                         switch (reader.TokenType)
@@ -320,6 +329,10 @@ namespace Jagabata.Resources
                     if (strField.Multiline)
                     {
                         writer.WriteBoolean("multiline", strField.Multiline);
+                    }
+                    if (strField.AskAtRuntime)
+                    {
+                        writer.WriteBoolean("ask_at_runtime", strField.AskAtRuntime);
                     }
                     break;
             }
