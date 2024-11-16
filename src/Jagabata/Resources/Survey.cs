@@ -46,11 +46,11 @@ namespace Jagabata.Resources
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public SurveySpecType Type { get; internal set; }
-        public bool Required { get; set; } = false;
+        public bool Required { get; set; }
         public string Variable { get; set; } = string.Empty;
         public virtual object? Default { get; set; }
         public virtual object Choices { get; set; } = string.Empty;
-        public int Min { get; set; } = 0;
+        public int Min { get; set; }
         public int Max { get; set; } = 1024;
         public bool NewQuestion { get; set; }
 
