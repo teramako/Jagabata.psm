@@ -107,7 +107,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Organization => $"{Organization.PATH}{Id}/" + (Galaxy ? "galaxy_credentials/" : "credentials/"),
                 ResourceType.User => $"{User.PATH}{Id}/credentials/",
                 ResourceType.Team => $"{Team.PATH}{Id}/credentials/",
-                ResourceType.CredentialType => $"{CredentialType.PATH}{Id}/credentials/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Id}/credentials/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/credentials/",
                 ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/credentials/",
@@ -208,7 +208,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Schedule,
                 ResourceType.WorkflowJobTemplateNode
         ])]
-        public IResource To { get; set; } = new Resource(0 ,0);
+        public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
         {

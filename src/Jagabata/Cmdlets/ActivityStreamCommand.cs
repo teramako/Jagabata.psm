@@ -96,7 +96,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Project => $"{Project.PATH}{Id}/activity_stream/",
                 ResourceType.Team => $"{Team.PATH}{Id}/activity_stream/",
                 ResourceType.Credential => $"{Credential.PATH}{Id}/activity_stream/",
-                ResourceType.CredentialType => $"{CredentialType.PATH}{Id}/activity_stream/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Id}/activity_stream/",
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/activity_stream/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/activity_stream/",
                 ResourceType.Group => $"{Group.PATH}{Id}/activity_stream/",

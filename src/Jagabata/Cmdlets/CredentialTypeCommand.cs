@@ -7,8 +7,8 @@ using System.Management.Automation;
 namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "CredentialType")]
-    [OutputType(typeof(CredentialType))]
-    public class GetCredentialTypeCommand : GetCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class GetCredentialTypeCommand : GetCommandBase<Resources.CredentialType>
     {
         protected override ResourceType AcceptType => ResourceType.CredentialType;
 
@@ -23,7 +23,7 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Find, "CredentialType")]
-    [OutputType(typeof(CredentialType))]
+    [OutputType(typeof(Resources.CredentialType))]
     public class FindCredentialTypeCommand : FindCommandBase
     {
         [Parameter()]
@@ -44,13 +44,13 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            Find<CredentialType>(CredentialType.PATH);
+            Find<Resources.CredentialType>(Resources.CredentialType.PATH);
         }
     }
 
     [Cmdlet(VerbsCommon.New, "CredentialType", SupportsShouldProcess = true)]
-    [OutputType(typeof(CredentialType))]
-    public class NewCredentialTypeCommand : NewCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class NewCredentialTypeCommand : NewCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -79,7 +79,9 @@ namespace Jagabata.Cmdlets
                 { "injectors", Injectors }
             };
             if (Description is not null)
+            {
                 sendData.Add("description", Description);
+            }
 
             return sendData;
         }
@@ -95,7 +97,7 @@ namespace Jagabata.Cmdlets
 
     [Cmdlet(VerbsCommon.Remove, "CredentialType", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
     [OutputType(typeof(void))]
-    public class RemoveCredentialTypeCommand : RemoveCommandBase<CredentialType>
+    public class RemoveCredentialTypeCommand : RemoveCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
@@ -108,8 +110,8 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsData.Update, "CredentialType", SupportsShouldProcess = true)]
-    [OutputType(typeof(CredentialType))]
-    public class UpdateCredentialTypeCommand : UpdateCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class UpdateCredentialTypeCommand : UpdateCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
