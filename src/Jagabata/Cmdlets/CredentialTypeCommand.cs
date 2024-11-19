@@ -1,5 +1,6 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
+using Jagabata.CredentialType;
 using Jagabata.Resources;
 using System.Collections;
 using System.Management.Automation;
@@ -63,8 +64,11 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string Kind { get; set; } = string.Empty;
 
-        [Parameter()]
-        public IDictionary Inputs { get; set; } = new Hashtable();
+        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
+        public IDictionary? Inputs { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
+        public FieldList? FieldList { get; set; }
 
         [Parameter()]
         public IDictionary Injectors { get; set; } = new Hashtable();
@@ -75,9 +79,17 @@ namespace Jagabata.Cmdlets
             {
                 { "name", Name },
                 { "kind", Kind },
-                { "inputs", Inputs },
                 { "injectors", Injectors }
             };
+            if (FieldList is not null)
+            {
+                sendData.Add("inputs", FieldList);
+            }
+            else if (Inputs is not null)
+            {
+                sendData.Add("inputs", Inputs);
+            }
+
             if (Description is not null)
             {
                 sendData.Add("description", Description);
@@ -128,8 +140,11 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string? Kind { get; set; }
 
-        [Parameter()]
+        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
         public IDictionary? Inputs { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
+        public FieldList? FieldList { get; set; }
 
         [Parameter()]
         public IDictionary? Injectors { get; set; }
@@ -145,6 +160,8 @@ namespace Jagabata.Cmdlets
                 sendData.Add("kind", Kind);
             if (Inputs is not null)
                 sendData.Add("inputs", Inputs);
+            else if (FieldList is not null)
+                sendData.Add("inputs", FieldList);
             if (Injectors is not null)
                 sendData.Add("injectors", Injectors);
 
