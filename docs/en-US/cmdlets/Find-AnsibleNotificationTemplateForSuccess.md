@@ -21,7 +21,7 @@ Find-AnsibleNotificationTemplateForSuccess [-Type] <ResourceType> [-Id] <UInt64>
 
 ### PipelineInput
 ```
-Find-AnsibleNotificationTemplateForSuccess [-OrderBy <String[]>] [-Resource] <IResource> [-Search <String[]>]
+Find-AnsibleNotificationTemplateForSuccess [-OrderBy <String[]>] -Resource <IResource> [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -167,7 +167,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

@@ -27,7 +27,7 @@ Find-AnsibleUser [-Type] <ResourceType> [-Id] <UInt64> [[-UserName] <String[]>] 
 
 ### PipelineInput
 ```
-Find-AnsibleUser [-Resource] <IResource> [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
+Find-AnsibleUser -Resource <IResource> [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
 ```
@@ -192,7 +192,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

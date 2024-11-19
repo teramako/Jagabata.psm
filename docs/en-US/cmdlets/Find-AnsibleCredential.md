@@ -28,7 +28,7 @@ Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-CredentialTypeKin
 
 ### PipelineInput
 ```
-Find-AnsibleCredential [-Resource] <IResource> [-CredentialTypeKind <CredentialTypeKind[]>]
+Find-AnsibleCredential -Resource <IResource> [-CredentialTypeKind <CredentialTypeKind[]>]
  [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
@@ -261,7 +261,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
