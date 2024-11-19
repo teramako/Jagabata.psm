@@ -12,9 +12,16 @@ Update a CredentialType.
 
 ## SYNTAX
 
+### InputsDict
 ```
 Update-AnsibleCredentialType [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Kind <String>]
- [-Inputs <IDictionary>] [-Injectors <IDictionary>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -Inputs <IDictionary> [-Injectors <IDictionary>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### FieldList
+```
+Update-AnsibleCredentialType [-Id] <UInt64> [-Name <String>] [-Description <String>] [-Kind <String>]
+ -FieldList <FieldList> [-Injectors <IDictionary>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,6 +48,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FieldList
+Custom `inputs` of CredentialType which defined by `Jagabata.CredentialType.FieldList`
+
+```yaml
+Type: FieldList
+Parameter Sets: FieldList
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -80,10 +102,10 @@ Accept wildcard characters: False
 
 ```yaml
 Type: IDictionary
-Parameter Sets: (All)
+Parameter Sets: InputsDict
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
