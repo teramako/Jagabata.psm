@@ -1,5 +1,6 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
+using Jagabata.CredentialType;
 using Jagabata.Resources;
 using System.Collections;
 using System.Management.Automation;
@@ -7,8 +8,8 @@ using System.Management.Automation;
 namespace Jagabata.Cmdlets
 {
     [Cmdlet(VerbsCommon.Get, "CredentialType")]
-    [OutputType(typeof(CredentialType))]
-    public class GetCredentialTypeCommand : GetCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class GetCredentialTypeCommand : GetCommandBase<Resources.CredentialType>
     {
         protected override ResourceType AcceptType => ResourceType.CredentialType;
 
@@ -23,7 +24,7 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsCommon.Find, "CredentialType")]
-    [OutputType(typeof(CredentialType))]
+    [OutputType(typeof(Resources.CredentialType))]
     public class FindCredentialTypeCommand : FindCommandBase
     {
         [Parameter()]
@@ -44,13 +45,13 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            Find<CredentialType>(CredentialType.PATH);
+            Find<Resources.CredentialType>(Resources.CredentialType.PATH);
         }
     }
 
     [Cmdlet(VerbsCommon.New, "CredentialType", SupportsShouldProcess = true)]
-    [OutputType(typeof(CredentialType))]
-    public class NewCredentialTypeCommand : NewCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class NewCredentialTypeCommand : NewCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; } = string.Empty;
@@ -63,8 +64,11 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string Kind { get; set; } = string.Empty;
 
-        [Parameter()]
-        public IDictionary Inputs { get; set; } = new Hashtable();
+        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
+        public IDictionary? Inputs { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
+        public FieldList? FieldList { get; set; }
 
         [Parameter()]
         public IDictionary Injectors { get; set; } = new Hashtable();
@@ -75,11 +79,21 @@ namespace Jagabata.Cmdlets
             {
                 { "name", Name },
                 { "kind", Kind },
-                { "inputs", Inputs },
                 { "injectors", Injectors }
             };
+            if (FieldList is not null)
+            {
+                sendData.Add("inputs", FieldList);
+            }
+            else if (Inputs is not null)
+            {
+                sendData.Add("inputs", Inputs);
+            }
+
             if (Description is not null)
+            {
                 sendData.Add("description", Description);
+            }
 
             return sendData;
         }
@@ -95,7 +109,7 @@ namespace Jagabata.Cmdlets
 
     [Cmdlet(VerbsCommon.Remove, "CredentialType", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High)]
     [OutputType(typeof(void))]
-    public class RemoveCredentialTypeCommand : RemoveCommandBase<CredentialType>
+    public class RemoveCredentialTypeCommand : RemoveCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
@@ -108,8 +122,8 @@ namespace Jagabata.Cmdlets
     }
 
     [Cmdlet(VerbsData.Update, "CredentialType", SupportsShouldProcess = true)]
-    [OutputType(typeof(CredentialType))]
-    public class UpdateCredentialTypeCommand : UpdateCommandBase<CredentialType>
+    [OutputType(typeof(Resources.CredentialType))]
+    public class UpdateCredentialTypeCommand : UpdateCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
@@ -126,8 +140,11 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string? Kind { get; set; }
 
-        [Parameter()]
+        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
         public IDictionary? Inputs { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
+        public FieldList? FieldList { get; set; }
 
         [Parameter()]
         public IDictionary? Injectors { get; set; }
@@ -143,6 +160,8 @@ namespace Jagabata.Cmdlets
                 sendData.Add("kind", Kind);
             if (Inputs is not null)
                 sendData.Add("inputs", Inputs);
+            else if (FieldList is not null)
+                sendData.Add("inputs", FieldList);
             if (Injectors is not null)
                 sendData.Add("injectors", Injectors);
 

@@ -918,10 +918,11 @@
       </TableControl>
     </View>
     <View>
-      <Name>CredentialInputField</Name>
+      <Name>CredentialTypeInputs</Name>
       <ViewSelectedBy>
-        <TypeName>Jagabata.Resources.CredentialStringInputField</TypeName>
-        <TypeName>Jagabata.Resources.CredentialBoolInputField</TypeName>
+        <TypeName>Jagabata.CredentialType.StringField</TypeName>
+        <TypeName>Jagabata.CredentialType.BoolField</TypeName>
+        <TypeName>Jagabata.CredentialType.ChoiceField</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -932,6 +933,9 @@
           </TableColumnHeader>
           <TableColumnHeader/><!-- Label -->
           <TableColumnHeader/><!-- Format -->
+          <TableColumnHeader><!-- Required -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
           <TableColumnHeader><!-- Secret -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
@@ -960,6 +964,9 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Format</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Required</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Secret</PropertyName>
