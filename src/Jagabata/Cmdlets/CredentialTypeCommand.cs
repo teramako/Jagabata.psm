@@ -64,11 +64,9 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string Kind { get; set; } = string.Empty;
 
-        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
-        public IDictionary? Inputs { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
-        public FieldList? FieldList { get; set; }
+        [Parameter()]
+        [DictionaryTransformation(typeof(FieldList))]
+        public IDictionary Inputs { get; set; } = new Hashtable();
 
         [Parameter()]
         public IDictionary Injectors { get; set; } = new Hashtable();
@@ -79,16 +77,9 @@ namespace Jagabata.Cmdlets
             {
                 { "name", Name },
                 { "kind", Kind },
+                { "inputs", Inputs },
                 { "injectors", Injectors }
             };
-            if (FieldList is not null)
-            {
-                sendData.Add("inputs", FieldList);
-            }
-            else if (Inputs is not null)
-            {
-                sendData.Add("inputs", Inputs);
-            }
 
             if (Description is not null)
             {
@@ -140,11 +131,9 @@ namespace Jagabata.Cmdlets
         [ValidateSet("net", "cloud")]
         public string? Kind { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "InputsDict")]
+        [Parameter()]
+        [DictionaryTransformation(typeof(FieldList))]
         public IDictionary? Inputs { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "FieldList")]
-        public FieldList? FieldList { get; set; }
 
         [Parameter()]
         public IDictionary? Injectors { get; set; }
@@ -160,8 +149,6 @@ namespace Jagabata.Cmdlets
                 sendData.Add("kind", Kind);
             if (Inputs is not null)
                 sendData.Add("inputs", Inputs);
-            else if (FieldList is not null)
-                sendData.Add("inputs", FieldList);
             if (Injectors is not null)
                 sendData.Add("injectors", Injectors);
 

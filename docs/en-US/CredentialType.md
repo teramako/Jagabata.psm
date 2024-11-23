@@ -78,7 +78,7 @@ $list.Add([Jagabata.CredentialType.StringField]@{ Id = "username"; Label = "User
 # Add password input field
 $list.Add([Jagabata.CredentialType.SecretField]@{ Id = "password"; Label = "Password"; Required = $true })
 
-New-AnsibleCredentialType -Name "Demo-1" -Kind cloud -FieldList $list -WhatIf
+New-AnsibleCredentialType -Name "Demo-1" -Kind cloud -Inputs $list -WhatIf
 ```
 
 ```Output
