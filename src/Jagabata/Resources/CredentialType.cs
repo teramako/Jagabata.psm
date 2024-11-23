@@ -69,7 +69,7 @@ namespace Jagabata.Resources
         string Description { get; }
         CredentialTypeKind Kind { get; }
         FieldList Inputs { get; }
-        Dictionary<string, Dictionary<string, string>> Injectors { get; }
+        Injectors Injectors { get; }
     }
 
     public class CredentialType(ulong id,
@@ -85,7 +85,7 @@ namespace Jagabata.Resources
                                 string nameSpace,
                                 bool managed,
                                 FieldList inputs,
-                                Dictionary<string, Dictionary<string, string>> injectors)
+                                Injectors injectors)
         : ICredentialType, IResource<CredentialType.Summary>
     {
         public const string PATH = "/api/v2/credential_types/";
@@ -134,6 +134,6 @@ namespace Jagabata.Resources
         public string Namespace { get; } = nameSpace;
         public bool Managed { get; } = managed;
         public FieldList Inputs { get; } = inputs;
-        public Dictionary<string, Dictionary<string, string>> Injectors { get; } = injectors;
+        public Injectors Injectors { get; } = injectors;
     }
 }
