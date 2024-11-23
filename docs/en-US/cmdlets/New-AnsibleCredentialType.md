@@ -12,15 +12,8 @@ Create a CredentialType.
 
 ## SYNTAX
 
-### InputsDict
 ```
-New-AnsibleCredentialType [-Name] <String> [-Description <String>] [-Kind] <String> -Inputs <IDictionary>
- [-Injectors <IDictionary>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### FieldList
-```
-New-AnsibleCredentialType [-Name] <String> [-Description <String>] [-Kind] <String> -FieldList <FieldList>
+New-AnsibleCredentialType [-Name] <String> [-Description <String>] [-Kind] <String> [-Inputs <IDictionary>]
  [-Injectors <IDictionary>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -56,21 +49,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -FieldList
-Custom `inputs` of CredentialType which defined by `Jagabata.CredentialType.FieldList`
-
-```yaml
-Type: FieldList
-Parameter Sets: FieldList
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Injectors
 
 ```yaml
@@ -86,13 +64,16 @@ Accept wildcard characters: False
 ```
 
 ### -Inputs
+Custom Credential Type Inputs object which raw Dictionary or `Jagabata.CredentialType.FieldList`.
+
+See: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CredentialType.md
 
 ```yaml
 Type: IDictionary
-Parameter Sets: InputsDict
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
