@@ -40,7 +40,7 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
     ///     </item>
     /// </list>
     /// </summary>
-    public class FilterArgumentTransformationAttribute : ArgumentTransformationAttribute
+    internal class FilterArgumentTransformationAttribute : ArgumentTransformationAttribute
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
