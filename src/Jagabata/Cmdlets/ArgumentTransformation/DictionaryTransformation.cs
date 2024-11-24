@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation;
 
-internal class DictionaryTransformation : ArgumentTransformationAttribute
+internal class DictionaryTransformationAttribute : ArgumentTransformationAttribute
 {
-    public DictionaryTransformation(params Type[] types)
+    public DictionaryTransformationAttribute(params Type[] types)
     {
         Types = types;
     }
@@ -33,6 +33,6 @@ internal class DictionaryTransformation : ArgumentTransformationAttribute
             return JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonElm, Json.DeserializeOptions)
                 ?? throw new ArgumentException("result is null");
         }
-        throw new ArgumentException($"{nameof(inputData)} should be one of [IDictionary, {string.Join(", ", Types.Select(t => t.Name))}]");
+        throw new ArgumentException($"{nameof(inputData)} should be one of [IDictionary, {string.Join(", ", Types.Select(static t => t.Name))}]");
     }
 }
