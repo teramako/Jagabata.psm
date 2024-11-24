@@ -69,6 +69,7 @@ namespace Jagabata.Cmdlets
         public IDictionary Inputs { get; set; } = new Hashtable();
 
         [Parameter()]
+        [DictionaryTransformation(typeof(Injectors))]
         public IDictionary Injectors { get; set; } = new Hashtable();
 
         protected override Dictionary<string, object> CreateSendData()
@@ -136,6 +137,7 @@ namespace Jagabata.Cmdlets
         public IDictionary? Inputs { get; set; }
 
         [Parameter()]
+        [DictionaryTransformation(typeof(Injectors))]
         public IDictionary? Injectors { get; set; }
 
         protected override Dictionary<string, object?> CreateSendData()
