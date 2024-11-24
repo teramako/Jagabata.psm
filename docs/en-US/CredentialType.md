@@ -1,6 +1,6 @@
 # Creating CredentialType
 
-To create CredentialType, we need to define `inputs` data.
+To create CredentialType, we need to define `inputs` and `injectors` data.
 
 ## Custom Credential Type Inputs
 
@@ -169,3 +169,33 @@ classDiagram
 
 ```
 This is only an overview diagram and differs from the actual class diagram.
+
+## Custom Credential Type Injectors
+
+The specification: https://github.com/ansible/awx/blob/devel/docs/credentials/custom_credential_types.md#defining-custom-credential-type-injectors
+
+### Classes
+
+Namespace: `Jagabata.CredentialType`:
+- `Jagabata.CredentialType.Injectors`: container for `env`, `extra_vars` or `file` properties
+
+```powershell
+$injectors = [Jagabata.CredentialType.Injectors]::new();
+$injectors.Env = @{
+  MY_CLOUD_INI_FILE = "{{ tower.filename }}"
+}
+$injectors.File = @{
+  template = @(
+    "[mycloud]",
+    "token={{ api_token }}"
+  ) -join "`n"
+}
+$injectors.ExtraVars = @{ 
+  some_extra_var = "{{ username }}:{{ password }}";
+  auth = @{
+    username = "{{ username }}";
+    password = "{{ password }}";
+  }
+}
+```
+
