@@ -50,6 +50,9 @@ Accept wildcard characters: False
 ```
 
 ### -Injectors
+Custom Credential Type Injectors object which raw Dictionary or `Jagabata.CredentialType.Injectors`.
+
+See: https://github.com/teramako/Jagabata.psm/blob/develop/docs/en-US/CredentialType.md
 
 ```yaml
 Type: IDictionary
