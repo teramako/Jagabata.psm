@@ -43,7 +43,7 @@ All commands of Jagabata.psm are added "Ansible" prefix by default, like `Get-Ho
 > ```powershell
 > Import-Module Jagabata.psm -Prefix Awx
 > ```
-> All commands of Jagabata.psm will be added "Awx" prefix instead of "Ansibl", like `Get-Host` -> `Get-AwxHost`.
+> All commands of Jagabata.psm will be added "Awx" prefix instead of "Ansible", like `Get-Host` -> `Get-AwxHost`.
 
 ### 3. Get Poersonal Access Token
 
