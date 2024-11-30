@@ -271,6 +271,7 @@ namespace Jagabata.Cmdlets
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
+            ws.Close();
             return fileInfo;
         }
         private FileInfo WriteLogAsText(DirectoryInfo dir, IUnifiedJob unifiedJob)
@@ -292,6 +293,7 @@ namespace Jagabata.Cmdlets
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
+            ws.Close();
             return fileInfo;
         }
         private FileInfo WriteLogAsHtml(DirectoryInfo dir, IUnifiedJob unifiedJob)
@@ -325,6 +327,7 @@ namespace Jagabata.Cmdlets
                     ws.WriteLine(htmlLog[..bodyTagEnd].Replace("<title>Type</title>", $"<title>{title}</title>"));
                     ws.WriteLine(jobInfo.ToString());
                     ws.WriteLine(htmlLog[bodyTagEnd..]);
+                    ws.Close();
                     return fileInfo;
                 }
             }
@@ -334,6 +337,7 @@ namespace Jagabata.Cmdlets
             ws.WriteLine(jobInfo.ToString());
             ws.WriteLine("<p>Ooops, Missing log data :(</p>");
             ws.WriteLine("</body></html>");
+            ws.Close();
             return fileInfo;
         }
         private static IEnumerable<(string Key, object? Value)> GetJobProperties(IUnifiedJob job)
