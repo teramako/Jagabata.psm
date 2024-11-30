@@ -1,6 +1,8 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Resources;
+using System.Collections;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Management.Automation;
 using System.Reflection;
 using System.Text;
@@ -267,7 +269,13 @@ namespace Jagabata.Cmdlets
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var prop in props)
             {
-                ws.WriteLine(format, prop.Name, prop.GetValue(systemJob));
+                var value = prop.GetValue(systemJob);
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                ws.WriteLine(format, prop.Name, val);
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
@@ -289,7 +297,12 @@ namespace Jagabata.Cmdlets
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var (key, value) in props)
             {
-                ws.WriteLine(format, key, value);
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                ws.WriteLine(format, key, val);
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
@@ -312,7 +325,13 @@ namespace Jagabata.Cmdlets
             jobInfo.AppendLine("<table style=\"font-size: 12px\"><caption>Job Info</caption>");
             foreach ((string key, object? value) in GetJobProperties(unifiedJob))
             {
-                jobInfo.AppendLine(string.Format(format, key, value));
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                jobInfo.AppendFormat(CultureInfo.CurrentCulture, format, key, HttpUtility.HtmlEncode(val))
+                       .AppendLine();
             }
             jobInfo.AppendLine("</table>");
 
