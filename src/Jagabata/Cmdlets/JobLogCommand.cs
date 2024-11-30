@@ -109,14 +109,18 @@ namespace Jagabata.Cmdlets
         protected override void BeginProcessing()
         {
             if (Id > 0 && Type > 0)
+            {
                 Job = new Resource(Type, Id);
+            }
 
             if (Download is null)
             {
                 if (CommandRuntime.Host?.UI.SupportsVirtualTerminal ?? false)
                 {
                     if (Format == JobLogFormat.NotSpecified)
+                    {
                         Format = JobLogFormat.ansi;
+                    }
                 }
                 else if (Format == JobLogFormat.ansi)
                 {
@@ -143,12 +147,14 @@ namespace Jagabata.Cmdlets
                 }
             }
             Query.Add("format", $"{Format}");
-            Query.Add("dark", (Dark ? "1" : "0"));
+            Query.Add("dark", Dark ? "1" : "0");
         }
         protected override void ProcessRecord()
         {
             if (Job.Id == 0)
+            {
                 return;
+            }
 
             switch (Job.Type)
             {
