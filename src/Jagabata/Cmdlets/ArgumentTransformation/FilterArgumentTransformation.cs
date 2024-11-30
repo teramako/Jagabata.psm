@@ -66,9 +66,10 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                         }
                         continue;
                     case string str:
-                        foreach (var f in GetQueries(HttpUtility.ParseQueryString(str)))
+                        foreach (var kv in str.Split('&'))
                         {
-                            queries.Add(f.GetKey(), f.GetValue());
+                            var filter = Filter.Parse(kv);
+                            queries.Add(filter.GetKey(), filter.GetValue());
                         }
                         continue;
                     default:
