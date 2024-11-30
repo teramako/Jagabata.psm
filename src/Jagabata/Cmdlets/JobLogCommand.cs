@@ -248,7 +248,7 @@ namespace Jagabata.Cmdlets
                         yield return WriteLogAsHtml(dir, unifiedJob);
                         break;
                     default:
-                        throw new Exception($"Unkown format: {Format}");
+                        throw new InvalidOperationException($"Unkown format: {Format}");
                 }
             }
         }
