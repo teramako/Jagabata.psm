@@ -313,6 +313,18 @@ namespace Jagabata.Cmdlets
 
             // Write Log to a fileStream as HTML
             using StreamWriter ws = new(fileStream, Encoding.UTF8);
+            if (htmlLog is not null)
+            {
+                int bodyTagStart = htmlLog.IndexOf("<body", StringComparison.Ordinal);
+                if (bodyTagStart > 0)
+                {
+                    int bodyTagEnd = htmlLog.IndexOf('>', bodyTagStart) + 1;
+                    ws.WriteLine(htmlLog[..bodyTagEnd].Replace("<title>Type</title>", $"<title>{title}</title>"));
+                    ws.WriteLine(jobInfo.ToString());
+                    ws.WriteLine(htmlLog[bodyTagEnd..]);
+                    return fileInfo;
+                }
+            }
             ws.WriteLine("<html>");
             ws.WriteLine($"<head><meta charset=\"utf-8\"><title>{title}</title></head>");
             ws.WriteLine("<body>");
