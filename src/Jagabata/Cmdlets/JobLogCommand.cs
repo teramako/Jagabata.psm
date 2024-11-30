@@ -256,7 +256,8 @@ namespace Jagabata.Cmdlets
         private FileInfo WriteSystemLog(DirectoryInfo dir, ISystemJob systemJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{systemJob.Id}.txt"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var txtLog = systemJob.ResultStdout;
             using var ws = new StreamWriter(fileStream, Encoding.UTF8);
 
@@ -275,7 +276,8 @@ namespace Jagabata.Cmdlets
         private FileInfo WriteLogAsText(DirectoryInfo dir, IUnifiedJob unifiedJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{unifiedJob.Id}.txt"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var path = GetStdoutPath(unifiedJob.Id, unifiedJob.Type);
             var txtLog = GetResource<string>($"{path}?{Query}", AcceptType.Text);
             using var ws = new StreamWriter(fileStream, Encoding.UTF8);
@@ -295,7 +297,8 @@ namespace Jagabata.Cmdlets
         private FileInfo WriteLogAsHtml(DirectoryInfo dir, IUnifiedJob unifiedJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{unifiedJob.Id}.html"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var path = GetStdoutPath(unifiedJob.Id, unifiedJob.Type);
             var htmlLog = GetResource<string>($"{path}?{Query}", AcceptType.Html);
             var title = $"{unifiedJob.Id} - {HttpUtility.HtmlEncode(unifiedJob.Name)}";
