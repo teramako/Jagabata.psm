@@ -377,6 +377,7 @@ namespace Jagabata.Cmdlets
                 IProjectUpdateJob => typeof(IProjectUpdateJob),
                 IInventoryUpdateJob => typeof(IInventoryUpdateJob),
                 ISystemJob => typeof(ISystemJob),
+                IAdHocCommand => typeof(IAdHocCommand),
                 _ => null
             };
             if (type is null)
