@@ -377,8 +377,12 @@ namespace Jagabata.Cmdlets
                 IProjectUpdateJob => typeof(IProjectUpdateJob),
                 IInventoryUpdateJob => typeof(IInventoryUpdateJob),
                 ISystemJob => typeof(ISystemJob),
-                _ => throw new NotFiniteNumberException()
+                _ => null
             };
+            if (type is null)
+            {
+                yield break;
+            }
             foreach (var prop in type.GetProperties())
             {
                 yield return (prop.Name, prop.GetValue(job));
