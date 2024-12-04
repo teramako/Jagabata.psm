@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using System.Management.Automation;
 using Jagabata.Resources;
 
@@ -38,13 +39,10 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
             {
                 case int:
                 case long:
-                    if (ulong.TryParse($"{inputData}", out var id))
-                        return id;
-                    throw new ArgumentException();
+                    return ulong.Parse($"{inputData}", CultureInfo.InvariantCulture);
                 case uint:
                 case ulong:
-                    id = (ulong)inputData;
-                    return id;
+                    return (ulong)inputData;
             }
 
             var resource = TransformToResource(inputData);
@@ -104,6 +102,8 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
 
             switch (inputData)
             {
+                case string str:
+                    return Resource.Parse(str, CultureInfo.InvariantCulture);
                 case IResource resource:
                     return Validate(resource);
                 case IDictionary dict:
