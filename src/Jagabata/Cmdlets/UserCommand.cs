@@ -3,7 +3,6 @@ using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Management.Automation;
-using System.Runtime.InteropServices;
 using System.Security;
 
 namespace Jagabata.Cmdlets
@@ -327,7 +326,6 @@ namespace Jagabata.Cmdlets
         protected override Dictionary<string, object?> CreateSendData()
         {
             var sendData = new Dictionary<string, object?>();
-            string dataDescription = string.Empty;
             if (!string.IsNullOrEmpty(UserName))
                 sendData.Add("username", UserName);
             if (FirstName is not null)
@@ -342,14 +340,7 @@ namespace Jagabata.Cmdlets
                 sendData.Add("is_system_auditor", IsSystemAuditor);
             if (Password is not null)
             {
-                var passwordString = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(Password));
-                Password.Dispose();
-                if (!string.IsNullOrEmpty(passwordString))
-                {
-                    sendData.Add("password", "***"); // dummy
-                    dataDescription = Json.Stringify(sendData, pretty: true);
-                    sendData["password"] = passwordString;
-                }
+                sendData.Add("password", Password);
             }
 
             return sendData;
