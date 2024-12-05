@@ -205,7 +205,7 @@ namespace Jagabata.Cmdlets
 
         private string? _user;
         private SecureString? _password;
-        private bool _passwordInputedFromPrompt = false;
+        private bool _passwordInputedFromPrompt;
 
         private void GatherUserAndPassword()
         {
