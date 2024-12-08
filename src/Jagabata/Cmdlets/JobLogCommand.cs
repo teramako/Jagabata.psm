@@ -1,6 +1,8 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Resources;
+using System.Collections;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Management.Automation;
 using System.Reflection;
 using System.Text;
@@ -107,14 +109,18 @@ namespace Jagabata.Cmdlets
         protected override void BeginProcessing()
         {
             if (Id > 0 && Type > 0)
+            {
                 Job = new Resource(Type, Id);
+            }
 
             if (Download is null)
             {
                 if (CommandRuntime.Host?.UI.SupportsVirtualTerminal ?? false)
                 {
                     if (Format == JobLogFormat.NotSpecified)
+                    {
                         Format = JobLogFormat.ansi;
+                    }
                 }
                 else if (Format == JobLogFormat.ansi)
                 {
@@ -141,12 +147,14 @@ namespace Jagabata.Cmdlets
                 }
             }
             Query.Add("format", $"{Format}");
-            Query.Add("dark", (Dark ? "1" : "0"));
+            Query.Add("dark", Dark ? "1" : "0");
         }
         protected override void ProcessRecord()
         {
             if (Job.Id == 0)
+            {
                 return;
+            }
 
             switch (Job.Type)
             {
@@ -218,7 +226,7 @@ namespace Jagabata.Cmdlets
         }
         private IEnumerable<FileInfo> DownloadLogs(DirectoryInfo dir)
         {
-            var unifiedJobsTask = UnifiedJob.Get(_jobs.Select(job => job.Id).ToArray());
+            var unifiedJobsTask = UnifiedJob.Get(_jobs.Select(static job => job.Id).ToArray());
             unifiedJobsTask.Wait();
             foreach (var unifiedJob in unifiedJobsTask.Result)
             {
@@ -240,7 +248,7 @@ namespace Jagabata.Cmdlets
                         yield return WriteLogAsHtml(dir, unifiedJob);
                         break;
                     default:
-                        throw new Exception($"Unkown format: {Format}");
+                        throw new InvalidOperationException($"Unkown format: {Format}");
                 }
             }
         }
@@ -256,46 +264,62 @@ namespace Jagabata.Cmdlets
         private FileInfo WriteSystemLog(DirectoryInfo dir, ISystemJob systemJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{systemJob.Id}.txt"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var txtLog = systemJob.ResultStdout;
             using var ws = new StreamWriter(fileStream, Encoding.UTF8);
 
             ws.WriteLine("-----");
             var props = typeof(ISystemJob).GetProperties(BindingFlags.Public);
-            var maxLength = props.Select(p => p.Name.Length).Max();
+            var maxLength = props.Select(static p => p.Name.Length).Max();
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var prop in props)
             {
-                ws.WriteLine(format, prop.Name, prop.GetValue(systemJob));
+                var value = prop.GetValue(systemJob);
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                ws.WriteLine(format, prop.Name, val);
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
+            ws.Close();
             return fileInfo;
         }
         private FileInfo WriteLogAsText(DirectoryInfo dir, IUnifiedJob unifiedJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{unifiedJob.Id}.txt"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var path = GetStdoutPath(unifiedJob.Id, unifiedJob.Type);
             var txtLog = GetResource<string>($"{path}?{Query}", AcceptType.Text);
             using var ws = new StreamWriter(fileStream, Encoding.UTF8);
 
             ws.WriteLine("-----");
             var props = GetJobProperties(unifiedJob).ToArray();
-            var maxLength = props.Select(tuple => tuple.Key.Length).Max();
+            var maxLength = props.Select(static tuple => tuple.Key.Length).Max();
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var (key, value) in props)
             {
-                ws.WriteLine(format, key, value);
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                ws.WriteLine(format, key, val);
             }
             ws.WriteLine("-----");
             ws.WriteLine(txtLog);
+            ws.Close();
             return fileInfo;
         }
         private FileInfo WriteLogAsHtml(DirectoryInfo dir, IUnifiedJob unifiedJob)
         {
             FileInfo fileInfo = new(Path.Combine(dir.FullName, $"{unifiedJob.Id}.html"));
-            using FileStream fileStream = fileInfo.OpenWrite();
+            using FileStream fileStream = fileInfo.Open(fileInfo.Exists ? FileMode.Truncate : FileMode.CreateNew,
+                                                        FileAccess.Write);
             var path = GetStdoutPath(unifiedJob.Id, unifiedJob.Type);
             var htmlLog = GetResource<string>($"{path}?{Query}", AcceptType.Html);
             var title = $"{unifiedJob.Id} - {HttpUtility.HtmlEncode(unifiedJob.Name)}";
@@ -307,18 +331,38 @@ namespace Jagabata.Cmdlets
             jobInfo.AppendLine("<table style=\"font-size: 12px\"><caption>Job Info</caption>");
             foreach ((string key, object? value) in GetJobProperties(unifiedJob))
             {
-                jobInfo.AppendLine(string.Format(format, key, value));
+                var val = value switch
+                {
+                    IList or IDictionary => Json.Stringify(value),
+                    _ => value
+                };
+                jobInfo.AppendFormat(CultureInfo.CurrentCulture, format, key, HttpUtility.HtmlEncode(val))
+                       .AppendLine();
             }
             jobInfo.AppendLine("</table>");
 
             // Write Log to a fileStream as HTML
             using StreamWriter ws = new(fileStream, Encoding.UTF8);
+            if (htmlLog is not null)
+            {
+                int bodyTagStart = htmlLog.IndexOf("<body", StringComparison.Ordinal);
+                if (bodyTagStart > 0)
+                {
+                    int bodyTagEnd = htmlLog.IndexOf('>', bodyTagStart) + 1;
+                    ws.WriteLine(htmlLog[..bodyTagEnd].Replace("<title>Type</title>", $"<title>{title}</title>"));
+                    ws.WriteLine(jobInfo.ToString());
+                    ws.WriteLine(htmlLog[bodyTagEnd..]);
+                    ws.Close();
+                    return fileInfo;
+                }
+            }
             ws.WriteLine("<html>");
             ws.WriteLine($"<head><meta charset=\"utf-8\"><title>{title}</title></head>");
             ws.WriteLine("<body>");
             ws.WriteLine(jobInfo.ToString());
             ws.WriteLine("<p>Ooops, Missing log data :(</p>");
             ws.WriteLine("</body></html>");
+            ws.Close();
             return fileInfo;
         }
         private static IEnumerable<(string Key, object? Value)> GetJobProperties(IUnifiedJob job)
@@ -333,8 +377,13 @@ namespace Jagabata.Cmdlets
                 IProjectUpdateJob => typeof(IProjectUpdateJob),
                 IInventoryUpdateJob => typeof(IInventoryUpdateJob),
                 ISystemJob => typeof(ISystemJob),
-                _ => throw new NotFiniteNumberException()
+                IAdHocCommand => typeof(IAdHocCommand),
+                _ => null
             };
+            if (type is null)
+            {
+                yield break;
+            }
             foreach (var prop in type.GetProperties())
             {
                 yield return (prop.Name, prop.GetValue(job));

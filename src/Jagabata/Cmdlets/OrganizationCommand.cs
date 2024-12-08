@@ -1,5 +1,6 @@
 using System.Management.Automation;
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets
@@ -35,6 +36,8 @@ namespace Jagabata.Cmdlets
         public string[]? Name { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description",
+                                   "max_hosts", "default_environment"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -96,7 +99,7 @@ namespace Jagabata.Cmdlets
             }
         }
     }
-    
+
     [Cmdlet(VerbsData.Update, "Organization", SupportsShouldProcess = true)]
     [OutputType(typeof(Organization))]
     public class UpdateOrganizationCommand : UpdateCommandBase<Organization>

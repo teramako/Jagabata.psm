@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -32,7 +33,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.User,
                 ResourceType.Team
@@ -40,6 +41,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "name", "description", "parents", "parents", "content_type",
+                                   "ancestors", "descendents", "children"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -82,7 +85,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.InstanceGroup,
                 ResourceType.Organization,
@@ -96,6 +99,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "name", "description", "parents", "parents", "content_type",
+                                   "ancestors", "descendents", "children"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

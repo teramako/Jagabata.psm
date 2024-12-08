@@ -1,3 +1,4 @@
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -27,6 +28,10 @@ namespace Jagabata.Cmdlets
         public ulong InstanceGroup { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "hostname", "uuid", "created", "modified", "last_seen", "health_check_started",
+                                   "last_health_check", "errors", "capacity_adjustment", "version", "capacity", "cpu",
+                                   "memory", "cpu_capacity", "mem_capacity", "enabled", "managed_by_policy", "node_type",
+                                   "node_state", "ip_address", "listener_port", "peers_from_control_nodes"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

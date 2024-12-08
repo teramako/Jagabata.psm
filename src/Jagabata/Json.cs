@@ -173,7 +173,25 @@ namespace Jagabata
 
             public override void Write(Utf8JsonWriter writer, RelatedDictionary value, JsonSerializerOptions options)
             {
-                JsonSerializer.Serialize(writer, value, options);
+                writer.WriteStartObject();
+                foreach (var kv in value)
+                {
+                    writer.WritePropertyName(kv.Key);
+                    if (kv.Value is IList list)
+                    {
+                        writer.WriteStartArray();
+                        foreach (var item in list)
+                        {
+                            writer.WriteStringValue($"{item}");
+                        }
+                        writer.WriteEndArray();
+                    }
+                    else
+                    {
+                        writer.WriteStringValue($"{kv.Value}");
+                    }
+                }
+                writer.WriteEndObject();
             }
         }
         /// <summary>

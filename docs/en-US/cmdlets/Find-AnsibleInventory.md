@@ -27,9 +27,8 @@ Find-AnsibleInventory [-Type] <ResourceType> [-Id] <UInt64> [-Kind <InventoryKin
 
 ### PipelineInput
 ```
-Find-AnsibleInventory [-Resource] <IResource> [-Kind <InventoryKind>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+Find-AnsibleInventory -Resource <IResource> [-Kind <InventoryKind>] [-OrderBy <String[]>] [-Search <String[]>]
+ [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -189,7 +188,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

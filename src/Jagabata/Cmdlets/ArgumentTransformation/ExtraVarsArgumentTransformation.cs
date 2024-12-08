@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation
 {
-    public class ExtraVarsArgumentTransformationAttribute : ArgumentTransformationAttribute
+    internal class ExtraVarsArgumentTransformationAttribute : ArgumentTransformationAttribute
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {

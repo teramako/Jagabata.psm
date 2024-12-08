@@ -46,11 +46,11 @@ namespace Jagabata.Resources
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public SurveySpecType Type { get; internal set; }
-        public bool Required { get; set; } = false;
+        public bool Required { get; set; }
         public string Variable { get; set; } = string.Empty;
         public virtual object? Default { get; set; }
         public virtual object Choices { get; set; } = string.Empty;
-        public int Min { get; set; } = 0;
+        public int Min { get; set; }
         public int Max { get; set; } = 1024;
         public bool NewQuestion { get; set; }
 
@@ -81,16 +81,22 @@ namespace Jagabata.Resources
                 {
                     case "max":
                         if (reader.TryGetInt32(out int max))
+                        {
                             spec.Max = max;
+                        }
                         break;
                     case "min":
                         if (reader.TryGetInt32(out int min))
+                        {
                             spec.Min = min;
+                        }
                         break;
                     case "type":
                         var typeName = reader.GetString();
                         if (Enum.TryParse<SurveySpecType>(typeName, true, out var type))
+                        {
                             spec.Type = type;
+                        }
                         break;
                     case "choices":
                         switch (reader.TokenType)
@@ -110,9 +116,13 @@ namespace Jagabata.Resources
                         {
                             case JsonTokenType.Number:
                                 if (reader.TryGetInt32(out var defaultInt))
+                                {
                                     spec.Default = defaultInt;
+                                }
                                 else if (reader.TryGetSingle(out var defaultFloat))
+                                {
                                     spec.Default = defaultFloat;
+                                }
                                 break;
                             case JsonTokenType.String:
                             default:
@@ -164,7 +174,10 @@ namespace Jagabata.Resources
             {
                 writer.WritePropertyName("choices");
                 writer.WriteStartArray();
-                foreach (var item in list) writer.WriteStringValue(item.ToString());
+                foreach (var item in list)
+                {
+                    writer.WriteStringValue(item.ToString());
+                }
                 writer.WriteEndArray();
             }
             else

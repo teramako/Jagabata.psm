@@ -26,7 +26,7 @@ Find-AnsibleRole [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-S
 
 ### PipelineInput
 ```
-Find-AnsibleRole [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleRole -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -169,7 +169,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

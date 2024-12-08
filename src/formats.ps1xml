@@ -918,6 +918,80 @@
       </TableControl>
     </View>
     <View>
+      <Name>CredentialTypeInputs</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.CredentialType.StringField</TypeName>
+        <TypeName>Jagabata.CredentialType.BoolField</TypeName>
+        <TypeName>Jagabata.CredentialType.ChoiceField</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <AutoSize/>
+        <TableHeaders>
+          <TableColumnHeader/><!-- Id -->
+          <TableColumnHeader><!-- Type -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Label -->
+          <TableColumnHeader/><!-- Format -->
+          <TableColumnHeader><!-- Required -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Secret -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Mutiline -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Default -->
+          <TableColumnHeader/><!-- Choices -->
+          <TableColumnHeader><!-- AskAtRuntime -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- HelpText -->
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap>true</Wrap>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Type</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Label</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Format</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Required</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Secret</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Multiline</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Default</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Choices</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AskAtRuntime</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>HelpText</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>Inventory</Name>
       <ViewSelectedBy>
         <TypeName>Jagabata.Resources.Inventory</TypeName>

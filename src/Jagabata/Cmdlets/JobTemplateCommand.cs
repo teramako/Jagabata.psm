@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Management.Automation;
@@ -37,7 +38,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Organization,
                 ResourceType.Inventory
@@ -48,6 +49,17 @@ namespace Jagabata.Cmdlets
         public string[]? Name { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "job_type", "inventory", "project",
+                                   "playbook", "scm_branch", "forks", "limit", "verbosity", "job_tags", "force_handlers",
+                                   "skip_tags", "start_at_task", "timeout", "use_fact_cache", "organization", "last_job_run",
+                                   "last_job_failed", "next_job_run", "status", "execution_environment", "ask_scm_branch_on_launch",
+                                   "ask_diff_mode_on_launch", "ask_variables_on_launch", "ask_limit_on_launch", "ask_tags_on_launch",
+                                   "ask_skip_tags_on_launch", "ask_job_type_on_launch", "ask_verbosity_on_launch",
+                                   "ask_inventory_on_launch", "ask_credential_on_launch", "ask_execution_environment_on_launch",
+                                   "ask_labels_on_launch", "ask_forks_on_launch", "ask_job_slice_count_on_launch",
+                                   "ask_timeout_on_launch", "ask_instance_groups_on_launch", "survey_enabled", "become_enabled",
+                                   "diff_mode", "allow_simultaneous", "custom_virtualenv", "job_slice_count", "webhook_service",
+                                   "webhook_credential", "prevent_instance_group_fallback"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

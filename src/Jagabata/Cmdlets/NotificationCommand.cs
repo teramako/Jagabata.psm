@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -37,7 +38,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.NotificationTemplate,
                 ResourceType.Job,
@@ -50,6 +51,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "notification_template", "error", "status",
+                                   "notifications_sent", "notification_type", "recipients", "subject", "body"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

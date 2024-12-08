@@ -26,7 +26,7 @@ Find-AnsibleInventorySource [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <Str
 
 ### PipelineVariable
 ```
-Find-AnsibleInventorySource [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleInventorySource -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -173,7 +173,7 @@ Parameter Sets: PipelineVariable
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

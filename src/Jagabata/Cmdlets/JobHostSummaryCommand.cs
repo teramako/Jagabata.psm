@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -29,7 +30,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Job,
                 ResourceType.Host,
@@ -38,6 +39,9 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "job", "host", "constructed_host", "host_name",
+                                   "changed", "dark", "failures", "ok", "processed", "skipped", "failed",
+                                   "ignored", "rescued"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void ProcessRecord()

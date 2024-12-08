@@ -20,7 +20,7 @@ Find-AnsibleJobHostSummary [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <Stri
 
 ### PipelineInput
 ```
-Find-AnsibleJobHostSummary [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleJobHostSummary -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -166,7 +166,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

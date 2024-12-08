@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -28,7 +29,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.JobTemplate,
                 ResourceType.WorkflowApprovalTemplate
@@ -47,6 +48,13 @@ namespace Jagabata.Cmdlets
         public string[]? LaunchType { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "unified_job_template",
+                                   "launch_type", "status", "failed", "started", "finished", "canceled_on",
+                                   "elapsed", "job_explanation", "work_unit_id", "workflow_job_template",
+                                   "allow_simultaneous", "job_template", "is_sliced_job", "inventory",
+                                   "webhook_service", "webhook_credential", "webhook_guid", "notifications",
+                                   "unified_job_node", "workflow_job_template", "organization", "schedule",
+                                   "created_by", "modified_by", "instance_group", "labels"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

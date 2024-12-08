@@ -1,8 +1,8 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
 using System.Management.Automation;
-using System.Runtime.InteropServices;
 using System.Security;
 
 namespace Jagabata.Cmdlets
@@ -50,7 +50,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Organization,
                 ResourceType.Team,
@@ -66,6 +66,9 @@ namespace Jagabata.Cmdlets
         public string[]? Email { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
+                                   "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
+                                   "roles", "profile"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -118,7 +121,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.InstanceGroup,
                 ResourceType.Organization,
@@ -133,6 +136,9 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
+                                   "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
+                                   "roles", "profile"])]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -198,7 +204,7 @@ namespace Jagabata.Cmdlets
 
         private string? _user;
         private SecureString? _password;
-        private bool _passwordInputedFromPrompt = false;
+        private bool _passwordInputedFromPrompt;
 
         private void GatherUserAndPassword()
         {
@@ -207,7 +213,7 @@ namespace Jagabata.Cmdlets
                 _user = Credential.UserName;
                 _password = Credential.Password;
             }
-            else 
+            else
             {
                 _user = UserName;
                 if (Password is not null)
@@ -320,7 +326,6 @@ namespace Jagabata.Cmdlets
         protected override Dictionary<string, object?> CreateSendData()
         {
             var sendData = new Dictionary<string, object?>();
-            string dataDescription = string.Empty;
             if (!string.IsNullOrEmpty(UserName))
                 sendData.Add("username", UserName);
             if (FirstName is not null)
@@ -335,14 +340,7 @@ namespace Jagabata.Cmdlets
                 sendData.Add("is_system_auditor", IsSystemAuditor);
             if (Password is not null)
             {
-                var passwordString = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(Password));
-                Password.Dispose();
-                if (!string.IsNullOrEmpty(passwordString))
-                {
-                    sendData.Add("password", "***"); // dummy
-                    dataDescription = Json.Stringify(sendData, pretty: true);
-                    sendData["password"] = passwordString;
-                }
+                sendData.Add("password", Password);
             }
 
             return sendData;

@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -28,7 +29,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.ProjectUpdate,
                 ResourceType.InventorySource
@@ -36,6 +37,12 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "unified_job_template", "launch_type", "status", "execution_environment", "failed",
+                                   "started", "finished", "canceled_on", "elapsed", "job_explanation", "execution_node",
+                                   "controller_node", "work_unit_id", "source", "source_path", "source_vars", "scm_branch",
+                                   "enabled_var", "enabled_value", "enabled_value", "overwrite", "overwrite_vars",
+                                   "timeout", "verbosity", "limit", "inventory", "inventory_source", "license_error",
+                                   "org_host_limit_error", "source_project_update", "instance_group", "scm_revision"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

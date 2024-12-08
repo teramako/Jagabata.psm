@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -21,7 +22,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; } = 0;
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Job,
                 ResourceType.ProjectUpdate,
@@ -37,6 +38,8 @@ namespace Jagabata.Cmdlets
         public SwitchParameter AdHocCommandEvent { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "event", "counter", "event_data", "failed", "changed",
+                                   "uuid", "stdout", "start_line", "end_line", "verbosity"])]
         public override string[] OrderBy { get; set; } = ["counter"];
 
         protected override void ProcessRecord()

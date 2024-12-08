@@ -20,7 +20,7 @@ Find-AnsibleAccessList [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]
 
 ### PipelineInput
 ```
-Find-AnsibleAccessList [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleAccessList -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -176,7 +176,7 @@ Parameter Sets: PipelineInput
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

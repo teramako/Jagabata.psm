@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
 
@@ -47,7 +48,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.OAuth2Application,
                 ResourceType.OAuth2AccessToken,
@@ -71,6 +72,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "timestamp", "operation", "changes", "object1", "object2", "action_node"])]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()
@@ -94,7 +96,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Project => $"{Project.PATH}{Id}/activity_stream/",
                 ResourceType.Team => $"{Team.PATH}{Id}/activity_stream/",
                 ResourceType.Credential => $"{Credential.PATH}{Id}/activity_stream/",
-                ResourceType.CredentialType => $"{CredentialType.PATH}{Id}/activity_stream/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Id}/activity_stream/",
                 ResourceType.Inventory => $"{Inventory.PATH}{Id}/activity_stream/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/activity_stream/",
                 ResourceType.Group => $"{Group.PATH}{Id}/activity_stream/",

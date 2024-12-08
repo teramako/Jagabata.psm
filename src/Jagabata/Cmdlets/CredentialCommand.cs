@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
 using System.Management.Automation;
@@ -41,7 +42,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
         [ResourceTransformation(AcceptableTypes = [
                 ResourceType.Organization,
                 ResourceType.User,
@@ -58,12 +59,24 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        public string? Kind { get; set; }
+        [Alias("Kind")]
+        public CredentialTypeKind[]? CredentialTypeKind { get; set; }
+
+        [Parameter()]
+        [ArgumentCompletions("aim", "aws", "aws_secretsmanager_credential", "azure_kv", "azure_rm", "centrify_vault_kv",
+                             "conjur", "controller", "galaxy_api_token", "gce", "github_token", "gitlab_token",
+                             "gpg_public_key", "hashivault_kv", "hashivault_ssh", "insights", "kubernetes_bearer_token",
+                             "net", "openstack", "registry", "rhv", "satellite6", "scm", "ssh", "thycotic_dsv",
+                             "thycotic_tss", "vault", "vmware")]
+        [Alias("Namespace")]
+        public string[]? CredentialTypeNamespace { get; set; }
 
         /// <summary>
         /// Only affected for an Organization
         /// </summary>
         [Parameter()]
+        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
+                                   "credential_type", "managed", "created_by", "modified_by"])]
         public SwitchParameter Galaxy { get; set; }
 
         [Parameter()]
@@ -71,9 +84,13 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Kind is not null)
+            if (CredentialTypeKind is not null)
             {
-                Query.Add("chain__credential_type__namespace__icontains", Kind);
+                Query.Add("credential_type__kind__in", string.Join(',', CredentialTypeKind));
+            }
+            if (CredentialTypeNamespace is not null)
+            {
+                Query.Add("credential_type__namespace__in", string.Join(',', CredentialTypeNamespace));
             }
             SetupCommonQuery();
         }
@@ -90,7 +107,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Organization => $"{Organization.PATH}{Id}/" + (Galaxy ? "galaxy_credentials/" : "credentials/"),
                 ResourceType.User => $"{User.PATH}{Id}/credentials/",
                 ResourceType.Team => $"{Team.PATH}{Id}/credentials/",
-                ResourceType.CredentialType => $"{CredentialType.PATH}{Id}/credentials/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Id}/credentials/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/credentials/",
                 ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/credentials/",
@@ -191,7 +208,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Schedule,
                 ResourceType.WorkflowJobTemplateNode
         ])]
-        public IResource To { get; set; } = new Resource(0 ,0);
+        public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
         {
