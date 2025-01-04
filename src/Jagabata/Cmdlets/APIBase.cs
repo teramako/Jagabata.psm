@@ -69,6 +69,13 @@ public abstract class APICmdletBase : Cmdlet
             apiTask.Wait();
             var result = apiTask.Result;
             WriteVerboseResponse(result.Response);
+
+            // Add a resource to the cache for completion
+            if (result.Contents is IResource res)
+            {
+                Caches.Add(res);
+            }
+
             return result.Contents;
         }
         catch (RestAPIException ex)
@@ -144,6 +151,9 @@ public abstract class APICmdletBase : Cmdlet
             }
             var resultSet = result.Contents;
 
+            // Add resources to the cache for completion
+            Caches.Add(resultSet.Results.OfType<IResource>());
+
             yield return resultSet;
 
             nextPathAndQuery = string.IsNullOrEmpty(resultSet?.Next) ? string.Empty : resultSet.Next;
@@ -207,6 +217,13 @@ public abstract class APICmdletBase : Cmdlet
             apiTask.Wait();
             RestAPIResult<TValue> result = apiTask.Result;
             WriteVerboseResponse(result.Response);
+
+            // Add a resource to the cache for completion
+            if (result.Contents is IResource res)
+            {
+                Caches.Add(res);
+            }
+
             return result.Contents;
         }
         catch (RestAPIException ex)
@@ -246,6 +263,13 @@ public abstract class APICmdletBase : Cmdlet
             apiTask.Wait();
             RestAPIResult<TValue> result = apiTask.Result;
             WriteVerboseResponse(result.Response);
+
+            // Add cache for completion
+            if (result.Contents is IResource res)
+            {
+                Caches.Add(res);
+            }
+
             return result.Contents;
         }
         catch (RestAPIException ex)
