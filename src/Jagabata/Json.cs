@@ -518,5 +518,207 @@ namespace Jagabata
                 writer.WriteEndObject();
             }
         }
+
+        internal class SummaryFieldsHostConverter : SummaryFieldsConverter
+        {
+            protected override object? DeserializeLastJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<HostLastJobSummary>(ref reader, options);
+            }
+            protected override object? DeserializeRecentJobs(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<HostRecentJobSummary>(ref reader, options);
+            }
+        }
+        internal class SummaryFieldsOrganizationConverter : SummaryFieldsConverter
+        {
+            protected override object? DeserializeRoles(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, OrganizationObjectRoleSummary>>(ref reader, options);
+            }
+        }
+        internal class SummaryFieldsWorkflowJobNodeConverter: SummaryFieldsConverter
+        {
+            protected override object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<JobSummary>(ref reader, options);
+            }
+        }
+        internal class SummaryFieldsConverter : JsonConverter<SummaryFieldsDictionary>
+        {
+            public override SummaryFieldsDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                var dict = new SummaryFieldsDictionary();
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonTokenType.EndObject)
+                    {
+                        break;
+                    }
+                    if (reader.TokenType != JsonTokenType.PropertyName)
+                    {
+                        throw new JsonException($"TokenType is not PropertyName: {reader.TokenType}");
+                    }
+                    string? propertyName = reader.GetString() ?? throw new JsonException("PropertyName is null");
+                    reader.Read();
+                    bool isArray = reader.TokenType == JsonTokenType.StartArray;
+                    string key = Utils.ToUpperCamelCase(propertyName);
+                    if (reader.TokenType == JsonTokenType.StartArray)
+                    {
+                        var array = new ArrayList();
+                        while (reader.Read())
+                        {
+                            if (reader.TokenType == JsonTokenType.EndArray)
+                            {
+                                break;
+                            }
+                            array.Add(Deserialize(key, ref reader, options));
+                        }
+                        dict.Add(key, array.ToArray());
+                    }
+                    else
+                    {
+                        dict.Add(key, Deserialize(key, ref reader, options) ?? throw new JsonException($"{key}'s value is null"));
+                    }
+                }
+                return dict;
+            }
+            private object? Deserialize(string key, ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                switch (key)
+                {
+                    case "Actor":
+                    case "CreatedBy":
+                    case "ModifiedBy":
+                    case "ApprovedOrDeniedBy":
+                    case "User":
+                        return JsonSerializer.Deserialize<UserSummary>(ref reader, options);
+                    case "AdHocCommand":
+                        return JsonSerializer.Deserialize<AdHocCommandSummary>(ref reader, options);
+                    case "AncestorJob":
+                        return JsonSerializer.Deserialize<AncestorJobSummary>(ref reader, options);
+                    case "Application":
+                        return JsonSerializer.Deserialize<ApplicationSummary>(ref reader, options);
+                    case "Credential":
+                    case "SourceCredential":
+                    case "TargetCredential":
+                        return JsonSerializer.Deserialize<CredentialSummary>(ref reader, options);
+                    case "Credentials":
+                        return JsonSerializer.Deserialize<JobTemplateCredentialSummary>(ref reader, options);
+                    case "CredentialType":
+                        return JsonSerializer.Deserialize<CredentialTypeSummary>(ref reader, options);
+                    case "ExecutionEnvironment":
+                    case "DefaultEnvironment":
+                    case "ResolvedEnvironment":
+                        return JsonSerializer.Deserialize<EnvironmentSummary>(ref reader, options);
+                    case "Group":
+                        return JsonSerializer.Deserialize<GroupSummary>(ref reader, options);
+                    case "Groups":
+                        return JsonSerializer.Deserialize<ListSummary<GroupSummary>>(ref reader, options);
+                    case "Host":
+                        return JsonSerializer.Deserialize<HostSummary>(ref reader, options);
+                    case "Instance":
+                        return JsonSerializer.Deserialize<InstanceSummary>(ref reader, options);
+                    case "InstanceGroup":
+                        return JsonSerializer.Deserialize<InstanceGroupSummary>(ref reader, options);
+                    case "Inventory":
+                        return JsonSerializer.Deserialize<InventorySummary>(ref reader, options);
+                    case "InventorySource":
+                        return JsonSerializer.Deserialize<InventorySourceSummary>(ref reader, options);
+                    case "Job":
+                        return DeserializeJob(ref reader, options);
+                    case "JobTemplate":
+                        return JsonSerializer.Deserialize<JobTemplateSummary>(ref reader, options);
+                    case "LastJob":
+                        return DeserializeLastJob(ref reader, options);
+                    case "LastJobHostSummary":
+                        return JsonSerializer.Deserialize<LastJobHostSummary>(ref reader, options);
+                    case "LastUpdate":
+                        return JsonSerializer.Deserialize<LastUpdateSummary>(ref reader, options);
+                    case "Label":
+                        return JsonSerializer.Deserialize<LabelSummary>(ref reader, options);
+                    case "Labels":
+                        return JsonSerializer.Deserialize<ListSummary<LabelSummary>>(ref reader, options);
+                    case "Notification":
+                        return JsonSerializer.Deserialize<NotificationSummary>(ref reader, options);
+                    case "NotificationTemplate":
+                        return JsonSerializer.Deserialize<NotificationTemplateSummary>(ref reader, options);
+                    case "OAuth2AccessToken":
+                        return JsonSerializer.Deserialize<TokenSummary>(ref reader, options);
+                    case "Organization":
+                        return JsonSerializer.Deserialize<OrganizationSummary>(ref reader, options);
+                    case "ObjectRoles":
+                        return DeserializeRoles(ref reader, options);
+                    case "Owners":
+                        return JsonSerializer.Deserialize<OwnerSummary>(ref reader, options);
+                    case "Project":
+                    case "SourceProject":
+                        return JsonSerializer.Deserialize<ProjectSummary>(ref reader, options);
+                    case "ProjectUpdate":
+                        return JsonSerializer.Deserialize<ProjectUpdateSummary>(ref reader, options);
+                    case "RecentJobs":
+                        return DeserializeRecentJobs(ref reader, options);
+                    case "RecentNotifications":
+                        return JsonSerializer.Deserialize<RecentNotificationSummary>(ref reader, options);
+                    case "RelatedFieldCounts":
+                        return JsonSerializer.Deserialize<RelatedFieldCountsSummary>(ref reader, options);
+                    case "Role":
+                        return JsonSerializer.Deserialize<RoleSummary>(ref reader, options);
+                    case "Schedule":
+                        return JsonSerializer.Deserialize<ScheduleSummary>(ref reader, options);
+                    case "Setting":
+                        return JsonSerializer.Deserialize<SettingSummary>(ref reader, options);
+                    case "SourceWorkflowJob":
+                        return JsonSerializer.Deserialize<SourceWorkflowJobSummary>(ref reader, options);
+                    case "Survey":
+                        return JsonSerializer.Deserialize<SurveySummary>(ref reader, options);
+                    case "Team":
+                        return JsonSerializer.Deserialize<TeamSummary>(ref reader, options);
+                    case "Tokens":
+                        return JsonSerializer.Deserialize<ListSummary<TokenSummary>>(ref reader, options);
+                    case "UnifiedJobTemplate":
+                        return JsonSerializer.Deserialize<UnifiedJobTemplateSummary>(ref reader, options);
+                    case "UserCapabilities":
+                        return JsonSerializer.Deserialize<Capability>(ref reader, options);
+                    case "WorkflowApprovalTemplate":
+                        return JsonSerializer.Deserialize<WorkflowApprovalTemplateSummary>(ref reader, options);
+                    case "WorkflowJob":
+                        return JsonSerializer.Deserialize<WorkflowJobSummary>(ref reader, options);
+                    case "WorkflowJobTemplate":
+                        return JsonSerializer.Deserialize<WorkflowJobTemplateSummary>(ref reader, options);
+                    case "WorkflowJobTemplateNode":
+                        return JsonSerializer.Deserialize<WorkflowJobTemplateNodeSummary>(ref reader, options);
+                    default:
+                        throw new JsonException($"Unkown property name: {key}");
+                }
+            }
+            protected virtual object? DeserializeLastJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<LastJobSummary>(ref reader, options);
+            }
+            protected virtual object? DeserializeRoles(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, ObjectRoleSummary>>(ref reader, options);
+            }
+            protected virtual object? DeserializeRecentJobs(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<RecentJobSummary>(ref reader, options);
+            }
+            protected virtual object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<JobExSummary>(ref reader, options);
+            }
+
+            public override void Write(Utf8JsonWriter writer, SummaryFieldsDictionary value, JsonSerializerOptions options)
+            {
+                writer.WriteStartObject();
+                foreach (string key in value.Keys)
+                {
+                    writer.WritePropertyName(Utils.ToSnakeCase(key));
+                    JsonSerializer.Serialize(writer, value[key], options);
+                }
+                writer.WriteEndObject();
+            }
+        }
     }
 }

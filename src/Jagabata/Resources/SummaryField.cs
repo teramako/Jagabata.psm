@@ -3,6 +3,14 @@ using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
+    /// <summary>
+    /// For SummaryFields property
+    /// </summary>
+    [JsonConverter(typeof(Json.SummaryFieldsConverter))]
+    public class SummaryFieldsDictionary : Dictionary<string, object>
+    {
+    }
+
     public abstract record SummaryBase
     {
         public sealed override string ToString()
@@ -220,4 +228,28 @@ namespace Jagabata.Resources
     // WorkflowApprovalTemplate in WorkflowApproval
     public record WorkflowApprovalTemplateSummary(ulong Id, string Name, string Description, int Timeout)
         : ResourceSummary(Id, ResourceType.WorkflowApprovalTemplate);
+
+    public record AdHocCommandSummary(ulong Id, string Name, JobStatus Status, string Limit)
+        : ResourceSummary(Id, ResourceType.AdHocCommand);
+
+    public record InstanceSummary(ulong Id, string Hostname)
+        : ResourceSummary(Id, ResourceType.Instance);
+
+    public record NotificationSummary(ulong Id, JobStatus Status, string NotificationType, ulong NotificationTemplateId)
+        : ResourceSummary(Id, ResourceType.Notification);
+
+    public record RoleSummary(ulong Id, string RoleField)
+        : ResourceSummary(Id, ResourceType.Role);
+
+    public record SettingSummary(string Name, string Category)
+        : SummaryBase;
+
+    public record SurveySummary(string Title, string Description)
+        : SummaryBase;
+
+    public record TeamSummary(ulong Id, string Name, string Description)
+        : ResourceSummary(Id, ResourceType.Team);
+
+    public record WorkflowJobTemplateNodeSummary(ulong Id, ulong UnifiedJobTemplateId)
+        : ResourceSummary(Id, ResourceType.WorkflowJobTemplateNode);
 }
