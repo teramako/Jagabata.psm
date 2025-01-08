@@ -27,7 +27,7 @@ namespace Jagabata.Resources
     }
 
     public class AdHocCommand(ulong id, ResourceType type, string url, RelatedDictionary related,
-                              AdHocCommand.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                               JobLaunchType launchType, JobStatus status, ulong? executionEnvironment, bool failed,
                               DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
                               string jobExplanation, LaunchedBy launchedBy, string? workUnitId, string executionNode,
@@ -36,7 +36,7 @@ namespace Jagabata.Resources
                               bool becomeEnabled, bool diffMode)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IAdHocCommand, IResource<AdHocCommand.Summary>
+          IAdHocCommand, IResource
     {
         public new const string PATH = "/api/v2/ad_hoc_commands/";
         /// <summary>
@@ -131,15 +131,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(InventorySummary Inventory,
-                              EnvironmentSummary? ExecutionEnvironment,
-                              CredentialSummary Credential,
-                              InstanceGroupSummary InstanceGroup,
-                              UserSummary? CreatedBy,
-                              Capability UserCapabilities);
-
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
-                            AdHocCommand.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             JobLaunchType launchType, JobStatus status, ulong? executionEnvironment, bool failed,
                             DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
                             string jobExplanation, LaunchedBy launchedBy, string? workUnitId, string executionNode,
@@ -152,7 +145,7 @@ namespace Jagabata.Resources
                            executionEnvironment, failed, started, finished, canceledOn, elapsed, jobExplanation,
                            launchedBy, workUnitId, executionNode, controllerNode, jobType, inventory, limit, credential,
                            moduleName, moduleArgs, forks, verbosity, extraVars, becomeEnabled, diffMode),
-              IAdHocCommand, IJobDetail, IResource<Summary>
+              IAdHocCommand, IJobDetail, IResource
         {
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
@@ -162,7 +155,7 @@ namespace Jagabata.Resources
             public Dictionary<string, int> HostStatusCounts { get; } = hostStatusCounts;
         }
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string ExecutionNode { get; } = executionNode;
         public string ControllerNode { get; } = controllerNode;
         public JobType JobType { get; } = jobType;
