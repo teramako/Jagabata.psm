@@ -30,7 +30,7 @@ namespace Jagabata.Resources
                             ResourceType type,
                             string url,
                             RelatedDictionary related,
-                            Credential.Summary summaryFields,
+                            SummaryFieldsDictionary summaryFields,
                             DateTime created,
                             DateTime? modified,
                             string name,
@@ -42,7 +42,7 @@ namespace Jagabata.Resources
                             string kind,
                             bool cloud,
                             bool kubernetes)
-        : ICredential, IResource<Credential.Summary>
+        : ICredential, IResource
     {
         public const string PATH = "/api/v2/credentials/";
 
@@ -327,20 +327,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary? Organization,
-                              CredentialTypeSummary CredentialType,
-                              UserSummary CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Dictionary<string, ObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities,
-                              OwnerSummary[] Owners);
-
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
