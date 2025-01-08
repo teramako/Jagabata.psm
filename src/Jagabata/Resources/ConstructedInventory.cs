@@ -65,31 +65,31 @@ namespace Jagabata.Resources
     }
 
     public class ConstructedInventory(ulong id,
-                           ResourceType type,
-                           string url,
-                           RelatedDictionary related,
-                           Inventory.Summary summaryFields,
-                           DateTime created,
-                           DateTime? modified,
-                           string name,
-                           string description,
-                           ulong organization,
-                           string kind,
-                           string variables,
-                           bool hasActiveFailures,
-                           int totalHosts,
-                           int hostsWithActiveFailures,
-                           int totalGroups,
-                           bool hasInventorySources,
-                           int totalInventorySources,
-                           int inventorySourcesWithFailures,
-                           bool pendingDeletion,
-                           bool preventInstanceGroupFallback,
-                           string sourceVars,
-                           int updateCacheTimeout,
-                           string limit,
-                           JobVerbosity verbosity)
-        : IConstructedInventory, IResource<Inventory.Summary>
+                                      ResourceType type,
+                                      string url,
+                                      RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields,
+                                      DateTime created,
+                                      DateTime? modified,
+                                      string name,
+                                      string description,
+                                      ulong organization,
+                                      string kind,
+                                      string variables,
+                                      bool hasActiveFailures,
+                                      int totalHosts,
+                                      int hostsWithActiveFailures,
+                                      int totalGroups,
+                                      bool hasInventorySources,
+                                      int totalInventorySources,
+                                      int inventorySourcesWithFailures,
+                                      bool pendingDeletion,
+                                      bool preventInstanceGroupFallback,
+                                      string sourceVars,
+                                      int updateCacheTimeout,
+                                      string limit,
+                                      JobVerbosity verbosity)
+        : IConstructedInventory, IResource
     {
         public const string PATH = "/api/v2/constructed_inventories/";
 
@@ -126,7 +126,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Inventory.Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -153,5 +153,4 @@ namespace Jagabata.Resources
             return $"[{Id}] {Name}";
         }
     }
-
 }
