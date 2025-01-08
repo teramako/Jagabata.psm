@@ -10,11 +10,11 @@ namespace Jagabata.Resources
     }
 
     public class AdHocCommandJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                      AdHocCommandJobEvent.Summary summaryFields, DateTime created, DateTime? modified,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                       ulong adHocCommand, JobEventEvent @event, int counter, string eventDisplay,
                                       Dictionary<string, object?> eventData, bool failed, bool changed, string uuid, ulong? host,
                                       string hostName, string stdout, int startLine, int endLine, JobVerbosity verbosity)
-        : IAdHocCommandJobEvent, IResource<AdHocCommandJobEvent.Summary>
+        : IAdHocCommandJobEvent, IResource
     {
         /// <summary>
         /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
@@ -38,13 +38,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(HostSummary Host);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public ulong AdHocCommand { get; } = adHocCommand;
