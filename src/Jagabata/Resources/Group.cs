@@ -25,14 +25,14 @@ namespace Jagabata.Resources
                        ResourceType type,
                        string url,
                        RelatedDictionary related,
-                       Group.Summary summaryFields,
+                       SummaryFieldsDictionary summaryFields,
                        DateTime created,
                        DateTime? modified,
                        string name,
                        string description,
                        ulong inventory,
                        string variables)
-        : IGroup, IResource<Group.Summary>
+        : IGroup, IResource
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -170,17 +170,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(InventorySummary Inventory,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities);
-
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
