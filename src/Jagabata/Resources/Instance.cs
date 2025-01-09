@@ -43,7 +43,7 @@ namespace Jagabata.Resources
                           ResourceType type,
                           string url,
                           RelatedDictionary related,
-                          Instance.Summary summaryFields,
+                          SummaryFieldsDictionary summaryFields,
                           string hostname,
                           string uuid,
                           DateTime created,
@@ -70,7 +70,7 @@ namespace Jagabata.Resources
                           string nodeState,
                           string ipAddress,
                           int listenerPort)
-        : IInstance, IResource<Instance.Summary>
+        : IInstance, IResource
     {
         public const string PATH = "/api/v2/instances/";
         /// <summary>
@@ -123,13 +123,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(Capability UserCapabilities);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Hostname { get; } = hostname;
         public string Uuid { get; } = uuid;
         public DateTime Created { get; } = created;
