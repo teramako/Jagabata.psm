@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
@@ -34,7 +35,7 @@ namespace Jagabata.Resources
                       ResourceType type,
                       string url,
                       RelatedDictionary related,
-                      Host.Summary summaryFields,
+                      SummaryFieldsDictionary summaryFields,
                       DateTime created,
                       DateTime? modified,
                       string name,
@@ -43,7 +44,7 @@ namespace Jagabata.Resources
                       bool enabled,
                       string instanceId,
                       string variables)
-        : IHost, IResource<Host.Summary>
+        : IHost, IResource
     {
         public const string PATH = "/api/v2/hosts/";
 
@@ -160,19 +161,12 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(InventorySummary Inventory,
-                              HostLastJobSummary? LastJob,
-                              LastJobHostSummary? LastJobHostSummary,
-                              Capability UserCapabilities,
-                              ListSummary<GroupSummary> Groups,
-                              HostRecentJobSummary[] RecentJobs);
-
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        [JsonConverter(typeof(Json.SummaryFieldsHostConverter))]
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
