@@ -37,7 +37,7 @@ namespace Jagabata.Resources
                                       ResourceType type,
                                       string url,
                                       RelatedDictionary related,
-                                      ExecutionEnvironment.Summary summaryFields,
+                                      SummaryFieldsDictionary summaryFields,
                                       DateTime created,
                                       DateTime? modified,
                                       string name,
@@ -47,7 +47,7 @@ namespace Jagabata.Resources
                                       bool managed,
                                       ulong? credential,
                                       string pull)
-                : IExecutionEnvironment, IResource<ExecutionEnvironment.Summary>
+                : IExecutionEnvironment, IResource
     {
         public const string PATH = "/api/v2/execution_environments/";
 
@@ -101,16 +101,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary? Organization,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
