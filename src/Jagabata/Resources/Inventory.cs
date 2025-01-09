@@ -52,12 +52,12 @@ namespace Jagabata.Resources
     }
 
     public class Inventory(ulong id, ResourceType type, string url, RelatedDictionary related,
-                           Inventory.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                           SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                            string description, ulong organization, string kind, string hostFilter, string variables,
                            bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures, int totalGroups,
                            bool hasInventorySources, int totalInventorySources, int inventorySourcesWithFailures,
                            bool pendingDeletion, bool preventInstanceGroupFallback)
-        : IInventory, IResource<Inventory.Summary>
+        : IInventory, IResource
     {
         public const string PATH = "/api/v2/inventories/";
 
@@ -132,18 +132,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              UserSummary CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Dictionary<string, ObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities,
-                              ListSummary<LabelSummary> Labels);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
