@@ -76,7 +76,7 @@ namespace Jagabata.Resources
                                 ResourceType type,
                                 string url,
                                 RelatedDictionary related,
-                                CredentialType.Summary summaryFields,
+                                SummaryFieldsDictionary summaryFields,
                                 DateTime created,
                                 DateTime? modified,
                                 string name,
@@ -86,7 +86,7 @@ namespace Jagabata.Resources
                                 bool managed,
                                 FieldList inputs,
                                 Injectors injectors)
-        : ICredentialType, IResource<CredentialType.Summary>
+        : ICredentialType, IResource
     {
         public const string PATH = "/api/v2/credential_types/";
 
@@ -118,14 +118,12 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(Capability UserCapabilities);
-
 
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
