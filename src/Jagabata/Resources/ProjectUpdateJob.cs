@@ -25,7 +25,7 @@ namespace Jagabata.Resources
     }
 
     public class ProjectUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                  ProjectUpdateJob.Summary summaryFields, DateTime created, DateTime? modified,
+                                  SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                   string name, string description, ulong unifiedJobTemplate, JobLaunchType launchType,
                                   JobStatus status, ulong? executionEnvironment, bool failed, DateTime? started,
                                   DateTime? finished, DateTime? canceledOn, double elapsed, string jobExplanation,
@@ -35,7 +35,7 @@ namespace Jagabata.Resources
                                   string scmRevision, ulong project, JobType jobType, string jobTags)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IProjectUpdateJob, IResource<ProjectUpdateJob.Summary>
+          IProjectUpdateJob, IResource
     {
         public new const string PATH = "/api/v2/project_updates/";
 
@@ -89,18 +89,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              EnvironmentSummary? DefaultEnvironment,
-                              ProjectSummary Project,
-                              CredentialSummary? Credential,
-                              ScheduleSummary? Schedule,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              InstanceGroupSummary InstanceGroup,
-                              Capability UserCapabilities);
-
-
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
-                            Summary summaryFields, DateTime created, DateTime? modified, string name,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             string description, string localPath, string scmType, string scmUrl, string scmBranch,
                             string scmRefspec, bool scmClean, bool scmTrackSubmodules, bool scmDeleteOnUpdate,
                             ulong? credential, int timeout, string scmRevision, ulong unifiedJobTemplate,
@@ -129,7 +119,7 @@ namespace Jagabata.Resources
 
 
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
