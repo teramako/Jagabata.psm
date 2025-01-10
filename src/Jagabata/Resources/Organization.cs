@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
@@ -14,7 +15,7 @@ namespace Jagabata.Resources
                               ResourceType type,
                               string url,
                               RelatedDictionary related,
-                              Organization.Summary summaryFields,
+                              SummaryFieldsDictionary summaryFields,
                               DateTime created,
                               DateTime? modified,
                               string name,
@@ -22,7 +23,7 @@ namespace Jagabata.Resources
                               int maxHosts,
                               string? customVirtualenv,
                               int? defaultEnvironment)
-        : IOrganization, IResource<Organization.Summary>
+        : IOrganization, IResource
     {
         public const string PATH = "/api/v2/organizations/";
         /// <summary>
@@ -96,19 +97,12 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(EnvironmentSummary? DefaultEnvironment,
-                              UserSummary CreatedBy,
-                              UserSummary ModifiedBy,
-                              Dictionary<string, OrganizationObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities,
-                              RelatedFieldCountsSummary RelatedFieldCounts);
-
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        [JsonConverter(typeof(Json.SummaryFieldsOrganizationConverter))]
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
