@@ -137,12 +137,12 @@ namespace Jagabata.Resources
 
 
     public class JobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
-                          JobEvent.Summary summaryFields, DateTime created, DateTime? modified, ulong job,
+                          SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, ulong job,
                           JobEventEvent @event, int counter, string eventDisplay, Dictionary<string, object?> eventData,
                           int eventLevel, bool failed, bool changed, string uuid, string parentUUID, ulong? host,
                           string hostName, string playbook, string play, string task, string role, string stdout,
                           int startLine, int endLine, JobVerbosity verbosity)
-                : IJobEvent, IResource<JobEvent.Summary>
+                : IJobEvent, IResource
     {
         public const string PATH = "/api/v2/job_events/";
 
@@ -210,13 +210,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(HostSummary? Host, JobExSummary Job, Dictionary<string, ObjectRoleSummary> Role);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
