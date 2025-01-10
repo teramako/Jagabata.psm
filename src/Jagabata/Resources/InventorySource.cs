@@ -162,7 +162,7 @@ namespace Jagabata.Resources
     }
 
     public class InventorySource(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                 InventorySource.Summary summaryFields, DateTime created, DateTime? modified,
+                                 SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                  string name, string description, InventorySourceSource source, string sourcePath,
                                  string sourceVars, string scmBranch, ulong? credential, string enabledVar,
                                  string enabledValue, string hostFilter, bool overwrite, bool overwriteVars,
@@ -173,7 +173,7 @@ namespace Jagabata.Resources
                                  bool lastUpdateFailed, DateTime? lastUpdated)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IInventorySource, IUnifiedJobTemplate, IResource<InventorySource.Summary>
+          IInventorySource, IUnifiedJobTemplate, IResource
     {
         public new const string PATH = "/api/v2/inventory_sources/";
 
@@ -290,20 +290,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              InventorySummary Inventory,
-                              EnvironmentSummary? ExecutionEnvironment,
-                              ProjectSummary? SourceProject,
-                              LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              UserSummary CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities,
-                              CredentialSummary[] Credentials);
-
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public InventorySourceSource Source { get; } = source;
         public string SourcePath { get; } = sourcePath;
