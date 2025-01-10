@@ -89,7 +89,7 @@ namespace Jagabata.Resources
     }
 
     public class Project(ulong id, ResourceType type, string url, RelatedDictionary related,
-                         Project.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                         SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                          string description, string localPath, string scmType, string scmUrl, string scmBranch,
                          string scmRefspec, bool scmClean, bool scmTrackSubmodules, bool scmDeleteOnUpdate,
                          ulong? credential, int timeout, string scmRevision, DateTime? lastJobRun, bool lastJobFailed,
@@ -99,7 +99,7 @@ namespace Jagabata.Resources
                          DateTime? lastUpdated)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IProject, IUnifiedJobTemplate, IResource<Project.Summary>
+          IProject, IUnifiedJobTemplate, IResource
     {
         public new const string PATH = "/api/v2/projects/";
 
@@ -206,19 +206,8 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              EnvironmentSummary? DefaultEnvironment,
-                              CredentialSummary? Credential,
-                              LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              UserSummary CreatedBy,
-                              UserSummary ModifiedBy,
-                              Dictionary<string, ObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities);
-
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string LocalPath { get; } = localPath;
         public string ScmType { get; } = scmType;
         public string ScmUrl { get; } = scmUrl;
