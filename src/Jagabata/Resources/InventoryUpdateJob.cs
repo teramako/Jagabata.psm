@@ -97,7 +97,7 @@ namespace Jagabata.Resources
     }
 
     public class InventoryUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                    InventoryUpdateJob.Summary summaryFields, DateTime created, DateTime? modified,
+                                    SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                     string name, string description, ulong unifiedJobTemplate, JobLaunchType launchType,
                                     JobStatus status, ulong? executionEnvironment, string controllerNode, bool failed,
                                     DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
@@ -110,7 +110,7 @@ namespace Jagabata.Resources
                                     ulong? sourceProjectUpdate, ulong? instanceGroup, string scmRevision)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IInventoryUpdateJob, IResource<InventoryUpdateJob.Summary>
+          IInventoryUpdateJob, IResource
     {
         public new const string PATH = "/api/v2/inventory_updates/";
 
@@ -185,21 +185,7 @@ namespace Jagabata.Resources
             }
         }
 
-
-        public record Summary(OrganizationSummary Organization,
-                              InventorySummary Inventory,
-                              EnvironmentSummary? ExecutionEnvironment,
-                              CredentialSummary? Credential,
-                              ScheduleSummary? Schedule,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              InventorySourceSummary InventorySource,
-                              InstanceGroupSummary InstanceGroup,
-                              UserSummary CreatedBy,
-                              Capability UserCapabilities,
-                              CredentialSummary[] Credentials,
-                              ProjectSummary? SourceProject);
-
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, Summary summaryFields,
+        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
                             DateTime created, DateTime? modified, string name, string description,
                             ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                             ulong? executionEnvironment, string controllerNode, bool failed, DateTime? started,
@@ -229,7 +215,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
