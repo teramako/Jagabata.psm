@@ -45,7 +45,7 @@ namespace Jagabata.Resources
     }
 
     public class JobTemplateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                JobTemplateJob.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                                SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                                 string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                                 ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
                                 DateTime? canceledOn, double elapsed, string jobExplanation, string executionNode,
@@ -59,7 +59,7 @@ namespace Jagabata.Resources
                                 int jobSliceCount, string webhookService, uint? webhookCredential, string webhookGuid)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IJobTemplateJob, IResource<JobTemplateJob.Summary>
+          IJobTemplateJob, IResource
     {
         public new const string PATH = "/api/v2/jobs/";
         /// <summary>
@@ -112,24 +112,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              InventorySummary Inventory,
-                              EnvironmentSummary? ExecutionEnvironment,
-                              ProjectSummary Project,
-                              JobTemplateSummary JobTemplate,
-                              ScheduleSummary? Schedule,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              InstanceGroupSummary InstanceGroup,
-                              UserSummary CreatedBy,
-                              Capability UserCapabilities,
-                              ListSummary<LabelSummary> Labels,
-                              SourceWorkflowJobSummary? SourceWorkflowJob,
-                              AncestorJobSummary? AncestorJob,
-                              JobTemplateCredentialSummary[] Credentials);
-
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
@@ -173,7 +157,7 @@ namespace Jagabata.Resources
         }
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
-                            Summary summaryFields, DateTime created, DateTime? modified, string name,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             string description, JobType jobType, ulong inventory, ulong project, string playbook,
                             string scmBranch, byte forks, string limit, JobVerbosity verbosity, string extraVars,
                             string jobTags, bool forceHandlers, string skipTags, string startAtTask, ushort timeout,
@@ -196,7 +180,7 @@ namespace Jagabata.Resources
                              useFactCache, organization, jobTemplate, passwordsNeededToStart, allowSimultaneous,
                              artifacts, scmRevision, instanceGroup, diffMode, jobSliceNumber, jobSliceCount,
                              webhookService, webhookCredential, webhookGuid),
-               IJobTemplateJob, IJobDetail, IResource<Summary>
+               IJobTemplateJob, IJobDetail, IResource
         {
 
             public string JobArgs { get; } = jobArgs;
@@ -213,7 +197,7 @@ namespace Jagabata.Resources
             public string? CustomVirtualenv { get; } = customVirtualenv;
         }
         public class LaunchResult(ulong job, Dictionary<string, object?> ignoredFields, ulong id, ResourceType type,
-                                  string url, RelatedDictionary related, Summary summaryFields, DateTime created,
+                                  string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields, DateTime created,
                                   DateTime? modified, string name, string description, JobType jobType, ulong inventory,
                                   ulong project, string playbook, string scmBranch, byte forks, string limit,
                                   JobVerbosity verbosity, string extraVars, string jobTags, bool forceHandlers,
@@ -236,7 +220,7 @@ namespace Jagabata.Resources
                              useFactCache, organization, jobTemplate, passwordsNeededToStart, allowSimultaneous,
                              artifacts, scmRevision, instanceGroup, diffMode, jobSliceNumber, jobSliceCount,
                              webhookService, webhookCredential, webhookGuid),
-               IJobTemplateJob, IJobDetail, IResource<Summary>
+               IJobTemplateJob, IJobDetail, IResource
         {
             public ulong Job { get; } = job;
             public Dictionary<string, object?> IgnoredFields { get; } = ignoredFields;
