@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 namespace Jagabata.Resources
 {
 
-    public class JobHostSummary(ulong id, ResourceType type, string url, RelatedDictionary related, JobHostSummary.Summary summaryFields,
+    public class JobHostSummary(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
                           DateTime created, DateTime? modified, ulong job, ulong host, ulong? constructedHost,
                           string hostName, int changed, int dark, int failures, int oK, int processed, int skipped,
                           bool failed, int ignored, int rescued)
-                : IResource<JobHostSummary.Summary>
+                : IResource
     {
         public const string PATH = "/api/v2/job_host_summaries/";
         /// <summary>
@@ -85,13 +85,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(HostSummary Host, JobExSummary Job);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public ulong Job { get; } = job;
