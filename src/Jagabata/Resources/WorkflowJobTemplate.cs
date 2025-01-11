@@ -52,7 +52,7 @@ namespace Jagabata.Resources
     }
 
     public class WorkflowJobTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                     WorkflowJobTemplate.Summary summaryFields, DateTime created, DateTime? modified,
+                                     SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                      string name, string description, DateTime? lastJobRun, bool lastJobFailed,
                                      DateTime? nextJobRun, JobTemplateStatus status, string extraVars,
                                      ulong? organization, bool surveyEnabled, bool allowSimultaneous,
@@ -62,7 +62,7 @@ namespace Jagabata.Resources
                                      bool askSkipTagsOnLaunch, bool askTagsOnLaunch, string? skipTags, string? jobTags)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IWorkflowJobTemplate, IUnifiedJobTemplate, IResource<WorkflowJobTemplate.Summary>
+          IWorkflowJobTemplate, IUnifiedJobTemplate, IResource
     {
         public new const string PATH = "/api/v2/workflow_job_templates/";
         /// <summary>
@@ -115,20 +115,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary? Organization,
-                              InventorySummary? Inventory,
-                              LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Dictionary<string, ObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities,
-                              ListSummary<LabelSummary> Labels,
-                              RecentJobSummary[] RecentJobs);
-
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
 
         public string ExtraVars { get; } = extraVars;
