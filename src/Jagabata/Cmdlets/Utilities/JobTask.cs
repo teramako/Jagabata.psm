@@ -254,7 +254,7 @@ namespace Jagabata.Cmdlets.Utilities
             {
                 foreach (var node in apiResult.Contents.Results)
                 {
-                    if (node.SummaryFields.Job is null) continue;
+                    if (node.SummaryFields.ContainsKey("Job")) continue;
                     JobNodeSummary jobSummary = new(node);
                     if (Children.TryGetValue(jobSummary.Id, out var jp))
                     {
@@ -273,11 +273,10 @@ namespace Jagabata.Cmdlets.Utilities
     {
         public JobNodeSummary(WorkflowJobNode node)
         {
-            if (node.SummaryFields.Job is null)
+            if (node.SummaryFields["Job"] is not JobSummary job)
             {
-                throw new ArgumentException($"{nameof(node.SummaryFields.Job)} is null");
+                throw new ArgumentException($"{nameof(job)} is null");
             }
-            var job = node.SummaryFields.Job;
             Id = job.Id;
             Type = job.Type;
             Url = (string)node.Related["job"];
