@@ -27,13 +27,13 @@ namespace Jagabata.Resources
     }
 
     public class Schedule(string rrule, ulong id, ResourceType type, string url, RelatedDictionary related,
-                          Schedule.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                          SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                           string description, Dictionary<string, object?> extraData, ulong? inventory, string? scmBranch,
                           string? jobType, string? jobTags, string? skipTags, string? limit, bool? diffMode,
                           JobVerbosity? verbosity, ulong? executionEnvironment, int? forks, int? jobSliceCount,
                           int? timeout, ulong unifiedJobTemplate, bool enabled, DateTime? dtStart, DateTime? dtEnd,
                           DateTime? nextRun, string timezone, string until)
-                : ISchedule, IResource<Schedule.Summary>
+                : ISchedule, IResource
     {
         public const string PATH = "/api/v2/schedules/";
         /// <summary>
@@ -64,12 +64,6 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities,
-                              InventorySummary? Inventory);
-
 
         public string Rrule { get; } = rrule;
 
@@ -77,7 +71,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
 
