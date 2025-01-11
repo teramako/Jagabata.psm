@@ -6,7 +6,7 @@ namespace Jagabata.Resources
                                    ResourceType type,
                                    string url,
                                    RelatedDictionary related,
-                                   SystemJobTemplate.Summary summaryFields,
+                                   SummaryFieldsDictionary summaryFields,
                                    DateTime created,
                                    DateTime? modified,
                                    string name,
@@ -19,7 +19,7 @@ namespace Jagabata.Resources
                                    string jobType)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IUnifiedJobTemplate, IResource<SystemJobTemplate.Summary>
+          IUnifiedJobTemplate, IResource
     {
         public new const string PATH = "/api/v2/system_job_templates/";
 
@@ -51,13 +51,9 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              EnvironmentSummary? ResolvedEnvironment);
-
 
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
