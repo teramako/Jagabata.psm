@@ -21,7 +21,7 @@ namespace Jagabata.Resources
     }
 
     public class SystemJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                           SystemJob.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                           SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                            string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                            ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
                            DateTime? canceledOn, double elapsed, string jobExplanation, string executionNode,
@@ -29,7 +29,7 @@ namespace Jagabata.Resources
                            string extraVars, string resultStdout)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          ISystemJob, IResource<SystemJob.Summary>
+          ISystemJob, IResource
     {
         public new const string PATH = "/api/v2/system_jobs/";
         /// <summary>
@@ -60,14 +60,9 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(EnvironmentSummary ExecutionEnvironment,
-                              ScheduleSummary? Schedule,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              InstanceGroupSummary InstanceGroup,
-                              Capability UserCapabilities);
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
-                            Summary summaryFields, DateTime created, DateTime? modified, string name,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                             ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
                             DateTime? canceledOn, double elapsed, string jobArgs, string jobCwd,
@@ -78,7 +73,7 @@ namespace Jagabata.Resources
             : SystemJob(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
                         launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed,
                         jobExplanation, executionNode, launchedBy, workUnitId, systemJobTemplate, jobType, extraVars, resultStdout),
-              ISystemJob, IJobDetail, IResource<Summary>
+              ISystemJob, IJobDetail, IResource
         {
 
             public string JobArgs { get; } = jobArgs;
@@ -89,7 +84,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
 
