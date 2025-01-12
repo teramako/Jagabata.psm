@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 namespace Jagabata.Resources
 {
     public class SystemJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                SystemJobEvent.Summary summaryFields, DateTime created, DateTime? modified,
+                                SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                 JobEventEvent @event, int counter, string eventDisplay, Dictionary<string, object?> eventData,
                                 bool failed, bool changed, string uuid, string stdout, int startLine, int endLine,
                                 JobVerbosity verbosity, ulong systemJob)
-        : IJobEventBase, IResource<SystemJobEvent.Summary>
+        : IJobEventBase, IResource
     {
         /// <summary>
         /// List Sytem Job Events for a System Job.<br/>
@@ -31,12 +31,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary();
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public JobEventEvent Event { get; } = @event;

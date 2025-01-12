@@ -1,12 +1,12 @@
 namespace Jagabata.Resources
 {
     public class WorkflowApprovalTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                          WorkflowApprovalTemplate.Summary summaryFields, DateTime created,
+                                          SummaryFieldsDictionary summaryFields, DateTime created,
                                           DateTime? modified, string name, string description, DateTime? lastJobRun,
                                           bool lastJobFailed, DateTime? nextJobRun, JobTemplateStatus status,
                                           ulong? executionEnvironment, int timeout)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun, lastJobFailed, nextJobRun, status),
-          IResource<WorkflowApprovalTemplate.Summary>
+          IResource
     {
         public new const string PATH = "/api/v2/workflow_approval_templates/";
 
@@ -22,15 +22,8 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        public record Summary(WorkflowJobTemplateSummary WorkflowJobTemplate,
-                              LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              EnvironmentSummary? ResolvedEnvironment);
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
     }

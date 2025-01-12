@@ -19,7 +19,7 @@ namespace Jagabata.Resources
                                ResourceType type,
                                string url,
                                RelatedDictionary related,
-                               InstanceGroup.Summary summaryFields,
+                               SummaryFieldsDictionary summaryFields,
                                string name,
                                DateTime created,
                                DateTime? modified,
@@ -37,7 +37,7 @@ namespace Jagabata.Resources
                                int policyInstanceMinimum,
                                string[] policyInstanceList,
                                string podSpecOverride)
-        : IInstanceGroup, IResource<InstanceGroup.Summary>
+        : IInstanceGroup, IResource
     {
         public const string PATH = "/api/v2/instance_groups/";
         /// <summary>
@@ -216,14 +216,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(Dictionary<string, ObjectRoleSummary> ObjectRoles, Capability UserCapabilities);
-
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Name { get; } = name;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;

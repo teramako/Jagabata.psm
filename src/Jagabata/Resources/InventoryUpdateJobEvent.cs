@@ -3,12 +3,12 @@ using System.Collections.Specialized;
 namespace Jagabata.Resources
 {
     public class InventoryUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                         InventoryUpdateJobEvent.Summary summaryFields, DateTime created,
+                                         SummaryFieldsDictionary summaryFields, DateTime created,
                                          DateTime? modified, JobEventEvent @event, int counter, string eventDisplay,
                                          Dictionary<string, object?> eventData, bool failed, bool changed, string uuid,
                                          string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                          ulong inventoryUpdate)
-        : IJobEventBase, IResource<InventoryUpdateJobEvent.Summary>
+        : IJobEventBase, IResource
     {
         /// <summary>
         /// List Inventory Update Events for an Inventory Update.<br/>
@@ -32,13 +32,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary();
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public JobEventEvent Event { get; } = @event;

@@ -12,10 +12,10 @@ namespace Jagabata.Resources
     }
 
     public class CredentialInputSource(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                       CredentialInputSource.Summary summaryFields, DateTime created, DateTime? modified,
+                                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        string description, string inputFieldName, Dictionary<string, object?> metadata,
                                        ulong targetCredential, ulong sourceCredential)
-        : ICredentialInputSource, IResource<CredentialInputSource.Summary>
+        : ICredentialInputSource, IResource
     {
         public const string PATH = "/api/v2/credential_input_sources/";
 
@@ -69,17 +69,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(CredentialSummary SourceCredential,
-                              CredentialSummary TargetCredential,
-                              UserSummary CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Description { get; } = description;

@@ -34,7 +34,7 @@ namespace Jagabata.Resources
                                          ResourceType type,
                                          string url,
                                          RelatedDictionary related,
-                                         WorkflowJobTemplateNode.Summary summaryFields,
+                                         SummaryFieldsDictionary summaryFields,
                                          DateTime created,
                                          DateTime? modified,
                                          Dictionary<string, object?> extraData,
@@ -57,7 +57,7 @@ namespace Jagabata.Resources
                                          ulong[] alwaysNodes,
                                          bool allParentsMustConverge,
                                          string identifier)
-                : IWorkflowJobTemplateNode, IResource<WorkflowJobTemplateNode.Summary>
+                : IWorkflowJobTemplateNode, IResource
     {
         public const string PATH = "/api/v2/workflow_job_template_nodes/";
         /// <summary>
@@ -88,14 +88,12 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(WorkflowJobTemplateSummary WorkflowJobTemplate,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate);
 
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public Dictionary<string, object?> ExtraData { get; } = extraData;

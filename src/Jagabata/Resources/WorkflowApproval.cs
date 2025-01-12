@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 namespace Jagabata.Resources
 {
     public class WorkflowApproval(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                  WorkflowApproval.Summary summaryFields, DateTime created, DateTime? modified,
+                                  SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                   string name, string description, ulong? unifiedJobTemplate, JobLaunchType launchType,
                                   JobStatus status, ulong? executionEnvironment, bool failed, DateTime? started,
                                   DateTime? finished, DateTime? canceledOn, double elapsed, string jobExplanation,
@@ -11,7 +11,7 @@ namespace Jagabata.Resources
                                   DateTime? approvalExpiration, bool timedOut)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed, started,
                      finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IResource<WorkflowApproval.Summary>
+          IResource
     {
         public new const string PATH = "/api/v2/workflow_approvals/";
 
@@ -44,24 +44,15 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(WorkflowJobTemplateSummary WorkflowJobTemplate,
-                              WorkflowJobSummary WorkflowJob,
-                              WorkflowApprovalTemplateSummary WorkflowApprovalTemplate,
-                              UnifiedJobTemplateSummary? UnifiedJobTemplate,
-                              UserSummary? ApprovedOrDeniedBy,
-                              UserSummary? CreatedBy,
-                              Capability UserCapabilities,
-                              SourceWorkflowJobSummary SourceWorkflowJob);
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Description { get; } = description;
         public ulong? UnifiedJobTemplate { get; } = unifiedJobTemplate;
         public bool CanApproveOrDeny { get; } = canApproveOrDeny;
         public DateTime? ApprovalExpiration { get; } = approvalExpiration;
         public bool TimedOut { get; } = timedOut;
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, Summary summaryFields,
+        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
                             DateTime created, DateTime? modified, string name, string description,
                             ulong? unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                             ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
@@ -72,7 +63,7 @@ namespace Jagabata.Resources
             : WorkflowApproval(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
                                launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed,
                                jobExplanation, launchedBy, workUnitId, canApproveOrDeny, approvalExpiration, timedOut),
-              IJobDetail, IResource<Summary>
+              IJobDetail, IResource
         {
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;

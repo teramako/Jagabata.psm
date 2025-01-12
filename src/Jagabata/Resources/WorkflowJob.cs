@@ -35,7 +35,7 @@ namespace Jagabata.Resources
 
 
     public class WorkflowJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                             WorkflowJob.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                              string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                              ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
                              DateTime? canceledOn, double elapsed, string jobExplanation, LaunchedBy launchedBy,
@@ -45,7 +45,7 @@ namespace Jagabata.Resources
                              string? jobTags)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IWorkflowJob, IResource<WorkflowJob.Summary>
+          IWorkflowJob, IResource
     {
         public new const string PATH = "/api/v2/workflow_jobs/";
         /// <summary>
@@ -98,19 +98,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary? Organization,
-                              InventorySummary? Inventory,
-                              WorkflowJobTemplateSummary? WorkflowJobTemplate,
-                              JobTemplateSummary? JobTemplate,
-                              ScheduleSummary? Schedule,
-                              UnifiedJobTemplateSummary UnifiedJobTemplate,
-                              UserSummary? CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Capability UserCapabilities,
-                              ListSummary<LabelSummary> Labels);
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
         public ulong? WorkflowJobTemplate { get; } = workflowJobTemplate;
@@ -132,7 +121,7 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, Summary summaryFields,
+        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
                             DateTime created, DateTime? modified, string name, string description,
                             ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                             ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
@@ -147,7 +136,7 @@ namespace Jagabata.Resources
                           jobExplanation, launchedBy, workUnitId, workflowJobTemplate, extraVars, allowSimultaneous,
                           jobTemplate, isSlicedJob, inventory, limit, scmBranch, webhookService, webhookCredential,
                           webhookGuid, skipTags, jobTags),
-              IWorkflowJob, IJobDetail, IResource<Summary>
+              IWorkflowJob, IJobDetail, IResource
         {
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
@@ -156,7 +145,7 @@ namespace Jagabata.Resources
         }
         public class LaunchResult(ulong workflowJob, Dictionary<string, object?> ignoredFields, ulong id,
                                   ResourceType type, string url, RelatedDictionary related,
-                                  Summary summaryFields, DateTime created, DateTime? modified, string name,
+                                  SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                                   string description, ulong unifiedJobTemplate, JobLaunchType launchType,
                                   JobStatus status, ulong? executionEnvironment, bool failed, DateTime? started,
                                   DateTime? finished, DateTime? canceledOn, double elapsed, string jobArgs,
@@ -171,7 +160,7 @@ namespace Jagabata.Resources
                      jobCwd, jobEnv, jobExplanation, resultTraceback, launchedBy, workUnitId, workflowJobTemplate,
                      extraVars, allowSimultaneous, jobTemplate, isSlicedJob, inventory, limit, scmBranch,
                      webhookService, webhookCredential, webhookGuid, skipTags, jobTags),
-              IWorkflowJob, IJobDetail, IResource<Summary>
+              IWorkflowJob, IJobDetail, IResource
 
         {
             public ulong WorkflowJob { get; } = workflowJob;

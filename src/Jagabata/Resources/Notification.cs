@@ -19,10 +19,10 @@ namespace Jagabata.Resources
 
 
     public class Notification(ulong id, ResourceType type, string url, RelatedDictionary related,
-                              Notification.Summary summaryFields, DateTime created, DateTime? modified,
+                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                               ulong notificationTemplate, string error, JobStatus status, int notificationsSent,
                               NotificationType notificationType, string recipients, string subject, string? body)
-                : INotification, IResource<Notification.Summary>
+                : INotification, IResource
     {
         public const string PATH = "/api/v2/notifications/";
         /// <summary>
@@ -53,14 +53,12 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(NotificationTemplateSummary NotificationTemplate);
-
 
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;

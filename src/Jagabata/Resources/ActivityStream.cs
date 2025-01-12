@@ -14,19 +14,19 @@ namespace Jagabata.Resources
     }
 
     public class ActivityStream(ulong id,
-                          ResourceType type,
-                          string url,
-                          RelatedDictionary related,
-                          ActivityStream.Summary summaryFields,
-                          DateTime timestamp,
-                          ActivityStreamOperation operation,
-                          Dictionary<string, object?> changes,
-                          string object1,
-                          string object2,
-                          string objectAssociation,
-                          string actionNode,
-                          string objectType)
-        : IResource<ActivityStream.Summary>
+                                ResourceType type,
+                                string url,
+                                RelatedDictionary related,
+                                SummaryFieldsDictionary summaryFields,
+                                DateTime timestamp,
+                                ActivityStreamOperation operation,
+                                Dictionary<string, object?> changes,
+                                string object1,
+                                string object2,
+                                string objectAssociation,
+                                string actionNode,
+                                string objectType)
+        : IResource
     {
         public const string PATH = "/api/v2/activity_stream/";
 
@@ -448,7 +448,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         [JsonPropertyOrder(10)]
         public DateTime Timestamp { get; } = timestamp;

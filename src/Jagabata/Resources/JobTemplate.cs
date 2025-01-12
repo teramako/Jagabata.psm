@@ -134,7 +134,7 @@ namespace Jagabata.Resources
 
 
     public class JobTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
-                             JobTemplate.Summary summaryFields, DateTime created, DateTime? modified, string name,
+                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                              string description, JobType jobType, ulong? inventory, ulong project, string playbook,
                              string scmBranch, int forks, string limit, JobVerbosity verbosity, string extraVars,
                              string jobTags, bool forceHandlers, string startAtTask, int timeout, bool useFactCache,
@@ -150,7 +150,7 @@ namespace Jagabata.Resources
                              ulong? webhookCredential, bool preventInstanceGroupFallback)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IJobTemplate, IUnifiedJobTemplate, IResource<JobTemplate.Summary>
+          IJobTemplate, IUnifiedJobTemplate, IResource
     {
         public new const string PATH = "/api/v2/job_templates/";
 
@@ -225,23 +225,8 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(OrganizationSummary Organization,
-                              InventorySummary? Inventory,
-                              ProjectSummary Project,
-                              EnvironmentSummary? ExecutionEnvironment,
-                              LastJobSummary? LastJob,
-                              LastUpdateSummary? LastUpdate,
-                              UserSummary CreatedBy,
-                              UserSummary? ModifiedBy,
-                              Dictionary<string, ObjectRoleSummary> ObjectRoles,
-                              Capability UserCapabilities,
-                              ListSummary<LabelSummary> Labels,
-                              RecentJobSummary[] RecentJobs,
-                              JobTemplateCredentialSummary[] Credentials);
-
-
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public JobType JobType { get; } = jobType;
         public ulong? Inventory { get; } = inventory;
         public ulong Project { get; } = project;

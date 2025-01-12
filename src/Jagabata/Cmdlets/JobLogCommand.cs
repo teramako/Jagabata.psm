@@ -82,12 +82,12 @@ namespace Jagabata.Cmdlets
             {
                 foreach (var node in resultSet.Results)
                 {
-                    if (node.Job is null || node.SummaryFields.Job is null)
+                    if (node.Job is null || node.SummaryFields["Job"] is not JobSummary jobSummary)
                     {
                         continue;
                     }
                     var jobId = (ulong)node.Job;
-                    var type = node.SummaryFields.Job.Type;
+                    var type = jobSummary.Type;
                     switch (type)
                     {
                         case ResourceType.WorkflowJob:
@@ -98,7 +98,7 @@ namespace Jagabata.Cmdlets
                         default:
                             if (_jobIdSet.Add(node.Id))
                             {
-                                _jobs.Add(node.SummaryFields.Job);
+                                _jobs.Add(jobSummary);
                             }
                             break;
                     }

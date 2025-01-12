@@ -14,13 +14,13 @@ namespace Jagabata.Resources
     }
 
     public class ProjectUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                       ProjectUpdateJobEvent.Summary summaryFields, DateTime created, DateTime? modified,
+                                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        JobEventEvent @event, int counter, string eventDisplay,
                                        Dictionary<string, object?> eventData, int eventLevel, bool failed, bool changed,
                                        string uuid, string hostName, string playbook, string play, string task,
                                        string role, string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                        ulong projectUpdate)
-        : IProjectUpdateJobEvent, IResource<ProjectUpdateJobEvent.Summary>
+        : IProjectUpdateJobEvent, IResource
     {
         /// <summary>
         /// List Project Update Events for a Project Update.<br/>
@@ -44,13 +44,11 @@ namespace Jagabata.Resources
             }
         }
 
-        public record Summary(ProjectUpdateSummary ProjectUpdate);
-
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public Summary SummaryFields { get; } = summaryFields;
+        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public JobEventEvent Event { get; } = @event;
