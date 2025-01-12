@@ -9,7 +9,7 @@ namespace Jagabata.Resources
                       Role.Summary summaryFields,
                       string name,
                       string description)
-                : IResource<Role.Summary>
+                : IResource
     {
         public const string PATH = "/api/v2/roles/";
         /// <summary>
