@@ -14,7 +14,7 @@ namespace Jagabata.Cmdlets.Utilities
             if (!ContainsKey(job.Id))
             {
                 var jp = new JobProgress(job, parnetId);
-                this.Add(job.Id, jp);
+                Add(job.Id, jp);
             }
         }
         public void Start(string activityId, int intervalSeconds)
@@ -57,7 +57,7 @@ namespace Jagabata.Cmdlets.Utilities
         public IEnumerable<JobProgress?> GetJobLog()
         {
             List<Task<JobProgress?>> tasks = [];
-            foreach (var jp in GetAll().Where(jp => jp.Job is not null && !jp.Completed))
+            foreach (var jp in GetAll().Where(static jp => jp.Job is not null && !jp.Completed))
             {
                 switch (jp.Type)
                 {
@@ -70,7 +70,7 @@ namespace Jagabata.Cmdlets.Utilities
                 }
             }
             Task.WaitAll([.. tasks]);
-            return tasks.Select(t => t.Result);
+            return tasks.Select(static t => t.Result);
         }
         public List<IUnifiedJobSummary> CleanCompleted()
         {
@@ -219,14 +219,7 @@ namespace Jagabata.Cmdlets.Utilities
             {
                 return false;
             }
-            if (Children.Count > 0)
-            {
-                Completed = Children.Values.All(jp => jp.SetComplete());
-            }
-            else
-            {
-                Completed = true;
-            }
+            Completed = Children.Count <= 0 || Children.Values.All(static jp => jp.SetComplete());
             return Completed;
         }
         public void CleanCompletedChildren()
@@ -245,7 +238,7 @@ namespace Jagabata.Cmdlets.Utilities
         private async Task UpdateWorkflowJobNodes()
         {
             var query = HttpUtility.ParseQueryString("do_not_run=False&page_size=50&order_by=id");
-            var completedIds = Children.Values.Where(jp => jp.Completed).Select(jp => jp.Id).ToArray();
+            var completedIds = Children.Values.Where(static jp => jp.Completed).Select(static jp => jp.Id).ToArray();
             if (completedIds.Length > 0)
             {
                 query.Add("not__job__in", string.Join(',', completedIds));
