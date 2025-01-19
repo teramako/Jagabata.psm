@@ -436,12 +436,6 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public class Summary(UserSummary? actor)
-        {
-            public UserSummary? Actor { get; set; } = actor;
-            [JsonExtensionData]
-            public Dictionary<string, object>? ExtensionData { get; set; }
-        }
 
         public ulong Id { get; } = id;
 
