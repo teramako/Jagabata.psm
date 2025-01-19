@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -89,7 +90,7 @@ namespace Jagabata.Resources
                                       int updateCacheTimeout,
                                       string limit,
                                       JobVerbosity verbosity)
-        : IConstructedInventory, IResource
+        : IConstructedInventory, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/constructed_inventories/";
 
@@ -151,6 +152,21 @@ namespace Jagabata.Resources
         public override string ToString()
         {
             return $"[{Id}] {Name}";
+        }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Kind))
+            {
+                sb.Append($"[{Kind}] ");
+            }
+            sb.Append(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($"({Description})");
+            }
+            return sb.ToString();
         }
     }
 }
