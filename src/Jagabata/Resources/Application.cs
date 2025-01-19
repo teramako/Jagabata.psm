@@ -58,7 +58,7 @@ namespace Jagabata.Resources
                              string authorizationGrantType,
                              bool skipAuthorization,
                              ulong organization)
-        : IApplication, IResource
+        : IApplication, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/applications/";
         /// <summary>
@@ -148,5 +148,12 @@ namespace Jagabata.Resources
         public string AuthorizationGrantType { get; } = authorizationGrantType;
         public bool SkipAuthorization { get; } = skipAuthorization;
         public ulong Organization { get; } = organization;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? Name
+                   : $"{Name} ({Description})";
+        }
     }
 }
