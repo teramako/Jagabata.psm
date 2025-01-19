@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -14,7 +15,7 @@ namespace Jagabata.Resources
                                       ulong adHocCommand, JobEventEvent @event, int counter, string eventDisplay,
                                       Dictionary<string, object?> eventData, bool failed, bool changed, string uuid, ulong? host,
                                       string hostName, string stdout, int startLine, int endLine, JobVerbosity verbosity)
-        : IAdHocCommandJobEvent, IResource
+        : IAdHocCommandJobEvent, IResource, ICacheableResource
     {
         /// <summary>
         /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
@@ -59,5 +60,17 @@ namespace Jagabata.Resources
         public int StartLine { get; } = startLine;
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{ResourceType.AdHocCommand}:{AdHocCommand}] {Counter}:{StartLine}:{EndLine} {Event}");
+            if (!string.IsNullOrEmpty(HostName))
+            {
+                sb.Append($" Hostname={HostName}");
+            }
+            sb.Append($" Failed={Failed}");
+            sb.Append($" Changed={Changed}");
+            return sb.ToString();
+        }
     }
 }
