@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -32,7 +33,7 @@ namespace Jagabata.Resources
                        string description,
                        ulong inventory,
                        string variables)
-        : IGroup, IResource
+        : IGroup, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -181,5 +182,19 @@ namespace Jagabata.Resources
         public string Description { get; } = description;
         public ulong Inventory { get; } = inventory;
         public string Variables { get; } = variables;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
+            {
+                sb.Append($" in [{inventory.Type}:{inventory.Id}] {inventory.Name}");
+            }
+            return sb.ToString();
+        }
     }
 }
