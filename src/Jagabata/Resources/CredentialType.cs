@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -86,7 +87,7 @@ namespace Jagabata.Resources
                                 bool managed,
                                 FieldList inputs,
                                 Injectors injectors)
-        : ICredentialType, IResource
+        : ICredentialType, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credential_types/";
 
@@ -133,5 +134,20 @@ namespace Jagabata.Resources
         public bool Managed { get; } = managed;
         public FieldList Inputs { get; } = inputs;
         public Injectors Injectors { get; } = injectors;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{Kind}] {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            if (!string.IsNullOrEmpty(Namespace))
+            {
+                sb.Append($" Namespace={Namespace}");
+            }
+            sb.Append($" Managed={Managed}");
+            return sb.ToString();
+        }
     }
 }
