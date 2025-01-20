@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -15,7 +16,7 @@ namespace Jagabata.Resources
                                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        string description, string inputFieldName, Dictionary<string, object?> metadata,
                                        ulong targetCredential, ulong sourceCredential)
-        : ICredentialInputSource, IResource
+        : ICredentialInputSource, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credential_input_sources/";
 
@@ -81,5 +82,19 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> Metadata { get; } = metadata;
         public ulong TargetCredential { get; } = targetCredential;
         public ulong SourceCredential { get; } = sourceCredential;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append(Description)
+                  .Append(' ');
+            }
+            sb.Append($"InputFieldName={InputFieldName}");
+            sb.Append($" TargetCredential={TargetCredential}");
+            sb.Append($" SourceCredential={SourceCredential}");
+            return sb.ToString();
+        }
     }
 }
