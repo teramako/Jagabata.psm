@@ -37,7 +37,7 @@ namespace Jagabata.Resources
                                int policyInstanceMinimum,
                                string[] policyInstanceList,
                                string podSpecOverride)
-        : IInstanceGroup, IResource
+        : IInstanceGroup, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/instance_groups/";
         /// <summary>
@@ -238,5 +238,10 @@ namespace Jagabata.Resources
         public int PolicyInstanceMinimum { get; } = policyInstanceMinimum;
         public string[] PolicyInstanceList { get; } = policyInstanceList;
         public string PodSpecOverride { get; } = podSpecOverride;
+
+        public string GetDescription()
+        {
+            return $"{Name} IsContainerGroup={IsContainerGroup} Instances={Instances}";
+        }
     }
 }
