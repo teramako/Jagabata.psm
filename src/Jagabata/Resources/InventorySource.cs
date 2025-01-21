@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -173,7 +174,7 @@ namespace Jagabata.Resources
                                  bool lastUpdateFailed, DateTime? lastUpdated)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IInventorySource, IUnifiedJobTemplate, IResource
+          IInventorySource, IUnifiedJobTemplate, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/inventory_sources/";
 
@@ -324,6 +325,28 @@ namespace Jagabata.Resources
                        (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0) |
                        (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
             }
+        }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{Source}] {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            if (LastUpdated is not null)
+            {
+                sb.Append($" LastUpdated={LastUpdated}");
+            }
+            if (SummaryFields.TryGetValue<ProjectSummary>("SourceProject", out var project))
+            {
+                sb.Append($" SourceProject=[{project.Id}]{project.Name}");
+            }
+            if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
+            {
+                sb.Append($" Inventory=[{inventory.Id}]{inventory.Name}");
+            }
+            return sb.ToString();
         }
     }
 }
