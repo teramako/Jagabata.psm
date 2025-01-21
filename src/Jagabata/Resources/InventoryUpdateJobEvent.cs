@@ -8,7 +8,7 @@ namespace Jagabata.Resources
                                          Dictionary<string, object?> eventData, bool failed, bool changed, string uuid,
                                          string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                          ulong inventoryUpdate)
-        : IJobEventBase, IResource
+        : IJobEventBase, IResource, ICacheableResource
     {
         /// <summary>
         /// List Inventory Update Events for an Inventory Update.<br/>
@@ -51,5 +51,10 @@ namespace Jagabata.Resources
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong InventoryUpdate { get; } = inventoryUpdate;
+
+        public string GetDescription()
+        {
+            return $"[{ResourceType.InventoryUpdate}:{InventoryUpdate}] {Counter}:{StartLine}:{EndLine} {Event}";
+        }
     }
 }
