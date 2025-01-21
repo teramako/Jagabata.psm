@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -8,7 +9,7 @@ namespace Jagabata.Resources
                           DateTime created, DateTime? modified, ulong job, ulong host, ulong? constructedHost,
                           string hostName, int changed, int dark, int failures, int oK, int processed, int skipped,
                           bool failed, int ignored, int rescued)
-                : IResource
+                : IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/job_host_summaries/";
         /// <summary>
@@ -107,5 +108,18 @@ namespace Jagabata.Resources
         public bool Failed { get; } = failed;
         public int Ignored { get; } = ignored;
         public int Rescued { get; } = rescued;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{ResourceType.Host}:{Host}] {HostName}");
+            if (SummaryFields.TryGetValue<JobExSummary>("Job", out var job))
+            {
+                sb.Append($" Job=[{job.Id}]{job.Name}")
+                  .Append($" Status={job.Status}")
+                  .Append($" Elapsed={job.Elapsed}")
+                  .Append($" JobTemplate=[{job.JobTemplateId}]{job.JobTemplateName}");
+            }
+            return sb.ToString();
+        }
     }
 }
