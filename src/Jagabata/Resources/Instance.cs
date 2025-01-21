@@ -70,7 +70,7 @@ namespace Jagabata.Resources
                           string nodeState,
                           string ipAddress,
                           int listenerPort)
-        : IInstance, IResource
+        : IInstance, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/instances/";
         /// <summary>
@@ -154,5 +154,10 @@ namespace Jagabata.Resources
         public string NodeState { get; } = nodeState;
         public string IpAddress { get; } = ipAddress;
         public int ListenerPort { get; } = listenerPort;
+
+        public string GetDescription()
+        {
+            return $"{Hostname} [{NodeType}]";
+        }
     }
 }
