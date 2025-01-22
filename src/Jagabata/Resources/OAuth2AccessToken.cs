@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -33,7 +34,7 @@ namespace Jagabata.Resources
                                    ulong? application,
                                    DateTime expires,
                                    string scope)
-            : IOAuth2AccessToken, IResource
+            : IOAuth2AccessToken, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/tokens/";
         /// <summary>
@@ -165,5 +166,26 @@ namespace Jagabata.Resources
         public ulong? Application { get; } = application;
         public DateTime Expires { get; } = expires;
         public string Scope { get; } = scope;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (Application is null)
+            {
+                var user = SummaryFields["User"] as UserSummary;
+                sb.Append($"[User] {user?.Username}");
+            }
+            else
+            {
+                var app = SummaryFields["Application"] as ApplicationSummary;
+                sb.Append($"[Application] {app?.Name}");
+            }
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            sb.Append($" Scope={Scope}");
+            return sb.ToString();
+        }
     }
 }
