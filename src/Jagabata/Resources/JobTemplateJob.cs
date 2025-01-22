@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -59,7 +60,7 @@ namespace Jagabata.Resources
                                 int jobSliceCount, string webhookService, uint? webhookCredential, string webhookGuid)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IJobTemplateJob, IResource
+          IJobTemplateJob, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/jobs/";
         /// <summary>
@@ -154,6 +155,22 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);
+        }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            sb.Append($" Status={Status}");
+            if (Finished is not null)
+            {
+                sb.Append($" Finished={Finished}");
+            }
+            sb.Append($" Elapsed={Elapsed}");
+            return sb.ToString();
         }
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
