@@ -9,7 +9,7 @@ namespace Jagabata.Resources
                       Role.Summary summaryFields,
                       string name,
                       string description)
-                : IResource
+                : IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/roles/";
         /// <summary>
@@ -54,5 +54,12 @@ namespace Jagabata.Resources
 
         public string Name { get; } = name;
         public string Description { get; } = description;
+
+        public string GetDescription()
+        {
+            return SummaryFields.ResourceId is null
+                   ? $"{Name} ({Description})"
+                   : $"{Name} ({Description}) for [{SummaryFields.ResourceType}:{SummaryFields.ResourceId}] {SummaryFields.ResourceName}";
+        }
     }
 }
