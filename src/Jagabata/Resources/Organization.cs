@@ -23,7 +23,7 @@ namespace Jagabata.Resources
                               int maxHosts,
                               string? customVirtualenv,
                               int? defaultEnvironment)
-        : IOrganization, IResource
+        : IOrganization, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/organizations/";
         /// <summary>
@@ -110,5 +110,12 @@ namespace Jagabata.Resources
         public int MaxHosts { get; } = maxHosts;
         public string? CustomVirtualenv { get; } = customVirtualenv;
         public int? DefaultEnvironment { get; } = defaultEnvironment;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? Name
+                   : $"{Name} ({Description})";
+        }
     }
 }
