@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -99,7 +100,7 @@ namespace Jagabata.Resources
                          DateTime? lastUpdated)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IProject, IUnifiedJobTemplate, IResource
+          IProject, IUnifiedJobTemplate, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/projects/";
 
@@ -249,6 +250,17 @@ namespace Jagabata.Resources
         public async Task<string[]> GetInventoryFiles()
         {
             return await GetInventoryFiles(Id);
+        }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(string.IsNullOrEmpty(ScmType) ? "[Local]" : $"[{ScmType}]");
+            sb.Append($" {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            return sb.ToString();
         }
     }
 }
