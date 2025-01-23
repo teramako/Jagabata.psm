@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -20,7 +21,7 @@ namespace Jagabata.Resources
                                        string uuid, string hostName, string playbook, string play, string task,
                                        string role, string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                        ulong projectUpdate)
-        : IProjectUpdateJobEvent, IResource
+        : IProjectUpdateJobEvent, IResource, ICacheableResource
     {
         /// <summary>
         /// List Project Update Events for a Project Update.<br/>
@@ -69,5 +70,20 @@ namespace Jagabata.Resources
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong ProjectUpdate { get; } = projectUpdate;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{ResourceType.ProjectUpdate}:{ProjectUpdate}] {Counter}:{StartLine}:{EndLine} {Event}");
+            if (!string.IsNullOrEmpty(Play))
+            {
+                sb.Append($" Play={Play}");
+            }
+            if (!string.IsNullOrEmpty(Task))
+            {
+                sb.Append($" Task={Task}");
+            }
+            sb.Append($" Failed={Failed}");
+            return sb.ToString();
+        }
     }
 }
