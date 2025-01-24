@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -7,7 +8,7 @@ namespace Jagabata.Resources
                                 JobEventEvent @event, int counter, string eventDisplay, Dictionary<string, object?> eventData,
                                 bool failed, bool changed, string uuid, string stdout, int startLine, int endLine,
                                 JobVerbosity verbosity, ulong systemJob)
-        : IJobEventBase, IResource
+        : IJobEventBase, IResource, ICacheableResource
     {
         /// <summary>
         /// List Sytem Job Events for a System Job.<br/>
@@ -50,5 +51,13 @@ namespace Jagabata.Resources
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong SystemJob { get; } = systemJob;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{ResourceType.SystemJob}:{SystemJob}] {Counter}:{StartLine}:{EndLine} {Event}");
+            sb.Append($" Failed={Failed}");
+            sb.Append($" Changed={Changed}");
+            return sb.ToString();
+        }
     }
 }
