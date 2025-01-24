@@ -247,7 +247,11 @@ namespace Jagabata.Cmdlets.Utilities
             {
                 foreach (var node in apiResult.Contents.Results)
                 {
-                    if (node.SummaryFields.ContainsKey("Job")) continue;
+                    if (!node.SummaryFields.ContainsKey("Job"))
+                    {
+                        continue;
+                    }
+
                     JobNodeSummary jobSummary = new(node);
                     if (Children.TryGetValue(jobSummary.Id, out var jp))
                     {
