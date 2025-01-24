@@ -205,6 +205,7 @@ namespace Jagabata.Resources
             ResourceType.InventoryUpdate => ResourceType.InventorySource,
             ResourceType.WorkflowJob => ResourceType.WorkflowJobTemplate,
             ResourceType.SystemJob => ResourceType.SystemJobTemplate,
+            ResourceType.WorkflowApproval => ResourceType.WorkflowApprovalTemplate,
             _ => ResourceType.None
         };
     }
