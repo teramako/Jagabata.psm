@@ -19,7 +19,7 @@ namespace Jagabata.Resources
                                    string jobType)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IUnifiedJobTemplate, IResource
+          IUnifiedJobTemplate, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/system_job_templates/";
 
@@ -57,5 +57,12 @@ namespace Jagabata.Resources
 
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? $"{Name}"
+                   : $"{Name} ({Description})";
+        }
     }
 }
