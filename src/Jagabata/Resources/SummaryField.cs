@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -9,6 +10,16 @@ namespace Jagabata.Resources
     [JsonConverter(typeof(Json.SummaryFieldsConverter))]
     public class SummaryFieldsDictionary : Dictionary<string, object>
     {
+        public bool TryGetValue<T>(string key, [MaybeNullWhen(false)] out T value)
+        {
+            if (TryGetValue(key, out var obj) && obj is T tValue)
+            {
+                value = tValue;
+                return true;
+            }
+            value = default;
+            return false;
+        }
     }
 
     public abstract record SummaryBase
