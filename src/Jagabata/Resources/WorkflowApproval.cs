@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -11,7 +12,7 @@ namespace Jagabata.Resources
                                   DateTime? approvalExpiration, bool timedOut)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed, started,
                      finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IResource
+          IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/workflow_approvals/";
 
@@ -51,6 +52,22 @@ namespace Jagabata.Resources
         public bool CanApproveOrDeny { get; } = canApproveOrDeny;
         public DateTime? ApprovalExpiration { get; } = approvalExpiration;
         public bool TimedOut { get; } = timedOut;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
+            {
+                sb.Append($"[{template.Type}:{template.Id}] ");
+            }
+            sb.Append(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            sb.Append($" CanApproveOrDeny={CanApproveOrDeny}");
+            return sb.ToString();
+        }
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
                             DateTime created, DateTime? modified, string name, string description,
