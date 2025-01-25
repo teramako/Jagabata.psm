@@ -5,7 +5,7 @@ using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;
 
-public abstract class GetCommandBase<TResource> : APICmdletBase where TResource: class
+public abstract class GetCommandBase<TResource> : APICmdletBase where TResource : class
 {
     [Parameter(Mandatory = true,
                Position = 0,
@@ -18,24 +18,23 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     [Parameter(ValueFromPipelineByPropertyName = true, DontShow = true)]
     public ResourceType? Type { get; set; }
 
-    protected readonly HashSet<ulong> IdSet = [];
-    protected readonly NameValueCollection Query = HttpUtility.ParseQueryString("");
+    protected HashSet<ulong> IdSet { get; } = [];
+    protected NameValueCollection Query { get; } = HttpUtility.ParseQueryString("");
 
-    private string? _apiPath = null;
+    private string? _apiPath;
     protected virtual string ApiPath
     {
         get
         {
             if (_apiPath is not null)
+            {
                 return _apiPath;
+            }
 
             _apiPath = GetApiPath(typeof(TResource));
             return _apiPath;
         }
-        set
-        {
-            _apiPath = value;
-        }
+        set => _apiPath = value;
     }
 
     protected abstract ResourceType AcceptType { get; }
