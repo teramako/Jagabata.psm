@@ -62,7 +62,7 @@ namespace Jagabata.Resources
                                      bool askSkipTagsOnLaunch, bool askTagsOnLaunch, string? skipTags, string? jobTags)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IWorkflowJobTemplate, IUnifiedJobTemplate, IResource
+          IWorkflowJobTemplate, IUnifiedJobTemplate, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/workflow_job_templates/";
         /// <summary>
@@ -167,6 +167,13 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);
+        }
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? Name
+                   : $"{Name} ({Description})";
         }
     }
 }
