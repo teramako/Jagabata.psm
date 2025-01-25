@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -72,7 +73,7 @@ namespace Jagabata.Resources
                                  bool allParentsMustConverge,
                                  bool doNotRun,
                                  string identifier)
-                : IWorkflowJobNode, IResource
+                : IWorkflowJobNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
         /// <summary>
@@ -135,5 +136,19 @@ namespace Jagabata.Resources
         public bool AllParentsMustConverge { get; } = allParentsMustConverge;
         public bool DoNotRun { get; } = doNotRun;
         public string Identifier { get; } = identifier;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (SummaryFields.TryGetValue<JobSummary>("Job", out var job))
+            {
+                sb.Append($"[{job.Type}:{job.Id}] {job.Name}");
+            }
+            if (SummaryFields.TryGetValue<WorkflowJobSummary>("WorkflowJob", out var workflowJob))
+            {
+                sb.Append($" in [{workflowJob.Type}:{workflowJob.Id}] {workflowJob.Name}");
+            }
+            return sb.ToString();
+        }
     }
 }
