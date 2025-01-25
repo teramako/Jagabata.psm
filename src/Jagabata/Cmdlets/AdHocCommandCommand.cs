@@ -11,7 +11,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(AdHocCommand.Detail))]
     public class GetAdHocCommandJobCommand : GetCommandBase<AdHocCommand.Detail>
     {
-        protected override ResourceType AcceptType => ResourceType.AdHocCommand;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

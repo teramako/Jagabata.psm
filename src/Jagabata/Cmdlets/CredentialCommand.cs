@@ -10,7 +10,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Credential))]
     public class GetCredentialCommand : GetCommandBase<Credential>
     {
-        protected override ResourceType AcceptType => ResourceType.Credential;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(InventoryUpdateJob.Detail))]
     public class GetInventoryUpdateJobCommand : GetCommandBase<InventoryUpdateJob.Detail>
     {
-        protected override ResourceType AcceptType => ResourceType.InventoryUpdate;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

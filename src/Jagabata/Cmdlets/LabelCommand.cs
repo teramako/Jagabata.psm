@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Label))]
     public class GetLabelCommand : GetCommandBase<Label>
     {
-        protected override ResourceType AcceptType => ResourceType.Label;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

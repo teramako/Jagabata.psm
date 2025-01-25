@@ -10,7 +10,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(WorkflowApproval.Detail))]
     public class GetWorkflowApprovalRequestCommand : GetCommandBase<WorkflowApproval.Detail>
     {
-        protected override ResourceType AcceptType => ResourceType.WorkflowApproval;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

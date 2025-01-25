@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Group))]
     public class GetGroupCommand : GetCommandBase<Group>
     {
-        protected override ResourceType AcceptType => ResourceType.Group;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

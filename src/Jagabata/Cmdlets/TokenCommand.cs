@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(OAuth2AccessToken))]
     public class GetTokenCommand : GetCommandBase<OAuth2AccessToken>
     {
-        protected override ResourceType AcceptType => ResourceType.OAuth2AccessToken;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(JobHostSummary))]
     public class GetJobHostSummaryCommand : GetCommandBase<JobHostSummary>
     {
-        protected override ResourceType AcceptType => ResourceType.JobHostSummary;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {
