@@ -103,9 +103,6 @@ namespace Jagabata.Resources
                 }
             }
         }
-        public record Summary(JobSummary? Job,
-                              WorkflowJobSummary WorkflowJob,
-                              UnifiedJobTemplateSummary? UnifiedJobTemplate);
 
         public ulong Id { get; } = id;
         public ResourceType Type { get; } = type;
