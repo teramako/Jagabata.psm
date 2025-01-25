@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetHostCommand : GetCommandBase<Host>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Host)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
@@ -85,6 +87,8 @@ namespace Jagabata.Cmdlets
     public class GetHostFactsCacheCommand : GetCommandBase<Dictionary<string, object?>>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Host)]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Host.PATH;

@@ -13,6 +13,8 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowJobTemplateCommand : GetCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

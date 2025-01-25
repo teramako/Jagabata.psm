@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetScheduleCommand : GetCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Schedule)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

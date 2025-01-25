@@ -12,6 +12,8 @@ namespace Jagabata.Cmdlets
     public class GetCredentialTypeCommand : GetCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.CredentialType)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

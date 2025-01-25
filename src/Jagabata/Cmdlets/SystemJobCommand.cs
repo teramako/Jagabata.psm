@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetSystemJobCommand : GetCommandBase<SystemJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.SystemJob])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.SystemJob)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetCredentialInputSourceCommand : GetCommandBase<CredentialInputSource>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialInputSource])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.CredentialInputSource)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

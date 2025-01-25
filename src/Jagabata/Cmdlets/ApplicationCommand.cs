@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetApplicationCommand : GetCommandBase<Application>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2Application])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2Application)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

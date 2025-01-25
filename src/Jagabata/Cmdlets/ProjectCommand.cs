@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetProjectCommand : GetCommandBase<Project>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
@@ -80,6 +82,8 @@ namespace Jagabata.Cmdlets
     public class GetPlaybookCommand : GetCommandBase<string[]>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Project.PATH;
@@ -98,6 +102,8 @@ namespace Jagabata.Cmdlets
     public class GetInventoryFileCommand : GetCommandBase<string[]>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Project.PATH;

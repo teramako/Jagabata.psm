@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetRoleCommand : GetCommandBase<Role>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Role])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Role)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

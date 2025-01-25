@@ -11,6 +11,8 @@ namespace Jagabata.Cmdlets
     public class GetJobTemplateJobCommand : GetCommandBase<JobTemplateJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Job])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Job)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

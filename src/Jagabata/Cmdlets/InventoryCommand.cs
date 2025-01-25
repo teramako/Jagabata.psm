@@ -10,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetInventoryCommand : GetCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

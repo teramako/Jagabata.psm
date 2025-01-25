@@ -1,3 +1,4 @@
+using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
@@ -9,6 +10,8 @@ namespace Jagabata.Cmdlets
     public class GetHostMetricCommand : GetCommandBase<HostMetric>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.HostMetrics])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.HostMetrics)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()

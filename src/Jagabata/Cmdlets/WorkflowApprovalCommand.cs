@@ -11,6 +11,8 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowApprovalRequestCommand : GetCommandBase<WorkflowApproval.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApproval])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowApproval)]
         public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
