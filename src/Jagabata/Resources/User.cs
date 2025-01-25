@@ -31,7 +31,7 @@ namespace Jagabata.Resources
                       DateTime? lastLogin,
                       string externalAccount,
                       string[] auth)
-        : IUser, IResource
+        : IUser, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/users/";
         /// <summary>
@@ -189,6 +189,13 @@ namespace Jagabata.Resources
                 IsSystemAuditor = IsSystemAuditor,
                 Password = Password,
             };
+        }
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Email)
+                   ? Username
+                   : $"{Username} <{Email}>";
         }
     }
 
