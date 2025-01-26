@@ -271,7 +271,7 @@ namespace Jagabata.Cmdlets
 
             ws.WriteLine("-----");
             var props = typeof(ISystemJob).GetProperties(BindingFlags.Public);
-            var maxLength = props.Select(static p => p.Name.Length).Max();
+            var maxLength = props.Max(static p => p.Name.Length);
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var prop in props)
             {
@@ -299,7 +299,7 @@ namespace Jagabata.Cmdlets
 
             ws.WriteLine("-----");
             var props = GetJobProperties(unifiedJob).ToArray();
-            var maxLength = props.Select(static tuple => tuple.Key.Length).Max();
+            var maxLength = props.Max(static tuple => tuple.Key.Length);
             var format = $"{{0,{maxLength}}}: {{1}}";
             foreach (var (key, value) in props)
             {
