@@ -1,73 +1,80 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Management.Automation;
 using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation
 {
+    /// <summary>
+    /// Transform argument(s) or pipeline input(s) to Resource ID (ulong);
+    /// </summary>
     internal class ResourceIdTransformationAttribute : ResourceTransformationAttribute
     {
+        private const ulong FALLBACK_VALUE = 0;
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
             switch (inputData)
             {
                 case IList list:
-                    return TransformList(list);
+                    return TransformToList(list, engineIntrinsics).Select(static res => res.Id).ToArray();
                 case null:
-                    return 0;
+                    return FALLBACK_VALUE;
                 default:
-                    return TransformToId(inputData);
+                    var resource = TransformToResource(inputData);
+                    if (!Validate(resource, out var warningMessage))
+                    {
+                        WriteWarning(engineIntrinsics,
+                                     $"Skip the inputted resource [{resource.Type}:{resource.Id}]: {warningMessage}");
+                        return FALLBACK_VALUE;
+                    }
+                    return resource.Id;
             }
-        }
-        private List<ulong> TransformList(IList list)
-        {
-            var arr = new List<ulong>();
-            foreach (var inputItem in list)
-            {
-                arr.Add(TransformToId(inputItem));
-            }
-            return arr;
-        }
-        private ulong TransformToId(object inputData)
-        {
-            if (inputData is PSObject pso)
-            {
-                inputData = pso.BaseObject;
-            }
-
-            switch (inputData)
-            {
-                case int:
-                case long:
-                    return ulong.Parse($"{inputData}", CultureInfo.InvariantCulture);
-                case uint:
-                case ulong:
-                    return (ulong)inputData;
-            }
-
-            var resource = TransformToResource(inputData);
-            return resource.Id;
         }
     }
 
+    /// <summary>
+    /// Transform argument(s) or pipeline input(s) to IResource object(s)
+    /// </summary>
     internal class ResourceTransformationAttribute : ArgumentTransformationAttribute
     {
         public ResourceType[] AcceptableTypes { get; init; } = [];
 
-        private IResource Validate(IResource resource)
+        private static readonly Resource FALLBACK_VALUE = new(0, 0);
+
+        protected bool Validate(IResource resource, [MaybeNullWhen(true)] out string msg)
         {
             if (resource.Id == 0)
             {
-                throw new ArgumentException("`Id` should be greater than 0");
+                msg = "Resource ID should be greater than 0";
+                return false;
             }
             if (AcceptableTypes.Length != 0)
             {
                 if (!AcceptableTypes.Any(type => resource.Type == type))
                 {
-                    throw new ArgumentException($"`Type` should be one of [{string.Join(", ", AcceptableTypes)}]: {resource.Type}");
+                    msg = AcceptableTypes.Length == 1
+                          ? $"Resource type should be \"{AcceptableTypes[0]}\""
+                          : $"Resource type should be one of [{string.Join(", ", AcceptableTypes)}]";
+                    return false;
                 }
             }
-            return resource;
+            msg = null;
+            return true;
+        }
+
+        protected static void WriteWarning(EngineIntrinsics engineIntrinsics, string message)
+        {
+            var warningPreference = (ActionPreference)engineIntrinsics.SessionState.PSVariable.GetValue("WarningPreference", ActionPreference.Continue);
+            switch (warningPreference)
+            {
+                case ActionPreference.SilentlyContinue:
+                case ActionPreference.Ignore:
+                    return;
+                default:
+                    engineIntrinsics.Host.UI.WriteWarningLine(message);
+                    break;
+            }
         }
 
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
@@ -75,19 +82,32 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
             switch (inputData)
             {
                 case IList list:
-                    return TransformToList(list);
+                    return TransformToList(list, engineIntrinsics);
                 case null:
-                    return new Resource(0, 0);
+                    return FALLBACK_VALUE;
                 default:
-                    return TransformToResource(inputData);
+                    var resource = TransformToResource(inputData);
+                    if (!Validate(resource, out var warningMessage))
+                    {
+                        WriteWarning(engineIntrinsics,
+                                     $"Skip the inputted resource [{resource.Type}:{resource.Id}]: {warningMessage}");
+                        return FALLBACK_VALUE;
+                    }
+                    return resource;
             }
         }
-        protected IList<IResource> TransformToList(IList list)
+        protected IList<IResource> TransformToList(IList list, EngineIntrinsics engineIntrinsics)
         {
             var arr = new List<IResource>();
             foreach (var inputItem in list)
             {
-                arr.Add(TransformToResource(inputItem));
+                var resource = TransformToResource(inputItem);
+                if (!Validate(resource, out var warningMessage))
+                {
+                    WriteWarning(engineIntrinsics, $"Skip the inputted resource [{resource.Type}:{resource.Id}]: {warningMessage}");
+                    continue;
+                }
+                arr.Add(resource);
             }
             return arr;
         }
@@ -98,6 +118,11 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                 inputData = pso.BaseObject;
             }
 
+            if (AcceptableTypes.Length == 1 && LanguagePrimitives.TryConvertTo<ulong>(inputData, out var id))
+            {
+                return new Resource(AcceptableTypes[0], id);
+            }
+
             (ResourceType Type, ulong Id) resourceData = (ResourceType.None, 0);
 
             switch (inputData)
@@ -105,7 +130,7 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                 case string str:
                     return Resource.Parse(str, CultureInfo.InvariantCulture);
                 case IResource resource:
-                    return Validate(resource);
+                    return resource;
                 case IDictionary dict:
                     foreach (var key in dict.Keys)
                     {
@@ -190,7 +215,7 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
                     }
                     break;
             }
-            return Validate(new Resource(resourceData.Type, resourceData.Id));
+            return new Resource(resourceData.Type, resourceData.Id);
         }
     }
 }
