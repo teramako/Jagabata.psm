@@ -544,6 +544,20 @@ namespace Jagabata
                 return JsonSerializer.Deserialize<JobSummary>(ref reader, options);
             }
         }
+        internal class SummaryFieldsJobEventConverter : SummaryFieldsConverter
+        {
+            protected override object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<JobExSummary>(ref reader, options);
+            }
+        }
+        internal class SummaryFieldsJobHostSummaryConverter : SummaryFieldsConverter
+        {
+            protected override object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
+            {
+                return JsonSerializer.Deserialize<JobExSummary>(ref reader, options);
+            }
+        }
         internal class SummaryFieldsConverter : JsonConverter<SummaryFieldsDictionary>
         {
             public override SummaryFieldsDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -706,7 +720,7 @@ namespace Jagabata
             }
             protected virtual object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
             {
-                return JsonSerializer.Deserialize<JobExSummary>(ref reader, options);
+                return JsonSerializer.Deserialize<JobTemplateJobSummary>(ref reader, options);
             }
 
             public override void Write(Utf8JsonWriter writer, SummaryFieldsDictionary value, JsonSerializerOptions options)

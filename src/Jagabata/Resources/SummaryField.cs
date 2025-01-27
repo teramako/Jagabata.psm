@@ -141,6 +141,10 @@ namespace Jagabata.Resources
     public record RecentJobSummary(ulong Id, JobStatus Status, DateTime? Finished, DateTime? CanceledOn, ResourceType Type)
         : ResourceSummary(Id, Type);
 
+    // Job in ActivityStream
+    public record JobTemplateJobSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed, double Elapsed)
+        : ResourceSummary(Id, ResourceType.Job);
+
     // Job in WorkflowJobNode
     public record JobSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed,
                              double Elapsed, ResourceType Type)
