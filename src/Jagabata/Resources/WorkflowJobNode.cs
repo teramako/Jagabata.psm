@@ -140,7 +140,7 @@ namespace Jagabata.Resources
         public string GetDescription()
         {
             var sb = new StringBuilder();
-            if (SummaryFields.TryGetValue<JobSummary>("Job", out var job))
+            if (SummaryFields.TryGetValue<WorkflowJobNodeJobSummary>("Job", out var job))
             {
                 sb.Append($"[{job.Type}:{job.Id}] {job.Name}");
             }

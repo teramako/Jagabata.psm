@@ -270,7 +270,7 @@ namespace Jagabata.Cmdlets.Utilities
     {
         public JobNodeSummary(WorkflowJobNode node)
         {
-            if (node.SummaryFields["Job"] is not JobSummary job)
+            if (node.SummaryFields["Job"] is not WorkflowJobNodeJobSummary job)
             {
                 throw new ArgumentException($"{nameof(job)} is null");
             }

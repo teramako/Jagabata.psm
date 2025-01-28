@@ -541,7 +541,7 @@ namespace Jagabata
         {
             protected override object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
             {
-                return JsonSerializer.Deserialize<JobSummary>(ref reader, options);
+                return JsonSerializer.Deserialize<WorkflowJobNodeJobSummary>(ref reader, options);
             }
         }
         internal class SummaryFieldsJobEventConverter : SummaryFieldsConverter

@@ -82,7 +82,7 @@ namespace Jagabata.Cmdlets
             {
                 foreach (var node in resultSet.Results)
                 {
-                    if (node.Job is null || node.SummaryFields["Job"] is not JobSummary jobSummary)
+                    if (node.Job is null || node.SummaryFields["Job"] is not WorkflowJobNodeJobSummary jobSummary)
                     {
                         continue;
                     }
