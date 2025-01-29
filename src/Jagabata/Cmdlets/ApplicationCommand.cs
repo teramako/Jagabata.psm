@@ -23,22 +23,13 @@ namespace Jagabata.Cmdlets
             WriteObject(GetResultSet(), true);
         }
     }
-    [Cmdlet(VerbsCommon.Find, "Application", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Application")]
     [OutputType(typeof(Application))]
     public class FindApplicationCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization), nameof(ResourceType.User))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.User
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.User])]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.User)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -52,16 +43,10 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/applications/",
-                ResourceType.User => $"{User.PATH}{Id}/applications/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/applications/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/applications/",
                 _ => Application.PATH
             };
             Find<Application>(path);
