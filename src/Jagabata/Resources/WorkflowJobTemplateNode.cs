@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -57,7 +58,7 @@ namespace Jagabata.Resources
                                          ulong[] alwaysNodes,
                                          bool allParentsMustConverge,
                                          string identifier)
-                : IWorkflowJobTemplateNode, IResource
+                : IWorkflowJobTemplateNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_template_nodes/";
         /// <summary>
@@ -116,5 +117,19 @@ namespace Jagabata.Resources
         public ulong[] AlwaysNodes { get; } = alwaysNodes;
         public bool AllParentsMustConverge { get; } = allParentsMustConverge;
         public string Identifier { get; } = identifier;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
+            {
+                sb.Append($"[{template.Type}:{template.Id}] {template.Name}");
+            }
+            if (SummaryFields.TryGetValue<WorkflowJobTemplateSummary>("WorkflowJobTemplate", out var wjTemplate))
+            {
+                sb.Append($" in [{wjTemplate.Type}:{wjTemplate.Id}] {wjTemplate.Name}");
+            }
+            return sb.ToString();
+        }
     }
 }

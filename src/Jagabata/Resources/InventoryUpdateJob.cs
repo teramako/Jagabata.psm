@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -110,7 +111,7 @@ namespace Jagabata.Resources
                                     ulong? sourceProjectUpdate, ulong? instanceGroup, string scmRevision)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IInventoryUpdateJob, IResource
+          IInventoryUpdateJob, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/inventory_updates/";
 
@@ -243,6 +244,21 @@ namespace Jagabata.Resources
         public ulong? SourceProjectUpdate { get; } = sourceProjectUpdate;
         public ulong? InstanceGroup { get; } = instanceGroup;
         public string ScmRevision { get; } = scmRevision;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{Source}] {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            sb.Append($" Status={Status}");
+            if (Finished is not null)
+            {
+                sb.Append($" Finished={Finished}");
+            }
+            return sb.ToString();
+        }
     }
 
     public record CanUpdateInventorySource(ulong? InventorySource, bool CanUpdate);

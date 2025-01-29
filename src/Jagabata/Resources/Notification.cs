@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -22,7 +23,7 @@ namespace Jagabata.Resources
                               SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                               ulong notificationTemplate, string error, JobStatus status, int notificationsSent,
                               NotificationType notificationType, string recipients, string subject, string? body)
-                : INotification, IResource
+                : INotification, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/notifications/";
         /// <summary>
@@ -70,5 +71,24 @@ namespace Jagabata.Resources
         public string Recipients { get; } = recipients;
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{NotificationType}]");
+            if (SummaryFields.TryGetValue<NotificationTemplateSummary>("NotificationTemplate", out var noti))
+            {
+                sb.Append($" {noti.Name}");
+            }
+            sb.Append($" Status={Status} Modified={Modified}");
+            if (!string.IsNullOrEmpty(Error))
+            {
+                sb.Append($" Error={Error}");
+            }
+            if (!string.IsNullOrEmpty(Subject))
+            {
+                sb.Append($" Subject={Subject}");
+            }
+            return sb.ToString();
+        }
     }
 }

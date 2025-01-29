@@ -49,7 +49,7 @@ namespace Jagabata.Resources
                                       NotificationType notificationType,
                                       Dictionary<string, object?> notificationConfiguration,
                                       Messages? messages)
-                : INotificationTemplate, IResource
+                : INotificationTemplate, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/notification_templates/";
         /// <summary>
@@ -95,6 +95,13 @@ namespace Jagabata.Resources
         public NotificationType NotificationType { get; } = notificationType;
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? $"[{NotificationType}] {Name}"
+                   : $"[{NotificationType}] {Name} ({Description})";
+        }
     }
 
     public record Messages(

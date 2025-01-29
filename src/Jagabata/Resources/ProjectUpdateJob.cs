@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -35,7 +36,7 @@ namespace Jagabata.Resources
                                   string scmRevision, ulong project, JobType jobType, string jobTags)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IProjectUpdateJob, IResource
+          IProjectUpdateJob, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/project_updates/";
 
@@ -139,6 +140,26 @@ namespace Jagabata.Resources
         public ulong Project { get; } = project;
         public JobType JobType { get; } = jobType;
         public string JobTags { get; } = jobTags;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            sb.Append($" Status={Status}");
+            if (Finished is not null)
+            {
+                sb.Append($" Finished={Finished}");
+            }
+            sb.Append($" Elapsed={Elapsed}");
+            if (!string.IsNullOrEmpty(ScmType))
+            {
+                sb.Append($" [{ScmType}] {ScmUrl}:{ScmBranch} {ScmRevision}");
+            }
+            return sb.ToString();
+        }
     }
 
     public record CanUpdateProject(ulong? Project, bool CanUpdate);

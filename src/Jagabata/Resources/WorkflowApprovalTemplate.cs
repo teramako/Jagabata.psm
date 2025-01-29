@@ -6,7 +6,7 @@ namespace Jagabata.Resources
                                           bool lastJobFailed, DateTime? nextJobRun, JobTemplateStatus status,
                                           ulong? executionEnvironment, int timeout)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun, lastJobFailed, nextJobRun, status),
-          IResource
+          IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/workflow_approval_templates/";
 
@@ -26,5 +26,12 @@ namespace Jagabata.Resources
         public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? Name
+                   : $"{Name} ({Description})";
+        }
     }
 }

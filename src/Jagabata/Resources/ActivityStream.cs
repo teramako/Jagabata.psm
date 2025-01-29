@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -26,7 +27,7 @@ namespace Jagabata.Resources
                                 string objectAssociation,
                                 string actionNode,
                                 string objectType)
-        : IResource
+        : IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/activity_stream/";
 
@@ -460,5 +461,23 @@ namespace Jagabata.Resources
         public string ActionNode { get; } = actionNode;
         [JsonPropertyOrder(17)]
         public string ObjectType { get; } = objectType;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder($"[{Timestamp}] {Operation}");
+            if (!string.IsNullOrEmpty(ObjectType))
+            {
+                sb.Append($":{ObjectType}");
+            }
+            if (!string.IsNullOrEmpty(Object1))
+            {
+                sb.Append($":{Object1}");
+            }
+            if (!string.IsNullOrEmpty(Object2))
+            {
+                sb.Append($":{Object2}");
+            }
+            return sb.ToString();
+        }
     }
 }

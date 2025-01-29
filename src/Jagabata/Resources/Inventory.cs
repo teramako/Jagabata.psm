@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -57,7 +58,7 @@ namespace Jagabata.Resources
                            bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures, int totalGroups,
                            bool hasInventorySources, int totalInventorySources, int inventorySourcesWithFailures,
                            bool pendingDeletion, bool preventInstanceGroupFallback)
-        : IInventory, IResource
+        : IInventory, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/inventories/";
 
@@ -158,6 +159,20 @@ namespace Jagabata.Resources
         public override string ToString()
         {
             return $"[{Id}] {Name}";
+        }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(Name);
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            if (!string.IsNullOrEmpty(Kind))
+            {
+                sb.Append($" [{Kind}]");
+            }
+            return sb.ToString();
         }
     }
 }

@@ -150,7 +150,7 @@ namespace Jagabata.Resources
                              ulong? webhookCredential, bool preventInstanceGroupFallback)
         : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
                              lastJobFailed, nextJobRun, status),
-          IJobTemplate, IUnifiedJobTemplate, IResource
+          IJobTemplate, IUnifiedJobTemplate, IResource, ICacheableResource
     {
         public new const string PATH = "/api/v2/job_templates/";
 
@@ -311,6 +311,13 @@ namespace Jagabata.Resources
                        (UseFactCache ? JobTemplateOptions.FactCache : 0) |
                        (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
             }
+        }
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? $"{Name} Playbook={Playbook}"
+                   : $"{Name} ({Description}) Playbook={Playbook}";
         }
     }
 }

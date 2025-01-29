@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -44,7 +45,7 @@ namespace Jagabata.Resources
                       bool enabled,
                       string instanceId,
                       string variables)
-        : IHost, IResource
+        : IHost, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/hosts/";
 
@@ -180,5 +181,19 @@ namespace Jagabata.Resources
         public string InstanceId { get; } = instanceId;
 
         public string Variables { get; } = variables;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder(Enabled ? Name : $"[Disabled] {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
+            {
+                sb.Append($" in [{inventory.Type}:{inventory.Id}] {inventory.Name}");
+            }
+            return sb.ToString();
+        }
     }
 }

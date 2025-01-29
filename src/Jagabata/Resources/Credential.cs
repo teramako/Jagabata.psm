@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -42,7 +43,7 @@ namespace Jagabata.Resources
                             string kind,
                             bool cloud,
                             bool kubernetes)
-        : ICredential, IResource
+        : ICredential, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credentials/";
 
@@ -344,5 +345,24 @@ namespace Jagabata.Resources
         public string Kind { get; } = kind;
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(Kind))
+            {
+                sb.Append($"[{Kind}]");
+            }
+            if (Cloud)
+            {
+                sb.Append("[Cloud]");
+            }
+            sb.Append($" {Name}");
+            if (!string.IsNullOrEmpty(Description))
+            {
+                sb.Append($" ({Description})");
+            }
+            return sb.ToString();
+        }
     }
 }

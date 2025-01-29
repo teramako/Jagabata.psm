@@ -23,7 +23,7 @@ namespace Jagabata.Resources
                        DateTime? modified,
                        string name,
                        ulong organization)
-        : ILabel, IResource
+        : ILabel, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/labels/";
         /// <summary>
@@ -65,5 +65,12 @@ namespace Jagabata.Resources
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
         public ulong Organization { get; } = organization;
+
+        public string GetDescription()
+        {
+            return SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org)
+                ? $"{Name} Organization=[{org.Id}]{org.Name}"
+                : $"{Name}";
+        }
     }
 }

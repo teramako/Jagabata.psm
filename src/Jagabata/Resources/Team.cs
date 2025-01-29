@@ -28,7 +28,7 @@ namespace Jagabata.Resources
                       string name,
                       string description,
                       ulong organization)
-        : ITeam, IResource
+        : ITeam, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/teams/";
 
@@ -177,6 +177,13 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public string Description { get; } = description;
         public ulong Organization { get; } = organization;
+
+        public string GetDescription()
+        {
+            return string.IsNullOrEmpty(Description)
+                   ? Name
+                   : $"{Name} ({Description})";
+        }
     }
 }
 
