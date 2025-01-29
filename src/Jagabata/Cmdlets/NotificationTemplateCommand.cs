@@ -10,7 +10,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(NotificationTemplate))]
     public class GetNotificationTemplateCommand : GetCommandBase<NotificationTemplate>
     {
-        protected override ResourceType AcceptType => ResourceType.NotificationTemplate;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.NotificationTemplate)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

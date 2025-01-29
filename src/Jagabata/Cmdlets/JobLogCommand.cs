@@ -1,4 +1,5 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
+using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
 using System.Collections.Specialized;
@@ -37,6 +38,15 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "StdOutTypeAndId", Position = 1)]
         [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId", Position = 1)]
+        [ResourceCompletions(ResourceCompleteType.Id,
+        [
+            ResourceType.Job,
+            ResourceType.ProjectUpdate,
+            ResourceType.InventoryUpdate,
+            ResourceType.SystemJob,
+            ResourceType.WorkflowJob,
+            ResourceType.AdHocCommand
+        ])]
         public ulong Id { get; set; } = 0;
 
         [Parameter(Mandatory = true, ParameterSetName = "StdOutResource", ValueFromPipeline = true, Position = 0)]
@@ -48,6 +58,15 @@ namespace Jagabata.Cmdlets
                 ResourceType.SystemJob,
                 ResourceType.WorkflowJob,
                 ResourceType.AdHocCommand
+        ])]
+        [ResourceCompletions(
+        [
+            ResourceType.Job,
+            ResourceType.ProjectUpdate,
+            ResourceType.InventoryUpdate,
+            ResourceType.SystemJob,
+            ResourceType.WorkflowJob,
+            ResourceType.AdHocCommand
         ])]
         public IResource Job { get; set; } = new Resource(0, 0);
 

@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Application))]
     public class GetApplicationCommand : GetCommandBase<Application>
     {
-        protected override ResourceType AcceptType => ResourceType.OAuth2Application;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2Application])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2Application)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

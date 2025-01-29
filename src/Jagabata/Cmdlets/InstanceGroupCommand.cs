@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(InstanceGroup))]
     public class GetInstanceGroupCommand : GetCommandBase<InstanceGroup>
     {
-        protected override ResourceType AcceptType => ResourceType.InstanceGroup;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InstanceGroup])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InstanceGroup)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

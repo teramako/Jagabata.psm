@@ -25,7 +25,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(User))]
     public class GetUserCommand : GetCommandBase<User>
     {
-        protected override ResourceType AcceptType => ResourceType.User;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

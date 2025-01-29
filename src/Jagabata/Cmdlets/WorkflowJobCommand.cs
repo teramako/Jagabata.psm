@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(WorkflowJob.Detail))]
     public class GetWorkflowJobCommand : GetCommandBase<WorkflowJob.Detail>
     {
-        protected override ResourceType AcceptType => ResourceType.WorkflowJob;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJob])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJob)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

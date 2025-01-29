@@ -1,3 +1,4 @@
+using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
@@ -8,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Instance))]
     public class GetInstanceCommand : GetCommandBase<Instance>
     {
-        protected override ResourceType AcceptType => ResourceType.Instance;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Instance])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Instance)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

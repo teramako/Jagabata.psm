@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(ProjectUpdateJob.Detail))]
     public class GetProjectUpdateJobCommand : GetCommandBase<ProjectUpdateJob.Detail>
     {
-        protected override ResourceType AcceptType => ResourceType.ProjectUpdate;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ProjectUpdate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ProjectUpdate)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

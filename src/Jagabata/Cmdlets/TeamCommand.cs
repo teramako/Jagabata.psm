@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Team))]
     public class GetTeamCommand : GetCommandBase<Team>
     {
-        protected override ResourceType AcceptType => ResourceType.Team;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Team])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Team)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

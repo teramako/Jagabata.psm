@@ -5,51 +5,39 @@ using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;
 
-public abstract class GetCommandBase<TResource> : APICmdletBase where TResource: class
+public abstract class GetCommandBase<TResource> : APICmdletBase where TResource : class
 {
-    [Parameter(Mandatory = true,
-               Position = 0,
-               ValueFromRemainingArguments = true,
-               ValueFromPipeline = true,
-               ValueFromPipelineByPropertyName = true)]
-    [PSDefaultValue(Value = 1, Help = "The resource ID")]
-    public ulong[] Id { get; set; } = [];
+    public virtual ulong[] Id { get; set; } = [];
 
     [Parameter(ValueFromPipelineByPropertyName = true, DontShow = true)]
     public ResourceType? Type { get; set; }
 
-    protected readonly HashSet<ulong> IdSet = [];
-    protected readonly NameValueCollection Query = HttpUtility.ParseQueryString("");
+    protected HashSet<ulong> IdSet { get; } = [];
+    protected NameValueCollection Query { get; } = HttpUtility.ParseQueryString("");
 
-    private string? _apiPath = null;
+    private string? _apiPath;
     protected virtual string ApiPath
     {
         get
         {
             if (_apiPath is not null)
+            {
                 return _apiPath;
+            }
 
             _apiPath = GetApiPath(typeof(TResource));
             return _apiPath;
         }
-        set
-        {
-            _apiPath = value;
-        }
+        set => _apiPath = value;
     }
 
-    protected abstract ResourceType AcceptType { get; }
     /// <summary>
     /// Gather resource IDs to retrieve
     /// Primarily called from within the <see cref="Cmdlet.ProcessRecord"/> method
     /// </summary>
     protected void GatherResourceId()
     {
-        if (Type is not null && Type != AcceptType)
-        {
-            return;
-        }
-        foreach (var id in Id)
+        foreach (var id in Id.Where(static id => id > 0))
         {
             IdSet.Add(id);
         }
@@ -61,7 +49,11 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     /// </summary>
     protected IEnumerable<TResource> GetResultSet()
     {
-        if (IdSet.Count == 1)
+        if (IdSet.Count == 0)
+        {
+            yield break;
+        }
+        else if (IdSet.Count == 1)
         {
             var res = GetResource<TResource>($"{ApiPath}{IdSet.First()}/");
             yield return res;
@@ -87,11 +79,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource:
     /// <param name="subPath">sub path</param>
     protected IEnumerable<TResource> GetResource(string subPath = "")
     {
-        if (Type is not null && Type != AcceptType)
-        {
-            yield break;
-        }
-        foreach (var id in Id)
+        foreach (var id in Id.Where(static id => id > 0))
         {
             if (!IdSet.Add(id))
             {

@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(ExecutionEnvironment))]
     public class GetExecutionEnvironmentCommand : GetCommandBase<ExecutionEnvironment>
     {
-        protected override ResourceType AcceptType => ResourceType.ExecutionEnvironment;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {

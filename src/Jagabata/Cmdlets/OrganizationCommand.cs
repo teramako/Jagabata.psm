@@ -9,7 +9,10 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Organization))]
     public class GetOrganizationCommand : GetCommandBase<Organization>
     {
-        protected override ResourceType AcceptType => ResourceType.Organization;
+        [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
+        public override ulong[] Id { get; set; } = [];
 
         protected override void ProcessRecord()
         {
