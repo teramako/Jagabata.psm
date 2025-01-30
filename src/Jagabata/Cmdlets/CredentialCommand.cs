@@ -25,40 +25,22 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Credential", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Credential")]
     [OutputType(typeof(Credential))]
     public class FindCredentialCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.User),
-                     nameof(ResourceType.Team),
-                     nameof(ResourceType.CredentialType),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.InventoryUpdate),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.Job),
-                     nameof(ResourceType.Schedule),
-                     nameof(ResourceType.WorkflowJobTemplateNode),
-                     nameof(ResourceType.WorkflowJobNode))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.User,
-                ResourceType.Team,
-                ResourceType.CredentialType,
-                ResourceType.InventorySource,
-                ResourceType.InventoryUpdate,
-                ResourceType.JobTemplate,
-                ResourceType.Job,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplateNode,
-                ResourceType.WorkflowJobNode
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.User, ResourceType.Team, ResourceType.CredentialType,
+            ResourceType.InventorySource, ResourceType.InventoryUpdate, ResourceType.JobTemplate, ResourceType.Job,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
         ])]
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.User, ResourceType.Team, ResourceType.CredentialType,
+            ResourceType.InventorySource, ResourceType.InventoryUpdate, ResourceType.JobTemplate, ResourceType.Job,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -99,25 +81,19 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/" + (Galaxy ? "galaxy_credentials/" : "credentials/"),
-                ResourceType.User => $"{User.PATH}{Id}/credentials/",
-                ResourceType.Team => $"{Team.PATH}{Id}/credentials/",
-                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Id}/credentials/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/credentials/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/credentials/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/credentials/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/credentials/",
-                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/credentials/",
-                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/credentials/",
-                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/credentials/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/" + (Galaxy ? "galaxy_credentials/" : "credentials/"),
+                ResourceType.User => $"{User.PATH}{Resource.Id}/credentials/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/credentials/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Resource.Id}/credentials/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/credentials/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Resource.Id}/credentials/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/credentials/",
+                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/credentials/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Resource.Id}/credentials/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Resource.Id}/credentials/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Resource.Id}/credentials/",
                 _ => Credential.PATH
             };
             Find<Credential>(path);
