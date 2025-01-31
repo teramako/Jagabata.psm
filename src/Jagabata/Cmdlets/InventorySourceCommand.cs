@@ -47,11 +47,11 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "source", "source_path",
-                                   "source_vars", "scm_branch", "enabled_var", "enabled_value", "host_filter", "overwrite",
-                                   "overwrite_vars", "timeout", "verbosity", "limit", "last_job_run", "last_job_failed",
-                                   "next_job_run", "status", "execution_environment", "inventory", "update_on_launch",
-                                   "update_cache_timeout", "source_project"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "source", "source_path",
+                           "source_vars", "scm_branch", "enabled_var", "enabled_value", "host_filter", "overwrite",
+                           "overwrite_vars", "timeout", "verbosity", "limit", "last_job_run", "last_job_failed",
+                           "next_job_run", "status", "execution_environment", "inventory", "update_on_launch",
+                           "update_cache_timeout", "source_project")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

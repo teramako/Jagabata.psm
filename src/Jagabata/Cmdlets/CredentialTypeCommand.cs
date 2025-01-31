@@ -34,8 +34,8 @@ namespace Jagabata.Cmdlets
         public CredentialTypeKind[]? Kind { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "kind", "namespace",
-                                   "managed", "inputs", "injectors", "created_by", "modified_by"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "kind", "namespace",
+                           "managed", "inputs", "injectors", "created_by", "modified_by")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

@@ -38,8 +38,8 @@ namespace Jagabata.Cmdlets
         public SwitchParameter AdHocCommandEvent { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "event", "counter", "event_data", "failed", "changed",
-                                   "uuid", "stdout", "start_line", "end_line", "verbosity"])]
+        [OrderByCompletion("id", "created", "modified", "event", "counter", "event_data", "failed", "changed",
+                           "uuid", "stdout", "start_line", "end_line", "verbosity")]
         public override string[] OrderBy { get; set; } = ["counter"];
 
         protected override void ProcessRecord()

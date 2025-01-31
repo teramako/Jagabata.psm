@@ -41,15 +41,15 @@ namespace Jagabata.Cmdlets
         public string[]? LaunchType { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "unified_job_template",
-                                   "launch_type", "status", "execution_environment", "failed", "started", "finished",
-                                   "canceled_on", "elapsed", "job_explanation", "execution_node", "controller_node",
-                                   "work_unit_id", "job_type", "inventory", "project", "playbook", "scm_branch", "forks",
-                                   "limit", "verbosity", "job_tags", "force_handlers", "skip_tags", "start_at_task",
-                                   "timeout", "use_fact_cache", "organization", "job_template", "allow_simultaneous",
-                                   "artifacts", "scm_revision", "instance_group", "diff_mode", "job_slice_number",
-                                   "job_slice_count", "webhook_service", "webhook_credential", "webhook_credential",
-                                   "schedule", "created_by", "modified_by", "labels"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "unified_job_template",
+                           "launch_type", "status", "execution_environment", "failed", "started", "finished",
+                           "canceled_on", "elapsed", "job_explanation", "execution_node", "controller_node",
+                           "work_unit_id", "job_type", "inventory", "project", "playbook", "scm_branch", "forks",
+                           "limit", "verbosity", "job_tags", "force_handlers", "skip_tags", "start_at_task",
+                           "timeout", "use_fact_cache", "organization", "job_template", "allow_simultaneous",
+                           "artifacts", "scm_revision", "instance_group", "diff_mode", "job_slice_number",
+                           "job_slice_count", "webhook_service", "webhook_credential", "webhook_credential",
+                           "schedule", "created_by", "modified_by", "labels")]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 

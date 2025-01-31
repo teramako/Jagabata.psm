@@ -42,9 +42,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "job", "host", "constructed_host", "host_name",
-                                   "changed", "dark", "failures", "ok", "processed", "skipped", "failed",
-                                   "ignored", "rescued"])]
+        [OrderByCompletion("id", "created", "modified", "job", "host", "constructed_host", "host_name", "changed",
+                           "dark", "failures", "ok", "processed", "skipped", "failed", "ignored", "rescued")]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void ProcessRecord()

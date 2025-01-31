@@ -31,12 +31,12 @@ namespace Jagabata.Cmdlets
     public class FindSystemJobTemplateCommand : FindCommandBase
     {
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "last_job_run",
-                                   "last_job_failed", "next_job_run", "status", "execution_environment",
-                                   "job_type", "notification_templates_error", "notification_templates_success",
-                                   "notification_templates_started", "unifiedjob_unified_jobs", "last_job",
-                                   "organization", "schedules", "jobs", "created_by", "credentials", "current_job",
-                                   "modified_by", "instance_groups", "labels", "next_schedule"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "last_job_run",
+                           "last_job_failed", "next_job_run", "status", "execution_environment",
+                           "job_type", "notification_templates_error", "notification_templates_success",
+                           "notification_templates_started", "unifiedjob_unified_jobs", "last_job",
+                           "organization", "schedules", "jobs", "created_by", "credentials", "current_job",
+                           "modified_by", "instance_groups", "labels", "next_schedule")]
         public override string[] OrderBy { get; set; } = ["id"];
 
 

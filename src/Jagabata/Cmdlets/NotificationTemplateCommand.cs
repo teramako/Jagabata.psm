@@ -34,8 +34,8 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "notification_type", "messages"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "notification_type", "messages")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -72,8 +72,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "notification_type", "messages"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "notification_type", "messages")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -126,8 +126,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "notification_type", "messages"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "notification_type", "messages")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -184,8 +184,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "notification_type", "messages"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "notification_type", "messages")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -231,8 +231,8 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "notification_type", "messages"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "notification_type", "messages")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]

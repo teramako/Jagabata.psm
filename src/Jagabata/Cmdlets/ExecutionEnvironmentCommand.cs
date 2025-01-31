@@ -32,8 +32,8 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
-                                   "image", "managed", "credential", "pull"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
+                           "image", "managed", "credential", "pull")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

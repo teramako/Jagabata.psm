@@ -75,7 +75,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "timestamp", "operation", "changes", "object1", "object2", "action_node"])]
+        [OrderByCompletion("id", "timestamp", "operation", "changes", "object1", "object2", "action_node")]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

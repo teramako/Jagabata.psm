@@ -10,11 +10,11 @@ namespace Jagabata.Cmdlets
     public class FindUnifiedJobTemplateCommand : FindCommandBase
     {
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "last_job_run", "last_job_failed",
-                                   "next_job_run", "status", "execution_environment", "notification_templates_error",
-                                   "notification_templates_success", "notification_templates_started", "last_job",
-                                   "organization", "schedules", "labels", "created_by", "modified_by", "credentials",
-                                   "instance_groups", "next_schedule"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "last_job_run", "last_job_failed",
+                           "next_job_run", "status", "execution_environment", "notification_templates_error",
+                           "notification_templates_success", "notification_templates_started", "last_job",
+                           "organization", "schedules", "labels", "created_by", "modified_by", "credentials",
+                           "instance_groups", "next_schedule")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         private IEnumerable<ResultSet> GetResultSet(string path,

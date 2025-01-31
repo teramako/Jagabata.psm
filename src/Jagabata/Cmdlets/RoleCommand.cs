@@ -44,8 +44,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "name", "description", "parents", "parents", "content_type",
-                                   "ancestors", "descendents", "children"])]
+        [OrderByCompletion("id", "name", "description", "parents", "parents", "content_type",
+                           "ancestors", "descendents", "children")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -102,8 +102,8 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "name", "description", "parents", "parents", "content_type",
-                                   "ancestors", "descendents", "children"])]
+        [OrderByCompletion("id", "name", "description", "parents", "parents", "content_type",
+                           "ancestors", "descendents", "children")]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

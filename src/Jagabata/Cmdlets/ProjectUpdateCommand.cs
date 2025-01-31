@@ -36,11 +36,11 @@ namespace Jagabata.Cmdlets
         public string[]? Status { get; set; }
 
         [Parameter()]
-        [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "launch_type", "status",
-                                   "execution_environment", "failed", "started", "finished", "canceled_on", "elapsed",
-                                   "job_explanation", "execution_node", "work_unit_id", "local_path", "scm_type",
-                                   "scm_url", "scm_branch", "scm_refspec", "scm_clean", "scm_track_submodules",
-                                   "scm_delete_on_update", "credential", "timeout", "scm_revision", "project"])]
+        [OrderByCompletion("id", "created", "modified", "name", "description", "launch_type", "status",
+                           "execution_environment", "failed", "started", "finished", "canceled_on", "elapsed",
+                           "job_explanation", "execution_node", "work_unit_id", "local_path", "scm_type",
+                           "scm_url", "scm_branch", "scm_refspec", "scm_clean", "scm_track_submodules",
+                           "scm_delete_on_update", "credential", "timeout", "scm_revision", "project")]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 
