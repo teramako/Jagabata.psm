@@ -31,10 +31,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
         public ulong Template { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplateNode", ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong Node { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplateNode", Position = 1)]
