@@ -24,23 +24,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Role", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Role")]
     [OutputType(typeof(Role))]
     public class FindRoleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.User),
-                     nameof(ResourceType.Team))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.User,
-                ResourceType.Team
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.User, ResourceType.Team])]
+        [ResourceCompletions(ResourceType.User, ResourceType.Team)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -54,52 +44,31 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.User => $"{User.PATH}{Id}/roles/",
-                ResourceType.Team => $"{Team.PATH}{Id}/roles/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/roles/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/roles/",
                 _ => Role.PATH
             };
             Find<Role>(path);
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "ObjectRole", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "ObjectRole")]
     [OutputType(typeof(Role))]
     public class FindObjectRoleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.InstanceGroup),
-                     nameof(ResourceType.Organization),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.Team),
-                     nameof(ResourceType.Credential),
-                     nameof(ResourceType.Inventory),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.InstanceGroup,
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.Team,
-                ResourceType.Credential,
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.WorkflowJobTemplate
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.Project, ResourceType.Team,
+            ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate
         ])]
-        public IResource? Resource { get; set; }
+        [ResourceCompletions(
+            ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.Project, ResourceType.Team,
+            ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate
+        )]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "name", "description", "parents", "parents", "content_type",
@@ -112,22 +81,16 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Id}/object_roles/",
-                ResourceType.Organization => $"{Organization.PATH}{Id}/object_roles/",
-                ResourceType.Project => $"{Project.PATH}{Id}/object_roles/",
-                ResourceType.Team => $"{Team.PATH}{Id}/object_roles/",
-                ResourceType.Credential => $"{Credential.PATH}{Id}/object_roles/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/object_roles/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/object_roles/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/object_roles/",
+                ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Resource.Id}/object_roles/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/object_roles/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/object_roles/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/object_roles/",
+                ResourceType.Credential => $"{Credential.PATH}{Resource.Id}/object_roles/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/object_roles/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/object_roles/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/object_roles/",
                 _ => throw new ArgumentException()
             };
             Find<Role>(path);
