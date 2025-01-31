@@ -20,26 +20,14 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "JobHostSummary", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "JobHostSummary")]
     [OutputType(typeof(JobHostSummary))]
     public class FindJobHostSummaryCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Job),
-                     nameof(ResourceType.Host),
-                     nameof(ResourceType.Group))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput")]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Job,
-                ResourceType.Host,
-                ResourceType.Group
-        ])]
-        public IResource? Resource { get; set; }
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Job, ResourceType.Host, ResourceType.Group])]
+        [ResourceCompletions(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "created", "modified", "job", "host", "constructed_host", "host_name",
@@ -49,17 +37,11 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/job_host_summaries/",
-                ResourceType.Host => $"{Host.PATH}{Id}/job_host_summaries/",
-                ResourceType.Group => $"{Group.PATH}{Id}/job_host_summaries/",
+                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/job_host_summaries/",
+                ResourceType.Host => $"{Host.PATH}{Resource.Id}/job_host_summaries/",
+                ResourceType.Group => $"{Group.PATH}{Resource.Id}/job_host_summaries/",
                 _ => throw new ArgumentException()
             };
             Find<JobHostSummary>(path);
