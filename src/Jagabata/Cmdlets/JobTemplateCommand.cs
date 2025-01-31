@@ -29,26 +29,16 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "JobTemplate", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "JobTemplate")]
     [OutputType(typeof(JobTemplate))]
     public class FindJobTemplateCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Inventory))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Inventory
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.Inventory])]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.Inventory)]
         public IResource? Resource { get; set; }
 
-        [Parameter(Position = 2)]
+        [Parameter(Position = 1)]
         public string[]? Name { get; set; }
 
         [Parameter()]
@@ -75,16 +65,10 @@ namespace Jagabata.Cmdlets
         }
         protected override void EndProcessing()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/job_templates/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/job_templates/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/job_templates/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/job_templates/",
                 _ => JobTemplate.PATH
             };
             Find<JobTemplate>(path);
