@@ -24,23 +24,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Token", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Token")]
     [OutputType(typeof(OAuth2AccessToken))]
     public class FindTokenCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.OAuth2Application),
-                     nameof(ResourceType.User))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.OAuth2Application,
-                ResourceType.User
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.OAuth2Application, ResourceType.User])]
+        [ResourceCompletions(ResourceType.OAuth2Application, ResourceType.User)]
         public IResource? Resource { get; set; }
 
         /// <summary>
@@ -63,14 +53,8 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
-            {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
             Query.Clear();
-            if (Type != ResourceType.OAuth2Application)
+            if (Resource?.Type != ResourceType.OAuth2Application)
             {
                 switch (TokenType)
                 {
@@ -83,10 +67,10 @@ namespace Jagabata.Cmdlets
                 }
             }
             SetupCommonQuery();
-            var path = Type switch
+            var path = Resource?.Type switch
             {
-                ResourceType.OAuth2Application => $"{Application.PATH}{Id}/tokens/",
-                ResourceType.User => $"{User.PATH}{Id}/tokens/",
+                ResourceType.OAuth2Application => $"{Application.PATH}{Resource.Id}/tokens/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/tokens/",
                 _ => OAuth2AccessToken.PATH
             };
             Find<OAuth2AccessToken>(path);
