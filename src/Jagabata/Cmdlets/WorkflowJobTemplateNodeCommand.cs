@@ -52,7 +52,7 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path =Resources.WorkflowJobTemplateNode.PATH;
+            var path = WorkflowJobTemplateNode.PATH;
             if (Template > 0)
             {
                 path = $"{WorkflowJobTemplate.PATH}{Template}/workflow_nodes/";
@@ -61,9 +61,9 @@ namespace Jagabata.Cmdlets
             {
                 path = Linked switch
                 {
-                    WorkflowJobNodeLinkState.Always => $"{Resources.WorkflowJobTemplateNode.PATH}{Node}/always_nodes/",
-                    WorkflowJobNodeLinkState.Failure => $"{Resources.WorkflowJobTemplateNode.PATH}{Node}/failure_nodes/",
-                    WorkflowJobNodeLinkState.Success => $"{Resources.WorkflowJobTemplateNode.PATH}{Node}/success_nodes/",
+                    WorkflowJobNodeLinkState.Always => $"{WorkflowJobTemplateNode.PATH}{Node}/always_nodes/",
+                    WorkflowJobNodeLinkState.Failure => $"{WorkflowJobTemplateNode.PATH}{Node}/failure_nodes/",
+                    WorkflowJobNodeLinkState.Success => $"{WorkflowJobTemplateNode.PATH}{Node}/success_nodes/",
                     _ => throw new ArgumentException()
                 };
             }
