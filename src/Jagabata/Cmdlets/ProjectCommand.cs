@@ -24,25 +24,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Project", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Project")]
     [OutputType(typeof(Project))]
     public class FindProjectCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.User),
-                     nameof(ResourceType.Team))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.User,
-                ResourceType.Team
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.User, ResourceType.Team])]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.User, ResourceType.Team)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -60,17 +48,11 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/projects/",
-                ResourceType.User => $"{User.PATH}{Id}/projects/",
-                ResourceType.Team => $"{Team.PATH}{Id}/projects/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/projects/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/projects/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/projects/",
                 _ => Project.PATH
             };
             Find<Project>(path);
