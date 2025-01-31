@@ -24,34 +24,22 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Label", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Label")]
     [OutputType(typeof(Label))]
     public class FindLabelCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Inventory),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.Job),
-                     nameof(ResourceType.Schedule),
-                     nameof(ResourceType.WorkflowJobTemplate),
-                     nameof(ResourceType.WorkflowJob),
-                     nameof(ResourceType.WorkflowJobTemplateNode),
-                     nameof(ResourceType.WorkflowJobNode))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Job,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplate,
-                ResourceType.WorkflowJob,
-                ResourceType.WorkflowJobTemplateNode,
-                ResourceType.WorkflowJobNode
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
+            ResourceType.WorkflowJobNode
         ])]
+        [ResourceCompletions(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
+            ResourceType.WorkflowJobNode
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -64,22 +52,16 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/labels/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/labels/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/labels/",
-                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/labels/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/labels/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Id}/labels/",
-                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/labels/",
-                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/labels/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/labels/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/labels/",
+                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/labels/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Resource.Id}/labels/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/labels/",
+                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Resource.Id}/labels/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Resource.Id}/labels/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Resource.Id}/labels/",
                 _ => Label.PATH
             };
             Find<Label>(path);
