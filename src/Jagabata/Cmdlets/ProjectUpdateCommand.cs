@@ -26,6 +26,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public ulong Project { get; set; }
 
         [Parameter()]
