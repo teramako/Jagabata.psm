@@ -24,29 +24,20 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Schedule", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Schedule")]
     [OutputType(typeof(Resources.Schedule))]
     public class FindScheduleCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Project),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.SystemJobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
+            ResourceType.WorkflowJobTemplate
         ])]
+        [ResourceCompletions(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
+            ResourceType.WorkflowJobTemplate
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -62,19 +53,13 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Project => $"{Project.PATH}{Id}/schedules/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/schedules/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/schedules/",
-                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Id}/schedules/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/schedules/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/schedules/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/schedules/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/schedules/",
+                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Resource.Id}/schedules/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/schedules/",
                 _ => Resources.Schedule.PATH
             };
             base.Find<Resources.Schedule>(path);
