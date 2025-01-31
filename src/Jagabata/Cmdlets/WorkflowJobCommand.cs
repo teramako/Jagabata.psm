@@ -20,23 +20,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "WorkflowJob", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "WorkflowJob")]
     [OutputType(typeof(WorkflowJob))]
     public class FindWorkflowJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.JobTemplate,
-                ResourceType.WorkflowApprovalTemplate
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate])]
+        [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -78,16 +68,10 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/slice_workflow_jobs/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/workflow_jobs/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/slice_workflow_jobs/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/workflow_jobs/",
                 _ => WorkflowJob.PATH
             };
             Find<WorkflowJob>(path);
