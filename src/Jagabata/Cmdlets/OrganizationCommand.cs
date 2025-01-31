@@ -30,6 +30,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ParameterSetName = "User", ValueFromPipeline = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public ulong User { get; set; }
 
         [Parameter(ParameterSetName = "User")]
