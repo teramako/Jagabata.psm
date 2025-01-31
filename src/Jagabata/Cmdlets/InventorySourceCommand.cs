@@ -24,26 +24,18 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "InventorySource", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "InventorySource")]
     [OutputType(typeof(InventorySource))]
     public class FindInventorySourceCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Project),
-                     nameof(ResourceType.Inventory),
-                     nameof(ResourceType.Group),
-                     nameof(ResourceType.Host))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.Inventory,
-                ResourceType.Group,
-                ResourceType.Host
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
         ])]
+        [ResourceCompletions(
+            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -60,18 +52,12 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Project => $"{Project.PATH}{Id}/scm_inventory_sources/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/inventory_sources/",
-                ResourceType.Group => $"{Group.PATH}{Id}/inventory_sources/",
-                ResourceType.Host => $"{Host.PATH}{Id}/inventory_sources/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/scm_inventory_sources/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/inventory_sources/",
+                ResourceType.Group => $"{Group.PATH}{Resource.Id}/inventory_sources/",
+                ResourceType.Host => $"{Host.PATH}{Resource.Id}/inventory_sources/",
                 _ => InventorySource.PATH
             };
             Find<InventorySource>(path);
