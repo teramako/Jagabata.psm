@@ -31,6 +31,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]
@@ -52,24 +53,14 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForApproval", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForApproval")]
     [OutputType(typeof(NotificationTemplate))]
     public class FindNotificationTemplateForApprovalCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.WorkflowJobTemplate
-        ])]
-        public IResource? Resource { get; set; }
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.WorkflowJobTemplate])]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
@@ -82,48 +73,31 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/notification_templates_approvals/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_approvals/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/notification_templates_approvals/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/notification_templates_approvals/",
                 _ => throw new ArgumentException()
             };
             Find<NotificationTemplate>(path);
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForError", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForError")]
     [OutputType(typeof(NotificationTemplate))]
     public class FindNotificationTemplateForErrorCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.SystemJobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         ])]
-        public IResource? Resource { get; set; }
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
@@ -136,52 +110,35 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/notification_templates_error/",
-                ResourceType.Project => $"{Project.PATH}{Id}/notification_templates_error/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/notification_templates_error/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/notification_templates_error/",
-                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Id}/notification_templates_error/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_error/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/notification_templates_error/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/notification_templates_error/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/notification_templates_error/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/notification_templates_error/",
+                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Resource.Id}/notification_templates_error/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/notification_templates_error/",
                 _ => throw new ArgumentException()
             };
             Find<NotificationTemplate>(path);
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForStarted", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForStarted")]
     [OutputType(typeof(NotificationTemplate))]
     public class FindNotificationTemplateForStartedCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.SystemJobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         ])]
-        public IResource? Resource { get; set; }
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
@@ -194,57 +151,40 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/notification_templates_started/",
-                ResourceType.Project => $"{Project.PATH}{Id}/notification_templates_started/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/notification_templates_started/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/notification_templates_started/",
-                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Id}/notification_templates_started/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_started/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/notification_templates_started/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/notification_templates_started/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/notification_templates_started/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/notification_templates_started/",
+                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Resource.Id}/notification_templates_started/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/notification_templates_started/",
                 _ => throw new ArgumentException()
             };
             Find<NotificationTemplate>(path);
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForSuccess", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "NotificationTemplateForSuccess")]
     [OutputType(typeof(NotificationTemplate))]
     public class FindNotificationTemplateForSuccessCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.SystemJobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        ])]
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion(Keys = ["id", "created", "modified", "name", "description", "organization",
                                    "notification_type", "messages"])]
         public override string[] OrderBy { get; set; } = ["id"];
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
-        public IResource? Resource { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -252,20 +192,14 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/notification_templates_success/",
-                ResourceType.Project => $"{Project.PATH}{Id}/notification_templates_success/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/notification_templates_success/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/notification_templates_success/",
-                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Id}/notification_templates_success/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/notification_templates_success/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/notification_templates_success/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/notification_templates_success/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/notification_templates_success/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/notification_templates_success/",
+                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{Resource.Id}/notification_templates_success/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/notification_templates_success/",
                 _ => throw new ArgumentException()
             };
             Find<NotificationTemplate>(path);
