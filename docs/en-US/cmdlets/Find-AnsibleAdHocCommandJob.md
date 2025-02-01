@@ -12,21 +12,8 @@ Retrieve jobs for AdHocCommand.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleAdHocCommandJob [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleAdHocCommandJob [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleAdHocCommandJob -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleAdHocCommandJob [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -109,22 +96,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -168,13 +139,22 @@ The resource is accepted following types:
 - `Host`  
 - `Group`
 
+> [!TIP]  
+> Can specify the resource as string like `Host:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleHost -Id 1)`  
+>  - `-Resource @{ type = "host"; id = 1 }`  
+>  - `-Resource host:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -194,24 +174,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Search words. (case-insensitive)
-
-Multiple words are available by separating with a comma(`,`).
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Inventory, Host, Group
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -29,6 +29,8 @@ namespace Jagabata.Cmdlets
     public class FindExecutionEnvironmentCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]

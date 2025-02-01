@@ -20,23 +20,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "InventoryUpdateJob", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "InventoryUpdateJob")]
     [OutputType(typeof(InventoryUpdateJob))]
     public class FindInventoryUpdateJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.ProjectUpdate),
-                     nameof(ResourceType.InventorySource))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineVariable", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.ProjectUpdate,
-                ResourceType.InventorySource
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.ProjectUpdate, ResourceType.InventorySource])]
+        [ResourceCompletions(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -54,16 +44,10 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Id}/scm_inventory_updates/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/inventory_updates/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Resource.Id}/scm_inventory_updates/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/inventory_updates/",
                 _ => InventoryUpdateJob.PATH
             };
             Find<InventoryUpdateJob>(path);

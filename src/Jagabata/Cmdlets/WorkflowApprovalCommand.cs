@@ -27,6 +27,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApprovalTemplate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowApprovalTemplate)]
         public ulong WorkflowApprovalTemplate { get; set; }
 
         [Parameter()]

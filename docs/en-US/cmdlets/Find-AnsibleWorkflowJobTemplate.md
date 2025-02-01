@@ -115,6 +115,15 @@ Accept wildcard characters: False
 Organization ID or it's object.
 Search WorkflowJobTemplates which the Organization is associated with.
 
+> [!TIP]  
+> Can specify the resource as string like `Organization:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Organization (Get-AnsibleOrganization -Id 1)`  
+>  - `-Organization @{ type = "organization"; id = 1 }`  
+>  - `-Organization organization:1`
+
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
@@ -168,6 +177,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.UInt64
 Organization ID or it's object.
+See `-Organization` parameter.
 
 ## OUTPUTS
 

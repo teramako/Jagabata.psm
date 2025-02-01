@@ -22,24 +22,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "AdHocCommandJob", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "AdHocCommandJob")]
     [OutputType(typeof(AdHocCommand))]
     public class FindAdHocCommandJobCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Inventory),
-                     nameof(ResourceType.Host),
-                     nameof(ResourceType.Group))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.Host,
-                ResourceType.Group
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Inventory, ResourceType.Host, ResourceType.Group])]
+        [ResourceCompletions(ResourceType.Inventory, ResourceType.Host, ResourceType.Group)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -58,17 +47,11 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/ad_hoc_commands/",
-                ResourceType.Host => $"{Host.PATH}{Id}/ad_hoc_commands/",
-                ResourceType.Group => $"{Group.PATH}{Id}/ad_hoc_commands/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/ad_hoc_commands/",
+                ResourceType.Host => $"{Host.PATH}{Resource.Id}/ad_hoc_commands/",
+                ResourceType.Group => $"{Group.PATH}{Resource.Id}/ad_hoc_commands/",
                 _ => AdHocCommand.PATH
             };
             Find<AdHocCommand>(path);

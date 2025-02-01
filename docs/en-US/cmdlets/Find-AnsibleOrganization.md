@@ -199,8 +199,13 @@ User ID or it's object.
 Retrieve Organizations which the User belong to.
 
 > [!TIP]  
-> Can specify `IResource` object.  
-> For example: `-Id (Get-AnsibleUser -Id 3)`, `-Id $users[1]`
+> Can specify the resource as string like `User:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-User (Get-AnsibleUser -Id 1)`  
+>  - `-User @{ type = "user"; id = 1 }`  
+>  - `-User user:1`
 
 ```yaml
 Type: UInt64

@@ -12,23 +12,10 @@ Retrieve JobTemplates.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleJobTemplate [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleJobTemplate [-Type] <ResourceType> [-Id] <UInt64> [[-Name] <String[]>] [-OrderBy <String[]>]
+Find-AnsibleJobTemplate [[-Resource] <IResource>] [[-Name] <String[]>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleJobTemplate -Resource <IResource> [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,7 +35,7 @@ PS C:\> Find-AnsibleJobTemplate
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleJobTemplate -Type Organization -Id 1
+PS C:\> Find-AnsibleJobTemplate -Resource Organization:1
 ```
 
 Retrieve JobTemplates associated with the Organization of ID 1
@@ -107,22 +94,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
 Filter by JobTemplate name.
 The names must be an exact match. (case-sensitive)
@@ -135,7 +106,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -183,13 +154,22 @@ And `Type` should be following value:
 - `Organization`  
 - `Inventory`
 
+> [!TIP]  
+> Can specify the resource as string like `Inventory:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleInventory -Id 1)`  
+>  - `-Resource @{ type = "inventory"; id = 1 }`  
+>  - `-Resource inventory:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -214,34 +194,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization, Inventory
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### Jagabata.Resources.IResource
-The object has `Id` and `Type` properties.
-
-And `Type` should be following value:  
-- `Organization`  
-- `Inventory`
+Resource object to which the search target associated with.
+See: `-Resource` parameter.
 
 ## OUTPUTS
 

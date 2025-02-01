@@ -24,29 +24,20 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Team", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Team")]
     [OutputType(typeof(Team))]
     public class FindTeamCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.User),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.Credential),
-                     nameof(ResourceType.Role))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.User,
-                ResourceType.Project,
-                ResourceType.Credential,
-                ResourceType.Role
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
+            ResourceType.Role
         ])]
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
+            ResourceType.Role
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -60,19 +51,13 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/teams/",
-                ResourceType.User => $"{User.PATH}{Id}/teams/",
-                ResourceType.Project => $"{Project.PATH}{Id}/teams/",
-                ResourceType.Credential => $"{Credential.PATH}{Id}/owner_teams/",
-                ResourceType.Role => $"{Role.PATH}{Id}/teams/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/teams/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/teams/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/teams/",
+                ResourceType.Credential => $"{Credential.PATH}{Resource.Id}/owner_teams/",
+                ResourceType.Role => $"{Role.PATH}{Resource.Id}/teams/",
                 _ => Team.PATH
             };
             Find<Team>(path);

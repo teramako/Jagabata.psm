@@ -9,29 +9,16 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(IJobEventBase))]
     public class FindJobEventCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Job),
-                     nameof(ResourceType.ProjectUpdate),
-                     nameof(ResourceType.InventoryUpdate),
-                     nameof(ResourceType.SystemJob),
-                     nameof(ResourceType.AdHocCommand),
-                     nameof(ResourceType.Host),
-                     nameof(ResourceType.Group))]
-        public ResourceType Type { get; set; } = ResourceType.None;
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; } = 0;
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Job,
-                ResourceType.ProjectUpdate,
-                ResourceType.InventoryUpdate,
-                ResourceType.SystemJob,
-                ResourceType.AdHocCommand,
-                ResourceType.Host,
-                ResourceType.Group
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
+            ResourceType.AdHocCommand, ResourceType.Host, ResourceType.Group
         ])]
+        [ResourceCompletions(
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
+            ResourceType.AdHocCommand, ResourceType.Host, ResourceType.Group
+        )]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -44,9 +31,6 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Id > 0 && Type > 0)
-                Resource = new Resource(Type, Id);
-
             Query.Clear();
             SetupCommonQuery();
 

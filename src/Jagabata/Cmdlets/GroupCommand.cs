@@ -24,43 +24,32 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Group", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Group")]
     [OutputType(typeof(Group))]
     public class FindGroupCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Inventory),
-                     nameof(ResourceType.Group),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.Host))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.Group,
-                ResourceType.InventorySource,
-                ResourceType.Host
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Inventory, ResourceType.Group, ResourceType.InventorySource, ResourceType.Host
         ])]
+        [ResourceCompletions(
+            ResourceType.Inventory, ResourceType.Group, ResourceType.InventorySource, ResourceType.Host
+        )]
         public IResource? Resource { get; set; }
 
         /// <summary>
         /// List only root(Top-level) groups.
         /// Only affected for an Inventory Type
         /// </summary>
-        [Parameter(ParameterSetName = "AssociatedWith")]
-        [Parameter(ParameterSetName = "PipelineInput")]
+        [Parameter()]
         public SwitchParameter OnlyRoot { get; set; }
 
         /// <summary>
         /// List only directly member groups.
         /// Only affected for a Host Type
         /// </summary>
-        [Parameter(ParameterSetName = "AssociatedWith")]
-        [Parameter(ParameterSetName = "PipelineInput")]
+        [Parameter()]
         public SwitchParameter OnlyParnets { get; set; }
 
         [Parameter()]
@@ -74,18 +63,12 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/" + (OnlyRoot ? "root_groups/" : "groups/"),
-                ResourceType.Group => $"{Group.PATH}{Id}/children/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/groups/",
-                ResourceType.Host => $"{Host.PATH}{Id}/" + (OnlyParnets ? "groups/" : "all_groups/"),
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/" + (OnlyRoot ? "root_groups/" : "groups/"),
+                ResourceType.Group => $"{Group.PATH}{Resource.Id}/children/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/groups/",
+                ResourceType.Host => $"{Host.PATH}{Resource.Id}/" + (OnlyParnets ? "groups/" : "all_groups/"),
                 _ => Group.PATH
             };
             Find<Group>(path);

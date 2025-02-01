@@ -12,21 +12,8 @@ Retrieve Roles all or granted to the target resource.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleRole [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
- [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleRole [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleRole -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleRole [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -47,7 +34,7 @@ PS C:\> Find-AnsibleRole
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleRole -Type User -Id 1
+PS C:\> Find-AnsibleRole -Resource User:1
 ```
 
 Retrieve Roles associated with the User of ID 1
@@ -106,22 +93,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -163,15 +134,24 @@ The resource is accepted following types:
 - `User`  
 - `Team`
 
+> [!TIP]  
+> Can specify the resource as string like `User:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleUser -Id 1)`  
+>  - `-Resource @{ type = "user"; id = 1 }`  
+>  - `-Resource user:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -189,23 +169,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: User, Team
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -24,32 +24,20 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "InstanceGroup", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "InstanceGroup")]
     [OutputType(typeof(InstanceGroup))]
     public class FindInstanceGroupCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Instance),
-                     nameof(ResourceType.Organization),
-                     nameof(ResourceType.Inventory),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.Schedule),
-                     nameof(ResourceType.WorkflowJobTemplateNode),
-                     nameof(ResourceType.WorkflowJobNode))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Instance,
-                ResourceType.Organization,
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplateNode,
-                ResourceType.WorkflowJobNode
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
         ])]
+        [ResourceCompletions(
+            ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
+        )]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -64,21 +52,15 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Instance => $"{Instance.PATH}{Id}/instance_groups/",
-                ResourceType.Organization => $"{Organization.PATH}{Id}/instance_groups/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/instance_groups/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/instance_groups/",
-                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Id}/instance_groups/",
-                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Id}/instance_groups/",
-                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Id}/instance_groups/",
+                ResourceType.Instance => $"{Instance.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.Schedule => $"{Resources.Schedule.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Resource.Id}/instance_groups/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Resource.Id}/instance_groups/",
                 _ => InstanceGroup.PATH
             };
             Find<InstanceGroup>(path);

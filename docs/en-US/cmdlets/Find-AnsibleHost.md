@@ -12,22 +12,8 @@ Retrieve Hosts.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleHost [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
- [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleHost [-Type] <ResourceType> [-Id] <UInt64> [-OnlyChildren] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleHost -Resource <IResource> [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleHost [[-Resource] <IResource>] [-OnlyChildren] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -50,17 +36,17 @@ PS C:\> Find-AnsibleHost
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleHost -Type Inventory -Id 1
+PS C:\> Find-AnsibleHost -Resource Inventory:1
 ```
 
 Retrieve Hosts associated with the Inventory of ID 1
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
+`Resource` parameter can also be given from the pipeline, likes following:  
     Get-AnsibleInventory -Id 1 | Find-AnsibleHost
 
 ### Example 3
 ```powershell
-PS C:\> Find-AnsibleHost -Type Group -Id 1
+PS C:\> Find-AnsibleHost -Resource Group:1
 ```
 
 Retrieve Hosts directly or indirectly belonging to the target Group (ID 1).
@@ -121,29 +107,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OnlyChildren
 List only directly member group.
 Only affected for a Group Type
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith, PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -195,13 +165,22 @@ The resource is accepted following types:
 - `InventorySource`  
 - `Group`
 
+> [!TIP]  
+> Can specify the resource as string like `Group:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleGroup -Id 1)`  
+>  - `-Resource @{ type = "group"; id = 1 }`  
+>  - `-Resource group:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -221,23 +200,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Inventory, InventorySource, Group
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

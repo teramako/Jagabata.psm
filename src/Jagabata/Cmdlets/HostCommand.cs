@@ -24,33 +24,24 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Host", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Host")]
     [OutputType(typeof(Host))]
     public class FindHostCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Inventory),
-                     nameof(ResourceType.InventorySource),
-                     nameof(ResourceType.Group))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.InventorySource,
-                ResourceType.Group
+            ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group
         ])]
+        [ResourceCompletions(
+            ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group
+        )]
         public IResource? Resource { get; set; }
 
         /// <summary>
         /// List only directly member group.
         /// Only affected for a Group Type
         /// </summary>
-        [Parameter(ParameterSetName = "AssociatedWith")]
-        [Parameter(ParameterSetName = "PipelineInput")]
+        [Parameter()]
         public SwitchParameter OnlyChildren { get; set; }
 
         [Parameter()]
@@ -65,17 +56,11 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/hosts/",
-                ResourceType.InventorySource => $"{InventorySource.PATH}{Id}/hosts/",
-                ResourceType.Group => $"{Group.PATH}{Id}/" + (OnlyChildren ? "hosts/" : "all_hosts/"),
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/hosts/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/hosts/",
+                ResourceType.Group => $"{Group.PATH}{Resource.Id}/" + (OnlyChildren ? "hosts/" : "all_hosts/"),
                 _ => Host.PATH
             };
             Find<Host>(path);

@@ -21,57 +21,25 @@ namespace Jagabata.Cmdlets
         html
     }
 
-    [Cmdlet(VerbsCommon.Get, "JobLog", DefaultParameterSetName = "StdOutTypeAndId")]
-    [OutputType(typeof(string), ParameterSetName = ["StdOutTypeAndId", "StdOutResource"])]
-    [OutputType(typeof(FileInfo), ParameterSetName = ["DownloadTypeAndId", "DownloadResource"])]
+    [Cmdlet(VerbsCommon.Get, "JobLog", DefaultParameterSetName = "StdOut")]
+    [OutputType(typeof(string), ParameterSetName = ["StdOut"])]
+    [OutputType(typeof(FileInfo), ParameterSetName = ["Download"])]
     public class GetJobLogCommand : APICmdletBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "StdOutTypeAndId", Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Job),
-                     nameof(ResourceType.ProjectUpdate),
-                     nameof(ResourceType.InventoryUpdate),
-                     nameof(ResourceType.SystemJob),
-                     nameof(ResourceType.WorkflowJob),
-                     nameof(ResourceType.AdHocCommand))]
-        public ResourceType Type { get; set; } = ResourceType.None;
-
-        [Parameter(Mandatory = true, ParameterSetName = "StdOutTypeAndId", Position = 1)]
-        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId", Position = 1)]
-        [ResourceCompletions(ResourceCompleteType.Id,
+        [Parameter(Mandatory = true, ParameterSetName = "StdOut", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = "Download", ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
         [
-            ResourceType.Job,
-            ResourceType.ProjectUpdate,
-            ResourceType.InventoryUpdate,
-            ResourceType.SystemJob,
-            ResourceType.WorkflowJob,
-            ResourceType.AdHocCommand
-        ])]
-        public ulong Id { get; set; } = 0;
-
-        [Parameter(Mandatory = true, ParameterSetName = "StdOutResource", ValueFromPipeline = true, Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "DownloadResource", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Job,
-                ResourceType.ProjectUpdate,
-                ResourceType.InventoryUpdate,
-                ResourceType.SystemJob,
-                ResourceType.WorkflowJob,
-                ResourceType.AdHocCommand
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
+            ResourceType.WorkflowJob, ResourceType.AdHocCommand
         ])]
         [ResourceCompletions(
-        [
-            ResourceType.Job,
-            ResourceType.ProjectUpdate,
-            ResourceType.InventoryUpdate,
-            ResourceType.SystemJob,
-            ResourceType.WorkflowJob,
-            ResourceType.AdHocCommand
-        ])]
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
+            ResourceType.WorkflowJob, ResourceType.AdHocCommand
+        )]
         public IResource Job { get; set; } = new Resource(0, 0);
 
-        [Parameter(Mandatory = true, ParameterSetName = "DownloadTypeAndId")]
-        [Parameter(Mandatory = true, ParameterSetName = "DownloadResource")]
+        [Parameter(Mandatory = true, ParameterSetName = "Download", Position = 1)]
         public DirectoryInfo? Download { get; set; }
 
         [Parameter()]
@@ -127,11 +95,6 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Id > 0 && Type > 0)
-            {
-                Job = new Resource(Type, Id);
-            }
-
             if (Download is null)
             {
                 if (CommandRuntime.Host?.UI.SupportsVirtualTerminal ?? false)

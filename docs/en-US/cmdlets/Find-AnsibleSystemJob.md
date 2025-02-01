@@ -34,16 +34,10 @@ PS C:\> Find-AnsibleSystemJob
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleSystemJob -Type SystemJobTemplate -Id 1
+PS C:\> Find-AnsibleSystemJob -SystemJobTemplate 1
 ```
 
 Retrieve ProjectUpdate jobs associated with the SystemJobTemplate of ID 1
-
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
-    Get-AnsibleSystemJobTemplate -Id 1 | Find-AnsibleSystemJob
-
-and also can omit `-Type` parameter:  
-    Find-AnsibleSystemJob -Id 1
 
 ## PARAMETERS
 
@@ -172,6 +166,15 @@ Accept wildcard characters: False
 SystemJobTemplate ID or it's object.
 Retrieve jobs which the SystemJobTemplate associated with.
 
+> [!TIP]  
+> Can specify the resource as string like `SystemJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-SystemJobTemplate (Get-AnsibleSystemJobTemplate -Id 1)`  
+>  - `-SystemJobTemplate @{ type = "sytemjobtemplate"; id = 1 }`  
+>  - `-SystemJobTemplate sytemjobtemplate:1`
+
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
@@ -189,13 +192,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `SystemJobTemplate` (only)
-
 ### System.UInt64
 SystemJobTemplate ID or it's object.
+See `-SystemJobTemplate` parameter.
 
 ## OUTPUTS
 

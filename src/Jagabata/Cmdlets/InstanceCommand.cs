@@ -28,7 +28,9 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Instance))]
     public class FindInstanceCommand : FindCommandBase
     {
-        [Parameter(ValueFromPipeline = true)]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InstanceGroup])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InstanceGroup)]
         public ulong InstanceGroup { get; set; }
 
         [Parameter()]

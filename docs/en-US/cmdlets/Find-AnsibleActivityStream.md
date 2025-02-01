@@ -12,21 +12,8 @@ Retrieve ActivityStreams.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleActivityStream [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleActivityStream [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleActivityStream -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleActivityStream [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -66,12 +53,12 @@ Retrieve three ActivityStreams in order by oldest.
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleActivityStream -Type Organization -Id 1
+PS C:\> Find-AnsibleActivityStream -Resource Organization:1
 ```
 
 Retrieve ActivityStreams associated with the Organization of ID 1.
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
+`Resource` parameter can also be given from the pipeline, likes following:  
     Get-AnsibleOrganization -Id 1 | Find-AnsibleActivityStream
 
 ## PARAMETERS
@@ -123,22 +110,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -201,13 +172,22 @@ The resource is accepted following types:
 - `WorkflowJob`  
 - `ExecutionEnvironment`
 
+> [!TIP]  
+> Can specify the resource as string like `User:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleUser -Id 1)`  
+>  - `-Resource @{ type = "user"; id = 1 }`  
+>  - `-Resource user:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -227,23 +207,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: OAuth2Application, OAuth2AccessToken, Organization, User, Project, Team, Credential, CredentialType, Inventory, InventorySource, Group, Host, JobTemplate, Job, AdHocCommand, WorkflowJobTemplate, WorkflowJob, ExecutionEnvironment
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

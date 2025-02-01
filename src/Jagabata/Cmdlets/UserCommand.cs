@@ -40,32 +40,24 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "User", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "User")]
     [OutputType(typeof(User))]
     public class FindUserCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Team),
-                     nameof(ResourceType.Credential),
-                     nameof(ResourceType.Role))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.Credential,
-                ResourceType.Role
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
         ])]
+        [ResourceCompletions(
+            ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
+        )]
         public IResource? Resource { get; set; }
 
-        [Parameter(Position = 2)]
+        [Parameter(Position = 1)]
         public string[]? UserName { get; set; }
 
-        [Parameter(Position = 3)]
+        [Parameter(Position = 2)]
         public string[]? Email { get; set; }
 
         [Parameter()]
@@ -88,55 +80,35 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/users/",
-                ResourceType.Team => $"{Team.PATH}{Id}/users/",
-                ResourceType.Credential => $"{Credential.PATH}{Id}/owner_users/",
-                ResourceType.Role => $"{Role.PATH}{Id}/users/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/users/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/users/",
+                ResourceType.Credential => $"{Credential.PATH}{Resource.Id}/owner_users/",
+                ResourceType.Role => $"{Role.PATH}{Resource.Id}/users/",
                 _ => User.PATH
             };
             Find<User>(path);
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "AccessList", DefaultParameterSetName = "AssociatedWith")]
+    [Cmdlet(VerbsCommon.Find, "AccessList")]
     [OutputType(typeof(User))]
     public class FindAccessListCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.InstanceGroup),
-                     nameof(ResourceType.Organization),
-                     nameof(ResourceType.User),
-                     nameof(ResourceType.Project),
-                     nameof(ResourceType.Team),
-                     nameof(ResourceType.Credential),
-                     nameof(ResourceType.Inventory),
-                     nameof(ResourceType.JobTemplate),
-                     nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.InstanceGroup,
-                ResourceType.Organization,
-                ResourceType.User,
-                ResourceType.Project,
-                ResourceType.Team,
-                ResourceType.Credential,
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.WorkflowJobTemplate
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes =
+        [
+            ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
+            ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
+            ResourceType.WorkflowJobTemplate
         ])]
-        public IResource? Resource { get; set; }
+        [ResourceCompletions(
+            ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
+            ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
+            ResourceType.WorkflowJobTemplate
+        )]
+        public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [OrderByCompletion("id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
@@ -150,24 +122,18 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Id}/access_list/",
-                ResourceType.Organization => $"{Organization.PATH}{Id}/access_list/",
-                ResourceType.User => $"{User.PATH}{Id}/access_list/",
-                ResourceType.Project => $"{Project.PATH}{Id}/access_list/",
-                ResourceType.Team => $"{Team.PATH}{Id}/access_list/",
-                ResourceType.Credential => $"{Credential.PATH}{Id}/access_list/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/access_list/",
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/access_list/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/access_list/",
-                _ => throw new ArgumentException($"Can't handle the type: {Type}")
+                ResourceType.InstanceGroup => $"{InstanceGroup.PATH}{Resource.Id}/access_list/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/access_list/",
+                ResourceType.User => $"{User.PATH}{Resource.Id}/access_list/",
+                ResourceType.Project => $"{Project.PATH}{Resource.Id}/access_list/",
+                ResourceType.Team => $"{Team.PATH}{Resource.Id}/access_list/",
+                ResourceType.Credential => $"{Credential.PATH}{Resource.Id}/access_list/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/access_list/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/access_list/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/access_list/",
+                _ => throw new ArgumentException($"Can't handle the type: {Resource?.Type}")
             };
             Find<User>(path);
         }

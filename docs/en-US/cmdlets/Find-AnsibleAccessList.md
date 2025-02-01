@@ -12,15 +12,8 @@ Retrieve Users accessible to a resource.
 
 ## SYNTAX
 
-### AssociatedWith (Default)
 ```
-Find-AnsibleAccessList [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleAccessList -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleAccessList [-Resource] <IResource> [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -106,22 +99,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -170,13 +147,22 @@ The resource is accepted following types:
 - `JobTemplate`  
 - `WorkflowJobTemplate`
 
+> [!TIP]  
+> Can specify the resource as string like `User:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleUser -Id 1)`  
+>  - `-Resource @{ type = "user"; id = 1 }`  
+>  - `-Resource user:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -196,23 +182,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: InstanceGroup, Organization, User, Project, Team, Credential, Inventory, JobTemplate, WorkflowJobTemplate
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

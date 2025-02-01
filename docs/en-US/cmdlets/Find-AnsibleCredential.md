@@ -12,23 +12,8 @@ Retrieve Credentials.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleCredential [-CredentialTypeKind <CredentialTypeKind[]>] [-CredentialTypeNamespace <String[]>]
- [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
- [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleCredential [-Type] <ResourceType> [-Id] <UInt64> [-CredentialTypeKind <CredentialTypeKind[]>]
- [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleCredential -Resource <IResource> [-CredentialTypeKind <CredentialTypeKind[]>]
+Find-AnsibleCredential [[-Resource] <IResource>] [-CredentialTypeKind <CredentialTypeKind[]>]
  [-CredentialTypeNamespace <String[]>] [-Galaxy] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
@@ -60,18 +45,18 @@ PS C:\> Find-AnsibleCredential
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleCredential -Type Organization -Id 1
+PS C:\> Find-AnsibleCredential -Resource Organization:1
 ```
 
 Retrieve Credentials associated with the Organization of ID 1.
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:
+`Resource` parameter can also be given from the pipeline, likes following:
 
     Get-AnsibleOrganization -Id 1 | Find-AnsibleCredential
 
 ### Example 3
 ```powershell
-PS C:\> Find-AnsibleCredential -Type Organization -Id 1 -Galaxy
+PS C:\> Find-AnsibleCredential -Resource Organization:1 -Galaxy
 ```
 
 Retrieve Galaxy Credentials associated with the Organization of ID 1.
@@ -189,22 +174,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -255,13 +224,22 @@ The resource is accepted following types:
 - `WorkflowJobTemplateNode`  
 - `WorkflowJobNode`
 
+> [!TIP]  
+> Can specify the resource as string like `User:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleUser -Id 1)`  
+>  - `-Resource @{ type = "user"; id = 1 }`  
+>  - `-Resource user:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -281,23 +259,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization, User, Team, CredentialType, InventorySource, InventoryUpdate, JobTemplate, Job, Schedule, WorkflowJobTemplateNode, WorkflowJobNode
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

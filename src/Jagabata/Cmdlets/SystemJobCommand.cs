@@ -26,6 +26,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.SystemJobTemplate])]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.SystemJobTemplate)]
         public ulong SystemJobTemplate { get; set; }
 
         [Parameter()]
