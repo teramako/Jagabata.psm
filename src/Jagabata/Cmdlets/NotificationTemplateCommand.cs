@@ -58,7 +58,7 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForApprovalCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.WorkflowJobTemplate])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
@@ -88,11 +88,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForErrorCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -129,11 +128,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForStartedCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -170,11 +168,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForSuccessCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -334,14 +331,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource,
+            ResourceType.JobTemplate, ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource For { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 2)]
@@ -399,14 +392,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource,
+            ResourceType.JobTemplate, ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource For { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 2)]

@@ -29,14 +29,13 @@ namespace Jagabata.Cmdlets
     public class FindActivityStreamCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.OAuth2Application, ResourceType.OAuth2AccessToken, ResourceType.Organization, ResourceType.User,
             ResourceType.Project, ResourceType.Team, ResourceType.Credential, ResourceType.CredentialType,
             ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group, ResourceType.Host,
             ResourceType.JobTemplate, ResourceType.Job, ResourceType.AdHocCommand, ResourceType.WorkflowJobTemplate,
             ResourceType.WorkflowJob, ResourceType.ExecutionEnvironment
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.OAuth2Application, ResourceType.OAuth2AccessToken, ResourceType.Organization, ResourceType.User,
             ResourceType.Project, ResourceType.Team, ResourceType.Credential, ResourceType.CredentialType,

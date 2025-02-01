@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindTokenCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.OAuth2Application, ResourceType.User])]
+        [ResourceTransformation(ResourceType.OAuth2Application, ResourceType.User)]
         [ResourceCompletions(ResourceType.OAuth2Application, ResourceType.User)]
         public IResource? Resource { get; set; }
 

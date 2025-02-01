@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindWorkflowJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate])]
+        [ResourceTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource? Resource { get; set; }
 

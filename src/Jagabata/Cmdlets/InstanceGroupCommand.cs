@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindInstanceGroupCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode

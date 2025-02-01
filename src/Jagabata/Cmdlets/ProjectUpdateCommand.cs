@@ -72,7 +72,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "Project", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "CheckProject", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceTransformation(ResourceType.Project)]
         public IResource? Project { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "CheckId")]

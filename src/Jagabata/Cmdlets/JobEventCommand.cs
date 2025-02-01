@@ -10,11 +10,10 @@ namespace Jagabata.Cmdlets
     public class FindJobEventCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
             ResourceType.AdHocCommand, ResourceType.Host, ResourceType.Group
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
             ResourceType.AdHocCommand, ResourceType.Host, ResourceType.Group

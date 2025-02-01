@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindInventoryCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.Inventory, ResourceType.Host])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Inventory, ResourceType.Host)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.Inventory, ResourceType.Host)]
         public IResource? Resource { get; set; }
 

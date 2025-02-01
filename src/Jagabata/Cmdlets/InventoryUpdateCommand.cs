@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindInventoryUpdateJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.ProjectUpdate, ResourceType.InventorySource])]
+        [ResourceTransformation(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
         [ResourceCompletions(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
         public IResource? Resource { get; set; }
 
@@ -62,10 +62,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "CheckResource", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.InventorySource
-        ])]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.InventorySource)]
         public IResource? Source { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "CheckId")]

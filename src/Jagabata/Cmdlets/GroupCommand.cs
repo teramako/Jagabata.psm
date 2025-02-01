@@ -29,10 +29,9 @@ namespace Jagabata.Cmdlets
     public class FindGroupCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Inventory, ResourceType.Group, ResourceType.InventorySource, ResourceType.Host
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Inventory, ResourceType.Group, ResourceType.InventorySource, ResourceType.Host
         )]

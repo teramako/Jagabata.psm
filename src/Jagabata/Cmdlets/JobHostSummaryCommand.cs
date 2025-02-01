@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindJobHostSummaryCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Job, ResourceType.Host, ResourceType.Group])]
+        [ResourceTransformation(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
         [ResourceCompletions(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
         public IResource Resource { get; set; } = new Resource(0, 0);
 

@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindScheduleCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
             ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
             ResourceType.WorkflowJobTemplate
@@ -83,13 +82,10 @@ namespace Jagabata.Cmdlets
         public SwitchParameter Disabled { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         [Parameter()]

@@ -65,7 +65,7 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceTransformation(ResourceType.WorkflowJobTemplate)]
         public IResource? WorkflowJobTemplate { get; set; }
 
         [Parameter()]

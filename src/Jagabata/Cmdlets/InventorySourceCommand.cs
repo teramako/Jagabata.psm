@@ -29,13 +29,8 @@ namespace Jagabata.Cmdlets
     public class FindInventorySourceCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
-            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
-        ])]
-        [ResourceCompletions(
-            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
-        )]
+        [ResourceTransformation(ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
+        [ResourceCompletions(ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
         public IResource? Resource { get; set; }
 
         [Parameter()]

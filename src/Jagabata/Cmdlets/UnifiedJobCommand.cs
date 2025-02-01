@@ -12,12 +12,11 @@ namespace Jagabata.Cmdlets
     public class FindUnifiedJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate, ResourceType.Project,
             ResourceType.InventorySource, ResourceType.SystemJobTemplate, ResourceType.Inventory, ResourceType.Host,
             ResourceType.Group, ResourceType.Schedule, ResourceType.Instance, ResourceType.InstanceGroup
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate, ResourceType.Project,
             ResourceType.InventorySource, ResourceType.SystemJobTemplate, ResourceType.Inventory, ResourceType.Host,
@@ -154,14 +153,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                     ResourceType.Job,
-                     ResourceType.ProjectUpdate,
-                     ResourceType.InventoryUpdate,
-                     ResourceType.SystemJob,
-                     ResourceType.AdHocCommand,
-                     ResourceType.WorkflowJob
-        ])]
+        [ResourceTransformation(
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
+            ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
+        )]
         public IResource? Job { get; set; }
 
         [Parameter()]
@@ -207,14 +202,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Job,
-                ResourceType.ProjectUpdate,
-                ResourceType.InventoryUpdate,
-                ResourceType.SystemJob,
-                ResourceType.AdHocCommand,
-                ResourceType.WorkflowJob
-        ])]
+        [ResourceTransformation(
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
+            ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
+        )]
         public IResource? Job { get; set; }
 
         [Parameter()]

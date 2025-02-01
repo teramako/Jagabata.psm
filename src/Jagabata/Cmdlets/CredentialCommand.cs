@@ -30,12 +30,11 @@ namespace Jagabata.Cmdlets
     public class FindCredentialCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.User, ResourceType.Team, ResourceType.CredentialType,
             ResourceType.InventorySource, ResourceType.InventoryUpdate, ResourceType.JobTemplate, ResourceType.Job,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.User, ResourceType.Team, ResourceType.CredentialType,
             ResourceType.InventorySource, ResourceType.InventoryUpdate, ResourceType.JobTemplate, ResourceType.Job,
@@ -119,11 +118,7 @@ namespace Jagabata.Cmdlets
         public IDictionary Inputs { get; set; } = new Hashtable();
 
         [Parameter()]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.User
-        ])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.User)]
         public IResource? Owner { get; set; }
 
         protected override Dictionary<string, object> CreateSendData()
@@ -181,12 +176,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -212,12 +205,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource From { get; set; } = new Resource(0 ,0);
 
         protected override void ProcessRecord()

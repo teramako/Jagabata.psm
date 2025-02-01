@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindTeamCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
             ResourceType.Role
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
             ResourceType.Role

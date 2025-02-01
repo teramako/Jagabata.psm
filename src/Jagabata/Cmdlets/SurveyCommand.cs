@@ -33,10 +33,7 @@ namespace Jagabata.Cmdlets
     public class RegisterSurverySpecCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.JobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         [Parameter(ParameterSetName = "Spec")]
@@ -79,10 +76,7 @@ namespace Jagabata.Cmdlets
     public class RemoveSurveySpecCommand : RemoveCommandBase<SurveySpec>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.JobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()

@@ -45,10 +45,9 @@ namespace Jagabata.Cmdlets
     public class FindUserCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
         )]
@@ -97,12 +96,11 @@ namespace Jagabata.Cmdlets
     public class FindAccessListCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
             ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
             ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
@@ -333,11 +331,7 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.Role
-        ])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -362,11 +356,7 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.Role
-        ])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()

@@ -29,12 +29,8 @@ namespace Jagabata.Cmdlets
     public class FindHostCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-            ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group
-        ])]
-        [ResourceCompletions(
-            ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group
-        )]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group)]
+        [ResourceCompletions(ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group)]
         public IResource? Resource { get; set; }
 
         /// <summary>

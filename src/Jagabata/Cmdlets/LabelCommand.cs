@@ -29,12 +29,11 @@ namespace Jagabata.Cmdlets
     public class FindLabelCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
             ResourceType.WorkflowJobNode
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
@@ -107,13 +106,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplate,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -140,13 +136,10 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplate,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()

@@ -28,11 +28,10 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ParameterSetName = "StdOut", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "Download", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
             ResourceType.WorkflowJob, ResourceType.AdHocCommand
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
             ResourceType.WorkflowJob, ResourceType.AdHocCommand

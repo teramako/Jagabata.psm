@@ -28,7 +28,7 @@ namespace Jagabata.Cmdlets
     public class FindApplicationCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.User])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.User)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.User)]
         public IResource? Resource { get; set; }
 

@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.NotificationTemplate, ResourceType.Job, ResourceType.WorkflowJob, ResourceType.SystemJob,
             ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.AdHocCommand
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.NotificationTemplate, ResourceType.Job, ResourceType.WorkflowJob, ResourceType.SystemJob,
             ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.AdHocCommand

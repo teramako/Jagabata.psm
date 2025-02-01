@@ -27,7 +27,7 @@ namespace Jagabata.Cmdlets
     public class FindAdHocCommandJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Inventory, ResourceType.Host, ResourceType.Group])]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.Host, ResourceType.Group)]
         [ResourceCompletions(ResourceType.Inventory, ResourceType.Host, ResourceType.Group)]
         public IResource? Resource { get; set; }
 

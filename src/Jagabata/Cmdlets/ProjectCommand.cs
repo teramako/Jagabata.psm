@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindProjectCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.User, ResourceType.Team])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.User, ResourceType.Team)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.User, ResourceType.Team)]
         public IResource? Resource { get; set; }
 

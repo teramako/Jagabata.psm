@@ -34,7 +34,7 @@ namespace Jagabata.Cmdlets
     public class FindJobTemplateCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.Inventory])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Inventory)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.Inventory)]
         public IResource? Resource { get; set; }
 
@@ -81,7 +81,7 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "JobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.JobTemplate])]
+        [ResourceTransformation(ResourceType.JobTemplate)]
         public IResource? JobTemplate { get; set; }
 
         [Parameter()]
