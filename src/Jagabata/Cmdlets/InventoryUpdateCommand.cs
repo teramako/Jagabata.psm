@@ -64,6 +64,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "CheckResource", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(ResourceType.Inventory, ResourceType.InventorySource)]
+        [ResourceCompletions(ResourceType.Inventory, ResourceType.InventorySource)]
         public IResource? Source { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "CheckId")]
