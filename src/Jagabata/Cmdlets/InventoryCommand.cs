@@ -24,25 +24,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsCommon.Find, "Inventory", DefaultParameterSetName = "All")]
+    [Cmdlet(VerbsCommon.Find, "Inventory")]
     [OutputType(typeof(Inventory))]
     public class FindInventoryCommand : FindCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Organization),
-                     nameof(ResourceType.Inventory),
-                     nameof(ResourceType.Host))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Inventory,
-                ResourceType.Host
-        ])]
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.Inventory, ResourceType.Host])]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.Inventory, ResourceType.Host)]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -80,17 +68,11 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            if (Resource is not null)
+            var path = Resource?.Type switch
             {
-                Type = Resource.Type;
-                Id = Resource.Id;
-            }
-
-            var path = Type switch
-            {
-                ResourceType.Organization => $"{Organization.PATH}{Id}/inventories/",
-                ResourceType.Inventory => $"{Inventory.PATH}{Id}/input_inventories/",
-                ResourceType.Host => $"{Host.PATH}{Id}/smart_inventories/",
+                ResourceType.Organization => $"{Organization.PATH}{Resource.Id}/inventories/",
+                ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/input_inventories/",
+                ResourceType.Host => $"{Host.PATH}{Resource.Id}/smart_inventories/",
                 _ => Inventory.PATH
             };
             Find<Inventory>(path);
