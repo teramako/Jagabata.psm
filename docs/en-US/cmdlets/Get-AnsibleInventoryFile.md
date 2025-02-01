@@ -50,7 +50,7 @@ List of database IDs for one or more Projects.
 ```yaml
 Type: UInt64[]
 Parameter Sets: (All)
-Aliases:
+Aliases: project, p
 
 Required: True
 Position: 0

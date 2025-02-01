@@ -38,6 +38,7 @@ namespace Jagabata.Cmdlets
             ResourceType.NotificationTemplate, ResourceType.Job, ResourceType.WorkflowJob, ResourceType.SystemJob,
             ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.AdHocCommand
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

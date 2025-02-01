@@ -35,6 +35,7 @@ namespace Jagabata.Cmdlets
         [ResourceCompletions(
             ResourceType.Inventory, ResourceType.InventorySource, ResourceType.Group
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Host)]
+        [Alias("host")]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Host.PATH;

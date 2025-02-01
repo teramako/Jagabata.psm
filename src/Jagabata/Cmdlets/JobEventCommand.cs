@@ -19,6 +19,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.SystemJob,
             ResourceType.AdHocCommand, ResourceType.Host, ResourceType.Group
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]

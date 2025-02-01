@@ -38,6 +38,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
             ResourceType.Role
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

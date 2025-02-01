@@ -36,6 +36,7 @@ namespace Jagabata.Cmdlets
         [ResourceCompletions(
             ResourceType.Inventory, ResourceType.Group, ResourceType.InventorySource, ResourceType.Host
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         /// <summary>

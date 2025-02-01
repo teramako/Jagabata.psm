@@ -27,6 +27,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.Job, ResourceType.Host, ResourceType.Group])]
         [ResourceCompletions(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]

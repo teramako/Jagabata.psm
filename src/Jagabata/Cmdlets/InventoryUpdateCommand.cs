@@ -27,6 +27,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.ProjectUpdate, ResourceType.InventorySource])]
         [ResourceCompletions(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

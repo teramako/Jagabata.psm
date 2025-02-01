@@ -178,7 +178,7 @@ Retrieve jobs which the SystemJobTemplate associated with.
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
-Aliases:
+Aliases: template, t
 
 Required: False
 Position: 0

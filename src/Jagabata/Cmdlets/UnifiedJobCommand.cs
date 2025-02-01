@@ -23,6 +23,7 @@ namespace Jagabata.Cmdlets
             ResourceType.InventorySource, ResourceType.SystemJobTemplate, ResourceType.Inventory, ResourceType.Host,
             ResourceType.Group, ResourceType.Schedule, ResourceType.Instance, ResourceType.InstanceGroup
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

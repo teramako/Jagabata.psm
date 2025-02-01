@@ -168,7 +168,7 @@ The resource is accepted following types:
 ```yaml
 Type: IResource
 Parameter Sets: (All)
-Aliases:
+Aliases: associatedWith, r
 
 Required: False
 Position: 0

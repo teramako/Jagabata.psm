@@ -44,6 +44,7 @@ namespace Jagabata.Cmdlets
             ResourceType.JobTemplate, ResourceType.Job, ResourceType.AdHocCommand, ResourceType.WorkflowJobTemplate,
             ResourceType.WorkflowJob, ResourceType.ExecutionEnvironment
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

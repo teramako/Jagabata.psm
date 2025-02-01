@@ -36,6 +36,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.Inventory])]
         [ResourceCompletions(ResourceType.Organization, ResourceType.Inventory)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter(Position = 1)]

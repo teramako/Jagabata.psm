@@ -38,6 +38,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
             ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

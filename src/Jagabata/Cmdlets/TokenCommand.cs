@@ -31,6 +31,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.OAuth2Application, ResourceType.User])]
         [ResourceCompletions(ResourceType.OAuth2Application, ResourceType.User)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         /// <summary>

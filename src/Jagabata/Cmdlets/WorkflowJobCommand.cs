@@ -27,6 +27,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate])]
         [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]

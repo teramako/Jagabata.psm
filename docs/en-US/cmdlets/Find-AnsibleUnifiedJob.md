@@ -158,7 +158,7 @@ And `Type` should be following value:
 ```yaml
 Type: IResource
 Parameter Sets: (All)
-Aliases:
+Aliases: associatedWith, r
 
 Required: False
 Position: 0

@@ -171,7 +171,7 @@ WorkflowApprovalTemplate ID or it's object.
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
-Aliases:
+Aliases: template, t
 
 Required: False
 Position: 0

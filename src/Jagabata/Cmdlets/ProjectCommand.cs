@@ -31,6 +31,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.User, ResourceType.Team])]
         [ResourceCompletions(ResourceType.Organization, ResourceType.User, ResourceType.Team)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -66,6 +67,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
+        [Alias("project", "p")]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Project.PATH;
@@ -86,6 +88,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
         [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
+        [Alias("project", "p")]
         public override ulong[] Id { get; set; } = [];
 
         protected override string ApiPath => Project.PATH;

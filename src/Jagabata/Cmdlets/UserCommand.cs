@@ -52,6 +52,7 @@ namespace Jagabata.Cmdlets
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
         )]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter(Position = 1)]
@@ -108,6 +109,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]

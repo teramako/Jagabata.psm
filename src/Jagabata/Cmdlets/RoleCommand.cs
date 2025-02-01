@@ -31,6 +31,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.User, ResourceType.Team])]
         [ResourceCompletions(ResourceType.User, ResourceType.Team)]
+        [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
         [Parameter()]
@@ -68,6 +69,7 @@ namespace Jagabata.Cmdlets
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.Project, ResourceType.Team,
             ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]

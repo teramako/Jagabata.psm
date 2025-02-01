@@ -60,6 +60,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.WorkflowJobTemplate])]
         [ResourceCompletions(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -97,6 +98,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -138,6 +140,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -179,6 +182,7 @@ namespace Jagabata.Cmdlets
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         )]
+        [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]

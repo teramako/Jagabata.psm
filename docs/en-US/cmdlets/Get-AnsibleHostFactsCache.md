@@ -53,7 +53,7 @@ List of Host ID(s).
 ```yaml
 Type: UInt64[]
 Parameter Sets: (All)
-Aliases:
+Aliases: host
 
 Required: True
 Position: 0
