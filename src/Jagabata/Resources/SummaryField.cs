@@ -71,6 +71,7 @@ namespace Jagabata.Resources
         Copy = 1 << 4,
         Use = 1 << 5,
         AdHoc = 1 << 6,
+        Unattach = 1 << 7,
     }
 
     // Application in Token
@@ -482,6 +483,23 @@ namespace Jagabata.Resources
         public override string GetDescription()
         {
             return $"UnifiedJobTemplateId={UnifiedJobTemplateId}";
+        }
+    }
+
+    // DirectAccess, IndirectAccess in User (from /api/v2/*/access_list/)
+    public sealed record AccessSummary(AccessRoleSummary Role, string[] DescendantRoles)
+        : SummaryBase;
+
+    public sealed record AccessRoleSummary(ulong Id, string Name, string Description, string? ResourceName,
+                                           ResourceType? ResourceType, RelatedDictionary? Related,
+                                           Capability UserCapabilities)
+        : NameAndDescriptionResourceSummary(Id, Resources.ResourceType.Role, Name, Description)
+    {
+        public override string GetDescription()
+        {
+            return ResourceType is null
+                   ? base.GetDescription()
+                   : $"{base.GetDescription()} for [{ResourceType}]{ResourceName}";
         }
     }
 }

@@ -625,6 +625,9 @@ namespace Jagabata
                     case "DefaultEnvironment":
                     case "ResolvedEnvironment":
                         return JsonSerializer.Deserialize<EnvironmentSummary>(ref reader, options);
+                    case "DirectAccess":
+                    case "IndirectAccess":
+                        return JsonSerializer.Deserialize<AccessSummary>(ref reader, options);
                     case "Group":
                         return JsonSerializer.Deserialize<GroupSummary>(ref reader, options);
                     case "Groups":
