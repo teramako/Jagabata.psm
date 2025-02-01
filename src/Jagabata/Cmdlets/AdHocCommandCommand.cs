@@ -92,6 +92,8 @@ namespace Jagabata.Cmdlets
         public string ModuleArgs { get; set; } = string.Empty;
 
         [Parameter(Mandatory = true, Position = 3)]
+        [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong Credential { get; set; }
 
         /// <summary>
