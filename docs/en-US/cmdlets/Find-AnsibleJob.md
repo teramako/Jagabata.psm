@@ -100,8 +100,13 @@ JobTemplate ID or it's object.
 Filter to jobs in the JobTemplate for the specified ID.
 
 > [!TIP]  
-> Can specify `IResource` object.  
-> For example: `-JobTemplate (Get-AnsibleJobTemplate -Id 3)`, `-JobTemplate $jobTemplate`
+> Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-JobTemplate (Get-AnsibleJobTemplate -Id 1)`  
+>  - `-JobTemplate @{ type = "jobtemplate"; id = 1 }`  
+>  - `-JobTemplate jobtemplate:1`
 
 ```yaml
 Type: UInt64
@@ -223,8 +228,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### System.UInt64
 JobTemplate ID or it's object.
+See: `-JobTemplate` parameter.
 
 ## OUTPUTS
 

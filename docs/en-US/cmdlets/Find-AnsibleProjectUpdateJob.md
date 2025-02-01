@@ -152,8 +152,13 @@ Project ID or it's object.
 Filter to ProjectUpdateJobs of the Project for the specified ID.
 
 > [!TIP]  
-> Can specify `IResource` object.  
-> For example: `-Project (Get-AnsibleProject -Id 3)`, `-Project $project`
+> Can specify the resource as string like `Project:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Project (Get-AnsibleProject -Id 1)`  
+>  - `-Project @{ type = "project"; id = 1 }`  
+>  - `-Project project:1`
 
 ```yaml
 Type: UInt64
@@ -207,8 +212,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### System.UInt64
 Project ID or it's object.
+See `-Project` parameter.
 
 ## OUTPUTS
 

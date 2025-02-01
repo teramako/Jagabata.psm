@@ -160,6 +160,14 @@ Accept wildcard characters: False
 ### -WorkflowApprovalTemplate
 WorkflowApprovalTemplate ID or it's object.
 
+> [!TIP]  
+> Can specify the resource as string like `WorkflowApprovalTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-WorkflowApprovalTemplate @{ type = "workflowapprovaltemplate"; id = 1 }`  
+>  - `-WorkflowApprovalTemplate workflowapprovaltemplate:1`
+
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
@@ -179,6 +187,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.UInt64
 WorkflowApprovalTemplate ID or it's object.
+See `-WorkflowApprovalTemplate` parameter.
 
 ## OUTPUTS
 

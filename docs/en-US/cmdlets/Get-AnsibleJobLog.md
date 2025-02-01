@@ -12,25 +12,14 @@ Retrieve job logs.
 
 ## SYNTAX
 
-### StdOutTypeAndId (Default)
-```
-Get-AnsibleJobLog [-Type] <ResourceType> [-Id] <UInt64> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
-```
-
-### DownloadTypeAndId
-```
-Get-AnsibleJobLog [-Type] <ResourceType> [-Id] <UInt64> -Download <DirectoryInfo> [-Format <JobLogFormat>]
- [-Dark] [<CommonParameters>]
-```
-
-### StdOutResource
+### StdOut (Default)
 ```
 Get-AnsibleJobLog [-Job] <IResource> [-Format <JobLogFormat>] [-Dark] [<CommonParameters>]
 ```
 
-### DownloadResource
+### Download
 ```
-Get-AnsibleJobLog [-Job] <IResource> -Download <DirectoryInfo> [-Format <JobLogFormat>] [-Dark]
+Get-AnsibleJobLog [-Job] <IResource> [-Download] <DirectoryInfo> [-Format <JobLogFormat>] [-Dark]
  [<CommonParameters>]
 ```
 
@@ -64,7 +53,7 @@ Implements following Rest API:
 
 ### Example 1
 ```powershell
-PS C:\> Get-AnsibleJobLog @{ type = "job"; id = 10 }
+PS C:\> Get-AnsibleJobLog job:10
 ==> [10] Job
 
 PLAY [Hello World Sample] ******************************************************
@@ -85,7 +74,7 @@ Show the log for Job of ID 10 as text format.
 
 ### Example 2
 ```powershell
-PS C:\> Get-AnsibleJobLog @{ type = job; id = 10 } -Format html -Download .
+PS C:\> Get-AnsibleJobLog job:10 -Format html -Download .
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
@@ -139,11 +128,11 @@ The only exception is SystemJob, which can only be downloaded as TEXT format.
 
 ```yaml
 Type: DirectoryInfo
-Parameter Sets: DownloadTypeAndId, DownloadResource
+Parameter Sets: Download
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -172,21 +161,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-The ID of the Unified Job specified by the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Job
 UnifiedJob resource object from which to retrieve log.
 
@@ -199,9 +173,18 @@ And `Type` should be following value:
 - `WorkflowJob`     : WorkflowJobTemplate's job  
 - `SystemJob`       : SystemJobTemplate's job
 
+> [!TIP]  
+> Can specify the resource as string like `Job:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Job (Get-AnsibleJob -Id 1)`  
+>  - `-Job @{ type = "job"; id = 1 }`  
+>  - `-Job job:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: StdOutResource, DownloadResource
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -211,37 +194,14 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target UnifiedJob.
-
-```yaml
-Type: ResourceType
-Parameter Sets: StdOutTypeAndId, DownloadTypeAndId
-Aliases:
-Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, AdHocCommand
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### Jagabata.Resources.IResource
-The object has `Id` and `Type` properties.
-
-And `Type` should be following value:  
-- `Job`  
-- `ProjectUpdate`  
-- `InventoryUpdate`  
-- `SystemJob`  
-- `WorkflowJob`  
-- `AdHocCommand`
+Resource object to which the job log retrieved.
+See: `-Job` parameter.
 
 ## OUTPUTS
 

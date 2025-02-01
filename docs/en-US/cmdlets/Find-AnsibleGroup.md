@@ -12,23 +12,10 @@ Retrieve Groups.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleGroup [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>]
- [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleGroup [-Type] <ResourceType> [-Id] <UInt64> [-OnlyRoot] [-OnlyParnets] [-OrderBy <String[]>]
+Find-AnsibleGroup [[-Resource] <IResource>] [-OnlyRoot] [-OnlyParnets] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleGroup -Resource <IResource> [-OnlyRoot] [-OnlyParnets] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,24 +39,24 @@ PS C:\> Find-AnsibleGroup
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleGroup -Type Inventory -Id 1
+PS C:\> Find-AnsibleGroup -Resource Inventory:1
 ```
 
 Retrieve Groups associated with the Inventory of ID 1
 
-`Id` and `Type` parameters can also be given from the pipeline, likes following:  
+`Resource` parameter can also be given from the pipeline, likes following:  
     Get-AnsibleInventory -Id 1 | Find-AnsibleGroup
 
 ### Example 3
 ```powershell
-PS C:\> Find-AnsibleGroup -Type Inventory -Id 1 -OnlyRoot
+PS C:\> Find-AnsibleGroup -Resource Inventory:1 -OnlyRoot
 ```
 
 Retrieve **root** (top-level) Groups associated with the Inventory of ID 1
 
 ### Example 4
 ```powershell
-PS C:\> Find-AnsibleGroup -Type Host -Id 1
+PS C:\> Find-AnsibleGroup -Resource Host:1
 ```
 
 Retrieve Groups of which the target Host (ID 1) is directly or indirectly a member.
@@ -130,29 +117,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OnlyParnets
 List only directly member Groups.
 Only affected for a **Host** Type
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith, PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -168,7 +139,7 @@ Only affected for an **Inventory** Type
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AssociatedWith, PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -221,13 +192,22 @@ The resource is accepted following types:
 - `InventorySource`  
 - `Host`
 
+> [!TIP]  
+> Can specify the resource as string like `Host:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleHost -Id 1)`  
+>  - `-Resource @{ type = "host"; id = 1 }`  
+>  - `-Resource host:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -247,23 +227,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Inventory, Group, InventorySource, Host
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -13,7 +13,7 @@ Retrieve Instances.
 ## SYNTAX
 
 ```
-Find-AnsibleInstance [-InstanceGroup <UInt64>] [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleInstance [[-InstanceGroup] <UInt64>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -96,13 +96,22 @@ Accept wildcard characters: False
 InstanceGroup ID or it's object.
 Retrieve Instances which the InstanceGroup associated with.
 
+> [!TIP]  
+> Can specify the resource as string like `InstanceGroup:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-InstanceGroup (Get-AnsibleInstanceGroup -Id 1)`  
+>  - `-InstanceGroup @{ type = "instancegroup"; id = 1 }`  
+>  - `-InstanceGroup InstanceGroup:1`
+
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

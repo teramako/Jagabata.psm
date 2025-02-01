@@ -137,10 +137,13 @@ WorkflowJobTemplateNode ID or it's resource object.
 Search for child nodes linked to that WorkflowJobTemplateNode.
 
 > [!TIP]  
-> Can specify an object which has `Type` and `Id`.  
-> Example 1: `-Node (Get-AnsibleWorkflowJobTemplateNode -Id 10)`  
-> Example 2: `-Node @{type="workflowjobtemplatenode"; id=10}`  
-> Example 3: `-Node $nodes[0]`
+> Can specify the resource as string like `WorkflowJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Node (Get-AnsibleWorkflowJobTemplateNode -Id 1)`  
+>  - `-Node @{ type = "workflowjobtemplatenode"; id = 1 }`  
+>  - `-Node workflowJobTemplateNode:1`
 
 ```yaml
 Type: UInt64
@@ -212,10 +215,13 @@ WorkflowJobTemplate ID or it's resource object.
 Find within the WorkflowJobTemplate.
 
 > [!TIP]  
-> Can specify an object which has `Type` and `Id`.  
-> Example 1: `-Template (Get-AnsibleWorkflowJobTemplate -Id 3)`  
-> Example 2: `-Template @{type="workflowjobtemplate"; id=3}`  
-> Example 3: `-Template $wjt[0]`
+> Can specify the resource as string like `WorkflowJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Template (Get-AnsibleWorkflowJobTemplate -Id 1)`  
+>  - `-Template @{ type = "workflowJobTemplate"; id = 1 }`  
+>  - `-Template workflowjobtemplate:1`
 
 ```yaml
 Type: UInt64

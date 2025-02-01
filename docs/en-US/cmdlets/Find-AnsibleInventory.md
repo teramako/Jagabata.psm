@@ -12,23 +12,10 @@ Retrieve Inventories.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleInventory [-Kind <InventoryKind>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleInventory [-Type] <ResourceType> [-Id] <UInt64> [-Kind <InventoryKind>] [-OrderBy <String[]>]
+Find-AnsibleInventory [[-Resource] <IResource>] [-Kind <InventoryKind>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleInventory -Resource <IResource> [-Kind <InventoryKind>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,7 +36,7 @@ PS C:\> Find-AnsibleInventory
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleInventory -Type Organization -Id 1
+PS C:\> Find-AnsibleInventory -Resource Organization:1
 ```
 
 Retrieve Inventories associated with the Organization of ID 1
@@ -103,22 +90,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -182,13 +153,22 @@ The resource is accepted following types:
 - `Inventory`  
 - `Host`
 
+> [!TIP]  
+> Can specify the resource as string like `Host:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleHost -Id 1)`  
+>  - `-Resource @{ type = "host"; id = 1 }`  
+>  - `-Resource host:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -208,23 +188,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization, Inventory, Host
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

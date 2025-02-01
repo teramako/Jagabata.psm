@@ -12,25 +12,10 @@ Retrieve jobs for WorkflowJobTemplate.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleWorkflowJob [-Name <String[]>] [-Status <String[]>] [-LaunchType <String[]>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleWorkflowJob [-Type] <ResourceType> [-Id] <UInt64> [-Name <String[]>] [-Status <String[]>]
+Find-AnsibleWorkflowJob [[-Resource] <IResource>] [-Name <String[]>] [-Status <String[]>]
  [-LaunchType <String[]>] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleWorkflowJob -Resource <IResource> [-Name <String[]>] [-Status <String[]>] [-LaunchType <String[]>]
- [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
- [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,7 +35,7 @@ PS C:\> Find-AnsibleWorkflowJob
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleWorkflowJob -Type WorkflowJobTemplate -Id 1
+PS C:\> Find-AnsibleWorkflowJob -Resource WorkflowJobTemplate:1
 ```
 
 Retrieve jobs associated with the WorkflowJobTemplate of ID 1
@@ -104,22 +89,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -200,13 +169,22 @@ The resource is accepted following types:
 - `WorkflowJobTemplate`  
 - `JobTemplate`
 
+> [!TIP]  
+> Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleJobTemplate -Id 1)`  
+>  - `-Resource @{ type = "jobtemplate"; id = 1 }`  
+>  - `-Resource jobtemplate:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -242,23 +220,6 @@ Accepted values: new, started, pending, waiting, running, successful, failed, er
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: JobTemplate, WorkflowJobTemplate
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

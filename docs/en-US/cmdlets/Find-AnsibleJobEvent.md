@@ -1,4 +1,4 @@
----
+- -Id --
 external help file: Jagabata.psm.dll-Help.xml
 Module Name: Jagabata.psm
 online version:
@@ -12,16 +12,8 @@ Retrieve Job Events.
 
 ## SYNTAX
 
-### AssociatedWith
 ```
-Find-AnsibleJobEvent [-Type] <ResourceType> [-Id] <UInt64> [-AdHocCommandEvent] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleJobEvent -Resource <IResource> [-AdHocCommandEvent] [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleJobEvent [-Resource] <IResource> [-AdHocCommandEvent] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -42,14 +34,14 @@ Implementation of following API:
 
 ### Example 1
 ```powershell
-PS C:\> Find-AnsibleJobEvent -Type Job -Id 10
+PS C:\> Find-AnsibleJobEvent -Resource Job:10
 ```
 
 Retrieve Events for JobTemplate job of ID 1
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleJobEvent -Type Host -Id 1 -AdHocCommandEvent
+PS C:\> Find-AnsibleJobEvent -Resource Host:1 -AdHocCommandEvent
 ```
 
 Retrieve AdHocCommand (not JobTemplate job) Events associated with Host of ID 1.
@@ -124,22 +116,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -187,13 +163,22 @@ And `Type` should be following value:
 - `Host`            : Host (Retrieve events for jobs or ad-hoc-command jobs run on the host.)  
 - `Group`           : Group (Retrieve events for jobs run on hosts belonging to the group.)
 
+> [!TIP]  
+> Can specify the resource as string like `Job:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleJob -Id 1)`  
+>  - `-Resource @{ type = "job"; id = 1 }`  
+>  - `-Resource job:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -213,23 +198,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, Host, Group
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

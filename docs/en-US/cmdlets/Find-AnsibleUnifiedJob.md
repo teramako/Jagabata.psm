@@ -12,21 +12,8 @@ Retrieve Unified Jobs.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleUnifiedJob [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleUnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleUnifiedJob -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleUnifiedJob [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -108,22 +95,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -175,13 +146,22 @@ And `Type` should be following value:
 - `SystemJobTemplate`  
 - `WorkflowJobTemplate`
 
+> [!TIP]  
+> Can specify the resource as string like `Host:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleHost -Id 1)`  
+>  - `-Resource @{ type = "host"; id = 1 }`  
+>  - `-Resource host:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -206,43 +186,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: JobTemplate, WorkflowJobTemplate, Project, InventorySource, SystemJobTemplate, Inventory, Host, Group, Schedule, Instance, InstanceGroup
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### Jagabata.Resources.IResource
-The object has `Id` and `Type` properties.
-
-And `Type` should be following value:  
-- `Group`  
-- `Host`  
-- `Instance`  
-- `InstanceGroup`  
-- `Inventory`  
-- `InventorySource`  
-- `JobTemplate`  
-- `Project`  
-- `Schedule`  
-- `SystemJobTemplate`  
-- `WorkflowJobTemplate`
+Resource object to which the search target associated with.
+See: `-Resource` parameter.
 
 ## OUTPUTS
 

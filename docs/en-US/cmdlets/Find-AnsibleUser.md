@@ -12,22 +12,8 @@ Retrieve Users.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleUser [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleUser [-Type] <ResourceType> [-Id] <UInt64> [[-UserName] <String[]>] [[-Email] <String[]>]
- [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>]
- [-All] [<CommonParameters>]
-```
-
-### PipelineInput
-```
-Find-AnsibleUser -Resource <IResource> [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
+Find-AnsibleUser [[-Resource] <IResource>] [[-UserName] <String[]>] [[-Email] <String[]>] [-OrderBy <String[]>]
  [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
  [<CommonParameters>]
 ```
@@ -51,7 +37,7 @@ PS C:\> Find-AnsibleUser
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleUser -Type Organization -Id 1
+PS C:\> Find-AnsibleUser -Resource Organization:1
 ```
 
 Retrieve Users associated with the Organization of ID 1
@@ -99,7 +85,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -122,22 +108,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -186,13 +156,22 @@ The resource is accepted following types:
 - `Credential`  
 - `Role`
 
+> [!TIP]  
+> Can specify the resource as string like `Organization:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleOrganization -Id 1)`  
+>  - `-Resource @{ type = "organization"; id = 1 }`  
+>  - `-Resource organization:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -217,23 +196,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Organization, Team, Credential, Role
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -UserName
 Filter by `user_name` field.
 
@@ -245,7 +207,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

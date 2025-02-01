@@ -12,21 +12,8 @@ Retrieve InventorySources.
 
 ## SYNTAX
 
-### All (Default)
 ```
-Find-AnsibleInventorySource [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
- [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### AssociatedWith
-```
-Find-AnsibleInventorySource [-Type] <ResourceType> [-Id] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
-```
-
-### PipelineVariable
-```
-Find-AnsibleInventorySource -Resource <IResource> [-OrderBy <String[]>] [-Search <String[]>]
+Find-AnsibleInventorySource [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
  [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
@@ -49,7 +36,7 @@ PS C:\> Find-AnsibleInventorySource
 
 ### Example 2
 ```powershell
-PS C:\> Find-AnsibleInventorySource -Type Inventory -Id 1
+PS C:\> Find-AnsibleInventorySource -Resource Inventory:1
 ```
 
 Retrieve InventorySources associated with the Inventory of ID 1
@@ -108,22 +95,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -OrderBy
 Retrieve list in the specified orders.
 Use `!` prefix to sort in reverse.
@@ -167,13 +138,22 @@ The resource is accepted following types:
 - `Group`  
 - `Host`
 
+> [!TIP]  
+> Can specify the resource as string like `Host:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Resource (Get-AnsibleHost -Id 1)`  
+>  - `-Resource @{ type = "host"; id = 1 }`  
+>  - `-Resource host:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineVariable
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -193,23 +173,6 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Project, Inventory, Group, Host
-
-Required: True
-Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

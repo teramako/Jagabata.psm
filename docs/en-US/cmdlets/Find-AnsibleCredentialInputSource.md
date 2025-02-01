@@ -75,8 +75,13 @@ Credential ID or it's object.
 Retrieve CredenialInputSource which the Credential associated with.
 
 > [!TIP]  
-> Can specify `IResource` object.  
-> For example: `-Credential (Get-AnsibleCredential-Id 3)`, `-Credential $creds[1]`
+> Can specify the resource as string like `Credential:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Credential (Get-AnsibleCredential -Id 1)`  
+>  - `-Credential @{ type = "credential"; id = 1 }`  
+>  - `-Credential credential:1`
 
 ```yaml
 Type: UInt64

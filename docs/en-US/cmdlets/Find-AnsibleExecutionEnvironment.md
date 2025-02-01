@@ -115,6 +115,15 @@ Accept wildcard characters: False
 Organization ID or it's object.
 Retrieve ExecutionEnvironments which the Organization associated with.
 
+> [!TIP]  
+> Can specify the resource as string like `Organization:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Organization (Get-AnsibleOrganization -Id 1)`  
+>  - `-Organization @{ type = "organization"; id = 1 }`  
+>  - `-Organization organization:1`
+
 ```yaml
 Type: UInt64
 Parameter Sets: (All)
@@ -165,11 +174,6 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### Jagabata.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `Organization` (only)
 
 ### System.UInt64
 Organization ID or it's object.
