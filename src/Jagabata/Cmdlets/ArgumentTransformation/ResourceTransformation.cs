@@ -9,7 +9,8 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
     /// <summary>
     /// Transform argument(s) or pipeline input(s) to Resource ID (ulong);
     /// </summary>
-    internal class ResourceIdTransformationAttribute : ResourceTransformationAttribute
+    internal class ResourceIdTransformationAttribute(params ResourceType[] acceptTypes)
+        : ResourceTransformationAttribute(acceptTypes)
     {
         private const ulong FALLBACK_VALUE = 0;
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
@@ -36,9 +37,10 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
     /// <summary>
     /// Transform argument(s) or pipeline input(s) to IResource object(s)
     /// </summary>
-    internal class ResourceTransformationAttribute : ArgumentTransformationAttribute
+    internal class ResourceTransformationAttribute(params ResourceType[] acceptTypes)
+        : ArgumentTransformationAttribute
     {
-        public ResourceType[] AcceptableTypes { get; init; } = [];
+        public ResourceType[] AcceptableTypes { get; init; } = acceptTypes;
 
         private static readonly Resource FALLBACK_VALUE = new(0, 0);
 
