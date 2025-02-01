@@ -75,17 +75,14 @@ namespace Jagabata.Cmdlets
 
     public abstract class LaunchAdHocCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Host", ValueFromPipeline = true, Position = 0)]
-        public Host? Host { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "Group", ValueFromPipeline = true, Position = 0)]
-        public Group? Group { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "Inventory", ValueFromPipeline = true, Position = 0)]
-        public Inventory? Inventory { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "InventoryId", ValueFromPipeline = true, Position = 0)]
-        public ulong InventoryId { get; set; }
+        /// <summary>
+        /// Execution target, <c>Inventory</c>, <c>Group</c> or <c>Host</c>
+        /// </summary>
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceTransformation(ResourceType.Host, ResourceType.Host, ResourceType.Inventory)]
+        [ResourceCompletions(ResourceType.Host, ResourceType.Host, ResourceType.Inventory)]
+        [Alias("remote", "r")]
+        public IResource Target { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 1)]
         public string ModuleName { get; set; } = string.Empty;
@@ -97,8 +94,10 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, Position = 3)]
         public ulong Credential { get; set; }
 
-        [Parameter(ParameterSetName = "Inventory")]
-        [Parameter(ParameterSetName = "InventoryId")]
+        /// <summary>
+        /// Affected only when the target is <c>Inventory</c>
+        /// </summary>
+        [Parameter()]
         public string Limit { get; set; } = string.Empty;
 
         [Parameter()]
@@ -114,30 +113,20 @@ namespace Jagabata.Cmdlets
             {
                 SendData.Add("job_type", "check");
             }
-            if (!string.IsNullOrEmpty(Limit))
+            if (Target.Type == ResourceType.Inventory && !string.IsNullOrEmpty(Limit))
             {
                 SendData.Add("limit", Limit);
             }
         }
         private string GetPath()
         {
-            if (InventoryId > 0)
+            return Target.Type switch
             {
-                return $"{Inventory.PATH}{InventoryId}/ad_hoc_commands/";
-            }
-            else if (Inventory is not null)
-            {
-                return $"{Inventory.PATH}{Inventory.Id}/ad_hoc_commands/";
-            }
-            else if (Host is not null)
-            {
-                return $"{Host.PATH}{Host.Id}/ad_hoc_commands/";
-            }
-            else if (Group is not null)
-            {
-                return $"{Group.PATH}{Group.Id}/ad_hoc_commands/";
-            }
-            throw new ArgumentException();
+                ResourceType.Inventory => $"{Inventory.PATH}{Target.Id}/ad_hoc_commands/",
+                ResourceType.Host => $"{Host.PATH}{Target.Id}/ad_hoc_commands/",
+                ResourceType.Group => $"{Group.PATH}{Target.Id}/ad_hoc_commands/",
+                _ => throw new ArgumentException(),
+            };
         }
         protected AdHocCommand? Launch()
         {
