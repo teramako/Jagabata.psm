@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetTeamCommand : GetCommandBase<Team>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Team])]
+        [ResourceIdTransformation(ResourceType.Team)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Team)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindTeamCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
             ResourceType.Role
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.User, ResourceType.Project, ResourceType.Credential,
             ResourceType.Role
@@ -70,7 +69,7 @@ namespace Jagabata.Cmdlets
     public class NewTeamCommand : NewCommandBase<Team>
     {
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -105,7 +104,7 @@ namespace Jagabata.Cmdlets
     public class RemoveTeamCommand : RemoveCommandBase<Team>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Team])]
+        [ResourceIdTransformation(ResourceType.Team)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
@@ -119,7 +118,7 @@ namespace Jagabata.Cmdlets
     public class UpdateTeamCommand : UpdateCommandBase<Team>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Team])]
+        [ResourceIdTransformation(ResourceType.Team)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -130,7 +129,7 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         protected override Dictionary<string, object?> CreateSendData()

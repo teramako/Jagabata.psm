@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetLabelCommand : GetCommandBase<Label>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Label])]
+        [ResourceIdTransformation(ResourceType.Label)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,12 +29,11 @@ namespace Jagabata.Cmdlets
     public class FindLabelCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
             ResourceType.WorkflowJobNode
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Job, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJob, ResourceType.WorkflowJobTemplateNode,
@@ -104,17 +103,14 @@ namespace Jagabata.Cmdlets
     public class RegisterLabelCommand : RegistrationCommandBase<Label>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Label])]
+        [ResourceIdTransformation(ResourceType.Label)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplate,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -137,17 +133,14 @@ namespace Jagabata.Cmdlets
     public class UnregisterLabelCommand : RegistrationCommandBase<Label>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Label])]
+        [ResourceIdTransformation(ResourceType.Label)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.JobTemplate,
-                ResourceType.Schedule,
-                ResourceType.WorkflowJobTemplate,
-                ResourceType.WorkflowJobTemplateNode
-        ])]
+        [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -170,14 +163,14 @@ namespace Jagabata.Cmdlets
     public class UpdateLabelCommand : UpdateCommandBase<Label>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Label])]
+        [ResourceIdTransformation(ResourceType.Label)]
         public override ulong Id { get; set; }
 
         [Parameter()]
         public string Name { get; set; } = string.Empty;
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         protected override Dictionary<string, object?> CreateSendData()

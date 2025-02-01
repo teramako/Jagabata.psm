@@ -26,7 +26,7 @@ namespace Jagabata.Cmdlets
     public class GetUserCommand : GetCommandBase<User>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public override ulong[] Id { get; set; } = [];
 
@@ -45,10 +45,9 @@ namespace Jagabata.Cmdlets
     public class FindUserCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Team, ResourceType.Credential, ResourceType.Role
         )]
@@ -98,12 +97,11 @@ namespace Jagabata.Cmdlets
     public class FindAccessListCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
             ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.User, ResourceType.Project,
             ResourceType.Team, ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate,
@@ -267,7 +265,7 @@ namespace Jagabata.Cmdlets
     public class UpdateUserCommand : UpdateCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -331,15 +329,11 @@ namespace Jagabata.Cmdlets
     public class RegisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.Role
-        ])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -360,15 +354,11 @@ namespace Jagabata.Cmdlets
     public class UnregisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Team,
-                ResourceType.Role
-        ])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -389,7 +379,7 @@ namespace Jagabata.Cmdlets
     public class RemoveUserCommand : RemoveCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

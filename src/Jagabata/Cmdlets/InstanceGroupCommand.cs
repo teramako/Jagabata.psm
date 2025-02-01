@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetInstanceGroupCommand : GetCommandBase<InstanceGroup>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InstanceGroup])]
+        [ResourceIdTransformation(ResourceType.InstanceGroup)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InstanceGroup)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindInstanceGroupCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Instance, ResourceType.Organization, ResourceType.Inventory, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode, ResourceType.WorkflowJobNode

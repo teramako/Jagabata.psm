@@ -11,7 +11,7 @@ namespace Jagabata.Cmdlets
     public class GetJobTemplateJobCommand : GetCommandBase<JobTemplateJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Job])]
+        [ResourceIdTransformation(ResourceType.Job)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Job)]
         public override ulong[] Id { get; set; } = [];
 
@@ -26,7 +26,7 @@ namespace Jagabata.Cmdlets
     public class FindJobTemplateJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.JobTemplate])]
+        [ResourceIdTransformation(ResourceType.JobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobTemplate)]
         [Alias("template", "t")]
         public ulong JobTemplate { get; set; }
@@ -83,7 +83,7 @@ namespace Jagabata.Cmdlets
     public class RemoveJobTemplateJobCommand : RemoveCommandBase<JobTemplateJob>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Job])]
+        [ResourceIdTransformation(ResourceType.Job)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

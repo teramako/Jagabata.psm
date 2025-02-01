@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetInventoryUpdateJobCommand : GetCommandBase<InventoryUpdateJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventoryUpdate])]
+        [ResourceIdTransformation(ResourceType.InventoryUpdate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InventoryUpdate)]
         public override ulong[] Id { get; set; } = [];
 
@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindInventoryUpdateJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.ProjectUpdate, ResourceType.InventorySource])]
+        [ResourceTransformation(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
         [ResourceCompletions(ResourceType.ProjectUpdate, ResourceType.InventorySource)]
         [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
@@ -63,10 +63,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "CheckResource", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Inventory,
-                ResourceType.InventorySource
-        ])]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.InventorySource)]
         public IResource? Source { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "CheckId")]
@@ -208,7 +205,7 @@ namespace Jagabata.Cmdlets
     public class RemoveInventoryUpdateCommand : RemoveCommandBase<InventoryUpdateJob>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventoryUpdate])]
+        [ResourceIdTransformation(ResourceType.InventoryUpdate)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

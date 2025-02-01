@@ -13,7 +13,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowJobTemplateCommand : GetCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
         public override ulong[] Id { get; set; } = [];
 
@@ -32,7 +32,7 @@ namespace Jagabata.Cmdlets
     public class FindWorkflowJobTemplateCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
@@ -65,21 +65,21 @@ namespace Jagabata.Cmdlets
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceTransformation(ResourceType.WorkflowJobTemplate)]
         public IResource? WorkflowJobTemplate { get; set; }
 
         [Parameter()]
         public string? Limit { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
         public string? ScmBranch { get; set; }
 
         [Parameter()] // XXX: Should be string[] and created if not exists ?
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Label])]
+        [ResourceIdTransformation(ResourceType.Label)]
         public ulong[]? Labels { get; set; }
 
         [Parameter()]
@@ -552,11 +552,11 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -600,7 +600,7 @@ namespace Jagabata.Cmdlets
         public string? WebhookService { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -667,7 +667,7 @@ namespace Jagabata.Cmdlets
     public class UpdateWorkflowJobTemplateCommand : UpdateCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -678,11 +678,11 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -726,7 +726,7 @@ namespace Jagabata.Cmdlets
         public string? WebhookService { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -792,7 +792,7 @@ namespace Jagabata.Cmdlets
     public class RemoveWorkflowJobTemplateCommand : RemoveCommandBase<WorkflowJobTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

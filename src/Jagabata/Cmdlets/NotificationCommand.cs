@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetNotificationCommand : GetCommandBase<Notification>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Notification])]
+        [ResourceIdTransformation(ResourceType.Notification)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Notification)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.NotificationTemplate, ResourceType.Job, ResourceType.WorkflowJob, ResourceType.SystemJob,
             ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.AdHocCommand
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.NotificationTemplate, ResourceType.Job, ResourceType.WorkflowJob, ResourceType.SystemJob,
             ResourceType.ProjectUpdate, ResourceType.InventoryUpdate, ResourceType.AdHocCommand

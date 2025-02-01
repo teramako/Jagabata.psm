@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetScheduleCommand : GetCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
+        [ResourceIdTransformation(ResourceType.Schedule)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Schedule)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,11 +29,10 @@ namespace Jagabata.Cmdlets
     public class FindScheduleCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
             ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate, ResourceType.SystemJobTemplate,
             ResourceType.WorkflowJobTemplate
@@ -84,13 +83,10 @@ namespace Jagabata.Cmdlets
         public SwitchParameter Disabled { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -99,7 +95,7 @@ namespace Jagabata.Cmdlets
         public string? ExtraData { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -133,7 +129,7 @@ namespace Jagabata.Cmdlets
         public int? Forks { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -207,7 +203,7 @@ namespace Jagabata.Cmdlets
     public class UpdateScheduleCommand : UpdateCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
+        [ResourceIdTransformation(ResourceType.Schedule)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -229,7 +225,7 @@ namespace Jagabata.Cmdlets
         public string? ExtraData { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -263,7 +259,7 @@ namespace Jagabata.Cmdlets
         public int? Forks { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -328,7 +324,7 @@ namespace Jagabata.Cmdlets
     public class RemoveScheduleCommand : RemoveCommandBase<Resources.Schedule>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Schedule])]
+        [ResourceIdTransformation(ResourceType.Schedule)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

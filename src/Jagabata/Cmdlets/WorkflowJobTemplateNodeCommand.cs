@@ -11,7 +11,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowJobTemplateNodeCommand : GetCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public override ulong[] Id { get; set; } = [];
 
@@ -30,12 +30,12 @@ namespace Jagabata.Cmdlets
     public class FindWorkflowJobTemplateNodeCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
         public ulong Template { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplateNode", ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong Node { get; set; }
 
@@ -78,11 +78,11 @@ namespace Jagabata.Cmdlets
     public class NewWorkflowJobTemplateNodeCommand : NewCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         public ulong WorkflowJobtemplate { get; set; }
 
         [Parameter(Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong? ParentNode { get; set; }
 
         [Parameter(Position = 2)]
@@ -92,13 +92,10 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "UnifiedJobTemplate", Position = 3)]
         [Alias("Template")]
-        [ResourceIdTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate,
-        ])]
+        [ResourceIdTransformation(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public ulong UnifiedJobTemplate { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowApproval")]
@@ -114,7 +111,7 @@ namespace Jagabata.Cmdlets
         public string? ExtraData { get; set; }
 
         [Parameter(ParameterSetName = "UnifiedJobTemplate")]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter(ParameterSetName = "UnifiedJobTemplate")]
@@ -145,7 +142,7 @@ namespace Jagabata.Cmdlets
         public JobVerbosity? Verbosity { get; set; }
 
         [Parameter(ParameterSetName = "UnifiedJobTemplate")]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter(ParameterSetName = "UnifiedJobTemplate")]
@@ -297,18 +294,15 @@ namespace Jagabata.Cmdlets
     public class UpdateWorkflowJobTemplateNodeCommand : UpdateCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public override ulong Id { get; set; }
 
         [Parameter()]
         [Alias("Template")]
-        [ResourceIdTransformation(AcceptableTypes = [
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate,
-        ])]
+        [ResourceIdTransformation(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public ulong? UnifiedJobTemplate { get; set; }
 
         [Parameter()]
@@ -317,7 +311,7 @@ namespace Jagabata.Cmdlets
         public string? ExtraData { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -348,7 +342,7 @@ namespace Jagabata.Cmdlets
         public JobVerbosity? Verbosity { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -420,11 +414,11 @@ namespace Jagabata.Cmdlets
     public class RegisterWorkflowJobTemplateNodeCommand : RegistrationCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong To { get; set; }
 
         [Parameter()]
@@ -446,11 +440,11 @@ namespace Jagabata.Cmdlets
     public class UnregisterWorkflowJobTemplateNodeCommand : RegistrationCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong From { get; set; }
 
         private WorkflowJobTemplateNode? _parentNode;
@@ -496,7 +490,7 @@ namespace Jagabata.Cmdlets
     public class RemoveWorkflowJobTemplateNodeCommand : RemoveCommandBase<WorkflowJobTemplateNode>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobTemplateNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

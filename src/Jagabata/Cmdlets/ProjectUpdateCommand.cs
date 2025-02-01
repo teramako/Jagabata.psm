@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetProjectUpdateJobCommand : GetCommandBase<ProjectUpdateJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ProjectUpdate])]
+        [ResourceIdTransformation(ResourceType.ProjectUpdate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ProjectUpdate)]
         public override ulong[] Id { get; set; } = [];
 
@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindProjectUpdateJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public ulong Project { get; set; }
 
@@ -72,7 +72,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "Project", ValueFromPipeline = true, Position = 0)]
         [Parameter(Mandatory = true, ParameterSetName = "CheckProject", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceTransformation(ResourceType.Project)]
         public IResource? Project { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "CheckId")]
@@ -165,7 +165,7 @@ namespace Jagabata.Cmdlets
     public class RemoveProjectUpdateCommand : RemoveCommandBase<ProjectUpdateJob>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ProjectUpdate])]
+        [ResourceIdTransformation(ResourceType.ProjectUpdate)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

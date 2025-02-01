@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetRoleCommand : GetCommandBase<Role>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Role])]
+        [ResourceIdTransformation(ResourceType.Role)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Role)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindRoleCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.User, ResourceType.Team])]
+        [ResourceTransformation(ResourceType.User, ResourceType.Team)]
         [ResourceCompletions(ResourceType.User, ResourceType.Team)]
         [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
@@ -60,11 +60,10 @@ namespace Jagabata.Cmdlets
     public class FindObjectRoleCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.Project, ResourceType.Team,
             ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.InstanceGroup, ResourceType.Organization, ResourceType.Project, ResourceType.Team,
             ResourceType.Credential, ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate
@@ -103,11 +102,11 @@ namespace Jagabata.Cmdlets
     public class GrantRoleCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Role])]
+        [ResourceTransformation(ResourceType.Role)]
         public IResource[] Roles { get; set; } = [];
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.User, ResourceType.Team])]
+        [ResourceTransformation(ResourceType.User, ResourceType.Team)]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -144,11 +143,11 @@ namespace Jagabata.Cmdlets
     public class RevokeRoleCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Role])]
+        [ResourceTransformation(ResourceType.Role)]
         public IResource[] Roles { get; set; } = [];
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.User, ResourceType.Team])]
+        [ResourceTransformation(ResourceType.User, ResourceType.Team)]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()

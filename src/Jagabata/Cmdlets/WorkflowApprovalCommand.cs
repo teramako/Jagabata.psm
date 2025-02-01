@@ -11,7 +11,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowApprovalRequestCommand : GetCommandBase<WorkflowApproval.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApproval])]
+        [ResourceIdTransformation(ResourceType.WorkflowApproval)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowApproval)]
         public override ulong[] Id { get; set; } = [];
 
@@ -26,7 +26,7 @@ namespace Jagabata.Cmdlets
     public class FindWorkflowApprovalRequestCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApprovalTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowApprovalTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowApprovalTemplate)]
         [Alias("template", "t")]
         public ulong WorkflowApprovalTemplate { get; set; }
@@ -67,7 +67,7 @@ namespace Jagabata.Cmdlets
         protected abstract string Command { get; }
 
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApproval])]
+        [ResourceIdTransformation(ResourceType.WorkflowApproval)]
         public ulong Id { get; set; }
 
         private readonly HashSet<ulong> treatedIds = [];
@@ -122,7 +122,7 @@ namespace Jagabata.Cmdlets
     public class RemoveWorkflowApprovalRequestCommand : RemoveCommandBase<WorkflowApproval>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApproval])]
+        [ResourceIdTransformation(ResourceType.WorkflowApproval)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

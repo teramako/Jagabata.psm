@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetJobHostSummaryCommand : GetCommandBase<JobHostSummary>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.JobHostSummary])]
+        [ResourceIdTransformation(ResourceType.JobHostSummary)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobHostSummary)]
         public override ulong[] Id { get; set; } = [];
 
@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
     public class FindJobHostSummaryCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Job, ResourceType.Host, ResourceType.Group])]
+        [ResourceTransformation(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
         [ResourceCompletions(ResourceType.Job, ResourceType.Host, ResourceType.Group)]
         [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);

@@ -11,7 +11,7 @@ namespace Jagabata.Cmdlets
     public class GetNotificationTemplateCommand : GetCommandBase<NotificationTemplate>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceIdTransformation(ResourceType.NotificationTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.NotificationTemplate)]
         public override ulong[] Id { get; set; } = [];
 
@@ -30,7 +30,7 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
@@ -58,7 +58,7 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForApprovalCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Organization, ResourceType.WorkflowJobTemplate])]
+        [ResourceTransformation(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceType.Organization, ResourceType.WorkflowJobTemplate)]
         [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
@@ -89,11 +89,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForErrorCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -131,11 +130,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForStartedCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -173,11 +171,10 @@ namespace Jagabata.Cmdlets
     public class FindNotificationTemplateForSuccessCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
+        [ResourceTransformation(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
-        ])]
+        )]
         [ResourceCompletions(
             ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
@@ -222,7 +219,7 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -264,7 +261,7 @@ namespace Jagabata.Cmdlets
     public class UpdateNotificationTemplateCommand : UpdateCommandBase<NotificationTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceIdTransformation(ResourceType.NotificationTemplate)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -275,7 +272,7 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
@@ -320,7 +317,7 @@ namespace Jagabata.Cmdlets
     public class RemoveNotificationTemplateCommand : RemoveCommandBase<NotificationTemplate>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceIdTransformation(ResourceType.NotificationTemplate)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
@@ -334,18 +331,14 @@ namespace Jagabata.Cmdlets
     public class EnableNotificationTemplateCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceIdTransformation(ResourceType.NotificationTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource,
+            ResourceType.JobTemplate, ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource For { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 2)]
@@ -399,18 +392,14 @@ namespace Jagabata.Cmdlets
     public class DisableNotificationTemplateCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.NotificationTemplate])]
+        [ResourceIdTransformation(ResourceType.NotificationTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceTransformation(AcceptableTypes = [
-                ResourceType.Organization,
-                ResourceType.Project,
-                ResourceType.InventorySource,
-                ResourceType.JobTemplate,
-                ResourceType.SystemJobTemplate,
-                ResourceType.WorkflowJobTemplate
-        ])]
+        [ResourceTransformation(
+            ResourceType.Organization, ResourceType.Project, ResourceType.InventorySource,
+            ResourceType.JobTemplate, ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource For { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 2)]

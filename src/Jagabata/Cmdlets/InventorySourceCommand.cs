@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetInventorySourceCommand : GetCommandBase<InventorySource>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventorySource])]
+        [ResourceIdTransformation(ResourceType.InventorySource)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InventorySource)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,13 +29,8 @@ namespace Jagabata.Cmdlets
     public class FindInventorySourceCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes =
-        [
-            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
-        ])]
-        [ResourceCompletions(
-            ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host
-        )]
+        [ResourceTransformation(ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
+        [ResourceCompletions(ResourceType.Project, ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
         [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
 
@@ -77,14 +72,14 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true)]
         public InventorySourceSource Source { get ;set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         public ulong? SourceProject { get; set; }
 
         [Parameter()]
@@ -101,7 +96,7 @@ namespace Jagabata.Cmdlets
         public string? ScmBranch { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -134,7 +129,7 @@ namespace Jagabata.Cmdlets
         public string? Limit { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -200,7 +195,7 @@ namespace Jagabata.Cmdlets
     public class UpdateInventorySourceCommand : UpdateCommandBase<InventorySource>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventorySource])]
+        [ResourceIdTransformation(ResourceType.InventorySource)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -214,7 +209,7 @@ namespace Jagabata.Cmdlets
         public InventorySourceSource? Source { get ;set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         public ulong? SourceProject { get; set; }
 
         [Parameter()]
@@ -231,7 +226,7 @@ namespace Jagabata.Cmdlets
         public string? ScmBranch { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -264,7 +259,7 @@ namespace Jagabata.Cmdlets
         public string? Limit { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -329,7 +324,7 @@ namespace Jagabata.Cmdlets
     public class RemoveInventorySourceCommand : RemoveCommandBase<InventorySource>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventorySource])]
+        [ResourceIdTransformation(ResourceType.InventorySource)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

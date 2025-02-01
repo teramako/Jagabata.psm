@@ -12,7 +12,7 @@ namespace Jagabata.Cmdlets
     public class GetAdHocCommandJobCommand : GetCommandBase<AdHocCommand.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.AdHocCommand])]
+        [ResourceIdTransformation(ResourceType.AdHocCommand)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.AdHocCommand)]
         public override ulong[] Id { get; set; } = [];
 
@@ -27,7 +27,7 @@ namespace Jagabata.Cmdlets
     public class FindAdHocCommandJobCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(AcceptableTypes = [ResourceType.Inventory, ResourceType.Host, ResourceType.Group])]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.Host, ResourceType.Group)]
         [ResourceCompletions(ResourceType.Inventory, ResourceType.Host, ResourceType.Group)]
         [Alias("associatedWith", "r")]
         public IResource? Resource { get; set; }
@@ -64,7 +64,7 @@ namespace Jagabata.Cmdlets
     public class RemoveAdHocCommandJobCommand : RemoveCommandBase<AdHocCommand>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.AdHocCommand])]
+        [ResourceIdTransformation(ResourceType.AdHocCommand)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
