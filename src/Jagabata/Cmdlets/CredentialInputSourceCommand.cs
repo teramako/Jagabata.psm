@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetCredentialInputSourceCommand : GetCommandBase<CredentialInputSource>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialInputSource])]
+        [ResourceIdTransformation(ResourceType.CredentialInputSource)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.CredentialInputSource)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindCredentialInputSourceCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong Credential { get; set; }
 
         [Parameter()]

@@ -26,7 +26,7 @@ namespace Jagabata.Cmdlets
     public class GetUserCommand : GetCommandBase<User>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public override ulong[] Id { get; set; } = [];
 
@@ -265,7 +265,7 @@ namespace Jagabata.Cmdlets
     public class UpdateUserCommand : UpdateCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -329,7 +329,7 @@ namespace Jagabata.Cmdlets
     public class RegisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -358,7 +358,7 @@ namespace Jagabata.Cmdlets
     public class UnregisterUserCommand : RegistrationCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -387,7 +387,7 @@ namespace Jagabata.Cmdlets
     public class RemoveUserCommand : RemoveCommandBase<User>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

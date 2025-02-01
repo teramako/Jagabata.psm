@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetActivityStreamCommand : GetCommandBase<ActivityStream>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ActivityStream])]
+        [ResourceIdTransformation(ResourceType.ActivityStream)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ActivityStream)]
         public override ulong[] Id { get; set; } = [];
 

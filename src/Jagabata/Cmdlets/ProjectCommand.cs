@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetProjectCommand : GetCommandBase<Project>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
@@ -64,7 +64,7 @@ namespace Jagabata.Cmdlets
     public class GetPlaybookCommand : GetCommandBase<string[]>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
@@ -84,7 +84,7 @@ namespace Jagabata.Cmdlets
     public class GetInventoryFileCommand : GetCommandBase<string[]>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong[] Id { get; set; } = [];
 
@@ -126,15 +126,15 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter(Mandatory = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong DefaultEnvironment { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong SignatureValidationCredential { get; set; }
 
         [Parameter(ParameterSetName = "Manual", Mandatory = true)]
@@ -158,7 +158,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ParameterSetName = "Svn")]
         [Parameter(ParameterSetName = "Insights", Mandatory = true)]
         [Parameter(ParameterSetName = "Archive")]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong Credential { get; set; }
 
         [Parameter(ParameterSetName = "Git")]
@@ -254,7 +254,7 @@ namespace Jagabata.Cmdlets
     public class RemoveProjectCommand : RemoveCommandBase<Project>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
@@ -268,7 +268,7 @@ namespace Jagabata.Cmdlets
     public class UpdateProjectCommand : UpdateCommandBase<Project>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Project])]
+        [ResourceIdTransformation(ResourceType.Project)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -279,7 +279,7 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]
@@ -289,12 +289,12 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [AllowNull]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong? DefaultEnvironment { get; set; }
 
         [Parameter()]
         [AllowNull]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? SignatureValidationCredential { get; set; }
 
         [Parameter()]
@@ -315,7 +315,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [AllowNull]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]

@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetOrganizationCommand : GetCommandBase<Organization>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindOrganizationCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "User", ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.User])]
+        [ResourceIdTransformation(ResourceType.User)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public ulong User { get; set; }
 
@@ -75,7 +75,7 @@ namespace Jagabata.Cmdlets
         public uint MaxHosts { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong DefaultEnvironment { get; set; }
 
         protected override Dictionary<string, object> CreateSendData()
@@ -108,7 +108,7 @@ namespace Jagabata.Cmdlets
     public class UpdateOrganizationCommand : UpdateCommandBase<Organization>
     {
         [Parameter(Mandatory = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -122,7 +122,7 @@ namespace Jagabata.Cmdlets
         public uint? MaxHosts { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         [AllowNull]
         public ulong? DefaultEnvironment { get; set; }
 
@@ -155,7 +155,7 @@ namespace Jagabata.Cmdlets
     public class RemoveOrganizationCommand : RemoveCommandBase<Organization>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

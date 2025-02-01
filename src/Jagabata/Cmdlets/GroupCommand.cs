@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetGroupCommand : GetCommandBase<Group>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Group)]
         public override ulong[] Id { get; set; } = [];
 
@@ -80,7 +80,7 @@ namespace Jagabata.Cmdlets
     public class NewGroupCommand : NewCommandBase<Group>
     {
         [Parameter(Mandatory = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -124,7 +124,7 @@ namespace Jagabata.Cmdlets
     public class UpdateGroupCommand : UpdateCommandBase<Group>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -166,11 +166,11 @@ namespace Jagabata.Cmdlets
     public class RegisterGroupCommand : RegistrationCommandBase<Group>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong To { get; set; }
 
         protected override void ProcessRecord()
@@ -186,11 +186,11 @@ namespace Jagabata.Cmdlets
     public class UnregisterGroupCommand : RegistrationCommandBase<Group>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong From { get; set; }
 
         protected override void ProcessRecord()
@@ -206,7 +206,7 @@ namespace Jagabata.Cmdlets
     public class RemoveGroupCommand : RemoveCommandBase<Group>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

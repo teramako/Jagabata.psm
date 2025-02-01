@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetInventoryCommand : GetCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public override ulong[] Id { get; set; } = [];
 
@@ -84,7 +84,7 @@ namespace Jagabata.Cmdlets
     public class NewInventoryCommand : NewCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -145,7 +145,7 @@ namespace Jagabata.Cmdlets
     public class UpdateInventoryCommand : UpdateCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -198,7 +198,7 @@ namespace Jagabata.Cmdlets
     public class RemoveInventoryCommand : RemoveCommandBase<Inventory>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

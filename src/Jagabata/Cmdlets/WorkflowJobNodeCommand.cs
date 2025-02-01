@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowJobNodeCommand : GetCommandBase<WorkflowJobNode>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobNode)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobNode)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,12 +29,12 @@ namespace Jagabata.Cmdlets
     public class FindWorkflowJobNodeCommand : FindCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJob", ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJob])]
+        [ResourceIdTransformation(ResourceType.WorkflowJob)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJob)]
         public ulong Job { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobNode", ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJobNode])]
+        [ResourceIdTransformation(ResourceType.WorkflowJobNode)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobNode)]
         public ulong Node { get; set; }
 

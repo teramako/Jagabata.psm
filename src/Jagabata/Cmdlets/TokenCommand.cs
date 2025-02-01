@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetTokenCommand : GetCommandBase<OAuth2AccessToken>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2AccessToken])]
+        [ResourceIdTransformation(ResourceType.OAuth2AccessToken)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2AccessToken)]
         public override ulong[] Id { get; set; } = [];
 
@@ -86,7 +86,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true, ParameterSetName = "Application", Position = 0)]
         [Parameter(ParameterSetName = "User", Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2Application])]
+        [ResourceIdTransformation(ResourceType.OAuth2Application)]
         public ulong? Application { get; set; }
 
         [Parameter()]
@@ -143,7 +143,7 @@ namespace Jagabata.Cmdlets
     public class RemoveTokenCommand : RemoveCommandBase<OAuth2AccessToken>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2AccessToken])]
+        [ResourceIdTransformation(ResourceType.OAuth2AccessToken)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
@@ -157,7 +157,7 @@ namespace Jagabata.Cmdlets
     public class UpdateTokenCommand : UpdateCommandBase<OAuth2AccessToken>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.OAuth2AccessToken])]
+        [ResourceIdTransformation(ResourceType.OAuth2AccessToken)]
         public override ulong Id { get; set; }
 
         [Parameter()]

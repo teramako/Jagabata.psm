@@ -12,7 +12,7 @@ namespace Jagabata.Cmdlets
     public class GetCredentialTypeCommand : GetCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
+        [ResourceIdTransformation(ResourceType.CredentialType)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.CredentialType)]
         public override ulong[] Id { get; set; } = [];
 
@@ -107,7 +107,7 @@ namespace Jagabata.Cmdlets
     public class RemoveCredentialTypeCommand : RemoveCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
+        [ResourceIdTransformation(ResourceType.CredentialType)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
@@ -121,7 +121,7 @@ namespace Jagabata.Cmdlets
     public class UpdateCredentialTypeCommand : UpdateCommandBase<Resources.CredentialType>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.CredentialType])]
+        [ResourceIdTransformation(ResourceType.CredentialType)]
         public override ulong Id { get; set; }
 
         [Parameter()]

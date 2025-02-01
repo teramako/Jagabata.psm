@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowApprovalTemplate : GetCommandBase<WorkflowApprovalTemplate>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowApprovalTemplate])]
+        [ResourceIdTransformation(ResourceType.WorkflowApprovalTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowApprovalTemplate)]
         public override ulong[] Id { get; set; } = [];
 

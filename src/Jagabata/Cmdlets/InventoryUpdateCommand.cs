@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetInventoryUpdateJobCommand : GetCommandBase<InventoryUpdateJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventoryUpdate])]
+        [ResourceIdTransformation(ResourceType.InventoryUpdate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.InventoryUpdate)]
         public override ulong[] Id { get; set; } = [];
 
@@ -207,7 +207,7 @@ namespace Jagabata.Cmdlets
     public class RemoveInventoryUpdateCommand : RemoveCommandBase<InventoryUpdateJob>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.InventoryUpdate])]
+        [ResourceIdTransformation(ResourceType.InventoryUpdate)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

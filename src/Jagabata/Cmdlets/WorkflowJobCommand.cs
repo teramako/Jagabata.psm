@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetWorkflowJobCommand : GetCommandBase<WorkflowJob.Detail>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJob])]
+        [ResourceIdTransformation(ResourceType.WorkflowJob)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJob)]
         public override ulong[] Id { get; set; } = [];
 
@@ -83,7 +83,7 @@ namespace Jagabata.Cmdlets
     public class RemoveWorkflowJobCommand : RemoveCommandBase<WorkflowJob>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.WorkflowJob])]
+        [ResourceIdTransformation(ResourceType.WorkflowJob)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

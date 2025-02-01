@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetJobHostSummaryCommand : GetCommandBase<JobHostSummary>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.JobHostSummary])]
+        [ResourceIdTransformation(ResourceType.JobHostSummary)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobHostSummary)]
         public override ulong[] Id { get; set; } = [];
 

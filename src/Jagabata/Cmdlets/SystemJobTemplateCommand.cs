@@ -12,7 +12,7 @@ namespace Jagabata.Cmdlets
     public class GetSystemJobTemplateCommand : GetCommandBase<SystemJobTemplate>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.SystemJobTemplate])]
+        [ResourceIdTransformation(ResourceType.SystemJobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.SystemJobTemplate)]
         public override ulong[] Id { get; set; } = [];
 

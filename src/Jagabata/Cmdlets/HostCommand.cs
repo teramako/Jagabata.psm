@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetHostCommand : GetCommandBase<Host>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Host)]
         public override ulong[] Id { get; set; } = [];
 
@@ -72,7 +72,7 @@ namespace Jagabata.Cmdlets
     public class GetHostFactsCacheCommand : GetCommandBase<Dictionary<string, object?>>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Host)]
         public override ulong[] Id { get; set; } = [];
 
@@ -89,7 +89,7 @@ namespace Jagabata.Cmdlets
     public class NewHostCommand : NewCommandBase<Host>
     {
         [Parameter(Mandatory = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Inventory])]
+        [ResourceIdTransformation(ResourceType.Inventory)]
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -144,7 +144,7 @@ namespace Jagabata.Cmdlets
     public class UpdateHostCommand : UpdateCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -198,11 +198,11 @@ namespace Jagabata.Cmdlets
     public class RegisterHostCommand : RegistrationCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong To { get; set; }
 
         protected override void ProcessRecord()
@@ -218,11 +218,11 @@ namespace Jagabata.Cmdlets
     public class UnregisterHostCommand : RegistrationCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Group])]
+        [ResourceIdTransformation(ResourceType.Group)]
         public ulong From { get; set; }
 
         protected override void ProcessRecord()
@@ -238,7 +238,7 @@ namespace Jagabata.Cmdlets
     public class RemoveHostCommand : RemoveCommandBase<Host>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Host])]
+        [ResourceIdTransformation(ResourceType.Host)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()

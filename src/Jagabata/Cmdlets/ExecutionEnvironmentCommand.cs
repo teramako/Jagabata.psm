@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetExecutionEnvironmentCommand : GetCommandBase<ExecutionEnvironment>
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromRemainingArguments = true, ValueFromPipeline = true)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public override ulong[] Id { get; set; } = [];
 
@@ -29,7 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindExecutionEnvironmentCommand : FindCommandBase
     {
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
@@ -64,11 +64,11 @@ namespace Jagabata.Cmdlets
         public string Image { get; set; } = string.Empty;
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -108,7 +108,7 @@ namespace Jagabata.Cmdlets
     public class UpdateExecutionEnvironmentCommand : UpdateCommandBase<ExecutionEnvironment>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -122,11 +122,11 @@ namespace Jagabata.Cmdlets
         public string? Image { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Organization])]
+        [ResourceIdTransformation(ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.Credential])]
+        [ResourceIdTransformation(ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -167,7 +167,7 @@ namespace Jagabata.Cmdlets
     public class RemoveExecutionEnvironmentCommand : RemoveCommandBase<ExecutionEnvironment>
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(AcceptableTypes = [ResourceType.ExecutionEnvironment])]
+        [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
