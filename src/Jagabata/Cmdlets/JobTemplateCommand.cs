@@ -79,14 +79,18 @@ namespace Jagabata.Cmdlets
     public abstract class LaunchJobTemplateCommandBase : LaunchJobCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.JobTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "JobTemplate", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(ResourceType.JobTemplate)]
+        [ResourceCompletions(ResourceType.JobTemplate)]
         public IResource? JobTemplate { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -98,6 +102,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong[]? Credentials { get; set; }
 
         [Parameter()]
@@ -105,6 +110,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()] // XXX: Should be string[] and created if not exists ?
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public ulong[]? Labels { get; set; }
 
         [Parameter()]
@@ -129,6 +135,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
