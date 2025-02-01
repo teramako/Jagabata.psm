@@ -12,28 +12,8 @@ Invoke (launch) an AdHocCommand and wait until the job is finished.
 
 ## SYNTAX
 
-### Host
 ```
-Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Host] <Host> [-ModuleName] <String>
- [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### Group
-```
-Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Group] <Group> [-ModuleName] <String>
- [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### Inventory
-```
-Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Inventory] <Inventory>
- [-ModuleName] <String> [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Limit <String>] [-Check]
- [<CommonParameters>]
-```
-
-### InventoryId
-```
-Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-InventoryId] <UInt64>
+Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Target] <IResource>
  [-ModuleName] <String> [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Limit <String>] [-Check]
  [<CommonParameters>]
 ```
@@ -101,36 +81,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Group
-Group to be executed.
-
-```yaml
-Type: Group
-Parameter Sets: Group
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Host
-Host to be executed.
-
-```yaml
-Type: Host
-Parameter Sets: Host
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -IntervalSeconds
 Interval to confirm job completion (seconds).
 Default is 5 seconds.
@@ -147,42 +97,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Inventory
-Inventory to be executed.
-
-```yaml
-Type: Inventory
-Parameter Sets: Inventory
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -InventoryId
-Inventory ID to be executed.
-
-```yaml
-Type: UInt64
-Parameter Sets: InventoryId
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -Limit
 Further limit selected hosts to an additional pattern.
 
 ```yaml
 Type: String
-Parameter Sets: Inventory, InventoryId
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -254,22 +174,43 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Target
+Remote target resource to be executed.
+
+The resource is accepted following types:  
+- `Inventory`  
+- `Group`  
+- `Host`
+
+> [!TIP]  
+> Can specify the resource as string like `Group:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Target (Get-AnsibleGroup -Id 1)`  
+>  - `-Target @{ type = "group"; id = 1 }`  
+>  - `-Target group:1`
+
+```yaml
+Type: IResource
+Parameter Sets: (All)
+Aliases: remote, r
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### Jagabata.Resources.Host
-Host object to be executed.
-
-### Jagabata.Resources.Group
-Group object to be executed.
-
-### Jagabata.Resources.Inventory
-Inventory object to be executed.
-
-### System.UInt64
-Inventory ID to be executed.
+### Jagabata.Resources.IResource
+Remote target resource to be executed.
+See: `-Target` parameter.
 
 ## OUTPUTS
 
