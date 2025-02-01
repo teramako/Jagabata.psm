@@ -7,8 +7,12 @@ using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;
 
-public abstract class LaunchJobCommandBase : APICmdletBase
+public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
 {
+    ~LaunchJobCommandBase()
+    {
+        Dispose(false);
+    }
     protected readonly JobProgressManager JobProgressManager = [];
     private Sleep? _sleep;
     protected void Sleep(int milliseconds)
@@ -237,5 +241,28 @@ public abstract class LaunchJobCommandBase : APICmdletBase
             sendData["extra_vars"] = JsonSerializer.Serialize(extraVars);
         }
         return true;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    private bool _disposed;
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                if (_sleep is not null)
+                {
+                    _sleep.Dispose();
+                    _sleep = null;
+                }
+            }
+            _disposed = true;
+        }
     }
 }

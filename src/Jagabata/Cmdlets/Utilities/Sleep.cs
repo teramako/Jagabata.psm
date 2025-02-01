@@ -7,6 +7,10 @@ namespace Jagabata.Cmdlets.Utilities
         private bool _stopping = false;
         private bool _disposed = false;
         public Sleep() { }
+        ~Sleep()
+        {
+            Dispose(false);
+        }
         public void Do(int miliseconds)
         {
             lock (_syncObject)
@@ -33,12 +37,15 @@ namespace Jagabata.Cmdlets.Utilities
         }
         protected void Dispose(bool disposing)
         {
-            if (disposing && !_disposed)
+            if (!_disposed)
             {
-                if (_waitHandle is not null)
+                if (disposing)
                 {
-                    _waitHandle.Dispose();
-                    _waitHandle = null;
+                    if (_waitHandle is not null)
+                    {
+                        _waitHandle.Dispose();
+                        _waitHandle = null;
+                    }
                 }
                 _disposed = true;
             }
