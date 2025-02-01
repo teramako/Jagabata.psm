@@ -85,6 +85,11 @@ namespace Jagabata.Cmdlets
         public IResource Target { get; set; } = new Resource(0, 0);
 
         [Parameter(Mandatory = true, Position = 1)]
+        [ArgumentCompletions(
+            "command", "shell", "yum", "apt", "apt_key", "apt_repository", "apt_rpm", "service",
+            "group", "user", "mount", "ping", "selinux", "setup", "win_ping", "win_service",
+            "win_updates", "win_group", "win_user"
+        )]
         public string ModuleName { get; set; } = string.Empty;
 
         [Parameter(Position = 2)]
