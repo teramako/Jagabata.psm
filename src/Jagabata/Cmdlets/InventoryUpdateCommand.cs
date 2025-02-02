@@ -1,6 +1,7 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -98,15 +99,15 @@ namespace Jagabata.Cmdlets
                 WriteObject(psobject, false);
             }
         }
-        protected InventoryUpdateJob.Detail UpdateInventorySource(ulong id)
+        protected bool TryUpdateInventorySource(ulong id, [MaybeNullWhen(false)] out InventoryUpdateJob.Detail job)
         {
-            var apiResult = CreateResource<InventoryUpdateJob.Detail>($"{InventorySource.PATH}{id}/update/");
-            return apiResult.Contents ?? throw new NullReferenceException();
+            job = CreateResource<InventoryUpdateJob.Detail>($"{InventorySource.PATH}{id}/update/").Contents;
+            return job is not null;
         }
-        protected InventoryUpdateJob.Detail[] UpdateInventory(ulong id)
+        protected bool TryUpdateInventory(ulong id, [MaybeNullWhen(false)] out InventoryUpdateJob.Detail[] jobs)
         {
-            var apiResult = CreateResource<InventoryUpdateJob.Detail[]>($"{Inventory.PATH}{id}/update_inventory_sources/");
-            return apiResult.Contents ?? throw new NullReferenceException();
+            jobs = CreateResource<InventoryUpdateJob.Detail[]>($"{Inventory.PATH}{id}/update_inventory_sources/").Contents;
+            return jobs is not null;
         }
     }
 
@@ -133,16 +134,21 @@ namespace Jagabata.Cmdlets
             switch (Source.Type)
             {
                 case ResourceType.Inventory:
-                    foreach (var inventoryUpdateJob in UpdateInventory(Source.Id))
+                    if (TryUpdateInventory(Source.Id, out var jobs))
                     {
-                        WriteVerbose($"Update InventorySource:{inventoryUpdateJob.InventorySource} => Job:[{inventoryUpdateJob.Id}]");
-                        JobProgressManager.Add(inventoryUpdateJob);
+                        foreach (var updateJob in jobs)
+                        {
+                            WriteVerbose($"Update InventorySource:{updateJob.InventorySource} => Job:[{updateJob.Id}]");
+                            JobProgressManager.Add(updateJob);
+                        }
                     }
                     break;
                 case ResourceType.InventorySource:
-                    var inventorySourceUpdateJob = UpdateInventorySource(Source.Id);
-                    WriteVerbose($"Update InventorySource:{inventorySourceUpdateJob.InventorySource} => Job:[{inventorySourceUpdateJob.Id}]");
-                    JobProgressManager.Add(inventorySourceUpdateJob);
+                    if (TryUpdateInventorySource(Source.Id, out var sourceUpdateJob))
+                    {
+                        WriteVerbose($"Update InventorySource:{sourceUpdateJob.InventorySource} => Job:[{sourceUpdateJob.Id}]");
+                        JobProgressManager.Add(sourceUpdateJob);
+                    }
                     break;
             }
         }
@@ -172,12 +178,16 @@ namespace Jagabata.Cmdlets
             switch (Source.Type)
             {
                 case ResourceType.Inventory:
-                    var inventoryUpdateJobs = UpdateInventory(Source.Id);
-                    WriteObject(inventoryUpdateJobs, true);
+                    if (TryUpdateInventory(Source.Id, out var jobs))
+                    {
+                        WriteObject(jobs, true);
+                    }
                     break;
                 case ResourceType.InventorySource:
-                    var inventorySourceUpdateJob = UpdateInventorySource(Source.Id);
-                    WriteObject(inventorySourceUpdateJob, false);
+                    if (TryUpdateInventorySource(Source.Id, out var job))
+                    {
+                        WriteObject(job, false);
+                    }
                     break;
             }
         }
