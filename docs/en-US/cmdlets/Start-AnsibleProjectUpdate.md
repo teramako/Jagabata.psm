@@ -12,24 +12,14 @@ Invoke (update) Project.
 
 ## SYNTAX
 
-### Id
+### Update (Default)
 ```
 Start-AnsibleProjectUpdate [-Id] <UInt64> [<CommonParameters>]
 ```
 
-### CheckId
+### Check
 ```
-Start-AnsibleProjectUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### Project
-```
-Start-AnsibleProjectUpdate [-Project] <IResource> [<CommonParameters>]
-```
-
-### CheckProject
-```
-Start-AnsibleProjectUpdate [-Project] <IResource> [-Check] [<CommonParameters>]
+Start-AnsibleProjectUpdate [-Id] <UInt64> -Check [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,7 +52,7 @@ Check wheter a Project can be updated.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CheckId, CheckProject
+Parameter Sets: Check
 Aliases:
 
 Required: True
@@ -73,27 +63,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Project ID to be updated.
+Project ID or it's resource object to be updated.
+
+> [!TIP]  
+> Can specify the resource as string like `Project:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleProject -Id 1)`  
+>  - `-Id @{ type = "project"; id = 1 }`  
+>  - `-Id project:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id, CheckId
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Project
-Project object to be updated.
-
-```yaml
-Type: IResource
-Parameter Sets: Project, CheckProject
-Aliases:
+Parameter Sets: (All)
+Aliases: project, p
 
 Required: True
 Position: 0
@@ -108,10 +92,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Project ID to be updated.
-
-### Jagabata.Resources.Project
-Project object to be updated.
+Project ID or it's resource to be updated.
+See: `-Id` parameter.
 
 ## OUTPUTS
 
