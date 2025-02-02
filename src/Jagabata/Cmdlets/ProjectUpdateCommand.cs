@@ -66,22 +66,18 @@ namespace Jagabata.Cmdlets
 
     public abstract class LaunchProjectUpdateCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckId", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.Project)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
+        [Alias("project", "p")]
         public ulong Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Project", ValueFromPipeline = true, Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckProject", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(ResourceType.Project)]
-        public IResource? Project { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "CheckId")]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckProject")]
+        [Parameter(Mandatory = true, ParameterSetName = "Check")]
         public SwitchParameter Check { get; set; }
 
         protected void CheckCanUpdate(ulong projectId)
         {
-            var res = GetResource<CanUpdateProject>($"{Resources.Project.PATH}{projectId}/update/");
+            var res = GetResource<CanUpdateProject>($"{Project.PATH}{projectId}/update/");
             var psobject = new PSObject();
             psobject.Members.Add(new PSNoteProperty("Id", projectId));
             psobject.Members.Add(new PSNoteProperty("Type", ResourceType.Project));
@@ -90,31 +86,25 @@ namespace Jagabata.Cmdlets
         }
         protected ProjectUpdateJob.Detail UpdateProject(ulong projectId)
         {
-            var apiResult = CreateResource<ProjectUpdateJob.Detail>($"{Resources.Project.PATH}{projectId}/update/");
+            var apiResult = CreateResource<ProjectUpdateJob.Detail>($"{Project.PATH}{projectId}/update/");
             return apiResult.Contents ?? throw new NullReferenceException();
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Invoke, "ProjectUpdate")]
-    [OutputType(typeof(ProjectUpdateJob), ParameterSetName = ["Id", "Project"])]
-    [OutputType(typeof(PSObject), ParameterSetName = ["CheckId", "CheckProject"])]
+    [Cmdlet(VerbsLifecycle.Invoke, "ProjectUpdate", DefaultParameterSetName = "Update")]
+    [OutputType(typeof(ProjectUpdateJob), ParameterSetName = ["Update"])]
+    [OutputType(typeof(PSObject), ParameterSetName = ["Check"])]
     public class InvokeProjectUpdateCommand : LaunchProjectUpdateCommandBase
     {
-        [Parameter(ParameterSetName = "Id")]
-        [Parameter(ParameterSetName = "Project")]
+        [Parameter(ParameterSetName = "Update")]
         [ValidateRange(5, int.MaxValue)]
         public int IntervalSeconds { get; set; } = 5;
 
-        [Parameter(ParameterSetName = "Id")]
-        [Parameter(ParameterSetName = "Project")]
+        [Parameter(ParameterSetName = "Update")]
         public SwitchParameter SuppressJobLog { get; set; }
 
         protected override void ProcessRecord()
         {
-            if (Project is not null)
-            {
-                Id = Project.Id;
-            }
             if (Check)
             {
                 CheckCanUpdate(Id);
@@ -136,17 +126,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Start, "ProjectUpdate")]
-    [OutputType(typeof(ProjectUpdateJob.Detail), ParameterSetName = ["Id", "Project"])]
-    [OutputType(typeof(PSObject), ParameterSetName = ["CheckId", "CheckProject"])]
+    [Cmdlet(VerbsLifecycle.Start, "ProjectUpdate", DefaultParameterSetName = "Update")]
+    [OutputType(typeof(ProjectUpdateJob.Detail), ParameterSetName = ["Update"])]
+    [OutputType(typeof(PSObject), ParameterSetName = ["Check"])]
     public class StartProjectUpdateCommand : LaunchProjectUpdateCommandBase
     {
         protected override void ProcessRecord()
         {
-            if (Project is not null)
-            {
-                Id = Project.Id;
-            }
             if (Check)
             {
                 CheckCanUpdate(Id);
