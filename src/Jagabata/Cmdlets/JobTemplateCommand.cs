@@ -2,6 +2,7 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
+using System.Globalization;
 using System.Management.Automation;
 using System.Security;
 using System.Text;
@@ -79,14 +80,18 @@ namespace Jagabata.Cmdlets
     public abstract class LaunchJobTemplateCommandBase : LaunchJobCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.JobTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "JobTemplate", ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(ResourceType.JobTemplate)]
+        [ResourceCompletions(ResourceType.JobTemplate)]
         public IResource? JobTemplate { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -98,6 +103,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong[]? Credentials { get; set; }
 
         [Parameter()]
@@ -105,6 +111,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()] // XXX: Should be string[] and created if not exists ?
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public ulong[]? Labels { get; set; }
 
         [Parameter()]
@@ -129,6 +136,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]
@@ -141,7 +149,7 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         public SwitchParameter Interactive { get; set; }
 
-        private IDictionary<string, object?> CreateSendData()
+        private Dictionary<string, object?> CreateSendData()
         {
             var dict = new Dictionary<string, object?>();
             if (Inventory is not null)
@@ -212,47 +220,48 @@ namespace Jagabata.Cmdlets
             var def = requirements.Defaults;
             var (fixedColor, implicitColor, explicitColor, requiredColor) =
                 ((ConsoleColor?)null, ConsoleColor.Magenta, ConsoleColor.Green, ConsoleColor.Red);
+            var culture = CultureInfo.InvariantCulture;
             WriteHost($"[{jt.Id}] {jt.Name} - {jt.Description}\n");
-            var fmt = "{0,22} : {1}\n";
+            const string fmt = "{0,22} : {1}\n";
             {
                 var inventoryVal = (def.Inventory.Id is not null ? $"[{def.Inventory.Id}] {def.Inventory.Name}" : "Undefined")
                                    + (requirements.AskInventoryOnLaunch && Inventory is not null ? $" => [{Inventory}]" : "");
-                WriteHost(string.Format(fmt, "Inventory", inventoryVal),
+                WriteHost(string.Format(culture, fmt, "Inventory", inventoryVal),
                             foregroundColor: requirements.AskInventoryOnLaunch ? (Inventory is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.Limit) || Limit is not null)
             {
                 var limitVal = def.Limit
                                + (requirements.AskLimitOnLaunch && Limit is not null ? $" => {Limit}" : "");
-                WriteHost(string.Format(fmt, "Limit", $"{limitVal}"),
+                WriteHost(string.Format(culture, fmt, "Limit", $"{limitVal}"),
                             foregroundColor: requirements.AskLimitOnLaunch ? (Limit is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.ScmBranch) || ScmBranch is not null)
             {
                 var branchVal = def.ScmBranch
                                 + (requirements.AskScmBranchOnLaunch && ScmBranch is not null ? $" => {ScmBranch}" : "");
-                WriteHost(string.Format(fmt, "Scm Branch", branchVal),
+                WriteHost(string.Format(culture, fmt, "Scm Branch", branchVal),
                             foregroundColor: requirements.AskScmBranchOnLaunch ? (ScmBranch is null ? implicitColor : explicitColor) : fixedColor);
             }
             if ((def.Labels is not null && def.Labels.Length > 0) || Labels is not null)
             {
-                var labelsVal = string.Join(", ", def.Labels?.Select(l => $"[{l.Id}] {l.Name}") ?? [])
-                                + (requirements.AskLabelsOnLaunch && Labels is not null ? $" => {string.Join(',', Labels.Select(id => $"[{id}]"))}" : "");
-                WriteHost(string.Format(fmt, "Labels", labelsVal),
+                var labelsVal = string.Join(", ", def.Labels?.Select(static l => $"[{l.Id}] {l.Name}") ?? [])
+                                + (requirements.AskLabelsOnLaunch && Labels is not null ? $" => {string.Join(',', Labels.Select(static id => $"[{id}]"))}" : "");
+                WriteHost(string.Format(culture, fmt, "Labels", labelsVal),
                             foregroundColor: requirements.AskLabelsOnLaunch ? (Labels is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.JobTags) || Tags is not null)
             {
                 var tagsVal = def.JobTags
                               + (requirements.AskTagsOnLaunch && Tags is not null ? $" => {string.Join(", ", Tags)}" : "");
-                WriteHost(string.Format(fmt, "Job tags", tagsVal),
+                WriteHost(string.Format(culture, fmt, "Job tags", tagsVal),
                             foregroundColor: requirements.AskTagsOnLaunch ? (Tags is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.SkipTags) || SkipTags is not null)
             {
                 var skipTagsVal = def.SkipTags
                                   + (requirements.AskSkipTagsOnLaunch && SkipTags is not null ? $" => {string.Join(", ", SkipTags)}" : "");
-                WriteHost(string.Format(fmt, "Skip tags", skipTagsVal),
+                WriteHost(string.Format(culture, fmt, "Skip tags", skipTagsVal),
                             foregroundColor: requirements.AskSkipTagsOnLaunch ? (SkipTags is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (!string.IsNullOrEmpty(def.ExtraVars) || !string.IsNullOrEmpty(ExtraVars))
@@ -260,14 +269,14 @@ namespace Jagabata.Cmdlets
                 var sb = new StringBuilder();
                 var lines = def.ExtraVars.Split('\n');
                 var padding = "".PadLeft(25);
-                sb.Append(string.Format(fmt, "Extra vars", lines[0]));
+                sb.Append(string.Format(culture, fmt, "Extra vars", lines[0]));
                 foreach (var line in lines[1..])
                 {
                     sb.AppendLine(padding + line);
                 }
                 if (!string.IsNullOrEmpty(ExtraVars))
                 {
-                    sb.AppendLine($"{padding}=> (overwrite or append)");
+                    sb.AppendLine(culture, $"{padding}=> (overwrite or append)");
                     lines = ExtraVars.Split('\n');
                     foreach (var line in lines)
                     {
@@ -279,65 +288,65 @@ namespace Jagabata.Cmdlets
             }
             if (requirements.SurveyEnabled)
             {
-                WriteHost(string.Format(fmt, "Survey", "Enabled"), foregroundColor: requiredColor);
+                WriteHost(string.Format(culture, fmt, "Survey", "Enabled"), foregroundColor: requiredColor);
             }
             if (requirements.VariablesNeededToStart.Length > 0)
             {
-                WriteHost(string.Format(fmt, "Variables", $"[{string.Join(", ", requirements.VariablesNeededToStart)}]"),
+                WriteHost(string.Format(culture, fmt, "Variables", $"[{string.Join(", ", requirements.VariablesNeededToStart)}]"),
                             foregroundColor: requiredColor);
             }
             {
                 var diffModeVal = $"{def.DiffMode}"
                                   + (requirements.AskDiffModeOnLaunch && DiffMode is not null ? $" => {DiffMode}" : "");
-                WriteHost(string.Format(fmt, "Diff Mode", diffModeVal),
+                WriteHost(string.Format(culture, fmt, "Diff Mode", diffModeVal),
                                 foregroundColor: requirements.AskDiffModeOnLaunch ? (DiffMode is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var jobTypeVal = def.JobType
                                  + (requirements.AskJobTypeOnLaunch && JobType is not null ? $" => {JobType}" : "");
-                WriteHost(string.Format(fmt, "Job Type", jobTypeVal),
+                WriteHost(string.Format(culture, fmt, "Job Type", jobTypeVal),
                                 foregroundColor: requirements.AskJobTypeOnLaunch ? (JobType is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var verbosityVal = $"{def.Verbosity:d} ({def.Verbosity})"
                                    + (requirements.AskVerbosityOnLaunch && Verbosity is not null ? $" => {Verbosity:d} ({Verbosity})" : "");
-                WriteHost(string.Format(fmt, "Verbosity", verbosityVal),
+                WriteHost(string.Format(culture, fmt, "Verbosity", verbosityVal),
                                 foregroundColor: requirements.AskVerbosityOnLaunch ? (Verbosity is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (def.Credentials is not null || Credentials is not null)
             {
-                var credentialsVal = string.Join(", ", def.Credentials?.Select(c => $"[{c.Id}] {c.Name}") ?? [])
-                        + (requirements.AskCredentialOnLaunch && Credentials is not null ? $" => {string.Join(',', Credentials.Select(id => $"[{id}]"))}" : "");
-                WriteHost(string.Format(fmt, "Credentials", credentialsVal),
+                var credentialsVal = string.Join(", ", def.Credentials?.Select(static c => $"[{c.Id}] {c.Name}") ?? [])
+                        + (requirements.AskCredentialOnLaunch && Credentials is not null ? $" => {string.Join(',', Credentials.Select(static id => $"[{id}]"))}" : "");
+                WriteHost(string.Format(culture, fmt, "Credentials", credentialsVal),
                             foregroundColor: requirements.AskCredentialOnLaunch ? (Credentials is null ? implicitColor : explicitColor) : fixedColor);
             }
             if (requirements.PasswordsNeededToStart.Length > 0)
             {
-                WriteHost(string.Format(fmt, "CredentialPassswords", $"[{string.Join(", ", requirements.PasswordsNeededToStart)}]"),
+                WriteHost(string.Format(culture, fmt, "CredentialPassswords", $"[{string.Join(", ", requirements.PasswordsNeededToStart)}]"),
                             foregroundColor: requiredColor);
             }
             if (def.ExecutionEnvironment.Id is not null || ExecutionEnvironment is not null)
             {
                 var eeVal = $"[{def.ExecutionEnvironment.Id}] {def.ExecutionEnvironment.Name}"
                             + (requirements.AskExecutionEnvironmentOnLaunch && ExecutionEnvironment is not null ? $" => [{ExecutionEnvironment}]" : "");
-                WriteHost(string.Format(fmt, "ExecutionEnvironment", eeVal),
+                WriteHost(string.Format(culture, fmt, "ExecutionEnvironment", eeVal),
                             foregroundColor: requirements.AskExecutionEnvironmentOnLaunch ? (ExecutionEnvironment is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var forksVal = $"{def.Forks}" + (requirements.AskForksOnLaunch && Forks is not null ? $" => {Forks}" : "");
-                WriteHost(string.Format(fmt, "Forks", forksVal),
+                WriteHost(string.Format(culture, fmt, "Forks", forksVal),
                                 foregroundColor: requirements.AskForksOnLaunch ? (Forks is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var jobSliceVal = $"{def.JobSliceCount}"
                                   + (requirements.AskJobSliceCountOnLaunch && JobSliceCount is not null ? $" => {JobSliceCount}" : "");
-                WriteHost(string.Format(fmt, "Job Slice Count", jobSliceVal),
+                WriteHost(string.Format(culture, fmt, "Job Slice Count", jobSliceVal),
                                 foregroundColor: requirements.AskJobSliceCountOnLaunch ? (JobSliceCount is null ? implicitColor : explicitColor) : fixedColor);
             }
             {
                 var timeoutVal = $"{def.Timeout}"
                                  + (requirements.AskTimeoutOnLaunch && Timeout is not null ? $" => {Timeout}" : "");
-                WriteHost(string.Format(fmt, "Timeout", timeoutVal),
+                WriteHost(string.Format(culture, fmt, "Timeout", timeoutVal),
                                 foregroundColor: requirements.AskTimeoutOnLaunch ? (Timeout is null ? implicitColor : explicitColor) : fixedColor);
             }
         }
@@ -346,8 +355,9 @@ namespace Jagabata.Cmdlets
                                             IDictionary<string, object?> sendData,
                                             out Dictionary<string, (string caption, string description)> result)
         {
-            result = new();
+            result = [];
             ulong[] credentialIds;
+            var culture = CultureInfo.InvariantCulture;
             if (sendData.TryGetValue("credentials", out var res))
             {
                 credentialIds = res as ulong[] ?? [];
@@ -393,10 +403,10 @@ namespace Jagabata.Cmdlets
                                 default:
                                     continue;
                             }
-                            if (kv.Value as string != "ASK")
+                            if ((kv.Value as string) != "ASK")
                                 continue;
 
-                            result.Add(key, (string.Format(captionFmt, $"[{cred.Id}]{cred.Name}"), description));
+                            result.Add(key, (string.Format(culture, captionFmt, $"[{cred.Id}]{cred.Name}"), description));
                         }
                     }
                 }
@@ -423,7 +433,7 @@ namespace Jagabata.Cmdlets
                             captionFmt = "SSH Passphrase ({0})";
                             break;
                         default:
-                            if (!key.StartsWith("vault_password"))
+                            if (!key.StartsWith("vault_password", StringComparison.Ordinal))
                                 return false;
                             string[] vaultKeys = key.Split('.', 2);
                             captionFmt = (vaultKeys.Length == 2 && !string.IsNullOrEmpty(vaultKeys[1]))
@@ -433,7 +443,7 @@ namespace Jagabata.Cmdlets
                     }
                     var t = requirements.Defaults.Credentials?
                         .Where(cred => cred.PasswordsNeeded?.Any(passwordKey => passwordKey == key) ?? false)
-                        .Select(cred => (string.Format(captionFmt, $"[{cred.Id}]{cred.Name}"), description))
+                        .Select(cred => (string.Format(culture, captionFmt, $"[{cred.Id}]{cred.Name}"), description))
                         .FirstOrDefault() ?? ("", "");
 
                     result.Add(key, t);
@@ -490,18 +500,19 @@ namespace Jagabata.Cmdlets
             {
                 return false;
             }
+            var culture = CultureInfo.InvariantCulture;
             var prompt = new AskPrompt(CommandRuntime.Host);
             string key;
             string label;
-            string skipFormat = "Skip {0} prompt. Already specified: {1:g}";
+            const string skipFormat = "Skip {0} prompt. Already specified: {1:g}";
 
             // Inventory
             if (requirements.InventoryNeededToStart || (checkOptional && requirements.AskInventoryOnLaunch))
             {
                 key = "inventory"; label = "Inventory";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask<ulong>(label, "",
                                            defaultValue: requirements.Defaults.Inventory.Id,
@@ -527,26 +538,26 @@ namespace Jagabata.Cmdlets
             if (requirements.CredentialNeededToStart || (checkOptional && requirements.AskCredentialOnLaunch))
             {
                 key = "credentials"; label = "Credentials";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    var strData = $"[{string.Join(", ", (ulong[]?)sendData[key] ?? [])}]";
-                    WriteHost(string.Format(skipFormat, label, strData), dontshow: true);
+                    var strData = $"[{string.Join(", ", (ulong[]?)value ?? [])}]";
+                    WriteHost(string.Format(culture, skipFormat, label, strData), dontshow: true);
                 }
                 else if (prompt.AskList<ulong>(label, "",
-                                               defaultValues: requirements.Defaults.Credentials?.Select(x => $"[{x.Id}] {x.Name}"),
+                                               defaultValues: requirements.Defaults.Credentials?.Select(static x => $"[{x.Id}] {x.Name}"),
                                                helpMessage: "Enter Credential ID(s).",
                                                out var credentialsAnswer))
                 {
                     if (!credentialsAnswer.IsEmpty)
                     {
-                        var arr = credentialsAnswer.Input.Where(x => x > 0).ToArray();
+                        var arr = credentialsAnswer.Input.Where(static x => x > 0).ToArray();
                         sendData[key] = arr;
                         PrintPromptResult(label, $"[{string.Join(", ", arr)}]");
                     }
                     else
                     {
                         PrintPromptResult(label,
-                                    $"[{string.Join(", ", requirements.Defaults.Credentials?.Select(x => $"{x}") ?? [])}]",
+                                    $"[{string.Join(", ", requirements.Defaults.Credentials?.Select(static x => $"{x}") ?? [])}]",
                                     true);
                     }
                 }
@@ -566,9 +577,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskExecutionEnvironmentOnLaunch)
             {
                 key = "execution_environment"; label = "Execution Environment";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask<ulong>(label, "",
                                            defaultValue: requirements.Defaults.ExecutionEnvironment.Id,
@@ -593,9 +604,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskJobTypeOnLaunch)
             {
                 key = "job_type"; label = "Job Type";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.AskBool(label,
                                         defaultValue: requirements.Defaults.JobType == Resources.JobType.Run,
@@ -621,9 +632,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskScmBranchOnLaunch)
             {
                 key = "scm_branch"; label = "ScmBranch";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask(label, "",
                                     defaultValue: requirements.Defaults.ScmBranch,
@@ -647,26 +658,26 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskLabelsOnLaunch)
             {
                 key = "labels"; label = "Labels";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    var strData = $"[{string.Join(", ", (ulong[]?)sendData[key] ?? [])}]";
-                    WriteHost(string.Format(skipFormat, label, strData), dontshow: true);
+                    var strData = $"[{string.Join(", ", (ulong[]?)value ?? [])}]";
+                    WriteHost(string.Format(culture, skipFormat, label, strData), dontshow: true);
                 }
                 else if (prompt.AskList<ulong>(label, "",
-                                               defaultValues: requirements.Defaults.Labels?.Select(x => $"[{x.Id}] {x.Name}") ?? [],
+                                               defaultValues: requirements.Defaults.Labels?.Select(static x => $"[{x.Id}] {x.Name}") ?? [],
                                                helpMessage: "Enter Label ID(s).",
                                                out var labelsAnswer))
                 {
                     if (!labelsAnswer.IsEmpty)
                     {
-                        var arr = labelsAnswer.Input.Where(x => x > 0).ToArray();
+                        var arr = labelsAnswer.Input.Where(static x => x > 0).ToArray();
                         sendData[key] = arr;
                         PrintPromptResult(label, $"[{string.Join(", ", arr)}]");
                     }
                     else
                     {
                         PrintPromptResult(label,
-                                    $"[{string.Join(", ", requirements.Defaults.Labels?.Select(x => $"{x}") ?? [])}]",
+                                    $"[{string.Join(", ", requirements.Defaults.Labels?.Select(static x => $"{x}") ?? [])}]",
                                     true);
                     }
                 }
@@ -677,9 +688,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskForksOnLaunch)
             {
                 key = "forks"; label = "Forks";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask<int>(label, "",
                                          defaultValue: requirements.Defaults.Forks,
@@ -704,9 +715,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskLimitOnLaunch)
             {
                 key = "limit"; label = "Limit";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask(label, "",
                                     defaultValue: requirements.Defaults.Limit,
@@ -733,10 +744,10 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskVerbosityOnLaunch)
             {
                 key = "verbosity"; label = "Verbosity";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    var v = (JobVerbosity)((int)(sendData[key] ?? 0));
-                    WriteHost(string.Format(skipFormat, label, $"{v:d} ({v:g})"), dontshow: true);
+                    var v = (JobVerbosity)(int)(value ?? 0);
+                    WriteHost(string.Format(culture, skipFormat, label, $"{v:d} ({v:g})"), dontshow: true);
                 }
                 else if (prompt.AskEnum<JobVerbosity>(label,
                                                       defaultValue: requirements.Defaults.Verbosity,
@@ -762,9 +773,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskJobTypeOnLaunch)
             {
                 key = "job_slice_count"; label = "Job Slice Count";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask<int>(label, "",
                                          defaultValue: requirements.Defaults.JobSliceCount,
@@ -789,9 +800,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskTimeoutOnLaunch)
             {
                 key = "timeout"; label = "Timeout";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask<int>(label, "",
                                          defaultValue: requirements.Defaults.Timeout,
@@ -816,9 +827,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskDiffModeOnLaunch)
             {
                 key = "diff_mode"; label = "Diff Mode";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.AskBool(label,
                                         defaultValue: requirements.Defaults.DiffMode,
@@ -843,9 +854,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskTagsOnLaunch)
             {
                 key = "job_tags"; label = "Job Tags";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask(label, "",
                                     defaultValue: requirements.Defaults.JobTags,
@@ -872,9 +883,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskSkipTagsOnLaunch)
             {
                 key = "skip_tags"; label = "Skip Tags";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask(label, "",
                                     defaultValue: requirements.Defaults.JobTags,
@@ -901,9 +912,9 @@ namespace Jagabata.Cmdlets
             if (checkOptional && requirements.AskVariablesOnLaunch)
             {
                 key = "extra_vars"; label = "Extra Variables";
-                if (sendData.ContainsKey(key))
+                if (sendData.TryGetValue(key, out var value))
                 {
-                    WriteHost(string.Format(skipFormat, label, sendData[key]), dontshow: true);
+                    WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
                 else if (prompt.Ask(label, "",
                                     defaultValue: requirements.Defaults.ExtraVars,
