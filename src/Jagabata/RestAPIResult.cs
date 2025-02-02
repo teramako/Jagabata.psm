@@ -67,7 +67,7 @@ namespace Jagabata
     /// The response contents may be null especially HTTP status code is 204 (NotContent).
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RestAPIPostResult<T>(HttpResponseMessage response, T? contents = default(T)) : IRestAPIResult<T>
+    public class RestAPIPostResult<T>(HttpResponseMessage response, T? contents = default) : IRestAPIResult<T>
     {
         public T? Contents { get; } = contents;
         public RestAPIResponse Response { get; } = new RestAPIResponse(response);

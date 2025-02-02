@@ -91,7 +91,7 @@ namespace Jagabata.Resources
         /// persisting facts at the end of a playbook run to the database and caching facts for use by Ansible.
         /// </summary>
         bool UseFactCache { get; }
-        public ulong? ExecutionEnvironment { get; }
+        ulong? ExecutionEnvironment { get; }
         string HostConfigKey { get; }
         bool AskScmBranchOnLaunch { get; }
         bool AskDiffModeOnLaunch { get; }
@@ -276,42 +276,30 @@ namespace Jagabata.Resources
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public JobTemplateAskOnLaunch AskOnLaunch
-        {
-            get
-            {
-                return (AskJobTypeOnLaunch ? JobTemplateAskOnLaunch.JobType : 0) |
-                       (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0) |
-                       (AskScmBranchOnLaunch ? JobTemplateAskOnLaunch.ScmBranch : 0) |
-                       (AskExecutionEnvironmentOnLaunch ? JobTemplateAskOnLaunch.ExecutionEnvironment : 0) |
-                       (AskCredentialOnLaunch ? JobTemplateAskOnLaunch.Credentials : 0) |
-                       (AskLabelsOnLaunch ? JobTemplateAskOnLaunch.Labels : 0) |
-                       (AskVariablesOnLaunch ? JobTemplateAskOnLaunch.Variables : 0) |
-                       (AskForksOnLaunch ? JobTemplateAskOnLaunch.Forks : 0) |
-                       (AskLimitOnLaunch ? JobTemplateAskOnLaunch.Limit : 0) |
-                       (AskVerbosityOnLaunch ? JobTemplateAskOnLaunch.Verbosity : 0) |
-                       (AskJobSliceCountOnLaunch ? JobTemplateAskOnLaunch.JobSliceCount : 0) |
-                       (AskTimeoutOnLaunch ? JobTemplateAskOnLaunch.Timeout : 0) |
-                       (AskDiffModeOnLaunch ? JobTemplateAskOnLaunch.DiffMode : 0) |
-                       (AskInstanceGroupsOnLaunch ? JobTemplateAskOnLaunch.InstanceGroups : 0) |
-                       (AskTagsOnLaunch ? JobTemplateAskOnLaunch.JobTags : 0) |
-                       (AskSkipTagsOnLaunch ? JobTemplateAskOnLaunch.SkipTags : 0);
-            }
-        }
+        public JobTemplateAskOnLaunch AskOnLaunch => (AskJobTypeOnLaunch ? JobTemplateAskOnLaunch.JobType : 0)
+            | (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0)
+            | (AskScmBranchOnLaunch ? JobTemplateAskOnLaunch.ScmBranch : 0)
+            | (AskExecutionEnvironmentOnLaunch ? JobTemplateAskOnLaunch.ExecutionEnvironment : 0)
+            | (AskCredentialOnLaunch ? JobTemplateAskOnLaunch.Credentials : 0)
+            | (AskLabelsOnLaunch ? JobTemplateAskOnLaunch.Labels : 0)
+            | (AskVariablesOnLaunch ? JobTemplateAskOnLaunch.Variables : 0)
+            | (AskForksOnLaunch ? JobTemplateAskOnLaunch.Forks : 0)
+            | (AskLimitOnLaunch ? JobTemplateAskOnLaunch.Limit : 0)
+            | (AskVerbosityOnLaunch ? JobTemplateAskOnLaunch.Verbosity : 0)
+            | (AskJobSliceCountOnLaunch ? JobTemplateAskOnLaunch.JobSliceCount : 0)
+            | (AskTimeoutOnLaunch ? JobTemplateAskOnLaunch.Timeout : 0)
+            | (AskDiffModeOnLaunch ? JobTemplateAskOnLaunch.DiffMode : 0)
+            | (AskInstanceGroupsOnLaunch ? JobTemplateAskOnLaunch.InstanceGroups : 0)
+            | (AskTagsOnLaunch ? JobTemplateAskOnLaunch.JobTags : 0)
+            | (AskSkipTagsOnLaunch ? JobTemplateAskOnLaunch.SkipTags : 0);
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public JobTemplateOptions Options
-        {
-            get
-            {
-                return (SurveyEnabled ? JobTemplateOptions.Survey : 0) |
-                       (BecomeEnabled ? JobTemplateOptions.Become : 0) |
-                       (!string.IsNullOrEmpty(HostConfigKey) ? JobTemplateOptions.ProvisioningCallback : 0) |
-                       (!string.IsNullOrEmpty(WebhookService) ? JobTemplateOptions.Webhook : 0) |
-                       (AllowSimultaneous ? JobTemplateOptions.Simultaneous : 0) |
-                       (UseFactCache ? JobTemplateOptions.FactCache : 0) |
-                       (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
-            }
-        }
+        public JobTemplateOptions Options => (SurveyEnabled ? JobTemplateOptions.Survey : 0)
+            | (BecomeEnabled ? JobTemplateOptions.Become : 0)
+            | (!string.IsNullOrEmpty(HostConfigKey) ? JobTemplateOptions.ProvisioningCallback : 0)
+            | (!string.IsNullOrEmpty(WebhookService) ? JobTemplateOptions.Webhook : 0)
+            | (AllowSimultaneous ? JobTemplateOptions.Simultaneous : 0)
+            | (UseFactCache ? JobTemplateOptions.FactCache : 0)
+            | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
         public string GetDescription()
         {

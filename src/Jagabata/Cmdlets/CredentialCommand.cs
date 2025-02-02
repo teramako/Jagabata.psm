@@ -210,7 +210,7 @@ namespace Jagabata.Cmdlets
             ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
         )]
-        public IResource From { get; set; } = new Resource(0 ,0);
+        public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
         {

@@ -4,13 +4,9 @@ using System.Management.Automation.Language;
 
 namespace Jagabata.Cmdlets.Completer;
 
-internal class OrderByCompleter : IArgumentCompleter
+internal class OrderByCompleter(params string[] keys) : IArgumentCompleter
 {
-    public OrderByCompleter(params string[] keys)
-    {
-        Keys = keys;
-    }
-    public string[] Keys { get; init; }
+    public string[] Keys { get; init; } = keys;
     public IEnumerable<CompletionResult> CompleteArgument(string commandName, string parameterName,
                                                           string wordToComplete, CommandAst commandAst,
                                                           IDictionary fakeBoundParameters)

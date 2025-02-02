@@ -8,7 +8,7 @@ public sealed class TextSpec : InputSpec<string>
     { }
     public TextSpec(string name, string variableName) : base(SurveySpecType.Text, name, variableName)
     { }
-    public TextSpec(string variableName): base(SurveySpecType.Text, variableName)
+    public TextSpec(string variableName) : base(SurveySpecType.Text, variableName)
     { }
 }
 

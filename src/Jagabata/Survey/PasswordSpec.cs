@@ -8,7 +8,7 @@ public sealed class PasswordSpec : InputSpec<string>
     { }
     public PasswordSpec(string name, string variableName) : base(SurveySpecType.Password, name, variableName)
     { }
-    public PasswordSpec(string variableName): base(SurveySpecType.Password, variableName)
+    public PasswordSpec(string variableName) : base(SurveySpecType.Password, variableName)
     { }
 }
 

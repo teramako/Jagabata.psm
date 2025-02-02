@@ -66,7 +66,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Value of <see cref="Config.AnalyticsCollectors"/>
+        /// Value of <see cref="AnalyticsCollectors"/>
         /// </summary>
         public record ConfigValue(string Name, string Version, string Description)
         {

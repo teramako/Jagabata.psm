@@ -140,29 +140,17 @@ namespace Jagabata.Resources
         public string? JobTags { get; } = jobTags;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public JobTemplateAskOnLaunch AskOnLaunch
-        {
-            get
-            {
-                return (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0) |
+        public JobTemplateAskOnLaunch AskOnLaunch => (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0) |
                        (AskScmBranchOnLaunch ? JobTemplateAskOnLaunch.ScmBranch : 0) |
                        (AskLabelsOnLaunch ? JobTemplateAskOnLaunch.Labels : 0) |
                        (AskVariablesOnLaunch ? JobTemplateAskOnLaunch.Variables : 0) |
                        (AskLimitOnLaunch ? JobTemplateAskOnLaunch.Limit : 0) |
                        (AskTagsOnLaunch ? JobTemplateAskOnLaunch.JobTags : 0) |
                        (AskSkipTagsOnLaunch ? JobTemplateAskOnLaunch.SkipTags : 0);
-            }
-        }
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public JobTemplateOptions Options
-        {
-            get
-            {
-                return (SurveyEnabled ? JobTemplateOptions.Survey : 0) |
+        public JobTemplateOptions Options => (SurveyEnabled ? JobTemplateOptions.Survey : 0) |
                        (!string.IsNullOrEmpty(WebhookService) ? JobTemplateOptions.Webhook : 0) |
                        (AllowSimultaneous ? JobTemplateOptions.Simultaneous : 0);
-            }
-        }
 
         public Dictionary<string, object?> GetExtraVars()
         {

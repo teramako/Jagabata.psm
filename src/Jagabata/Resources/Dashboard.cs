@@ -19,17 +19,17 @@ namespace Jagabata.Resources
     {
         public const string PATH = "/api/v2/dashboard/";
 
-        public Dashboard.InventoriesRecord Inventories { get; } = inventories;
-        public Dictionary<string, Dashboard.LabeledRecord> InventorySources { get; } = inventorySources;
-        public Dashboard.GroupsRecord Groups { get; } = groups;
-        public Dashboard.TotalAndFailedRecord Hosts { get; } = hosts;
-        public Dashboard.TotalAndFailedRecord Projects { get; } = projects;
-        public Dictionary<string, Dashboard.LabeledRecord> ScmTypes { get; } = scmTypes;
-        public Dashboard.TotalRecord Users { get; } = users;
-        public Dashboard.TotalRecord Organizations { get; } = organizations;
-        public Dashboard.TotalRecord Teams { get; } = teams;
-        public Dashboard.TotalRecord Credentials { get; } = credentials;
-        public Dashboard.TotalRecord JobTemplates { get; } = jobTemplates;
+        public InventoriesRecord Inventories { get; } = inventories;
+        public Dictionary<string, LabeledRecord> InventorySources { get; } = inventorySources;
+        public GroupsRecord Groups { get; } = groups;
+        public TotalAndFailedRecord Hosts { get; } = hosts;
+        public TotalAndFailedRecord Projects { get; } = projects;
+        public Dictionary<string, LabeledRecord> ScmTypes { get; } = scmTypes;
+        public TotalRecord Users { get; } = users;
+        public TotalRecord Organizations { get; } = organizations;
+        public TotalRecord Teams { get; } = teams;
+        public TotalRecord Credentials { get; } = credentials;
+        public TotalRecord JobTemplates { get; } = jobTemplates;
 
         /// <summary>
         /// For Users, Organizations, Teams, Credentials and JobTemplates

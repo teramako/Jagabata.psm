@@ -430,7 +430,7 @@ public class RRule : IParsable<RRule>, ISpanParsable<RRule>
     /// <returns>this object</returns>
     public RRule SetWeekDay(params RRuleWeek[] byweeklist)
     {
-        _weekDays = byweeklist.Select(static week => new WeekDay(week)).ToArray();
+        _weekDays = [.. byweeklist.Select(static week => new WeekDay(week))];
         return this;
     }
     /// <summary>
@@ -440,7 +440,7 @@ public class RRule : IParsable<RRule>, ISpanParsable<RRule>
     /// <returns>this object</returns>
     public RRule SetWeekDay(params string[] bywkdaylist)
     {
-        _weekDays = bywkdaylist.Select(static wkday => new WeekDay(wkday)).ToArray();
+        _weekDays = [.. bywkdaylist.Select(static wkday => new WeekDay(wkday))];
         return this;
     }
 

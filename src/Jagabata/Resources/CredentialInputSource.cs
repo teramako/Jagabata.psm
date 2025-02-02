@@ -5,11 +5,11 @@ namespace Jagabata.Resources
 {
     public interface ICredentialInputSource
     {
-        public string Description { get; }
-        public string InputFieldName { get; }
-        public Dictionary<string, object?> Metadata { get; }
-        public ulong TargetCredential { get; }
-        public ulong SourceCredential { get; }
+        string Description { get; }
+        string InputFieldName { get; }
+        Dictionary<string, object?> Metadata { get; }
+        ulong TargetCredential { get; }
+        ulong SourceCredential { get; }
     }
 
     public class CredentialInputSource(ulong id, ResourceType type, string url, RelatedDictionary related,

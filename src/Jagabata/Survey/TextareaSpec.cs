@@ -8,7 +8,7 @@ public sealed class TextareaSpec : InputSpec<string>
     { }
     public TextareaSpec(string name, string variableName) : base(SurveySpecType.Textarea, name, variableName)
     { }
-    public TextareaSpec(string variableName): base(SurveySpecType.Textarea, variableName)
+    public TextareaSpec(string variableName) : base(SurveySpecType.Textarea, variableName)
     { }
 }
 

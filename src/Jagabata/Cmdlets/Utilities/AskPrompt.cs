@@ -6,54 +6,48 @@ using System.Security;
 
 namespace Jagabata.Cmdlets.Utilities
 {
-    internal class AskPrompt
+    internal class AskPrompt(PSHost host)
     {
-        public AskPrompt(PSHost host)
-        {
-            _host = host;
-        }
-        private PSHost _host { get; }
-
-        private void printHeader(string label, string defaultValue, string helpMessage = "", string helpIndicator = "", bool showDefault = true)
+        private void PrintHeader(string label, string defaultValue, string helpMessage = "", string helpIndicator = "", bool showDefault = true)
         {
             var gb = Console.BackgroundColor;
-            _host.UI.Write(ConsoleColor.Blue, gb, "<== ");
-            _host.UI.Write($"{label}");
+            host.UI.Write(ConsoleColor.Blue, gb, "<== ");
+            host.UI.Write($"{label}");
             if (showDefault)
             {
-                _host.UI.Write(" (Default: ");
-                _host.UI.Write(ConsoleColor.DarkYellow, gb, $"{defaultValue}");
-                _host.UI.WriteLine(")");
+                host.UI.Write(" (Default: ");
+                host.UI.Write(ConsoleColor.DarkYellow, gb, $"{defaultValue}");
+                host.UI.WriteLine(")");
             }
             else
             {
-                _host.UI.WriteLine();
+                host.UI.WriteLine();
             }
             if (!string.IsNullOrEmpty(helpMessage))
             {
-                _host.UI.WriteLine(helpMessage);
+                host.UI.WriteLine(helpMessage);
             }
             if (!string.IsNullOrEmpty(helpIndicator))
             {
-                _host.UI.WriteLine(ConsoleColor.DarkGray, gb, helpIndicator);
+                host.UI.WriteLine(ConsoleColor.DarkGray, gb, helpIndicator);
             }
         }
         private void WriteError(string errorMessage)
         {
-            _host.UI.WriteLine(ConsoleColor.Red, (ConsoleColor)(-1), errorMessage);
+            host.UI.WriteLine(ConsoleColor.Red, (ConsoleColor)(-1), errorMessage);
         }
-        private void printHelp(string label, string helpMessage = "", string helpIndicator = "")
+        private void PrintHelp(string label, string helpMessage = "", string helpIndicator = "")
         {
             var gb = Console.BackgroundColor;
-            _host.UI.Write(ConsoleColor.Blue, gb, "<== ");
-            _host.UI.WriteLine(label);
+            host.UI.Write(ConsoleColor.Blue, gb, "<== ");
+            host.UI.WriteLine(label);
             if (!string.IsNullOrEmpty(helpMessage))
             {
-                _host.UI.WriteLine(helpMessage);
+                host.UI.WriteLine(helpMessage);
             }
             if (!string.IsNullOrEmpty(helpIndicator))
             {
-                _host.UI.WriteLine(ConsoleColor.DarkGray, gb, helpIndicator);
+                host.UI.WriteLine(ConsoleColor.DarkGray, gb, helpIndicator);
             }
         }
         /// <summary>
@@ -76,7 +70,7 @@ namespace Jagabata.Cmdlets.Utilities
             var index = 0;
             var defaultValuString = $"[{string.Join(", ", defaultValues ?? [])}]";
             var helpIndicator = "(!? => Show help, !> => Suspend, !! => Comfirm even if the list is empty)";
-            printHeader(label, defaultValuString, helpMessage, helpIndicator);
+            PrintHeader(label, defaultValuString, helpMessage, helpIndicator);
             if (string.IsNullOrEmpty(promptKey))
                 promptKey = label;
 
@@ -91,17 +85,17 @@ namespace Jagabata.Cmdlets.Utilities
                 }
                 if (inputString.StartsWith('!'))
                 {
-                    var command = inputString.Substring(1).Trim();
+                    var command = inputString[1..].Trim();
                     switch (command)
                     {
                         case "?":
-                            printHelp(label, currentHelpMessage, helpIndicator);
+                            PrintHelp(label, currentHelpMessage, helpIndicator);
                             continue;
                         case "!": // return as the list is fulfilled even if the list is empty.
                             answers = new Answer<List<T>>(results, false);
                             return true;
                         case ">":
-                            _host.EnterNestedPrompt();
+                            host.EnterNestedPrompt();
                             continue;
                     }
                 }
@@ -148,7 +142,7 @@ namespace Jagabata.Cmdlets.Utilities
             var helpIndicator = """
                 (!? => Show help, !! => Use default, !> => Suspend, Empty => Skip, ("", '', $null) => Specify empty string)
                 """;
-            printHeader(label, defaultValueString, helpMessage, helpIndicator);
+            PrintHeader(label, defaultValueString, helpMessage, helpIndicator);
             var help = (string.IsNullOrEmpty(helpMessage) ? "" : $"{helpMessage}\n")
                        + $"Default: {defaultValueString}";
             if (string.IsNullOrEmpty(promptKey))
@@ -163,17 +157,17 @@ namespace Jagabata.Cmdlets.Utilities
                 }
                 if (inputString.StartsWith('!'))
                 {
-                    var command = inputString.Substring(1).Trim();
+                    var command = inputString[1..].Trim();
                     switch (command)
                     {
                         case "?":
-                            printHelp(label, help, helpIndicator);
+                            PrintHelp(label, help, helpIndicator);
                             continue;
                         case "!":
                             answer = new Answer<string>(defaultValue ?? string.Empty);
                             return true;
                         case ">":
-                            _host.EnterNestedPrompt();
+                            host.EnterNestedPrompt();
                             continue;
                         default:
                             inputString = command;
@@ -238,7 +232,7 @@ namespace Jagabata.Cmdlets.Utilities
                 help += (string.IsNullOrEmpty(help) ? "" : "\n") + $"Default: {defaultValue}";
             }
 
-            printHeader(label, $"{defaultValue}", helpMessage, helpIndicator, showDefault: defaultValue is not null);
+            PrintHeader(label, $"{defaultValue}", helpMessage, helpIndicator, showDefault: defaultValue is not null);
             if (string.IsNullOrEmpty(promptKey))
                 promptKey = label;
 
@@ -251,11 +245,11 @@ namespace Jagabata.Cmdlets.Utilities
                 }
                 if (inputString.StartsWith('!'))
                 {
-                    var command = inputString.Substring(1).Trim();
+                    var command = inputString[1..].Trim();
                     switch (command)
                     {
                         case "?":
-                            printHelp(label, help, helpIndicator);
+                            PrintHelp(label, help, helpIndicator);
                             continue;
                         case "!":
                             if (defaultValue is null) break;
@@ -263,7 +257,7 @@ namespace Jagabata.Cmdlets.Utilities
                             inputString = string.Empty;
                             break;
                         case ">":
-                            _host.EnterNestedPrompt();
+                            host.EnterNestedPrompt();
                             continue;
                         default:
                             inputString = command;
@@ -277,14 +271,9 @@ namespace Jagabata.Cmdlets.Utilities
                         WriteError("Empty value is not allowed.");
                         continue;
                     }
-                    if (defaultValue is null)
-                    {
-                        answer = new Answer<T>(default(T), !inputed);
-                    }
-                    else
-                    {
-                        answer = new Answer<T>((T)defaultValue, !inputed);
-                    }
+                    answer = defaultValue is null
+                        ? new Answer<T>(default, !inputed)
+                        : new Answer<T>((T)defaultValue, !inputed);
                     return true;
                 }
                 else
@@ -317,13 +306,14 @@ namespace Jagabata.Cmdlets.Utilities
                             [MaybeNullWhen(false)] out Answer<bool> answer)
         {
             answer = null;
-            var choices = new Collection<ChoiceDescription>();
+            var choices = new Collection<ChoiceDescription>
+            {
+                new($"{trueParameter.label} (&Yes)", trueParameter.helpMessage),
+                new($"{falseParameter.label} (&No)", falseParameter.helpMessage)
+            };
 
-            choices.Add(new ChoiceDescription($"{trueParameter.label} (&Yes)", trueParameter.helpMessage));
-            choices.Add(new ChoiceDescription($"{falseParameter.label} (&No)", falseParameter.helpMessage));
-
-            printHeader(label, "", $"{trueParameter.label} (Yes) or {falseParameter.label} (No)", showDefault: false);
-            var res = _host.UI.PromptForChoice("", "", choices, defaultValue ? 0 : 1);
+            PrintHeader(label, "", $"{trueParameter.label} (Yes) or {falseParameter.label} (No)", showDefault: false);
+            var res = host.UI.PromptForChoice("", "", choices, defaultValue ? 0 : 1);
             switch (res)
             {
                 case 0:
@@ -346,10 +336,10 @@ namespace Jagabata.Cmdlets.Utilities
         /// <param name="helpMessage"></param>
         /// <param name="defaultValue"</param>
         /// <returns>Whether the prompt is inputed(<c>true</c>) or Canceled(<c>false</c>)</returns>
-        public bool AskEnum<TEnum>(string label, TEnum defaultValue, string helpMessage, out Answer<TEnum> answer) where TEnum : System.Enum
+        public bool AskEnum<TEnum>(string label, TEnum defaultValue, string helpMessage, out Answer<TEnum> answer) where TEnum : Enum
         {
             var defaultValueString = $"{defaultValue:g} ({defaultValue:d})";
-            printHeader(label, defaultValueString, helpMessage);
+            PrintHeader(label, defaultValueString, helpMessage);
             var choices = new Collection<ChoiceDescription>();
             var defaultValueIndex = -1;
             var enumType = typeof(TEnum);
@@ -364,7 +354,7 @@ namespace Jagabata.Cmdlets.Utilities
                 }
                 choices.Add(new ChoiceDescription($"{str}(&{i})", str));
             }
-            var res = _host.UI.PromptForChoice("", "", choices, defaultValueIndex);
+            var res = host.UI.PromptForChoice("", "", choices, defaultValueIndex);
             if (res >= 0 && res < enumValues.Length)
             {
                 answer = new Answer<TEnum>(enumValues[res]);
@@ -389,18 +379,18 @@ namespace Jagabata.Cmdlets.Utilities
                                  [MaybeNullWhen(false)] out Answer<string> answer)
         {
             answer = null;
-            printHeader(label, defaultValue, helpMessage);
+            PrintHeader(label, defaultValue, helpMessage);
             var choices = new Collection<ChoiceDescription>();
             var defaultValueIndex = -1;
             for (var i = 0; i < fields.Count; i++)
             {
-                var field = fields[i];
-                if (field.Value == defaultValue)
+                var (Value, Description) = fields[i];
+                if (Value == defaultValue)
                     defaultValueIndex = i;
 
-                choices.Add(new ChoiceDescription($"{field.Value}(&{i})", field.Description));
+                choices.Add(new ChoiceDescription($"{Value}(&{i})", Description));
             }
-            int res = _host.UI.PromptForChoice("", "", choices, defaultValueIndex);
+            int res = host.UI.PromptForChoice("", "", choices, defaultValueIndex);
             if (res >= 0 && res < fields.Count)
             {
                 answer = new Answer<string>(fields[res].Value);
@@ -425,7 +415,7 @@ namespace Jagabata.Cmdlets.Utilities
                                    [MaybeNullWhen(false)] out Answer<string[]> answer)
         {
             answer = null;
-            printHeader(label, $"[{string.Join(", ", defaultValues)}]", helpMessage);
+            PrintHeader(label, $"[{string.Join(", ", defaultValues)}]", helpMessage);
             var maxCount = fields.Count;
             var results = new List<string>();
             var remainingFields = new List<(string Value, string Description)>(fields);
@@ -440,16 +430,16 @@ namespace Jagabata.Cmdlets.Utilities
                 var defaultValueIndex = 0;
 
                 choices.Add(new ChoiceDescription("&Confirm", "Confirm and finish multi select prompts"));
-                foreach (var field in remainingFields)
+                foreach (var (Value, Description) in remainingFields)
                 {
-                    if (remainingDefaultValues.Contains(field.Value))
+                    if (remainingDefaultValues.Contains(Value))
                         defaultValueIndex = fieldIndex;
 
-                    choices.Add(new ChoiceDescription($"{field.Value}(&{fieldIndex})", field.Description));
+                    choices.Add(new ChoiceDescription($"{Value}(&{fieldIndex})", Description));
                     fieldIndex++;
                 }
 
-                int selectedIndex = _host.UI.PromptForChoice("", $"{promptKey}[{results.Count}]", choices, defaultValueIndex);
+                int selectedIndex = host.UI.PromptForChoice("", $"{promptKey}[{results.Count}]", choices, defaultValueIndex);
                 if (selectedIndex == 0)
                 {
                     break;
@@ -467,7 +457,7 @@ namespace Jagabata.Cmdlets.Utilities
                 }
             } while (results.Count <= maxCount);
 
-            answer = new Answer<string[]>(results.ToArray());
+            answer = new Answer<string[]>([.. results]);
             return true;
         }
         /// <summary>
@@ -484,14 +474,14 @@ namespace Jagabata.Cmdlets.Utilities
                                 [MaybeNullWhen(false)] out Answer<SecureString> answer)
         {
             answer = null;
-            printHeader(caption, "", helpMessage, showDefault: false);
+            PrintHeader(caption, "", helpMessage, showDefault: false);
             if (string.IsNullOrEmpty(promptKey))
                 promptKey = "Password";
 
             var fd = new FieldDescription(promptKey);
             fd.SetParameterType(typeof(SecureString));
             var fdc = new Collection<FieldDescription>() { fd };
-            Dictionary<string, PSObject>? result = _host.UI.Prompt("", "", fdc);
+            Dictionary<string, PSObject>? result = host.UI.Prompt("", "", fdc);
             if (result is not null && result.TryGetValue(promptKey, out PSObject? pso))
             {
                 if (pso is null || pso.BaseObject is null)
@@ -512,7 +502,7 @@ namespace Jagabata.Cmdlets.Utilities
             var fd = new FieldDescription(label);
             fd.SetParameterType(typeof(string));
             var fdc = new Collection<FieldDescription>() { fd };
-            Dictionary<string, PSObject?>? result = _host.UI.Prompt("", "", fdc);
+            Dictionary<string, PSObject?>? result = host.UI.Prompt("", "", fdc);
             if (result is not null && result.TryGetValue(label, out PSObject? val))
             {
                 if (val is null || val.BaseObject is null)
@@ -525,15 +515,10 @@ namespace Jagabata.Cmdlets.Utilities
             return false;
         }
 
-        public class Answer<T>
+        public class Answer<T>(T input, bool isEmpty = false)
         {
-            public Answer(T input, bool isEmpty = false)
-            {
-                Input = input;
-                IsEmpty = isEmpty;
-            }
-            public T Input { get; }
-            public bool IsEmpty { get; }
+            public T Input { get; } = input;
+            public bool IsEmpty { get; } = isEmpty;
         }
     }
 }

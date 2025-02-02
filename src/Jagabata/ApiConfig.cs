@@ -27,10 +27,7 @@ namespace Jagabata
         }
         ~ApiConfig()
         {
-            if (Token is not null)
-            {
-                Token.Dispose();
-            }
+            Token?.Dispose();
         }
         /// <summary>
         /// The URL of AWX.<br/>
@@ -58,19 +55,12 @@ namespace Jagabata
         public FileInfo? File { get; set; }
 
 
-        private static ApiConfig? _instance = null;
+        private static ApiConfig? _instance;
 
         /// <summary>
         /// Current config
         /// </summary>
-        public static ApiConfig Instance
-        {
-            get
-            {
-                if (_instance is not null) return _instance;
-                return Load();
-            }
-        }
+        public static ApiConfig Instance => _instance is not null ? _instance : Load();
         /// <summary>
         /// Save the config to <paramref name="fileInfo"/> or
         /// default config path (<see cref="DefaultConfigPath"/>)
@@ -156,14 +146,14 @@ namespace Jagabata
         private const string ENV_CONFIG = "ANSIBLE_API_CONFIG";
         private const string DEFULT_CONFIG_NAME = ".ansible_api_config.json";
 
-        private User? _user = null;
-        private ulong? _userId = null;
-        private string? _userName = null;
+        private User? _user;
+        private ulong? _userId;
+        private string? _userName;
         internal User LoadUser(bool save = false, bool force = false)
         {
             if (force || _user is null)
             {
-                var task = Resources.User.GetMe();
+                var task = User.GetMe();
                 task.Wait();
                 _user = task.Result;
             }

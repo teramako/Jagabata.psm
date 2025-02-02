@@ -9,7 +9,7 @@ public class MultiSelectSpec : SelectSpec
     { }
     public MultiSelectSpec(string name, string variableName) : base(SurveySpecType.MultiSelect, name, variableName)
     { }
-    public MultiSelectSpec(string variableName): base(SurveySpecType.MultiSelect, variableName)
+    public MultiSelectSpec(string variableName) : base(SurveySpecType.MultiSelect, variableName)
     { }
     public override object? Default
     {

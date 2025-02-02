@@ -4,14 +4,10 @@ using System.Text.Json;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation;
 
-internal class DictionaryTransformationAttribute : ArgumentTransformationAttribute
+internal class DictionaryTransformationAttribute(params Type[] types)
+    : ArgumentTransformationAttribute
 {
-    public DictionaryTransformationAttribute(params Type[] types)
-    {
-        Types = types;
-    }
-
-    protected Type[] Types { get; init; }
+    protected Type[] Types { get; init; } = types;
 
     public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
     {

@@ -12,9 +12,7 @@ namespace Jagabata.Resources
     public class ResultSet(int count, string? next, string? previous, object[] results)
         : ResultSetBase(count, next, previous)
     {
-        public object?[] Results { get; } = results.OfType<JsonElement>()
-                                                   .Select(json => Json.ObjectToInferredType(json, true))
-                                                   .ToArray();
+        public object?[] Results { get; } = [.. results.OfType<JsonElement>().Select(static json => Json.ObjectToInferredType(json, true))];
     }
 
     public class ResultSet<T>(int count, string? next, string? previous, T[] results)

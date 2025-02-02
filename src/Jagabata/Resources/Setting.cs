@@ -5,18 +5,11 @@ namespace Jagabata.Resources
     /// /api/v2/settings/
     /// </code>
     /// </summary>
-    public class Setting
+    public class Setting(string url, string slug, string name)
     {
-        public Setting(string url, string slug, string name)
-        {
-            Url = url;
-            Slug = slug;
-            Name = name;
-        }
-
-        public string Url { get; }
-        public string Slug { get; }
-        public string Name { get; }
+        public string Url { get; } = url;
+        public string Slug { get; } = slug;
+        public string Name { get; } = name;
     }
 }
 

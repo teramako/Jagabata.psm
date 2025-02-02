@@ -231,17 +231,11 @@ namespace Jagabata.Resources
         public DateTime? LastUpdated { get; } = lastUpdated;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public ProjectOptions Options
-        {
-            get
-            {
-                return (ScmClean ? ProjectOptions.ScmClean : 0) |
+        public ProjectOptions Options => (ScmClean ? ProjectOptions.ScmClean : 0) |
                        (ScmDeleteOnUpdate ? ProjectOptions.ScmDeleteOnUpdate : 0) |
                        (ScmTrackSubmodules ? ProjectOptions.ScmTrackSubmodules : 0) |
                        (ScmUpdateOnLaunch ? ProjectOptions.ScmUpdateOnLaunch : 0) |
                        (AllowOverride ? ProjectOptions.AllowOverride : 0);
-            }
-        }
 
         /// <summary>
         /// Get inventory files and directories.

@@ -8,26 +8,25 @@ public abstract class InputSpec<T> : SurveySpec
     { }
     public InputSpec(SurveySpecType type, string name, string variableName) : base(type, name, variableName)
     { }
-    public InputSpec(SurveySpecType type, string variableName): this(type, variableName, variableName)
+    public InputSpec(SurveySpecType type, string variableName) : this(type, variableName, variableName)
     { }
     public sealed override object? Default
     {
-        get { return DefaultValue; }
+        get => DefaultValue;
         set
         {
             if (value is null)
             {
-                DefaultValue = default(T);
+                DefaultValue = default;
                 return;
             }
             DefaultValue = (T)value;
         }
     }
-    protected T? DefaultValue = default(T);
+    private T? DefaultValue;
     public sealed override object Choices
     {
-        get { return string.Empty; }
-        set { throw new InvalidOperationException(""); }
+        get => string.Empty; set => throw new InvalidOperationException("");
     }
 }
 

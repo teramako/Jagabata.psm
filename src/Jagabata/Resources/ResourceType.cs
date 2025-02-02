@@ -638,13 +638,13 @@ namespace Jagabata.Resources
         }
         public Method Method { get; init; } = Method.GET;
         public string PathName { get; set; }
-        public Type? Type { get; init; } = null;
+        public Type? Type { get; init; }
         public string Description { get; init; } = string.Empty;
-        public bool Virtual { get; init; } = false;
+        public bool Virtual { get; init; }
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public abstract class ResourceSubPathBase : Attribute
+    public abstract class ResourceSubPathBaseAttribute : Attribute
     {
         public Type Type { get; init; } = typeof(string);
         public Method Method { get; init; } = Method.GET;
@@ -652,7 +652,7 @@ namespace Jagabata.Resources
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public class ResourceIdPathAttribute : ResourceSubPathBase
+    public class ResourceIdPathAttribute : ResourceSubPathBaseAttribute
     {
         public ResourceIdPathAttribute() { }
         public ResourceIdPathAttribute(Type type)
@@ -662,7 +662,7 @@ namespace Jagabata.Resources
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public class ResourceSubPathAttribute : ResourceSubPathBase
+    public class ResourceSubPathAttribute : ResourceSubPathBaseAttribute
     {
         public ResourceSubPathAttribute(string pathName)
         {

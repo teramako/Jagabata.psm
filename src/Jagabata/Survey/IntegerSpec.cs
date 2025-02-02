@@ -8,7 +8,7 @@ public sealed class IntegerSpec : InputSpec<int>
     { }
     public IntegerSpec(string name, string variableName) : base(SurveySpecType.Integer, name, variableName)
     { }
-    public IntegerSpec(string variableName): base(SurveySpecType.Integer, variableName)
+    public IntegerSpec(string variableName) : base(SurveySpecType.Integer, variableName)
     { }
 }
 

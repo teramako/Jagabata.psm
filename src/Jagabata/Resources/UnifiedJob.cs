@@ -95,7 +95,7 @@ namespace Jagabata.Resources
             }
             var query = HttpUtility.ParseQueryString($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
             var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
-            return apiResult.Contents.Results.OfType<IUnifiedJob>().ToArray();
+            return [.. apiResult.Contents.Results.OfType<IUnifiedJob>()];
         }
         /// <summary>
         /// List Unified Jobs.<br/>

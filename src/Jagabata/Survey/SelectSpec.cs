@@ -9,11 +9,11 @@ public abstract class SelectSpec : SurveySpec
     { }
     public SelectSpec(SurveySpecType type, string name, string variableName) : base(type, name, variableName)
     { }
-    public SelectSpec(SurveySpecType type, string variableName): this(type, variableName, variableName)
+    public SelectSpec(SurveySpecType type, string variableName) : this(type, variableName, variableName)
     { }
     public sealed override object Choices
     {
-        get { return _choices; }
+        get => _choices;
         set
         {
             switch (value)
@@ -31,7 +31,7 @@ public abstract class SelectSpec : SurveySpec
                         if (item is null) continue;
                         results.Add($"{item}");
                     }
-                    _choices = results.ToArray();
+                    _choices = [.. results];
                     break;
                 default:
                     throw new InvalidCastException($"{nameof(value)} is must be string or IList: {value.GetType()}");

@@ -54,7 +54,7 @@ namespace Jagabata
                 _client = value;
             }
         }
-        private static HttpClient? _client = null;
+        private static HttpClient? _client;
         public static void SetClient(ApiConfig config)
         {
             var uri = config.Origin;
@@ -133,10 +133,8 @@ namespace Jagabata
                 if (typeof(T) == typeof(string))
                 {
                     long contentLength = response.Content.Headers.ContentLength ?? 0;
-                    T? stringContents = (contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync()) as T;
-                    if (stringContents is null)
-                        throw new NullReferenceException();
-                    return new RestAPIResult<T>(response, stringContents);
+                    var stringContents = (contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync()) as T;
+                    return new RestAPIResult<T>(response, stringContents!);
                 }
                 if (contentType == JsonContentType)
                 {
@@ -177,7 +175,7 @@ namespace Jagabata
                 long contentLength = response.Content.Headers.ContentLength ?? 0;
                 if (typeof(T) == typeof(string))
                 {
-                    string stringContents = (contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync());
+                    string stringContents = contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync();
                     return new RestAPIPostResult<T>(response, stringContents as T);
                 }
                 else if (contentLength == 0 || response.StatusCode == HttpStatusCode.NoContent)
@@ -264,11 +262,9 @@ namespace Jagabata
             if (response.StatusCode == HttpStatusCode.Found)
             {
                 var location = response.Headers.Location;
-                if (location is null)
-                {
-                    throw new RestAPIException("Not found Location", response);
-                }
-                return await GetAsync<T>(location.ToString(), type);
+                return location is not null
+                    ? await GetAsync<T>(location.ToString(), type)
+                    : throw new RestAPIException("Not found Location", response);
             }
             return await HandleResponse<T>(response);
         }
@@ -403,13 +399,9 @@ namespace Jagabata
     /// <summary>
     /// The exception from <see cref="RestAPI"/>
     /// </summary>
-    public class RestAPIException : HttpRequestException
+    public class RestAPIException(string? message, HttpResponseMessage response, Exception? inner = null)
+        : HttpRequestException(HttpRequestError.InvalidResponse, message, inner, response.StatusCode)
     {
-        public RestAPIException(string? message, HttpResponseMessage response, Exception? inner = null)
-            : base(HttpRequestError.InvalidResponse, message, inner, response.StatusCode)
-        {
-            Response = new RestAPIResponse(response);
-        }
-        public RestAPIResponse Response { get; }
+        public RestAPIResponse Response { get; } = new RestAPIResponse(response);
     }
 }

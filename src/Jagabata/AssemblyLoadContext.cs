@@ -4,23 +4,14 @@ using System.Runtime.Loader;
 
 namespace Jagabata;
 
-internal class AclModuleAssemblyLoadContext : AssemblyLoadContext
+internal class AclModuleAssemblyLoadContext(string dependencyDirPath) : AssemblyLoadContext
 {
-    private readonly string _dependencyDirPath;
-
-    public AclModuleAssemblyLoadContext(string dependencyDirPath)
-    {
-        _dependencyDirPath = dependencyDirPath;
-    }
-
     protected override Assembly? Load(AssemblyName assemblyName)
     {
-        string assemblyPath = Path.Combine(_dependencyDirPath, $"{assemblyName.Name}.dll");
-        if (File.Exists(assemblyPath))
-        {
-            return LoadFromAssemblyPath(assemblyPath);
-        }
-        return null;
+        string assemblyPath = Path.Combine(dependencyDirPath, $"{assemblyName.Name}.dll");
+        return File.Exists(assemblyPath)
+            ? LoadFromAssemblyPath(assemblyPath)
+            : null;
     }
 }
 
@@ -29,8 +20,7 @@ public class AclModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleA
     private static readonly string s_dependencyDirPath =
         Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "libs"));
 
-    private static readonly AclModuleAssemblyLoadContext s_dependencyAcl =
-        new AclModuleAssemblyLoadContext(s_dependencyDirPath);
+    private static readonly AclModuleAssemblyLoadContext s_dependencyAcl = new(s_dependencyDirPath);
 
     public void OnImport()
     {
@@ -44,10 +34,8 @@ public class AclModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleA
 
     private static Assembly? ResolveAclEngine(AssemblyLoadContext defaultAlc, AssemblyName assemblyToResolve)
     {
-        if (assemblyToResolve.Name != "Jagabata.Yaml")
-        {
-            return null;
-        }
-        return s_dependencyAcl.LoadFromAssemblyName(assemblyToResolve);
+        return assemblyToResolve.Name == "Jagabata.Yaml"
+            ? s_dependencyAcl.LoadFromAssemblyName(assemblyToResolve)
+            : null;
     }
 }

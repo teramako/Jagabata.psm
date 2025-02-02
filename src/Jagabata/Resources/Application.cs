@@ -122,7 +122,7 @@ namespace Jagabata.Resources
                                                                        NameValueCollection? query = null,
                                                                        bool getAll = false)
         {
-            var path = $"{Resources.User.PATH}{userId}/applications/";
+            var path = $"{User.PATH}{userId}/applications/";
             await foreach (var result in RestAPI.GetResultSetAsync<Application>(path, query, getAll))
             {
                 foreach (var app in result.Contents.Results)

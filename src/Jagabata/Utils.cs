@@ -133,13 +133,9 @@ namespace Jagabata
                                     .Select(attr => attr.Type)
                                     .FirstOrDefault();
             }
-            else if (isId)
-            {
-                subPath = string.Join('/', paths[4..]);
-            }
             else
             {
-                subPath = string.Join('/', paths[3..]);
+                subPath = isId ? string.Join('/', paths[4..]) : string.Join('/', paths[3..]);
             }
             return resourceField.GetCustomAttributes<ResourceSubPathAttribute>(false)
                                 .Where(attr => attr.Method == method && attr.PathName == subPath && attr.IsSubPathOfId == isId)

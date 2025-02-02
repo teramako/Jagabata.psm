@@ -100,14 +100,7 @@ namespace Jagabata
                 case JsonValueKind.String:
                     return val.GetString() ?? string.Empty;
                 case JsonValueKind.Number:
-                    if (val.GetRawText().IndexOf('.') > 0)
-                    {
-                        return val.GetDouble();
-                    }
-                    else
-                    {
-                        return val.GetInt64();
-                    }
+                    return val.GetRawText().IndexOf('.') > 0 ? val.GetDouble() : val.GetInt64();
                 case JsonValueKind.True:
                 case JsonValueKind.False:
                     return val.GetBoolean();
@@ -206,11 +199,9 @@ namespace Jagabata
             {
                 var val = reader.GetString() ?? throw new JsonException($"The value of Type {typeToConvert.Name} must not be null");
                 string upperCamelCaseName = Utils.ToUpperCamelCase(val);
-                if (Enum.TryParse(upperCamelCaseName, true, out TEnum enumVal))
-                {
-                    return enumVal;
-                }
-                throw new JsonException($"'{upperCamelCaseName}' is not in Enum {typeToConvert.Name}");
+                return Enum.TryParse(upperCamelCaseName, true, out TEnum enumVal)
+                    ? enumVal
+                    : throw new JsonException($"'{upperCamelCaseName}' is not in Enum {typeToConvert.Name}");
             }
 
             public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
@@ -231,9 +222,9 @@ namespace Jagabata
                 return reader.GetDateTime().ToLocalTime();
             }
 
-            public override void Write(Utf8JsonWriter writer, DateTime dateTime, JsonSerializerOptions options)
+            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
             {
-                writer.WriteStringValue(dateTime.ToUniversalTime().ToString("o"));
+                writer.WriteStringValue(value.ToUniversalTime().ToString("o"));
             }
         }
         /// <summary>
@@ -292,15 +283,8 @@ namespace Jagabata
         /// <summary>
         /// Converter to serialize/deserialize SecureString
         /// </summary>
-        private class SecureStringConverter : JsonConverter<System.Security.SecureString>
+        private class SecureStringConverter(bool mask) : JsonConverter<System.Security.SecureString>
         {
-            public SecureStringConverter(bool mask)
-            {
-                _mask = mask;
-            }
-
-            private bool _mask;
-
             public override System.Security.SecureString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 var secureString = new System.Security.SecureString();
@@ -315,7 +299,7 @@ namespace Jagabata
             }
             public override void Write(Utf8JsonWriter writer, System.Security.SecureString value, JsonSerializerOptions options)
             {
-                if (_mask)
+                if (mask)
                 {
                     writer.WriteStringValue("*****");
                 }
@@ -537,7 +521,7 @@ namespace Jagabata
                 return JsonSerializer.Deserialize<Dictionary<string, OrganizationObjectRoleSummary>>(ref reader, options);
             }
         }
-        internal class SummaryFieldsWorkflowJobNodeConverter: SummaryFieldsConverter
+        internal class SummaryFieldsWorkflowJobNodeConverter : SummaryFieldsConverter
         {
             protected override object? DeserializeJob(ref Utf8JsonReader reader, JsonSerializerOptions options)
             {
@@ -575,7 +559,6 @@ namespace Jagabata
                     }
                     string? propertyName = reader.GetString() ?? throw new JsonException("PropertyName is null");
                     reader.Read();
-                    bool isArray = reader.TokenType == JsonTokenType.StartArray;
                     string key = Utils.ToUpperCamelCase(propertyName);
                     if (reader.TokenType == JsonTokenType.StartArray)
                     {

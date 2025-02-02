@@ -198,7 +198,7 @@ namespace Jagabata.Resources
         /// <returns></returns>
         public static new async IAsyncEnumerable<InventorySource> Find(NameValueCollection? query, bool getAll = false)
         {
-            await foreach(var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, getAll))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -219,7 +219,7 @@ namespace Jagabata.Resources
                                                                               bool getAll = false)
         {
             var path = $"{Project.PATH}{projectId}/scm_inventory_sources/";
-            await foreach(var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -240,7 +240,7 @@ namespace Jagabata.Resources
                                                                                 bool getAll = false)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/inventory_sources/";
-            await foreach(var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -261,7 +261,7 @@ namespace Jagabata.Resources
                                                                             bool getAll = false)
         {
             var path = $"{Group.PATH}{groupId}/inventory_sources/";
-            await foreach(var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -282,7 +282,7 @@ namespace Jagabata.Resources
                                                                            bool getAll = false)
         {
             var path = $"{Host.PATH}{hostId}/inventory_sources/";
-            await foreach(var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -317,15 +317,9 @@ namespace Jagabata.Resources
         public DateTime? LastUpdated { get; } = lastUpdated;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public InventorySourceOptions Options
-        {
-            get
-            {
-                return (Overwrite ? InventorySourceOptions.Overwrite : 0) |
-                       (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0) |
-                       (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
-            }
-        }
+        public InventorySourceOptions Options => (Overwrite ? InventorySourceOptions.Overwrite : 0)
+                                                 | (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0)
+                                                 | (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
 
         public string GetDescription()
         {

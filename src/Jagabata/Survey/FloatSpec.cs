@@ -8,7 +8,7 @@ public sealed class FloatSpec : InputSpec<float>
     { }
     public FloatSpec(string name, string variableName) : base(SurveySpecType.Float, name, variableName)
     { }
-    public FloatSpec(string variableName): base(SurveySpecType.Float, variableName)
+    public FloatSpec(string variableName) : base(SurveySpecType.Float, variableName)
     { }
 }
 

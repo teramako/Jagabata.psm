@@ -43,7 +43,7 @@ internal class ApiPathCompleter : IArgumentCompleter
         string[] paths = ["v2", "o"];
         foreach (var path in paths)
         {
-            if (!string.IsNullOrEmpty(p2) && !path.StartsWith(p2))
+            if (!string.IsNullOrEmpty(p2) && !path.StartsWith(p2, StringComparison.Ordinal))
                 continue;
             yield return new CompletionResult($"/api/{path}/");
         }
@@ -56,14 +56,13 @@ internal class ApiPathCompleter : IArgumentCompleter
             {
                 if (attr.Virtual || method != attr.Method)
                 {
-                    if (!field.GetCustomAttributes<ResourceSubPathBase>(false)
-                              .Where(attr => attr.Method == method)
-                              .Any())
+                    if (!field.GetCustomAttributes<ResourceSubPathBaseAttribute>(false)
+                              .Any(attr => attr.Method == method))
                     {
                         continue;
                     }
                 }
-                if (attr.PathName.StartsWith(p3))
+                if (attr.PathName.StartsWith(p3, StringComparison.Ordinal))
                 {
                     var text = $"/api/v2/{attr.PathName}/";
                     var tooltip = string.IsNullOrEmpty(attr.Description)
@@ -97,7 +96,7 @@ internal class ApiPathCompleter : IArgumentCompleter
         if (resourceField is null) yield break;
         var p4IsId = ulong.TryParse(p4, out _);
 
-        var subPathAttrs = resourceField.GetCustomAttributes<ResourceSubPathBase>(false)
+        var subPathAttrs = resourceField.GetCustomAttributes<ResourceSubPathBaseAttribute>(false)
                                         .Where(attr => attr.Method == method)
                                         .ToArray();
         if (subPathAttrs.Length == 0) yield break;
@@ -168,7 +167,7 @@ internal class ApiPathCompleter : IArgumentCompleter
         {
             if (p4IsId != subPathAttr.IsSubPathOfId) continue;
             var compWord = p4IsId ? p5 : $"{p4}/{p5}";
-            if (subPathAttr.PathName.StartsWith(compWord))
+            if (subPathAttr.PathName.StartsWith(compWord, StringComparison.Ordinal))
             {
                 var text = $"/api/v2/{p3}/{p4}/{subPathAttr.PathName}/";
                 var tooltip = string.IsNullOrEmpty(subPathAttr.Description)

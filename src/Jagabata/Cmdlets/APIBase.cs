@@ -32,14 +32,14 @@ public abstract class APICmdletBase : Cmdlet
         };
         List<string> infoTags = dontshow ? [] : ["PSHOST"];
         if (tags is not null) { infoTags.AddRange(tags); }
-        WriteInformation(msg, infoTags.ToArray());
+        WriteInformation(msg, [.. infoTags]);
     }
     /// <summary>
     /// Get <c>PATH</c> field value in the Resource class
     /// </summary>
     /// <returns>API Path</returns>
     /// <exception cref="NullReferenceException">throw if <c>PATH</c> is not foudn or the value is null</exception>
-    protected string GetApiPath(Type t)
+    protected static string GetApiPath(Type t)
     {
         if (t.IsNested && t.ReflectedType is not null)
         {
@@ -85,7 +85,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);
@@ -187,7 +187,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);
@@ -233,7 +233,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);
@@ -279,7 +279,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);
@@ -315,7 +315,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);
@@ -351,7 +351,7 @@ public abstract class APICmdletBase : Cmdlet
         }
         catch (AggregateException aex)
         {
-            switch(aex.InnerException)
+            switch (aex.InnerException)
             {
                 case RestAPIException ex:
                     WriteVerboseResponse(ex.Response);

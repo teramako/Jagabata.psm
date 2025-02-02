@@ -30,7 +30,7 @@ namespace Jagabata.Resources
             {
                 return false;
             }
-            var list = s.Split(new char[] {':', '#'}, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var list = s.Split(new char[] { ':', '#' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             if (list.Length > 1
                 && Enum.TryParse<ResourceType>(list[0], true, out var resourceType)
                 && ulong.TryParse(list[1], System.Globalization.NumberStyles.Integer, provider, out var id))

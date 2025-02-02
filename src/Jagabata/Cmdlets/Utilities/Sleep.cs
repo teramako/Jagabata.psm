@@ -4,8 +4,8 @@ namespace Jagabata.Cmdlets.Utilities
     {
         private ManualResetEvent? _waitHandle;
         private readonly object _syncObject = new();
-        private bool _stopping = false;
-        private bool _disposed = false;
+        private bool _stopping;
+        private bool _disposed;
         public Sleep() { }
         ~Sleep()
         {

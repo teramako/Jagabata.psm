@@ -113,13 +113,13 @@ namespace Jagabata.Cmdlets.Utilities
             Update();
         }
         public ulong Id { get; }
-        public int ParentId { get; private set; } = 0;
+        public int ParentId { get; private set; }
         public ResourceType Type { get; private set; }
         public ProgressRecord Progress { get; }
         public IUnifiedJobSummary? Job { get; private set; }
-        public bool Finished { get; private set; } = false;
-        public bool Completed { get; private set; } = false;
-        public Dictionary<ulong, JobProgress> Children = [];
+        public bool Finished { get; private set; }
+        public bool Completed { get; private set; }
+        public Dictionary<ulong, JobProgress> Children { get; } = [];
 
         public IEnumerable<JobProgress> GetAll()
         {
@@ -136,7 +136,7 @@ namespace Jagabata.Cmdlets.Utilities
             }
         }
         public string CurrentLog { get; private set; } = string.Empty;
-        protected uint JobLogStartNext { get; private set; } = 0;
+        protected uint JobLogStartNext { get; private set; }
 
         public async Task<JobProgress?> GetLogAsync()
         {
