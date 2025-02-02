@@ -11,6 +11,10 @@ indent_size = 4
 max_line_length = 120
 trim_trailing_whitespace = true
 
+# IDE0010: Populate switch
+dotnet_diagnostic.IDE0010.severity = none
+# IDE0011: Add braces to 'if' statement.
+dotnet_diagnostic.IDE0011.severity = none
 # IDE0040: Accessibility modifiers required (escalated to a build warning)
 dotnet_diagnostic.IDE0040.severity = warning
 # IDE0160: Convert to block scoped namespace
