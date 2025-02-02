@@ -1,6 +1,7 @@
 using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -84,10 +85,10 @@ namespace Jagabata.Cmdlets
             psobject.Members.Add(new PSNoteProperty("CanUpdate", res.CanUpdate));
             WriteObject(psobject, false);
         }
-        protected ProjectUpdateJob.Detail UpdateProject(ulong projectId)
+        protected bool TryUpdateProject(ulong projectId, [MaybeNullWhen(false)] out ProjectUpdateJob.Detail job)
         {
-            var apiResult = CreateResource<ProjectUpdateJob.Detail>($"{Project.PATH}{projectId}/update/");
-            return apiResult.Contents ?? throw new NullReferenceException();
+            job = CreateResource<ProjectUpdateJob.Detail>($"{Project.PATH}{projectId}/update/").Contents;
+            return job is not null;
         }
     }
 
@@ -109,9 +110,8 @@ namespace Jagabata.Cmdlets
             {
                 CheckCanUpdate(Id);
             }
-            else
+            else if (TryUpdateProject(Id, out var job))
             {
-                var job = UpdateProject(Id);
                 WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
                 JobProgressManager.Add(job);
             }
@@ -137,9 +137,8 @@ namespace Jagabata.Cmdlets
             {
                 CheckCanUpdate(Id);
             }
-            else
+            else if (TryUpdateProject(Id, out var job))
             {
-                var job = UpdateProject(Id);
                 WriteVerbose($"Update Project:{Id} => Job:[{job.Id}]");
                 WriteObject(job, false);
             }
