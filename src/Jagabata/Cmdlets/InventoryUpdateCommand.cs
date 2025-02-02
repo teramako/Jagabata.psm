@@ -57,17 +57,12 @@ namespace Jagabata.Cmdlets
 
     public class LaunchInventoryUpdateCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckId", ValueFromPipeline = true, Position = 0)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "Resource", ValueFromPipeline = true, Position = 0)]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckResource", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(ResourceType.Inventory, ResourceType.InventorySource)]
-        public IResource? Source { get; set; }
+        [ResourceCompletions(ResourceType.Inventory, ResourceType.InventorySource)]
+        public IResource Source { get; set; } = new Resource(0, 0);
 
-        [Parameter(Mandatory = true, ParameterSetName = "CheckId")]
-        [Parameter(Mandatory = true, ParameterSetName = "CheckResource")]
+        [Parameter(Mandatory = true, ParameterSetName = "Check")]
         public SwitchParameter Check { get; set; }
 
         protected void CheckCanUpdate(IResource source)
@@ -115,27 +110,20 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Invoke, "InventoryUpdate")]
-    [OutputType(typeof(InventoryUpdateJob), ParameterSetName = ["Id", "Resource"])]
-    [OutputType(typeof(PSObject), ParameterSetName = ["CheckId", "CheckResource"])]
+    [Cmdlet(VerbsLifecycle.Invoke, "InventoryUpdate", DefaultParameterSetName = "Launch")]
+    [OutputType(typeof(InventoryUpdateJob), ParameterSetName = ["Launch"])]
+    [OutputType(typeof(PSObject), ParameterSetName = ["Check"])]
     public class InvokeInventoryUpdateCommand : LaunchInventoryUpdateCommandBase
     {
-        [Parameter(ParameterSetName = "Id")]
-        [Parameter(ParameterSetName = "Resource")]
+        [Parameter(ParameterSetName = "Launch")]
         [ValidateRange(5, int.MaxValue)]
         public int IntervalSeconds { get; set; } = 5;
 
-        [Parameter(ParameterSetName = "Id")]
-        [Parameter(ParameterSetName = "Resource")]
+        [Parameter(ParameterSetName = "Launch")]
         public SwitchParameter SuppressJobLog { get; set; }
 
         protected override void ProcessRecord()
         {
-            if (Source is null)
-            {
-                Source = new Resource(ResourceType.InventorySource, Id);
-            }
-
             if (Check)
             {
                 CheckCanUpdate(Source);
@@ -152,7 +140,7 @@ namespace Jagabata.Cmdlets
                     }
                     break;
                 case ResourceType.InventorySource:
-                    var inventorySourceUpdateJob = UpdateInventorySource(Id);
+                    var inventorySourceUpdateJob = UpdateInventorySource(Source.Id);
                     WriteVerbose($"Update InventorySource:{inventorySourceUpdateJob.InventorySource} => Job:[{inventorySourceUpdateJob.Id}]");
                     JobProgressManager.Add(inventorySourceUpdateJob);
                     break;
@@ -168,18 +156,13 @@ namespace Jagabata.Cmdlets
         }
     }
 
-    [Cmdlet(VerbsLifecycle.Start, "InventoryUpdate")]
-    [OutputType(typeof(InventoryUpdateJob.Detail), ParameterSetName = ["Id", "Resource"])]
-    [OutputType(typeof(PSObject), ParameterSetName = ["CheckId", "CheckResource"])]
+    [Cmdlet(VerbsLifecycle.Start, "InventoryUpdate", DefaultParameterSetName = "Launch")]
+    [OutputType(typeof(InventoryUpdateJob.Detail), ParameterSetName = ["Launch"])]
+    [OutputType(typeof(PSObject), ParameterSetName = ["Check"])]
     public class StartInventoryUpdateCommand : LaunchInventoryUpdateCommandBase
     {
         protected override void ProcessRecord()
         {
-            if (Source is null)
-            {
-                Source = new Resource(ResourceType.InventorySource, Id);
-            }
-
             if (Check)
             {
                 CheckCanUpdate(Source);

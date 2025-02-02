@@ -12,23 +12,13 @@ Invoke (update) an InventorySource and wait until the job is finished.
 
 ## SYNTAX
 
-### Id
+### Launch (Default)
 ```
-Invoke-AnsibleInventoryUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [<CommonParameters>]
-```
-
-### Resource
-```
-Invoke-AnsibleInventoryUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Source] <IResource>
+Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog]
  [<CommonParameters>]
 ```
 
-### CheckId
-```
-Invoke-AnsibleInventoryUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### CheckResource
+### Check
 ```
 Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-Check] [<CommonParameters>]
 ```
@@ -45,7 +35,7 @@ Implementation of following API:
 
 ### Example 1
 ```powershell
-PS C:\> Invoke-AnsibleInventoryUpdate -Id 11
+PS C:\> Invoke-AnsibleInventoryUpdate -Source InventorySource:11
 ====== [100] TestInventory - test_source ======
 ansible-inventory [core 2.15.12]
   config file = /runner/project/ansible.cfg
@@ -90,7 +80,7 @@ Check wheter InventorySource(s) can be updated.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CheckId, CheckResource
+Parameter Sets: Check
 Aliases:
 
 Required: True
@@ -100,28 +90,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-InventorySource ID to be updated.
-
-```yaml
-Type: UInt64
-Parameter Sets: Id, CheckId
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -IntervalSeconds
 Interval to confirm job completion (seconds).
 Default is 5 seconds.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id, Resource
+Parameter Sets: Launch
 Aliases:
 
 Required: False
@@ -132,13 +107,26 @@ Accept wildcard characters: False
 ```
 
 ### -Source
-A `Inventory` or `InventorySource` object.
+Resource object to be updated or checked.
+
+The resource is accepted following types:  
+- `Inventory`  
+- `InventorySource`
 
 If the value is `Inventory`, all of InventorySources in the Inventory will be updated or checked.
 
+> [!TIP]  
+> Can specify the resource as string like `Inventory:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Source (Get-AnsibleInventory -Id 1)`  
+>  - `-Source @{ type = "inventory"; id = 1 }`  
+>  - `-Source inventory:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: Resource, CheckResource
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -163,7 +151,7 @@ Suppress display job log.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Id, Resource
+Parameter Sets: Launch
 Aliases:
 
 Required: False
@@ -178,14 +166,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.UInt64
-InventorySource ID
-
-### Jagabata.Resources.InventorySource
-InventorySource object
-
-### Jagabata.Resources.Inventory
-Inventory object containing the InventorySources to be updated.
+### Jagabata.Resources.IResource
+Resource object to be updated or checked.
+See: `-Source` parameter.
 
 ## OUTPUTS
 

@@ -12,22 +12,12 @@ Invoke (update) InventorySources.
 
 ## SYNTAX
 
-### Id
-```
-Start-AnsibleInventoryUpdate [-Id] <UInt64> [<CommonParameters>]
-```
-
-### CheckId
-```
-Start-AnsibleInventoryUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### Resource
+### Launch (Default)
 ```
 Start-AnsibleInventoryUpdate [-Source] <IResource> [<CommonParameters>]
 ```
 
-### CheckResource
+### Check
 ```
 Start-AnsibleInventoryUpdate [-Source] <IResource> [-Check] [<CommonParameters>]
 ```
@@ -48,7 +38,7 @@ Implementation of following API:
 
 ### Example 1
 ```powershell
-PS C:\> Start-AnsibleInventoryUpdate -Id 11
+PS C:\> Start-AnsibleInventoryUpdate -Source InventorySource:11
 
  Id            Type Name                        JobType LaunchType  Status Finished Elapsed LaunchedBy     Template        Note
  --            ---- ----                        ------- ----------  ------ -------- ------- ----------     --------        ----
@@ -64,7 +54,7 @@ Check wheter InventorySource(s) can be updated.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CheckId, CheckResource
+Parameter Sets: Check
 Aliases:
 
 Required: True
@@ -74,29 +64,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-InventorySource ID to be updated.
-
-```yaml
-Type: UInt64
-Parameter Sets: Id, CheckId
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -Source
-A `Inventory` or `InventorySource` object.
+Resource object to be updated or checked.
+
+The resource is accepted following types:  
+- `Inventory`  
+- `InventorySource`
 
 If the value is `Inventory`, all of InventorySources in the Inventory will be updated or checked.
 
+> [!TIP]  
+> Can specify the resource as string like `Inventory:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Source (Get-AnsibleInventory -Id 1)`  
+>  - `-Source @{ type = "inventory"; id = 1 }`  
+>  - `-Source inventory:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: Resource, CheckResource
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -111,14 +99,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.UInt64
-InventorySource ID
-
-### Jagabata.Resources.InventorySource
-InventorySource object
-
-### Jagabata.Resources.Inventory
-Inventory object containing the InventorySources to be updated.
+### Jagabata.Resources.IResource
+Resource object to be updated or checked.
+See: `-Source` parameter.
 
 ## OUTPUTS
 
