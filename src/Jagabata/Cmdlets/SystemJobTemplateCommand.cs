@@ -2,6 +2,7 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -52,15 +53,11 @@ namespace Jagabata.Cmdlets
 
     public class LaunchSystemJobTemplateCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.SystemJobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.SystemJobTemplate)]
         [Alias("systemJobTemplate", "sjt")]
         public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "Template", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(ResourceType.SystemJobTemplate)]
-        public IResource? SystemJobTemplate { get; set; }
 
         [Parameter()]
         public IDictionary? ExtraVars { get; set; }
@@ -74,10 +71,10 @@ namespace Jagabata.Cmdlets
             }
             return dict;
         }
-        protected SystemJob.Detail Launch(ulong id)
+        protected bool TryLaunch(ulong id, [MaybeNullWhen(false)] out SystemJob.Detail job)
         {
-            var apiResult = CreateResource<SystemJob.Detail>($"{Resources.SystemJobTemplate.PATH}{id}/launch/", CreateSendData());
-            return apiResult.Contents ?? throw new NullReferenceException();
+            job = CreateResource<SystemJob.Detail>($"{SystemJobTemplate.PATH}{id}/launch/", CreateSendData()).Contents;
+            return job is not null;
         }
     }
 
@@ -94,13 +91,11 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (SystemJobTemplate is not null)
+            if (TryLaunch(Id, out var job))
             {
-                Id = SystemJobTemplate.Id;
+                WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
+                JobProgressManager.Add(job);
             }
-            var job = Launch(Id);
-            WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
-            JobProgressManager.Add(job);
         }
         protected override void EndProcessing()
         {
@@ -114,13 +109,11 @@ namespace Jagabata.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (SystemJobTemplate is not null)
+            if (TryLaunch(Id, out var job))
             {
-                Id = SystemJobTemplate.Id;
+                WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
+                WriteObject(job);
             }
-            var job = Launch(Id);
-            WriteVerbose($"Launch SystemJobTemplate:{Id} => Job:[{job.Id}]");
-            WriteObject(job);
         }
     }
 }
