@@ -158,6 +158,10 @@ namespace Jagabata.Cmdlets
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
             ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
         )]
+        [ResourceCompletions(
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
+            ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
+        )]
         public IResource? Job { get; set; }
 
         [Parameter()]
