@@ -12,25 +12,14 @@ Invoke (update) a Project and wait until the job is finished.
 
 ## SYNTAX
 
-### Id
+### Update (Default)
 ```
-Invoke-AnsibleProjectUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [<CommonParameters>]
-```
-
-### Project
-```
-Invoke-AnsibleProjectUpdate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Project] <IResource>
- [<CommonParameters>]
+Invoke-AnsibleProjectUpdate [-Id] <UInt64> [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
-### CheckId
+### Check
 ```
-Invoke-AnsibleProjectUpdate [-Id] <UInt64> [-Check] [<CommonParameters>]
-```
-
-### CheckProject
-```
-Invoke-AnsibleProjectUpdate [-Project] <IResource> [-Check] [<CommonParameters>]
+Invoke-AnsibleProjectUpdate [-Id] <UInt64> -Check [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -79,7 +68,7 @@ Check wheter a Project can be updated.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CheckId, CheckProject
+Parameter Sets: Check
 Aliases:
 
 Required: True
@@ -90,12 +79,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Project ID to be updated.
+Project ID or it's resource object to be updated.
+
+> [!TIP]  
+> Can specify the resource as string like `Project:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleProject -Id 1)`  
+>  - `-Id @{ type = "project"; id = 1 }`  
+>  - `-Id project:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id, CheckId
-Aliases:
+Parameter Sets: (All)
+Aliases: project, p
 
 Required: True
 Position: 0
@@ -110,28 +108,13 @@ Default is 5 seconds.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id, Project
+Parameter Sets: Update
 Aliases:
 
 Required: False
 Position: Named
 Default value: 5
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Project
-Project object to be updated.
-
-```yaml
-Type: IResource
-Parameter Sets: Project, CheckProject
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -153,7 +136,7 @@ Suppress display job log.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Id, Project
+Parameter Sets: Update
 Aliases:
 
 Required: False
@@ -169,10 +152,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Project ID to be updated.
-
-### Jagabata.Resources.Project
-Project object to be updated.
+Project ID or it's resource to be updated.
+See: `-Id` parameter.
 
 ## OUTPUTS
 
