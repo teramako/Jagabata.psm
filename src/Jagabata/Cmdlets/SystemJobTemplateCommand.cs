@@ -53,6 +53,9 @@ namespace Jagabata.Cmdlets
     public class LaunchSystemJobTemplateCommandBase : LaunchJobCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.SystemJobTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.SystemJobTemplate)]
+        [Alias("systemJobTemplate", "sjt")]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "Template", ValueFromPipeline = true, Position = 0)]
