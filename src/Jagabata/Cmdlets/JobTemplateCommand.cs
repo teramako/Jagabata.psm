@@ -79,15 +79,11 @@ namespace Jagabata.Cmdlets
 
     public abstract class LaunchJobTemplateCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.JobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.JobTemplate)]
+        [Alias("jobTemplate", "jt")]
         public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "JobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(ResourceType.JobTemplate)]
-        [ResourceCompletions(ResourceType.JobTemplate)]
-        public IResource? JobTemplate { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
@@ -950,7 +946,7 @@ namespace Jagabata.Cmdlets
         }
         protected JobTemplateJob.LaunchResult? Launch(ulong id)
         {
-            var requirements = GetResource<JobTemplateLaunchRequirements>($"{Resources.JobTemplate.PATH}{id}/launch/");
+            var requirements = GetResource<JobTemplateLaunchRequirements>($"{JobTemplate.PATH}{id}/launch/");
             ShowJobTemplateInfo(requirements);
             var sendData = CreateSendData();
             if (!TryAskOnLaunch(requirements, sendData, checkOptional: Interactive))
@@ -962,7 +958,7 @@ namespace Jagabata.Cmdlets
             JobTemplateJob.LaunchResult? launchResult;
             try
             {
-                var apiResult = CreateResource<JobTemplateJob.LaunchResult>($"{Resources.JobTemplate.PATH}{id}/launch/", sendData);
+                var apiResult = CreateResource<JobTemplateJob.LaunchResult>($"{JobTemplate.PATH}{id}/launch/", sendData);
                 launchResult = apiResult.Contents;
             }
             finally
@@ -995,10 +991,6 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (JobTemplate is not null)
-            {
-                Id = JobTemplate.Id;
-            }
             var launchResult = Launch(Id);
             if (launchResult is not null)
             {
@@ -1018,10 +1010,6 @@ namespace Jagabata.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (JobTemplate is not null)
-            {
-                Id = JobTemplate.Id;
-            }
             var launchResult = Launch(Id);
             if (launchResult is not null)
             {

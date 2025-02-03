@@ -12,22 +12,12 @@ Invoke (launch) a JobTemplate and wait unti the job is finished.
 
 ## SYNTAX
 
-### Id
 ```
-Invoke-AnsibleJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [-Inventory <UInt64>]
- [-JobType <JobType>] [-ScmBranch <String>] [-Credentials <UInt64[]>] [-Limit <String>] [-Labels <UInt64[]>]
- [-Tags <String[]>] [-SkipTags <String[]>] [-ExtraVars <String>] [-DiffMode <Boolean>]
- [-Verbosity <JobVerbosity>] [-Forks <Int32>] [-ExecutionEnvironment <UInt64>] [-JobSliceCount <Int32>]
- [-Timeout <Int32>] [-Interactive] [<CommonParameters>]
-```
-
-### JobTemplate
-```
-Invoke-AnsibleJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-JobTemplate] <IResource>
- [-Inventory <UInt64>] [-JobType <JobType>] [-ScmBranch <String>] [-Credentials <UInt64[]>] [-Limit <String>]
- [-Labels <UInt64[]>] [-Tags <String[]>] [-SkipTags <String[]>] [-ExtraVars <String>] [-DiffMode <Boolean>]
- [-Verbosity <JobVerbosity>] [-Forks <Int32>] [-ExecutionEnvironment <UInt64>] [-JobSliceCount <Int32>]
- [-Timeout <Int32>] [-Interactive] [<CommonParameters>]
+Invoke-AnsibleJobTemplate [-Id] <UInt64> [-Inventory <UInt64>] [-JobType <JobType>] [-ScmBranch <String>]
+ [-Credentials <UInt64[]>] [-Limit <String>] [-Labels <UInt64[]>] [-Tags <String[]>] [-SkipTags <String[]>]
+ [-ExtraVars <String>] [-DiffMode <Boolean>] [-Verbosity <JobVerbosity>] [-Forks <Int32>]
+ [-ExecutionEnvironment <UInt64>] [-JobSliceCount <Int32>] [-Timeout <Int32>] [-Interactive]
+ [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -76,10 +66,19 @@ Launch JobTemplate ID 7, and wait unti for the job is finished.
 ## PARAMETERS
 
 ### -Credentials
-Specify credential IDs.
+Specify credential IDs or it's resource objects.
 
 > [!NOTE]  
 > This parameter will be ignored if "Ask" flag is off, although the request will be sent.
+
+> [!TIP]  
+> Can specify the resource as string like `Credential:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Credentials (Get-AnsibleCredential -Id 1)`  
+>  - `-Credentials @{ type = "credential"; id = 1 }`  
+>  - `-Credentials credential:1`
 
 ```yaml
 Type: UInt64[]
@@ -112,10 +111,19 @@ Accept wildcard characters: False
 ```
 
 ### -ExecutionEnvironment
-Specify ExecutionEnvironment ID.
+Specify ExecutionEnvironment ID or it's resource object.
 
 > [!NOTE]  
 > This parameter will be ignored if "Ask" flag is off, although the request will be sent.
+
+> [!TIP]  
+> Can specify the resource as string like `ExecutionEnvironment:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-ExecutionEnvironment (Get-AnsibleExecutionEnvironment -Id 1)`  
+>  - `-ExecutionEnvironment Credentials @{ type = "executionEnvironment"; id = 1 }`  
+>  - `-ExecutionEnvironment Credentials executionEnvironment:1`
 
 ```yaml
 Type: UInt64
@@ -171,12 +179,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-JobTemplate ID to be launched.
+JobTemplate ID or it's resource object to be launched.
+
+> [!TIP]  
+> Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleJobTemplate -Id 1)`  
+>  - `-Id @{ type = "jobtemplate"; id = 1 }`  
+>  - `-Id jobtemplate:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id
-Aliases:
+Parameter Sets: (All)
+Aliases: jobTemplate, jt
 
 Required: True
 Position: 0
@@ -218,10 +235,19 @@ Accept wildcard characters: False
 ```
 
 ### -Inventory
-Inventory ID
+Inventory ID or it's resource object.
 
 > [!NOTE]  
 > This parameter will be ignored if "Ask" flag is off, although the request will be sent.
+
+> [!TIP]  
+> Can specify the resource as string like `Inventory:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Inventory (Get-AnsibleInventory -Id 1)`  
+>  - `-Inventory @{ type = "inventory"; id = 1 }`  
+>  - `-Inventory inventory:1`
 
 ```yaml
 Type: UInt64
@@ -250,21 +276,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -JobTemplate
-JobTempalte object to be launched.
-
-```yaml
-Type: IResource
-Parameter Sets: JobTemplate
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -450,10 +461,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-JobTemplate ID to be launched.
-
-### Jagabata.Resources.JobTemplate
-JobTemplate object to be launched.
+JobTemplate ID or it's resource to be launched.
+See: `-Id` parameter.
 
 ## OUTPUTS
 
