@@ -128,7 +128,7 @@ namespace Jagabata.Cmdlets
                 default:
                     WriteResultSet(UnifiedJob.PATH);
                     break;
-            };
+            }
         }
     }
 
