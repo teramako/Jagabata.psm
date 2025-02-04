@@ -76,7 +76,7 @@ namespace Jagabata.Cmdlets
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true)]
-        public InventorySourceSource Source { get ;set; }
+        public InventorySourceSource Source { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Project)]
@@ -206,7 +206,7 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
-        public InventorySourceSource? Source { get ;set; }
+        public InventorySourceSource? Source { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Project)]

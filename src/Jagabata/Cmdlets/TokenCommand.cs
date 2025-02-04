@@ -119,7 +119,7 @@ namespace Jagabata.Cmdlets
             {
                 id = 0;
                 action = "New Personal Access Token";
-                path = $"{Resources.User.PATH}{id}/tokens/";
+                path = $"{User.PATH}{id}/tokens/";
             }
             else if (Application is not null)
             {
