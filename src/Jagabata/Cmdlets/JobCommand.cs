@@ -84,6 +84,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Job)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Job)]
         public ulong Id { get; set; }
 
         protected override void ProcessRecord()
