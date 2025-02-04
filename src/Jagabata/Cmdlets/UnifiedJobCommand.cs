@@ -128,7 +128,7 @@ namespace Jagabata.Cmdlets
                 default:
                     WriteResultSet(UnifiedJob.PATH);
                     break;
-            };
+            }
         }
     }
 
@@ -141,24 +141,16 @@ namespace Jagabata.Cmdlets
                 typeof(WorkflowJob))]
     public class WaitJobCommand : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 0)]
-        [ValidateSet(nameof(ResourceType.Job),
-                     nameof(ResourceType.ProjectUpdate),
-                     nameof(ResourceType.InventoryUpdate),
-                     nameof(ResourceType.SystemJob),
-                     nameof(ResourceType.AdHocCommand),
-                     nameof(ResourceType.WorkflowJob))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "AssociatedWith", Position = 1)]
-        public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "PipelineInput", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(
             ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
             ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
         )]
-        public IResource? Job { get; set; }
+        [ResourceCompletions(
+            ResourceType.Job, ResourceType.ProjectUpdate, ResourceType.InventoryUpdate,
+            ResourceType.SystemJob, ResourceType.AdHocCommand, ResourceType.WorkflowJob
+        )]
+        public IResource Job { get; set; } = new Resource(0, 0);
 
         [Parameter()]
         [ValidateRange(5, int.MaxValue)]
@@ -169,13 +161,7 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (Job is not null)
-            {
-                Type = Job.Type;
-                Id = Job.Id;
-            }
-
-            JobProgressManager.Add(Id, new JobProgress(Id, Type));
+            JobProgressManager.Add(Job.Id, new JobProgress(Job.Id, Job.Type));
         }
         protected override void EndProcessing()
         {

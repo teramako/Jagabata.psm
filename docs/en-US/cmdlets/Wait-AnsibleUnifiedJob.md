@@ -12,13 +12,6 @@ Wait until jobs are finished.
 
 ## SYNTAX
 
-### AssociatedWith
-```
-Wait-AnsibleUnifiedJob [-Type] <ResourceType> [-Id] <UInt64> [-IntervalSeconds <Int32>] [-SuppressJobLog]
- [<CommonParameters>]
-```
-
-### PipelineInput
 ```
 Wait-AnsibleUnifiedJob [-Job] <IResource> [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
@@ -31,7 +24,7 @@ While waiting, retrieve the logs periodically and ouput.
 
 ### Example 1
 ```powershell
-PS C:\> Wait-AnsibleUnifiedJob -Type Job -Id 110
+PS C:\> Wait-AnsibleUnifiedJob -Job Job:110
 ====== [110] Demo Job Template ======
 
 PLAY [Hello World Sample] ******************************************************
@@ -63,22 +56,6 @@ Retrieve running jobs currently, and wait until those jobs are completed.
 
 ## PARAMETERS
 
-### -Id
-Job ID of the target resource.
-Use in conjection with the `-Type` parameter.
-
-```yaml
-Type: UInt64
-Parameter Sets: AssociatedWith
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -IntervalSeconds
 Interval to confirm job completion (seconds).
 Default is 5 seconds.
@@ -107,9 +84,18 @@ And `Type` should be following value:
 - `WorkflowJob`     : WorkflowJobTemplate's job  
 - `SystemJob`       : SystemJobTemplate's job
 
+> [!TIP]  
+> Can specify the resource as string like `Job:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Job (Get-AnsibleJob -Id 1)`  
+>  - `-Job @{ type = "job"; id = 1 }`  
+>  - `-Job job:1`
+
 ```yaml
 Type: IResource
-Parameter Sets: PipelineInput
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -144,38 +130,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: AssociatedWith
-Aliases:
-Accepted values: Job, ProjectUpdate, InventoryUpdate, SystemJob, AdHocCommand, WorkflowJob
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### Jagabata.Resources.IResource
-The object has `Id` and `Type` properties.
-
-And `Type` should be following value:  
-- `Job`  
-- `ProjectUpdate`  
-- `InventoryUpdate`  
-- `SystemJob`  
-- `AdHocCommand`  
-- `WorkflowJob`
+UnifiedJob resource object from which to wait.
+See: `-Job` parameter.
 
 ## OUTPUTS
 
