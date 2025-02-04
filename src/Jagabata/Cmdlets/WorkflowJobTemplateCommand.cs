@@ -62,15 +62,11 @@ namespace Jagabata.Cmdlets
 
     public abstract class LaunchWorkflowJobTemplateCommandBase : LaunchJobCommandBase
     {
-        [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
         [Alias("workflowJobTemplate", "wjt")]
         public ulong Id { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
-        [ResourceTransformation(ResourceType.WorkflowJobTemplate)]
-        public IResource? WorkflowJobTemplate { get; set; }
 
         [Parameter()]
         public string? Limit { get; set; }
@@ -136,7 +132,7 @@ namespace Jagabata.Cmdlets
         }
         protected void GetLaunchRequirements(ulong id)
         {
-            var res = GetResource<WorkflowJobTemplateLaunchRequirements>($"{Resources.WorkflowJobTemplate.PATH}{id}/launch/");
+            var res = GetResource<WorkflowJobTemplateLaunchRequirements>($"{WorkflowJobTemplate.PATH}{id}/launch/");
             WriteObject(res, false);
         }
         private void ShowJobTemplateInfo(WorkflowJobTemplateLaunchRequirements requirements)
@@ -469,7 +465,7 @@ namespace Jagabata.Cmdlets
 
         protected WorkflowJob.LaunchResult? Launch(ulong id)
         {
-            var requirements = GetResource<WorkflowJobTemplateLaunchRequirements>($"{Resources.WorkflowJobTemplate.PATH}{id}/launch/");
+            var requirements = GetResource<WorkflowJobTemplateLaunchRequirements>($"{WorkflowJobTemplate.PATH}{id}/launch/");
             ShowJobTemplateInfo(requirements);
             if (requirements.NodeTemplatesMissing.Length > 0)
             {
@@ -486,7 +482,7 @@ namespace Jagabata.Cmdlets
                 WriteWarning("Launch canceled.");
                 return null;
             }
-            var apiResult = CreateResource<WorkflowJob.LaunchResult>($"{Resources.WorkflowJobTemplate.PATH}{id}/launch/", sendData);
+            var apiResult = CreateResource<WorkflowJob.LaunchResult>($"{WorkflowJobTemplate.PATH}{id}/launch/", sendData);
             var launchResult = apiResult.Contents;
             if (launchResult is null) return null;
             WriteVerbose($"Launch WorkflowJobTemplate:{id} => Job:[{launchResult.Id}]");
@@ -514,10 +510,8 @@ namespace Jagabata.Cmdlets
 
         protected override void ProcessRecord()
         {
-            if (WorkflowJobTemplate is not null)
-            {
-                Id = WorkflowJobTemplate.Id;
-            }
+            if (Id == 0) return;
+
             var launchResult = Launch(Id);
             if (launchResult is not null)
             {
@@ -536,10 +530,8 @@ namespace Jagabata.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            if (WorkflowJobTemplate is not null)
-            {
-                Id = WorkflowJobTemplate.Id;
-            }
+            if (Id == 0) return;
+
             var launchResult = Launch(Id);
             if (launchResult is not null)
             {
