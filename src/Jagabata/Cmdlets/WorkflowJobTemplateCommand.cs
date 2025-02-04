@@ -63,6 +63,9 @@ namespace Jagabata.Cmdlets
     public abstract class LaunchWorkflowJobTemplateCommandBase : LaunchJobCommandBase
     {
         [Parameter(Mandatory = true, ParameterSetName = "Id", ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.WorkflowJobTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplate)]
+        [Alias("workflowJobTemplate", "wjt")]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "WorkflowJobTemplate", ValueFromPipeline = true, Position = 0)]
@@ -74,6 +77,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -81,6 +85,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()] // XXX: Should be string[] and created if not exists ?
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public ulong[]? Labels { get; set; }
 
         [Parameter()]
