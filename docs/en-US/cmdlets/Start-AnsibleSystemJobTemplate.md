@@ -12,14 +12,8 @@ Invoke (launch) a SystemJobTemplate.
 
 ## SYNTAX
 
-### Id
 ```
 Start-AnsibleSystemJobTemplate [-Id] <UInt64> [-ExtraVars <IDictionary>] [<CommonParameters>]
-```
-
-### Template
-```
-Start-AnsibleSystemJobTemplate [-SystemJobTemplate] <IResource> [-ExtraVars <IDictionary>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -70,27 +64,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-SystemJobTemplate ID to be launched.
+SystemJobTemplate ID or it's resource object to be launched.
+
+> [!TIP]  
+> Can specify the resource as string like `SystemJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleSystemJobTemplate -Id 1)`  
+>  - `-Id @{ type = "systemjobtemplate"; id = 1 }`  
+>  - `-Id systemjobtemplate:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -SystemJobTemplate
-{{ Fill SystemJobTemplate Description }}
-
-```yaml
-Type: IResource
-Parameter Sets: Template
-Aliases:
+Parameter Sets: (All)
+Aliases: systemJobTemplate, sjt
 
 Required: True
 Position: 0
@@ -105,10 +93,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-SystemJobTemplate ID to be launched.
-
-### Jagabata.Resources.SystemJobTemplate
-SystemJobTemplate object to be launched.
+SystemJobTemplate ID or it's resource to be launched.
+See: `-Id` parameter.
 
 ## OUTPUTS
 

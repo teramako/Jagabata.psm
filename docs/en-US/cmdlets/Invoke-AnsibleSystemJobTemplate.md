@@ -12,16 +12,8 @@ Invoke (launch) a SystemJobTemplate and wait unti the job is finished.
 
 ## SYNTAX
 
-### Id
 ```
-Invoke-AnsibleSystemJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64>
- [-ExtraVars <IDictionary>] [<CommonParameters>]
-```
-
-### Template
-```
-Invoke-AnsibleSystemJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-SystemJobTemplate] <IResource>
- [-ExtraVars <IDictionary>] [<CommonParameters>]
+Invoke-AnsibleSystemJobTemplate [-Id] <UInt64> [-ExtraVars <IDictionary>] [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -87,12 +79,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-SystemJobTemplate ID to be launched.
+SystemJobTemplate ID or it's resource object to be launched.
+
+> [!TIP]  
+> Can specify the resource as string like `SystemJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleSystemJobTemplate -Id 1)`  
+>  - `-Id @{ type = "systemjobtemplate"; id = 1 }`  
+>  - `-Id systemjobtemplate:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id
-Aliases:
+Parameter Sets: (All)
+Aliases: systemJobTemplate, sjt
 
 Required: True
 Position: 0
@@ -141,31 +142,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SystemJobTemplate
-SystemJobTempalte object to be launched.
-
-```yaml
-Type: IResource
-Parameter Sets: Template
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### System.UInt64
-SystemJobTemplate ID to be launched.
-
-### Jagabata.Resources.SystemJobTemplate
-SystemJobTemplate object to be launched.
+SystemJobTemplate ID or it's resource to be launched.
+See: `-Id` parameter.
 
 ## OUTPUTS
 
