@@ -70,6 +70,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter(Mandatory = true)]

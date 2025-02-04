@@ -1035,10 +1035,12 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Project)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public ulong? Project { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -1087,6 +1089,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]

@@ -87,6 +87,10 @@ namespace Jagabata.Cmdlets
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         )]
+        [ResourceCompletions(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         [Parameter()]
@@ -96,6 +100,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -130,6 +135,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]

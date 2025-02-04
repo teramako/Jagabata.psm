@@ -77,6 +77,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true)]
         [ValidateRange(1, ulong.MaxValue)]
+        [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         protected override Dictionary<string, object> CreateSendData()

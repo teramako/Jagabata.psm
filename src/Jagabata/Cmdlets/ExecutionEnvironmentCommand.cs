@@ -65,10 +65,12 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]

@@ -81,6 +81,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]

@@ -106,6 +106,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.CredentialType)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.CredentialType)]
         public ulong CredentialType { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -120,6 +121,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.User)]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.Team, ResourceType.User)]
         public IResource? Owner { get; set; }
 
         protected override Dictionary<string, object> CreateSendData()

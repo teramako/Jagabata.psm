@@ -553,10 +553,12 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -601,6 +603,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]

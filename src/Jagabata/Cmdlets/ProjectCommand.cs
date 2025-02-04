@@ -130,14 +130,17 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong DefaultEnvironment { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong SignatureValidationCredential { get; set; }
 
         [Parameter(ParameterSetName = "Manual", Mandatory = true)]
@@ -162,6 +165,7 @@ namespace Jagabata.Cmdlets
         [Parameter(ParameterSetName = "Insights", Mandatory = true)]
         [Parameter(ParameterSetName = "Archive")]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong Credential { get; set; }
 
         [Parameter(ParameterSetName = "Git")]

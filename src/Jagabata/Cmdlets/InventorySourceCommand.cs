@@ -73,6 +73,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong Inventory { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -80,6 +81,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Project)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public ulong? SourceProject { get; set; }
 
         [Parameter()]
@@ -97,6 +99,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]

@@ -88,6 +88,7 @@ namespace Jagabata.Cmdlets
         [Parameter(Mandatory = true, ParameterSetName = "Application", Position = 0)]
         [Parameter(ParameterSetName = "User", Position = 1)]
         [ResourceIdTransformation(ResourceType.OAuth2Application)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2Application)]
         public ulong? Application { get; set; }
 
         [Parameter()]

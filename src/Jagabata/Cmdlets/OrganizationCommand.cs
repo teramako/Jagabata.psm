@@ -76,6 +76,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong DefaultEnvironment { get; set; }
 
         protected override Dictionary<string, object> CreateSendData()
