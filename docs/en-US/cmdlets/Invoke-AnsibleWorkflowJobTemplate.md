@@ -12,19 +12,10 @@ Invoke (update) a WorkflowJobTemplate and wait until the job is finished.
 
 ## SYNTAX
 
-### Id
 ```
-Invoke-AnsibleWorkflowJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Id] <UInt64> [-Limit <String>]
- [-Inventory <UInt64>] [-ScmBranch <String>] [-Labels <UInt64[]>] [-Tags <String[]>] [-SkipTags <String[]>]
- [-ExtraVars <String>] [-Interactive] [<CommonParameters>]
-```
-
-### WorkflowJobTemplate
-```
-Invoke-AnsibleWorkflowJobTemplate [-IntervalSeconds <Int32>] [-SuppressJobLog]
- [-WorkflowJobTemplate] <IResource> [-Limit <String>] [-Inventory <UInt64>] [-ScmBranch <String>]
+Invoke-AnsibleWorkflowJobTemplate [-Id] <UInt64> [-Limit <String>] [-Inventory <UInt64>] [-ScmBranch <String>]
  [-Labels <UInt64[]>] [-Tags <String[]>] [-SkipTags <String[]>] [-ExtraVars <String>] [-Interactive]
- [<CommonParameters>]
+ [-IntervalSeconds <Int32>] [-SuppressJobLog] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -83,12 +74,21 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-WorkflowJobTemplate ID to be launched.
+WorkflowJobTemplate ID or it's resource object to be launched.
+
+> [!TIP]  
+> Can specify the resource as string like `WorkflowJobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Id (Get-AnsibleWorkflowJobTemplate -Id 1)`  
+>  - `-Id @{ type = "workflowjobtemplate"; id = 1 }`  
+>  - `-Id workflowjobtemplate:1`
 
 ```yaml
 Type: UInt64
-Parameter Sets: Id
-Aliases:
+Parameter Sets: (All)
+Aliases: workflowJobTemplate, wjt
 
 Required: True
 Position: 0
@@ -130,10 +130,19 @@ Accept wildcard characters: False
 ```
 
 ### -Inventory
-Inventory ID
+Inventory ID or it's resource object.
 
 > [!NOTE]  
 > This parameter will be ignored if "Ask" flag is off, although the request will be sent.
+
+> [!TIP]  
+> Can specify the resource as string like `Inventory:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Inventory (Get-AnsibleInventory -Id 1)`  
+>  - `-Inventory @{ type = "inventory"; id = 1 }`  
+>  - `-Inventory inventory:1`
 
 ```yaml
 Type: UInt64
@@ -266,31 +275,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WorkflowJobTemplate
-WorkflowJobTempalte object to be launched.
-
-```yaml
-Type: IResource
-Parameter Sets: WorkflowJobTemplate
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable, -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### System.UInt64
-WorkflowJobTemplate ID to be launched.
-
-### Jagabata.Resources.WorkflowJobTemplate
-WorkflowJobTemplate object to be launched.
+WorkflowJobTemplate ID or it's resource to be launched.
+See: `-Id` parameter.
 
 ## OUTPUTS
 
