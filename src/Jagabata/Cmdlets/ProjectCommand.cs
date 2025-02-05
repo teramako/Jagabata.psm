@@ -277,6 +277,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Project)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Project)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -288,6 +289,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         [Parameter()]
@@ -298,11 +300,13 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? DefaultEnvironment { get; set; }
 
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong? SignatureValidationCredential { get; set; }
 
         [Parameter()]
@@ -324,6 +328,7 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong? Credential { get; set; }
 
         [Parameter()]

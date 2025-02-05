@@ -303,11 +303,16 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public override ulong Id { get; set; }
 
         [Parameter()]
         [Alias("Template")]
         [ResourceIdTransformation(
+            ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
+        )]
+        [ResourceCompletions(ResourceCompleteType.Id,
             ResourceType.Project, ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.SystemJobTemplate, ResourceType.WorkflowJobTemplate
         )]
@@ -320,6 +325,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
         public ulong? Inventory { get; set; }
 
         [Parameter()]
@@ -351,6 +357,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.ExecutionEnvironment)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.ExecutionEnvironment)]
         public ulong? ExecutionEnvironment { get; set; }
 
         [Parameter()]

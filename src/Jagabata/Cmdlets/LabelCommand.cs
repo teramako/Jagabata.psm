@@ -166,6 +166,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -173,6 +174,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong Organization { get; set; }
 
         protected override Dictionary<string, object?> CreateSendData()

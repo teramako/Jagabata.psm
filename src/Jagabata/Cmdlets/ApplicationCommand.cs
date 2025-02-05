@@ -118,6 +118,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.OAuth2Application)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2Application)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -128,6 +129,8 @@ namespace Jagabata.Cmdlets
         public string? Description { get; set; }
 
         [Parameter()]
+        [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]

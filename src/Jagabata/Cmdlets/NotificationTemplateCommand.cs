@@ -263,6 +263,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.NotificationTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.NotificationTemplate)]
         public override ulong Id { get; set; }
 
         [Parameter()]
@@ -274,6 +275,7 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Organization)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public ulong? Organization { get; set; }
 
         [Parameter()]

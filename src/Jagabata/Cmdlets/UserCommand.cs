@@ -266,6 +266,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.User)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public override ulong Id { get; set; }
 
         [Parameter()]
