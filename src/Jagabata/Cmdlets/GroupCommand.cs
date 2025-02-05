@@ -169,10 +169,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Group)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Group)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceIdTransformation(ResourceType.Group)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Group)]
         public ulong To { get; set; }
 
         protected override void ProcessRecord()
@@ -189,10 +191,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Group)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Group)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceIdTransformation(ResourceType.Group)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Group)]
         public ulong From { get; set; }
 
         protected override void ProcessRecord()

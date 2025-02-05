@@ -106,10 +106,15 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
+        [ResourceCompletions(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
         )]
@@ -136,10 +141,15 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
         [ResourceIdTransformation(ResourceType.Label)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Label)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(
+            ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
+            ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
+        )]
+        [ResourceCompletions(
             ResourceType.Inventory, ResourceType.JobTemplate, ResourceType.Schedule,
             ResourceType.WorkflowJobTemplate, ResourceType.WorkflowJobTemplateNode
         )]

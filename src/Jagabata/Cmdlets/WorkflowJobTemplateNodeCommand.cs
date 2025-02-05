@@ -430,10 +430,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong To { get; set; }
 
         [Parameter()]
@@ -456,10 +458,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true)]
         [ResourceIdTransformation(ResourceType.WorkflowJobTemplateNode)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.WorkflowJobTemplateNode)]
         public ulong From { get; set; }
 
         private WorkflowJobTemplateNode? _parentNode;

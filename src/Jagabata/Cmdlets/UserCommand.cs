@@ -331,10 +331,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.User)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource To { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
@@ -356,10 +358,12 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.User)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.User)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
+        [ResourceCompletions(ResourceType.Organization, ResourceType.Team, ResourceType.Role)]
         public IResource From { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()

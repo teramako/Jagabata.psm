@@ -176,10 +176,15 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(
+            ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
+        )]
+        [ResourceCompletions(
             ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
         )]
@@ -205,10 +210,15 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
         [ResourceTransformation(
+            ResourceType.InventorySource, ResourceType.JobTemplate,
+            ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
+        )]
+        [ResourceCompletions(
             ResourceType.InventorySource, ResourceType.JobTemplate,
             ResourceType.Schedule, ResourceType.WorkflowJobTemplateNode
         )]
