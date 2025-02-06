@@ -2,12 +2,11 @@ using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;
 
-public abstract class RegistrationCommandBase<TResource> : APICmdletBase where TResource: class
+public abstract class RegistrationCommandBase<TResource> : APICmdletBase where TResource : class
 {
     protected bool Register(string path, ulong targetId, IResource toResource, string? targetDescription = null)
     {
-        if (targetDescription is null)
-            targetDescription = $"{typeof(TResource).Name} [{targetId}]";
+        targetDescription ??= $"{typeof(TResource).Name} [{targetId}]";
         var toDescription = $"{toResource.Type} [{toResource.Id}]";
 
         if (ShouldProcess(targetDescription, $"Register to {toDescription}"))
@@ -28,8 +27,7 @@ public abstract class RegistrationCommandBase<TResource> : APICmdletBase where T
 
     protected bool Unregister(string path, ulong targetId, IResource fromResource, string? targetDescription = null)
     {
-        if (targetDescription is null)
-            targetDescription = $"{typeof(TResource).Name} [{targetId}]";
+        targetDescription ??= $"{typeof(TResource).Name} [{targetId}]";
         var fromDescription = $"{fromResource.Type} [{fromResource.Id}]";
 
         if (ShouldProcess(targetDescription, $"Unregister from {fromDescription}"))
