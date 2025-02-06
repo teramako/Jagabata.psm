@@ -41,6 +41,17 @@ internal class ResourceCompleter(ResourceType[] types) : IArgumentCompleter
                                                           CommandAst commandAst,
                                                           IDictionary fakeBoundParameters)
     {
+        if (wordToComplete.Length == 0)
+        {
+            foreach (var type in ResourceTypes)
+            {
+                var name = $"{type}:";
+                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, name);
+            }
+            yield break;
+        }
+
+        var availableTypes = new HashSet<ResourceType>();
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
             var name = $"{item.Type}:{item.Id}";
@@ -48,6 +59,15 @@ internal class ResourceCompleter(ResourceType[] types) : IArgumentCompleter
             if (name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
             {
                 yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, tooltip);
+            }
+            availableTypes.Add(item.Type);
+        }
+        foreach (var type in ResourceTypes.Where(t => !availableTypes.Contains(t)))
+        {
+            var name = $"{type}:";
+            if (name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            {
+                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, name);
             }
         }
     }
