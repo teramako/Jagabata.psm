@@ -23,6 +23,7 @@ namespace Jagabata.Resources
                    : throw new FormatException($"Resource format should be '{{Type}}:{{Id}}': {s}");
         }
 
+        private static readonly char[] separator = [':', '#'];
         public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Resource result)
         {
             result = default;
@@ -30,7 +31,7 @@ namespace Jagabata.Resources
             {
                 return false;
             }
-            var list = s.Split(new char[] { ':', '#' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var list = s.Split(separator, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             if (list.Length > 1
                 && Enum.TryParse<ResourceType>(list[0], true, out var resourceType)
                 && ulong.TryParse(list[1], System.Globalization.NumberStyles.Integer, provider, out var id))
