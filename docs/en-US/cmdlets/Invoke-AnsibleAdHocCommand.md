@@ -13,8 +13,8 @@ Invoke (launch) an AdHocCommand and wait until the job is finished.
 ## SYNTAX
 
 ```
-Invoke-AnsibleAdHocCommand [-IntervalSeconds <Int32>] [-SuppressJobLog] [-Target] <IResource>
- [-ModuleName] <String> [[-ModuleArgs] <String>] [-Credential] <UInt64> [-Limit <String>] [-Check]
+Invoke-AnsibleAdHocCommand [-Target] <IResource> [-ModuleName] <String> [[-ModuleArgs] <String>]
+ [-Credential] <UInt64> [-Limit <String>] [-Check] [-IntervalSeconds <Int32>] [-SuppressJobLog]
  [<CommonParameters>]
 ```
 
