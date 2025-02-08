@@ -13,7 +13,7 @@ Retrieve Survey specifications.
 ## SYNTAX
 
 ```
-Get-AnsibleSurveySpec [-Type] <ResourceType> [-Id] <UInt64> [<CommonParameters>]
+Get-AnsibleSurveySpec [-Template] <IResource> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +27,7 @@ Implements following Rest API:
 
 ### Example 1
 ```powershell
-PS C:\> Get-AnsibleSurveySpec -Type JobTemplate -Id 10
+PS C:\> Get-AnsibleSurveySpec -Template JobTemplate:10
 
 Name Description Spec
 ---- ----------- ----
@@ -36,36 +36,27 @@ Name Description Spec
 
 ## PARAMETERS
 
-### -Id
-Datebase ID of the target resource.
-Use in conjection with the `-Type` parameter.
+### -Template
+JobTemplate or WorkflowJobTemplate resource object which has SurveySpecs.
+
+> [!TIP]  
+> Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Template (Get-AnsibleJobTemplate -Id 1)`  
+>  - `-Template @{ type = "jobTemplate"; id = 1 }`  
+>  - `-Template jobTemplate:1`
 
 ```yaml
-Type: UInt64
+Type: IResource
 Parameter Sets: (All)
 Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Type
-Resource type name of the target.
-Use in conjection with the `-Id` parameter.
-
-```yaml
-Type: ResourceType
-Parameter Sets: (All)
-Aliases:
-Accepted values: JobTemplate, WorkflowJobTemplate
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -74,17 +65,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values:  
-- `JobTemplate`  
-- `WorkflowJobTemplate`  
-
-### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for the ResourceType
+### Jagabata.Resources.IResource
+JobTemplate or WorkflowJobTemplate resource object.
+See `-Template` parameter.
 
 ## OUTPUTS
 
