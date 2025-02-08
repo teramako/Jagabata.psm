@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExecutionEnvironment
-ExecutionEnvironment ID.
+ExecutionEnvironment ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -116,7 +116,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-WorkflwJobTemplateNode ID to be updated.
+WorkflwJobTemplateNode ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -147,7 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### -Inventory
-Inventory ID.
+Inventory ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -268,7 +268,7 @@ Accept wildcard characters: False
 ```
 
 ### -UnifiedJobTemplate
-UnifiedJobTemplate (JobTemplate, Project, InventorySource, WorkflowJobTemplate) ID.
+UnifiedJobTemplate (JobTemplate, Project, InventorySource, WorkflowJobTemplate) ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -335,7 +335,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-WorkflowJobTemplateNode ID.
+WorkflwJobTemplateNode ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

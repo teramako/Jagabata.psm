@@ -35,7 +35,7 @@ Change the name for the Organization of Id 2.
 ## PARAMETERS
 
 ### -DefaultEnvironment
-ExecutionEnvironment ID.
+ExecutionEnvironment ID or its resource object.
 
 > [!TIP]  
 > Specify `0` or `$null` if want to set empty.

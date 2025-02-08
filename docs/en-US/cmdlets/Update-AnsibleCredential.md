@@ -33,7 +33,7 @@ PS C:\> Update-AnsibleCredential -Id 2 -Description "Updated Description"
 ## PARAMETERS
 
 ### -CredentialType
-CredentialType ID.
+CredentialType ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Credential ID to be updated.
+Credential ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -158,7 +158,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Credential ID.
+Credential ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

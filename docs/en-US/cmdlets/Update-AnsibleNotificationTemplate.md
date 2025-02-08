@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-NotificationTemplate ID to be updated.
+NotificationTemplate ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -109,7 +109,7 @@ Accept wildcard characters: False
 ```
 
 ### -Organization
-Organization ID.
+Organization ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -176,7 +176,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-NotificationTemplate ID.
+NotificationTemplate ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 
