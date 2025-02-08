@@ -9,20 +9,18 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Resources.Survey))]
     public class GetSurveySpecCommand : APICmdletBase
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 0)]
-        [ValidateSet(nameof(ResourceType.JobTemplate), nameof(ResourceType.WorkflowJobTemplate))]
-        public ResourceType Type { get; set; }
-
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        public ulong Id { get; set; }
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
+        [ResourceIdTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
+        [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
+        public IResource Template { get; set; } = new Resource(0, 0);
 
         protected override void ProcessRecord()
         {
-            var path = Type switch
+            var path = Template.Type switch
             {
-                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Id}/survey_spec/",
-                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Id}/survey_spec/",
-                _ => throw new ArgumentException($"Unkown Resource Type: {Type}")
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{Template.Id}/survey_spec/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Template.Id}/survey_spec/",
+                _ => throw new ArgumentException($"Unkown Resource Type: {Template.Type}")
             };
             var survey = GetResource<Resources.Survey>(path);
             WriteObject(survey);
