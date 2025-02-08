@@ -35,6 +35,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
+        [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource Template { get; set; } = new Resource(0, 0);
 
         [Parameter(ParameterSetName = "Spec")]
