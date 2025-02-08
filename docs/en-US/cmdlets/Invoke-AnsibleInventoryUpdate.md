@@ -20,7 +20,7 @@ Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-IntervalSeconds <Int32>] [
 
 ### Check
 ```
-Invoke-AnsibleInventoryUpdate [-Source] <IResource> [-Check] [<CommonParameters>]
+Invoke-AnsibleInventoryUpdate [-Source] <IResource> -Check [<CommonParameters>]
 ```
 
 ## DESCRIPTION
