@@ -116,7 +116,7 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Application))]
     public class UpdateApplicationCommand : UpdateCommandBase<Application>
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.OAuth2Application)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.OAuth2Application)]
         public override ulong Id { get; set; }
