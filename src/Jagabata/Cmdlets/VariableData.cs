@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetVariableDataCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
+        [ResourceTransformation(ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
         [ResourceCompletions(ResourceType.Inventory, ResourceType.Group, ResourceType.Host)]
         [Alias("associatedWith", "r")]
         public IResource Resource { get; set; } = new Resource(0, 0);
