@@ -68,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Organization ID to be updated.
+Organization ID or it's resource to be update.
 
 ```yaml
 Type: UInt64
@@ -78,7 +78,7 @@ Aliases:
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -148,7 +148,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.UInt64
+Organization ID or it's resource to be update.
+See: `-Id` parameter.
+
 ## OUTPUTS
 
 ### Jagabata.Resources.Organization

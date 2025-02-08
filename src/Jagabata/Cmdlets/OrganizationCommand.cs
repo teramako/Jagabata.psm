@@ -108,7 +108,7 @@ namespace Jagabata.Cmdlets
     [OutputType(typeof(Organization))]
     public class UpdateOrganizationCommand : UpdateCommandBase<Organization>
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.Organization)]
         [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Organization)]
         public override ulong Id { get; set; }
