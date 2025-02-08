@@ -10,7 +10,7 @@ namespace Jagabata.Cmdlets
     public class GetSurveySpecCommand : APICmdletBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
-        [ResourceIdTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
+        [ResourceTransformation(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         [ResourceCompletions(ResourceType.JobTemplate, ResourceType.WorkflowJobTemplate)]
         public IResource Template { get; set; } = new Resource(0, 0);
 
