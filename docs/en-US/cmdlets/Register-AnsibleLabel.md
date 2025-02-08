@@ -38,7 +38,7 @@ Associate the Label of ID 1 to the Inventory of ID 2.
 ## PARAMETERS
 
 ### -Id
-Label ID to be registered.
+Label ID or its resource object to be registered.
 
 ```yaml
 Type: UInt64
@@ -111,7 +111,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Label ID.
+Label ID or its resource object to be registered.
+See `-Id` parameter.
 
 ## OUTPUTS
 

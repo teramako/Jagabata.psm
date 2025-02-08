@@ -34,7 +34,7 @@ Associate the Host of ID 3 to the Group of ID 1.
 ## PARAMETERS
 
 ### -Id
-Host Id.
+Host ID or its resource object to be registerted as a child.
 
 ```yaml
 Type: UInt64
@@ -49,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -To
-Parent Group Id.
+Group ID or its resource object to be as a parent.
 
 > [!NOTE]  
 > Can specify `IResource` object.  
@@ -104,7 +104,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Host Id.
+Host ID or its resource object to be registerted as a child.
+See `-Id` parameter.
 
 ## OUTPUTS
 

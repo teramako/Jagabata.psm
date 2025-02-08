@@ -140,7 +140,20 @@ Accept wildcard characters: False
 ```
 
 ### -Template
-JobTemplate or WorkflowJobTemplate object.
+JobTemplate or WorkflowJobTemplate resource object to be registered to.
+
+The resource is accepted following types:  
+- `JobTemplate`  
+- `WorkflowJobTemplate`  
+
+> [!TIP]  
+> Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-Template (Get-AnsibleJobTemplate -Id 1)`  
+>  - `-Template @{ type = "jobtemplate"; id = 1 }`  
+>  - `-Template jobTemplate:1`
 
 ```yaml
 Type: IResource
@@ -191,7 +204,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Jagabata.Resources.IResource
-JobTemplate or WorkflowJobTemplate object.
+JobTemplate or WorkflowJobTemplate resource object.
+See `-Template` parameter.
 
 ## OUTPUTS
 

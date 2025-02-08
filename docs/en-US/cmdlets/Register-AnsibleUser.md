@@ -36,7 +36,7 @@ Associate the User of ID 2 to the Organization of ID 1.
 ## PARAMETERS
 
 ### -Id
-User ID to be registered.
+User ID or its resource object to be registerted.
 
 ```yaml
 Type: UInt64
@@ -57,6 +57,15 @@ Following resource is available:
 - `Organization`  
 - `Team`  
 - `Role`
+
+> [!TIP]  
+> Can specify the resource as string like `Team:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-To (Get-AnsibleTeam -Id 1)`  
+>  - `-To @{ type = "team"; id = 1 }`  
+>  - `-To team:1`
 
 ```yaml
 Type: IResource
@@ -107,7 +116,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-User ID.
+User ID or its resource object to be registerted.
+See `-Id` parameter.
 
 ## OUTPUTS
 
