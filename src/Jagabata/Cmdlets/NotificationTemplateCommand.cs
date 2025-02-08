@@ -336,6 +336,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.NotificationTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.NotificationTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -397,6 +398,7 @@ namespace Jagabata.Cmdlets
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 0)]
         [ResourceIdTransformation(ResourceType.NotificationTemplate)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.NotificationTemplate)]
         public ulong Id { get; set; }
 
         [Parameter(Mandatory = true, Position = 1)]
@@ -424,8 +426,8 @@ namespace Jagabata.Cmdlets
             };
             foreach (var timing in On)
             {
-                if (timing == "Approval" && (For.Type != ResourceType.Organization
-                                             && For.Type != ResourceType.WorkflowJobTemplate))
+                if (timing == "Approval" && For.Type != ResourceType.Organization
+                                             && For.Type != ResourceType.WorkflowJobTemplate)
                 {
                     WriteWarning($"{For.Type} has no \"{timing}\" notifications.");
                     continue;
