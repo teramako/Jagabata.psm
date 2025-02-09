@@ -41,33 +41,24 @@ internal class ResourceCompleter(ResourceType[] types) : IArgumentCompleter
                                                           CommandAst commandAst,
                                                           IDictionary fakeBoundParameters)
     {
-        if (wordToComplete.Length == 0)
-        {
-            foreach (var type in ResourceTypes)
-            {
-                var name = $"{type}:";
-                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, name);
-            }
-            yield break;
-        }
-
+        var isEmpty = string.IsNullOrEmpty(wordToComplete);
         var availableTypes = new HashSet<ResourceType>();
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
             var name = $"{item.Type}:{item.Id}";
             var tooltip = $"[{name}] {item.Description}";
-            if (name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            if (isEmpty || name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
             {
                 yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, tooltip);
+                availableTypes.Add(item.Type);
             }
-            availableTypes.Add(item.Type);
         }
         foreach (var type in ResourceTypes.Where(t => !availableTypes.Contains(t)))
         {
             var name = $"{type}:";
-            if (name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            if (isEmpty || name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
             {
-                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, name);
+                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, "Incompleted candidate");
             }
         }
     }
@@ -82,12 +73,13 @@ internal class ResourceIdCompleter(ResourceType[] types) : IArgumentCompleter
                                                           CommandAst commandAst,
                                                           IDictionary fakeBoundParameters)
     {
+        var isEmpty = string.IsNullOrEmpty(wordToComplete);
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
             var id = $"{item.Id}";
             var name = $"{item.Type}:{id}";
             var tooltip = $"[{name}] {item.Description}";
-            if (id.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            if (isEmpty || id.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
             {
                 yield return new CompletionResult(id, name, CompletionResultType.ParameterValue, tooltip);
             }
