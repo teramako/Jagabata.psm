@@ -191,11 +191,14 @@ namespace Jagabata.Resources
             };
         }
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Email)
-                   ? Username
-                   : $"{Username} <{Email}>";
+            var item = new CacheItem(Type, Id, Username, string.Empty);
+            if (!string.IsNullOrEmpty(Email))
+            {
+                item.Metadata.Add("Email", Email);
+            }
+            return item;
         }
     }
 

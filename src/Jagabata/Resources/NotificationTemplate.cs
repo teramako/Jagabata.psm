@@ -96,11 +96,14 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? $"[{NotificationType}] {Name}"
-                   : $"[{NotificationType}] {Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Type"] = $"{NotificationType}"
+                }
+            };
         }
     }
 

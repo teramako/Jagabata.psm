@@ -178,11 +178,9 @@ namespace Jagabata.Resources
         public string Description { get; } = description;
         public ulong Organization { get; } = organization;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

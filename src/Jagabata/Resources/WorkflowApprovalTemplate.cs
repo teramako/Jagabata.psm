@@ -27,11 +27,9 @@ namespace Jagabata.Resources
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

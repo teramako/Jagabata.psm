@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -135,19 +134,16 @@ namespace Jagabata.Resources
         public FieldList Inputs { get; } = inputs;
         public Injectors Injectors { get; } = injectors;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{Kind}] {Name}");
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            if (!string.IsNullOrEmpty(Namespace))
-            {
-                sb.Append($" Namespace={Namespace}");
-            }
-            sb.Append($" Managed={Managed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Kind"] = $"{Kind}",
+                    ["Namespace"] = Namespace,
+                    ["Managed"] = $"{Managed}"
+                }
+            };
         }
     }
 }

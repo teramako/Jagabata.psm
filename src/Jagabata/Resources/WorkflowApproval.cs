@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -53,20 +52,14 @@ namespace Jagabata.Resources
         public DateTime? ApprovalExpiration { get; } = approvalExpiration;
         public bool TimedOut { get; } = timedOut;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
+            var item = new CacheItem(Type, Id, string.Empty, Description);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
             {
-                sb.Append($"[{template.Type}:{template.Id}] ");
+                item.Metadata.Add("Template", $"[{template.Type}:{template.Id}] {template.Name}");
             }
-            sb.Append(Name);
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
-            sb.Append($" CanApproveOrDeny={CanApproveOrDeny}");
-            return sb.ToString();
+            return item;
         }
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,

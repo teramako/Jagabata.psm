@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -83,18 +82,16 @@ namespace Jagabata.Resources
         public ulong TargetCredential { get; } = targetCredential;
         public ulong SourceCredential { get; } = sourceCredential;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, string.Empty, Description)
             {
-                sb.Append(Description)
-                  .Append(' ');
-            }
-            sb.Append($"InputFieldName={InputFieldName}");
-            sb.Append($" TargetCredential={TargetCredential}");
-            sb.Append($" SourceCredential={SourceCredential}");
-            return sb.ToString();
+                Metadata = {
+                    ["InputFieldName"] = InputFieldName,
+                    ["TargetCredential"] = $"{TargetCredential}",
+                    ["SourceCredential"] = $"{SourceCredential}"
+                }
+            };
         }
     }
 }

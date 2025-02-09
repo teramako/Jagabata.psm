@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -61,16 +60,16 @@ namespace Jagabata.Resources
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.AdHocCommand}:{AdHocCommand}] {Counter}:{StartLine}:{EndLine} {Event}");
-            if (!string.IsNullOrEmpty(HostName))
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
-                sb.Append($" Hostname={HostName}");
-            }
-            sb.Append($" Failed={Failed}");
-            sb.Append($" Changed={Changed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Hostname"] = HostName,
+                    ["Failed"] = $"{Failed}",
+                    ["Changed"] = $"{Changed}"
+                }
+            };
         }
     }
 }

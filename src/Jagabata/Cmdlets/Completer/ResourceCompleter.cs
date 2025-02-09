@@ -32,61 +32,98 @@ internal class ResourceCompletionsAttribute(ResourceCompleteType completeType, p
     }
 }
 
-internal class ResourceCompleter(ResourceType[] types) : IArgumentCompleter
+internal class ResourceCompleter(ResourceType[] types) : ResourceCompleterBase
 {
     public ResourceType[] ResourceTypes { get; init; } = types;
-    public IEnumerable<CompletionResult> CompleteArgument(string commandName,
-                                                          string parameterName,
-                                                          string wordToComplete,
-                                                          CommandAst commandAst,
-                                                          IDictionary fakeBoundParameters)
+    public override IEnumerable<CompletionResult> CompleteArgument(string commandName,
+                                                                   string parameterName,
+                                                                   string wordToComplete,
+                                                                   CommandAst commandAst,
+                                                                   IDictionary fakeBoundParameters)
     {
-        var isEmpty = string.IsNullOrEmpty(wordToComplete);
+        var (word, quote, isEmpty) = ParseWord(wordToComplete);
         var availableTypes = new HashSet<ResourceType>();
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
-            var name = $"{item.Type}:{item.Id}";
-            var tooltip = $"[{name}] {item.Description}";
-            if (isEmpty || name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
+            if (isEmpty || name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
             {
-                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, tooltip);
+                yield return new CompletionResult(ToCompletionText(name, quote),
+                                                  name,
+                                                  CompletionResultType.ParameterValue,
+                                                  item.ToTooltip());
                 availableTypes.Add(item.Type);
             }
         }
+        // complete remaining types
         foreach (var type in ResourceTypes.Where(t => !availableTypes.Contains(t)))
         {
             var name = $"{type}:";
-            if (isEmpty || name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            if (isEmpty || name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
             {
-                yield return new CompletionResult(name, name, CompletionResultType.ParameterValue, "Incompleted candidate");
+                yield return new CompletionResult(ToCompletionText(name, quote),
+                                                  name,
+                                                  CompletionResultType.ParameterValue,
+                                                  "Incompleted candidate");
             }
         }
     }
 }
 
-internal class ResourceIdCompleter(ResourceType[] types) : IArgumentCompleter
+internal class ResourceIdCompleter(ResourceType[] types) : ResourceCompleterBase
 {
     public ResourceType[] ResourceTypes { get; init; } = types;
-    public IEnumerable<CompletionResult> CompleteArgument(string commandName,
-                                                          string parameterName,
-                                                          string wordToComplete,
-                                                          CommandAst commandAst,
-                                                          IDictionary fakeBoundParameters)
+    public string? FilterKey { get; }
+    public HashSet<string>? FilterValues { get; }
+
+    public override IEnumerable<CompletionResult> CompleteArgument(string commandName,
+                                                                   string parameterName,
+                                                                   string wordToComplete,
+                                                                   CommandAst commandAst,
+                                                                   IDictionary fakeBoundParameters)
     {
-        var isEmpty = string.IsNullOrEmpty(wordToComplete);
+        var (word, quote, isEmpty) = ParseWord(wordToComplete);
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
             var id = $"{item.Id}";
-            var name = $"{item.Type}:{id}";
-            var tooltip = $"[{name}] {item.Description}";
-            if (isEmpty || id.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
+            var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
+            if (isEmpty
+                || id.StartsWith(word, StringComparison.OrdinalIgnoreCase)
+                || name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
             {
-                yield return new CompletionResult(id, name, CompletionResultType.ParameterValue, tooltip);
-            }
-            else if (name.StartsWith(wordToComplete, StringComparison.OrdinalIgnoreCase))
-            {
-                yield return new CompletionResult(id, name, CompletionResultType.ParameterValue, tooltip);
+                yield return new CompletionResult(ToCompletionText(id, quote), $"{id} ({name})",
+                                                  CompletionResultType.ParameterValue, item.ToTooltip());
             }
         }
     }
+}
+
+internal abstract class ResourceCompleterBase : IArgumentCompleter
+{
+    protected static (string Word, char? Quote, bool IsEmpty) ParseWord(string wordToComplete)
+    {
+        if (string.IsNullOrEmpty(wordToComplete))
+        {
+            return (string.Empty, null, true);
+        }
+        ReadOnlySpan<char> word = wordToComplete;
+        char? quote = null;
+        if (word[0] is '\'' or '"')
+        {
+            quote = word[0];
+            word = word.Length > 1 && word[^1] == quote ? word[1..^1] : word[1..];
+        }
+        return (word.ToString(), quote, word.Length == 0);
+    }
+    protected static string ToCompletionText(string text, char? quote = null)
+    {
+        return quote is null
+            ? Utils.QuoteIfNeed(text)
+            : Utils.QuoteIfNeed(text, (char)quote, true);
+    }
+    public abstract IEnumerable<CompletionResult> CompleteArgument(string commandName,
+                                                                   string parameterName,
+                                                                   string wordToComplete,
+                                                                   CommandAst commandAst,
+                                                                   IDictionary fakeBoundParameters);
 }

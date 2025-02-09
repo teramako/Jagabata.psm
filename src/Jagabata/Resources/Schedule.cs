@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -101,22 +100,18 @@ namespace Jagabata.Resources
         public string TimeZone { get; } = timezone;
         public string Until { get; } = until;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Enabled ? Name : $"[Disabled] {Name}");
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
+            var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
             {
-                sb.Append($" for [{template.Type}:{template.Id}] {template.Name}");
+                item.Metadata.Add("Template", $"[{template.Type}:{template.Id}] {template.Name}");
             }
             if (NextRun is not null)
             {
-                sb.Append($" NextRun={NextRun}");
+                item.Metadata.Add("NextRun", $"{NextRun}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

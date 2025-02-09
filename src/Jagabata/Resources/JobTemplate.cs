@@ -301,11 +301,15 @@ namespace Jagabata.Resources
             | (UseFactCache ? JobTemplateOptions.FactCache : 0)
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? $"{Name} Playbook={Playbook}"
-                   : $"{Name} ({Description}) Playbook={Playbook}";
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Playbook"] = Playbook,
+                    ["Status"] = $"{Status}",
+                }
+            };
         }
     }
 }

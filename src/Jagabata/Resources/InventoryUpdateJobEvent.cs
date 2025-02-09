@@ -52,9 +52,9 @@ namespace Jagabata.Resources
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong InventoryUpdate { get; } = inventoryUpdate;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return $"[{ResourceType.InventoryUpdate}:{InventoryUpdate}] {Counter}:{StartLine}:{EndLine} {Event}";
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}");
         }
     }
 }

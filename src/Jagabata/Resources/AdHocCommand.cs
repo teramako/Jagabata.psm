@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -176,18 +175,17 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(ModuleArgs))
+            return new CacheItem(Type, Id, Name, ModuleArgs)
             {
-                sb.Append($": {ModuleArgs}");
-            }
-            sb.Append($" Status={Status}");
-            sb.Append($" Limit={Limit}");
-            sb.Append($" Finished={Finished}");
-            sb.Append($" Elapsed={Elapsed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Limit"] = Limit,
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
         }
     }
 }

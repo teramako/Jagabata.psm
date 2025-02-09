@@ -157,11 +157,9 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

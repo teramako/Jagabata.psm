@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -118,18 +117,20 @@ namespace Jagabata.Resources
         public bool AllParentsMustConverge { get; } = allParentsMustConverge;
         public string Identifier { get; } = identifier;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
+            var item = new CacheItem(Type, Id, string.Empty, string.Empty);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
             {
-                sb.Append($"[{template.Type}:{template.Id}] {template.Name}");
+                item.Name = template.Name;
+                item.Description = template.Description;
+                item.Metadata.Add("Template", $"[{template.Type}:{template.Id}] {template.Name}");
             }
             if (SummaryFields.TryGetValue<WorkflowJobTemplateSummary>("WorkflowJobTemplate", out var wjTemplate))
             {
-                sb.Append($" in [{wjTemplate.Type}:{wjTemplate.Id}] {wjTemplate.Name}");
+                item.Metadata.Add("WorkflowJobTemplate", $"[{wjTemplate.Type}:{wjTemplate.Id}] {wjTemplate.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

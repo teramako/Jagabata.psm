@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -183,18 +182,14 @@ namespace Jagabata.Resources
         public ulong Inventory { get; } = inventory;
         public string Variables { get; } = variables;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
+            var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
             {
-                sb.Append($" in [{inventory.Type}:{inventory.Id}] {inventory.Name}");
+                item.Metadata.Add("Inventory", $"[{inventory.Type}:{inventory.Id}] {inventory.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

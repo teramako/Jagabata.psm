@@ -155,9 +155,14 @@ namespace Jagabata.Resources
         public string IpAddress { get; } = ipAddress;
         public int ListenerPort { get; } = listenerPort;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return $"{Hostname} [{NodeType}]";
+            return new CacheItem(Type, Id, Hostname, string.Empty)
+            {
+                Metadata = {
+                    ["NodeType"] = $"{NodeType}"
+                }
+            };
         }
     }
 }

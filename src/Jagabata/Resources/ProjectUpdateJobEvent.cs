@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -71,19 +70,16 @@ namespace Jagabata.Resources
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong ProjectUpdate { get; } = projectUpdate;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.ProjectUpdate}:{ProjectUpdate}] {Counter}:{StartLine}:{EndLine} {Event}");
-            if (!string.IsNullOrEmpty(Play))
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
-                sb.Append($" Play={Play}");
-            }
-            if (!string.IsNullOrEmpty(Task))
-            {
-                sb.Append($" Task={Task}");
-            }
-            sb.Append($" Failed={Failed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Play"] = Play,
+                    ["Task"] = Task,
+                    ["Failed"] = $"{Failed}"
+                }
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -117,19 +116,14 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public string Pull { get; } = pull;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            sb.Append($" Image={Image}");
-            if (SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org))
-            {
-                sb.Append($" Organization={org.Name}");
-            }
-            return sb.ToString();
+                Metadata = {
+                    ["Image"] = Image
+                }
+            };
         }
     }
 }

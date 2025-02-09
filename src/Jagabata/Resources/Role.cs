@@ -55,11 +55,14 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public string Description { get; } = description;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return SummaryFields.ResourceId is null
-                   ? $"{Name} ({Description})"
-                   : $"{Name} ({Description}) for [{SummaryFields.ResourceType}:{SummaryFields.ResourceId}] {SummaryFields.ResourceName}";
+            var item = new CacheItem(Type, Id, Name, Description);
+            if (SummaryFields.ResourceId is not null)
+            {
+                item.Metadata.Add("TargetObject", $"[{SummaryFields.ResourceType}:{SummaryFields.ResourceId}] {SummaryFields.ResourceName}");
+            }
+            return item;
         }
     }
 }

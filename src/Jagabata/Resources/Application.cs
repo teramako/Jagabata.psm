@@ -149,11 +149,9 @@ namespace Jagabata.Resources
         public bool SkipAuthorization { get; } = skipAuthorization;
         public ulong Organization { get; } = organization;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

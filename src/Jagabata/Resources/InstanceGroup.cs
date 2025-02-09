@@ -239,9 +239,15 @@ namespace Jagabata.Resources
         public string[] PolicyInstanceList { get; } = policyInstanceList;
         public string PodSpecOverride { get; } = podSpecOverride;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return $"{Name} IsContainerGroup={IsContainerGroup} Instances={Instances}";
+            return new CacheItem(Type, Id, Name, string.Empty)
+            {
+                Metadata = {
+                    ["IsContainerGroup"] = $"{IsContainerGroup}",
+                    ["Instances"] = $"{Instances}"
+                }
+            };
         }
     }
 }

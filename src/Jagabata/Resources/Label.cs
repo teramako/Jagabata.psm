@@ -66,11 +66,14 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public ulong Organization { get; } = organization;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org)
-                ? $"{Name} Organization=[{org.Id}]{org.Name}"
-                : $"{Name}";
+            var item = new CacheItem(Type, Id, Name, string.Empty);
+            if (SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org))
+            {
+                item.Metadata.Add("Organization", $"[{org.Type}:{org.Id}] {org.Name}");
+            }
+            return item;
         }
     }
 }

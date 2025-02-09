@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -161,18 +160,14 @@ namespace Jagabata.Resources
             return $"[{Id}] {Name}";
         }
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            if (!string.IsNullOrEmpty(Kind))
-            {
-                sb.Append($" [{Kind}]");
-            }
-            return sb.ToString();
+                Metadata = {
+                    ["Kind"] = Kind
+                }
+            };
         }
     }
 }

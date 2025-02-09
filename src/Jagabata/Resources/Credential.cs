@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -346,23 +345,19 @@ namespace Jagabata.Resources
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(Kind))
+            var item = new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($"[{Kind}]");
-            }
-            if (Cloud)
+                Metadata = {
+                    ["Kind"] = Kind,
+                }
+            };
+            if (SummaryFields.TryGetValue<CredentialTypeSummary>("CredentialType", out var ct))
             {
-                sb.Append("[Cloud]");
+                item.Metadata.Add("CredentialType", $"[{ct.Type}:{ct.Id}] {ct.Name}");
             }
-            sb.Append($" {Name}");
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
-            return sb.ToString();
+            return item;
         }
     }
 }

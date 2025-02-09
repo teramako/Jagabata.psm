@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -52,12 +51,15 @@ namespace Jagabata.Resources
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong SystemJob { get; } = systemJob;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.SystemJob}:{SystemJob}] {Counter}:{StartLine}:{EndLine} {Event}");
-            sb.Append($" Failed={Failed}");
-            sb.Append($" Changed={Changed}");
-            return sb.ToString();
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
+            {
+                Metadata = {
+                    ["Failed"] = $"{Failed}",
+                    ["Changed"] = $"{Changed}",
+                }
+            };
         }
     }
 }

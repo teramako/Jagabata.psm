@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -167,25 +166,19 @@ namespace Jagabata.Resources
         public DateTime Expires { get; } = expires;
         public string Scope { get; } = scope;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
-            if (Application is null)
+            var item = new CacheItem(Type, Id, string.Empty, Description);
+            if (Application is null && SummaryFields.TryGetValue<UserSummary>("User", out var user))
             {
-                var user = SummaryFields["User"] as UserSummary;
-                sb.Append($"[User] {user?.Username}");
+                item.Metadata.Add("User", $"[{user.Type}:{user.Id} {user.Username}");
             }
-            else
+            else if (SummaryFields.TryGetValue<ApplicationSummary>("Application", out var app))
             {
-                var app = SummaryFields["Application"] as ApplicationSummary;
-                sb.Append($"[Application] {app?.Name}");
+                item.Metadata.Add("Application", $"[{app.Type}:{app.Id} {app.Name}");
             }
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
-            sb.Append($" Scope={Scope}");
-            return sb.ToString();
+            item.Metadata.Add("Scope", Scope);
+            return item;
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -109,17 +108,17 @@ namespace Jagabata.Resources
         public int Ignored { get; } = ignored;
         public int Rescued { get; } = rescued;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.Host}:{Host}] {HostName}");
+            var item = new CacheItem(Type, Id, HostName, string.Empty);
             if (SummaryFields.TryGetValue<JobExSummary>("Job", out var job))
             {
-                sb.Append($" Job=[{job.Id}]{job.Name}")
-                  .Append($" Status={job.Status}")
-                  .Append($" Elapsed={job.Elapsed}")
-                  .Append($" JobTemplate=[{job.JobTemplateId}]{job.JobTemplateName}");
+                item.Metadata.Add("Job", $"[{job.Type}:{job.Id}] {job.Name}");
+                item.Metadata.Add("Status", $"{job.Status}");
+                item.Metadata.Add("Elapsed", $"{job.Elapsed}");
+                item.Metadata.Add("JobTemplate", $"[{ResourceType.JobTemplate}:{job.JobTemplateId}] {job.JobTemplateName}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }
