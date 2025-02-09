@@ -198,6 +198,10 @@ namespace Jagabata
             public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 var val = reader.GetString() ?? throw new JsonException($"The value of Type {typeToConvert.Name} must not be null");
+                if (string.IsNullOrEmpty(val))
+                {
+                    return default;
+                }
                 string upperCamelCaseName = Utils.ToUpperCamelCase(val);
                 return Enum.TryParse(upperCamelCaseName, true, out TEnum enumVal)
                     ? enumVal
