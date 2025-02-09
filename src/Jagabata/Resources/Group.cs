@@ -32,7 +32,7 @@ namespace Jagabata.Resources
                        string description,
                        ulong inventory,
                        string variables)
-        : IGroup, IResource, ICacheableResource
+        : SummaryFieldsContainer, IGroup, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -174,7 +174,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;

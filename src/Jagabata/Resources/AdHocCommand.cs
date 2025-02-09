@@ -155,7 +155,7 @@ namespace Jagabata.Resources
             public Dictionary<string, int> HostStatusCounts { get; } = hostStatusCounts;
         }
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string ExecutionNode { get; } = executionNode;
         public string ControllerNode { get; } = controllerNode;
         public JobType JobType { get; } = jobType;

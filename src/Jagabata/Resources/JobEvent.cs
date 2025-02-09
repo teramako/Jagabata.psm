@@ -142,7 +142,7 @@ namespace Jagabata.Resources
                           int eventLevel, bool failed, bool changed, string uuid, string parentUUID, ulong? host,
                           string hostName, string playbook, string play, string task, string role, string stdout,
                           int startLine, int endLine, JobVerbosity verbosity)
-                : IJobEvent, IResource, ICacheableResource
+                : SummaryFieldsContainer, IJobEvent, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/job_events/";
 
@@ -215,7 +215,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsJobEventConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;

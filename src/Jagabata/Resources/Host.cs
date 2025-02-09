@@ -44,7 +44,7 @@ namespace Jagabata.Resources
                       bool enabled,
                       string instanceId,
                       string variables)
-        : IHost, IResource, ICacheableResource
+        : SummaryFieldsContainer, IHost, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/hosts/";
 
@@ -166,7 +166,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsHostConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;

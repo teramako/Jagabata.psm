@@ -226,7 +226,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public JobType JobType { get; } = jobType;
         public ulong? Inventory { get; } = inventory;
         public ulong Project { get; } = project;

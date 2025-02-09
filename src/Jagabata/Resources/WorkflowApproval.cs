@@ -45,7 +45,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Description { get; } = description;
         public ulong? UnifiedJobTemplate { get; } = unifiedJobTemplate;
         public bool CanApproveOrDeny { get; } = canApproveOrDeny;

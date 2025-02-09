@@ -57,7 +57,7 @@ namespace Jagabata.Resources
                                          ulong[] alwaysNodes,
                                          bool allParentsMustConverge,
                                          string identifier)
-                : IWorkflowJobTemplateNode, IResource, ICacheableResource
+                : SummaryFieldsContainer, IWorkflowJobTemplateNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_template_nodes/";
         /// <summary>
@@ -93,7 +93,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public Dictionary<string, object?> ExtraData { get; } = extraData;

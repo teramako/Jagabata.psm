@@ -8,7 +8,7 @@ namespace Jagabata.Resources
                           DateTime created, DateTime? modified, ulong job, ulong host, ulong? constructedHost,
                           string hostName, int changed, int dark, int failures, int oK, int processed, int skipped,
                           bool failed, int ignored, int rescued)
-                : IResource, ICacheableResource
+                : SummaryFieldsContainer, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/job_host_summaries/";
         /// <summary>
@@ -91,7 +91,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsJobHostSummaryConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public ulong Job { get; } = job;

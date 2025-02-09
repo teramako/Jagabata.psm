@@ -116,8 +116,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public string ExtraVars { get; } = extraVars;
         public ulong? Organization { get; } = organization;

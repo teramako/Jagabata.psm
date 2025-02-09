@@ -15,7 +15,7 @@ namespace Jagabata.Resources
                                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        string description, string inputFieldName, Dictionary<string, object?> metadata,
                                        ulong targetCredential, ulong sourceCredential)
-        : ICredentialInputSource, IResource, ICacheableResource
+        : SummaryFieldsContainer, ICredentialInputSource, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credential_input_sources/";
 
@@ -73,7 +73,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Description { get; } = description;

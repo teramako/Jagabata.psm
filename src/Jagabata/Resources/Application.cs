@@ -58,7 +58,7 @@ namespace Jagabata.Resources
                              string authorizationGrantType,
                              bool skipAuthorization,
                              ulong organization)
-        : IApplication, IResource, ICacheableResource
+        : SummaryFieldsContainer, IApplication, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/applications/";
         /// <summary>
@@ -136,7 +136,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;

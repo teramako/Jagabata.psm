@@ -23,7 +23,7 @@ namespace Jagabata.Resources
                        DateTime? modified,
                        string name,
                        ulong organization)
-        : ILabel, IResource, ICacheableResource
+        : SummaryFieldsContainer, ILabel, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/labels/";
         /// <summary>
@@ -59,7 +59,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;

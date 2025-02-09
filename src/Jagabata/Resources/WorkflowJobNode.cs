@@ -72,7 +72,7 @@ namespace Jagabata.Resources
                                  bool allParentsMustConverge,
                                  bool doNotRun,
                                  string identifier)
-                : IWorkflowJobNode, IResource, ICacheableResource
+                : SummaryFieldsContainer, IWorkflowJobNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
         /// <summary>
@@ -109,7 +109,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsWorkflowJobNodeConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
 

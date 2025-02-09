@@ -45,7 +45,7 @@ namespace Jagabata.Resources
                                      string jobExplanation,
                                      LaunchedBy launchedBy,
                                      string? workUnitId)
-        : IUnifiedJob
+        : SummaryFieldsContainer, IUnifiedJob
     {
         public const string PATH = "/api/v2/unified_jobs/";
 

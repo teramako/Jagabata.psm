@@ -33,7 +33,7 @@ namespace Jagabata.Resources
                           JobVerbosity? verbosity, ulong? executionEnvironment, int? forks, int? jobSliceCount,
                           int? timeout, ulong unifiedJobTemplate, bool enabled, DateTime? dtStart, DateTime? dtEnd,
                           DateTime? nextRun, string timezone, string until)
-                : ISchedule, IResource, ICacheableResource
+                : SummaryFieldsContainer, ISchedule, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/schedules/";
         /// <summary>
@@ -71,7 +71,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
 

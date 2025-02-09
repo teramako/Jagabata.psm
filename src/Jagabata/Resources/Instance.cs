@@ -70,7 +70,7 @@ namespace Jagabata.Resources
                           string nodeState,
                           string ipAddress,
                           int listenerPort)
-        : IInstance, IResource, ICacheableResource
+        : SummaryFieldsContainer, IInstance, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/instances/";
         /// <summary>
@@ -127,7 +127,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Hostname { get; } = hostname;
         public string Uuid { get; } = uuid;
         public DateTime Created { get; } = created;
