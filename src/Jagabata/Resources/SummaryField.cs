@@ -97,7 +97,7 @@ namespace Jagabata.Resources
 
     // CredentialType in Credential
     public sealed record CredentialTypeSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Credential, Name, Description);
+        : NameAndDescriptionResourceSummary(Id, ResourceType.CredentialType, Name, Description);
 
     // ObjectRoles in Credential, InstanceGroup, Inventory, JobTemplate, Project, Team, WorkflowJobTemplate
     public sealed record ObjectRoleSummary(ulong Id, string Name, string Description)
