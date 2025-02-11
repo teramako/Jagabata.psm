@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Text;
-using Jagabata.Resources;
 
 namespace Jagabata
 {

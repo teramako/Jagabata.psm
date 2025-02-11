@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Web;
-using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets;
 

@@ -99,7 +99,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### Jagabata.IResource
 Resource object to be updated or checked.
 See: `-Source` parameter.
 

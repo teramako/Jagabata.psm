@@ -192,7 +192,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### Jagabata.IResource
 Resource object to which the search target has access.
 
 See: `-Resource` parameter.

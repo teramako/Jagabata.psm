@@ -102,7 +102,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource[]
+### Jagabata.IResource[]
 Role objects to be granted.
 
 ## OUTPUTS

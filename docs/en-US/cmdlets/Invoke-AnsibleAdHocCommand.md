@@ -208,7 +208,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### Jagabata.IResource
 Remote target resource to be executed.
 See: `-Target` parameter.
 

@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using Jagabata.Resources;
 
-namespace Jagabata.Resources
+namespace Jagabata
 {
     /// <summary>
     /// Resource Type
@@ -155,8 +156,8 @@ namespace Jagabata.Resources
         [ResourceSubPath("object_roles", typeof(ResultSet<Role>), Description = "List Roles for a Project")]
         [ResourceSubPath("playbooks", typeof(string[]), Description = "Retrieve Project Playbooks")]
         [ResourceSubPath("project_updates", typeof(ResultSet<ProjectUpdateJob>), Description = "List Project Updates for a Project")]
-        [ResourceSubPath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules for a Project")]
-        [ResourceSubPath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule for a Project")]
+        [ResourceSubPath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules for a Project")]
+        [ResourceSubPath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule for a Project")]
         [ResourceSubPath("scm_inventory_sources", typeof(ResultSet<InventorySource>), Description = "List Inventory Sources for a Project")]
         [ResourceSubPath("teams", typeof(ResultSet<Team>), Description = "List Teams for a Project")]
         [ResourceSubPath("update", typeof(Dictionary<string, bool>), Description = "Determine if a Project can be updated")]
@@ -207,11 +208,11 @@ namespace Jagabata.Resources
         [ResourceSubPath("test", Description = "")]
         [ResourceSubPath("test", Method = Method.POST, Description = "")]
         Credential,
-        [ResourcePath("crendential_types", typeof(ResultSet<CredentialType>), Description = "List Credential Types")]
-        [ResourcePath("crendential_types", typeof(CredentialType), Method = Method.POST, Description = "Create a Credential Type")]
-        [ResourceIdPath(typeof(CredentialType), Method = Method.GET, Description = "Retrieve a Credential Type")]
-        [ResourceIdPath(typeof(CredentialType), Method = Method.PUT, Description = "Update a Credential Type")]
-        [ResourceIdPath(typeof(CredentialType), Method = Method.PATCH, Description = "Update a Credential Type")]
+        [ResourcePath("crendential_types", typeof(ResultSet<Resources.CredentialType>), Description = "List Credential Types")]
+        [ResourcePath("crendential_types", typeof(Resources.CredentialType), Method = Method.POST, Description = "Create a Credential Type")]
+        [ResourceIdPath(typeof(Resources.CredentialType), Method = Method.GET, Description = "Retrieve a Credential Type")]
+        [ResourceIdPath(typeof(Resources.CredentialType), Method = Method.PUT, Description = "Update a Credential Type")]
+        [ResourceIdPath(typeof(Resources.CredentialType), Method = Method.PATCH, Description = "Update a Credential Type")]
         [ResourceIdPath(Method = Method.DELETE, Description = "Delete a Credential Type")]
         [ResourceSubPath("activity_stream", typeof(ResultSet<ActivityStream>), Description = "List Activity Stream for a Credential Type")]
         [ResourceSubPath("credentials", typeof(ResultSet<Credential>), Description = "List Credentials for a Credential Type")]
@@ -280,8 +281,8 @@ namespace Jagabata.Resources
         [ResourceSubPath("notification_templates_started", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for an Inventory Source")]
         [ResourceSubPath("notification_templates_success", typeof(ResultSet<NotificationTemplate>), Method = Method.GET, Description = "List Notification Templates for an Inventory Source")]
         [ResourceSubPath("notification_templates_success", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for an Inventory Source")]
-        [ResourceSubPath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules for an Inventory Source")]
-        [ResourceSubPath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule for an Inventory Source")]
+        [ResourceSubPath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules for an Inventory Source")]
+        [ResourceSubPath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule for an Inventory Source")]
         [ResourceSubPath("update", typeof(Dictionary<string, bool>), Description = "Determine if the Inventory Source can be updated")]
         [ResourceSubPath("update", typeof(InventoryUpdateJob), Method = Method.POST, Description = "Update Inventory Source")]
         InventorySource,
@@ -370,11 +371,11 @@ namespace Jagabata.Resources
         [ResourceSubPath("notification_templates_success", typeof(ResultSet<NotificationTemplate>), Method = Method.GET, Description = "List Notification Templates for a Job Template")]
         [ResourceSubPath("notification_templates_success", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for a Job Template")]
         [ResourceSubPath("object_roles", typeof(ResultSet<Role>), Description = "List Roles for a Job Template")]
-        [ResourceSubPath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules for a Job Template")]
-        [ResourceSubPath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule for a Job Template")]
+        [ResourceSubPath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules for a Job Template")]
+        [ResourceSubPath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule for a Job Template")]
         [ResourceSubPath("slice_workflow_jobs", typeof(ResultSet<WorkflowJob>), Description = "List Workflow Jobs for a Job Template")]
         [ResourceSubPath("slice_workflow_jobs", typeof(WorkflowJob), Method = Method.POST, Description = "Create a WorkflowJob for a Job Template")]
-        [ResourceSubPath("survey_spec", typeof(Survey), Description = "Retrieve Survey Spec for a Job Template")]
+        [ResourceSubPath("survey_spec", typeof(Resources.Survey), Description = "Retrieve Survey Spec for a Job Template")]
         [ResourceSubPath("survey_spec", Method = Method.POST, Description = "Create Survey Spec for a Job Template")]
         [ResourceSubPath("survey_spec", Method = Method.DELETE, Description = "Delete Survey Spec for a Job Template")]
         [ResourceSubPath("webhook_key", typeof(Dictionary<string, string>), Description = "Retrieve Webhook Key for a Job Template")]
@@ -436,8 +437,8 @@ namespace Jagabata.Resources
         [ResourceSubPath("notification_templates_started", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for a System Job Template")]
         [ResourceSubPath("notification_templates_success", typeof(ResultSet<NotificationTemplate>), Method = Method.GET, Description = "List Notification Templates for a System Job Template")]
         [ResourceSubPath("notification_templates_success", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for a System Job Template")]
-        [ResourceSubPath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules for a System Job Template")]
-        [ResourceSubPath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule for a System Job Template")]
+        [ResourceSubPath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules for a System Job Template")]
+        [ResourceSubPath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule for a System Job Template")]
         SystemJobTemplate,
         [ResourcePath("system_jobs", typeof(ResultSet<SystemJob>), Description = "List System Jobs")]
         [ResourceIdPath(typeof(SystemJob), Description = "Retrieve a System Job")]
@@ -449,11 +450,11 @@ namespace Jagabata.Resources
         SystemJob,
         [ResourcePath("system_job_event", typeof(SystemJobEvent), Virtual = true)]
         SystemJobEvent,
-        [ResourcePath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules")]
-        [ResourcePath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule")]
-        [ResourceIdPath(typeof(Schedule), Description = "Retrieve a Schedule")]
-        [ResourceIdPath(typeof(Schedule), Method = Method.PUT, Description = "Update a Schedule")]
-        [ResourceIdPath(typeof(Schedule), Method = Method.PATCH, Description = "Update a Schedule")]
+        [ResourcePath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules")]
+        [ResourcePath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule")]
+        [ResourceIdPath(typeof(Resources.Schedule), Description = "Retrieve a Schedule")]
+        [ResourceIdPath(typeof(Resources.Schedule), Method = Method.PUT, Description = "Update a Schedule")]
+        [ResourceIdPath(typeof(Resources.Schedule), Method = Method.PATCH, Description = "Update a Schedule")]
         [ResourceIdPath(Method = Method.DELETE, Description = "Delete a Schedule")]
         [ResourceSubPath("credentials", typeof(ResultSet<Credential>), Description = "List Credentials for a Schedule")]
         [ResourceSubPath("credentials", typeof(Credential), Method = Method.POST, Description = "Create a Credential for a Schedule")]
@@ -526,9 +527,9 @@ namespace Jagabata.Resources
         [ResourceSubPath("notification_templates_success", typeof(ResultSet<NotificationTemplate>), Method = Method.GET, Description = "List Notification Templates for a Workflow Job Template")]
         [ResourceSubPath("notification_templates_success", typeof(NotificationTemplate), Method = Method.POST, Description = "Create a Notification Template for a Workflow Job Template")]
         [ResourceSubPath("object_roles", typeof(ResultSet<Role>), Description = "List Roles for a Workflow Job Template")]
-        [ResourceSubPath("schedules", typeof(ResultSet<Schedule>), Description = "List Schedules for a Workflow Job Template")]
-        [ResourceSubPath("schedules", typeof(Schedule), Method = Method.POST, Description = "Create a Schedule for a Workflow Job Template")]
-        [ResourceSubPath("survey_spec", typeof(Survey), Description = "Retrieve Survey Spec for a Workflow Job Template")]
+        [ResourceSubPath("schedules", typeof(ResultSet<Resources.Schedule>), Description = "List Schedules for a Workflow Job Template")]
+        [ResourceSubPath("schedules", typeof(Resources.Schedule), Method = Method.POST, Description = "Create a Schedule for a Workflow Job Template")]
+        [ResourceSubPath("survey_spec", typeof(Resources.Survey), Description = "Retrieve Survey Spec for a Workflow Job Template")]
         [ResourceSubPath("survey_spec", Method = Method.POST, Description = "Create Survey Spec for a Workflow Job Template")]
         [ResourceSubPath("survey_spec", Method = Method.DELETE, Description = "Delete Survey Spec for a Workflow Job Template")]
         [ResourceSubPath("webhook_key", typeof(Dictionary<string, string>), Description = "Retrieve Webhook Key for a Workflow Job Template")]
@@ -625,7 +626,7 @@ namespace Jagabata.Resources
 
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public class ResourcePathAttribute : Attribute
+    internal class ResourcePathAttribute : Attribute
     {
         public ResourcePathAttribute(string pathName, Type resourceType)
         {
@@ -644,7 +645,7 @@ namespace Jagabata.Resources
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public abstract class ResourceSubPathBaseAttribute : Attribute
+    internal abstract class ResourceSubPathBaseAttribute : Attribute
     {
         public Type Type { get; init; } = typeof(string);
         public Method Method { get; init; } = Method.GET;
@@ -652,7 +653,7 @@ namespace Jagabata.Resources
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public class ResourceIdPathAttribute : ResourceSubPathBaseAttribute
+    internal class ResourceIdPathAttribute : ResourceSubPathBaseAttribute
     {
         public ResourceIdPathAttribute() { }
         public ResourceIdPathAttribute(Type type)
@@ -662,7 +663,7 @@ namespace Jagabata.Resources
     }
 
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = true)]
-    public class ResourceSubPathAttribute : ResourceSubPathBaseAttribute
+    internal class ResourceSubPathAttribute : ResourceSubPathBaseAttribute
     {
         public ResourceSubPathAttribute(string pathName)
         {

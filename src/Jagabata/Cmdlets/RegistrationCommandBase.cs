@@ -1,5 +1,3 @@
-using Jagabata.Resources;
-
 namespace Jagabata.Cmdlets;
 
 public abstract class RegistrationCommandBase<TResource> : APICmdletBase where TResource : class

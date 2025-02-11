@@ -135,7 +135,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### Jagabata.IResource
 UnifiedJob resource object from which to wait.
 See: `-Job` parameter.
 

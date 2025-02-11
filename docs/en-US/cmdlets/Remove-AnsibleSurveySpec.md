@@ -99,7 +99,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.IResource
+### Jagabata.IResource
 JobTemplate or WorkflowJobTemplate object.
 
 ## OUTPUTS

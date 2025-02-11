@@ -533,7 +533,7 @@ namespace Jagabata.Resources
     public sealed record AccessRoleSummary(ulong Id, string Name, string Description, string? ResourceName,
                                            ResourceType? ResourceType, RelatedDictionary? Related,
                                            Capability UserCapabilities)
-        : NameAndDescriptionResourceSummary(Id, Resources.ResourceType.Role, Name, Description)
+        : NameAndDescriptionResourceSummary(Id, Jagabata.ResourceType.Role, Name, Description)
     {
         public override CacheItem GetCacheItem()
         {

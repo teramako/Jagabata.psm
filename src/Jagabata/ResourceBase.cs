@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Jagabata.Resources;
 
 namespace Jagabata
 {
