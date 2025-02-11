@@ -68,16 +68,16 @@ namespace Jagabata.Cmdlets
             {
                 foreach (var node in resultSet.Results)
                 {
-                    if (node.Job is null || node.SummaryFields["Job"] is not WorkflowJobNodeJobSummary jobSummary)
+                    if (node.Job is null
+                        || !node.SummaryFields.TryGetValue<WorkflowJobNodeJobSummary>("Job", out var jobSummary))
                     {
                         continue;
                     }
-                    var jobId = (ulong)node.Job;
                     var type = jobSummary.Type;
                     switch (type)
                     {
                         case ResourceType.WorkflowJob:
-                            GetJobsFromWorkflowJob(jobId);
+                            GetJobsFromWorkflowJob(jobSummary.Id);
                             break;
                         case ResourceType.WorkflowApproval:
                             break;
