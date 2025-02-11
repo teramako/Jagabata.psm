@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using Jagabata.Resources;
 
-namespace Jagabata.Resources
+namespace Jagabata
 {
     public interface IResource
     {
