@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -43,7 +42,7 @@ namespace Jagabata.Resources
                             string kind,
                             bool cloud,
                             bool kubernetes)
-        : ICredential, IResource, ICacheableResource
+        : SummaryFieldsContainer, ICredential, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credentials/";
 
@@ -332,7 +331,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -346,23 +345,19 @@ namespace Jagabata.Resources
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(Kind))
+            var item = new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($"[{Kind}]");
-            }
-            if (Cloud)
+                Metadata = {
+                    ["Kind"] = Kind,
+                }
+            };
+            if (SummaryFields.TryGetValue<CredentialTypeSummary>("CredentialType", out var ct))
             {
-                sb.Append("[Cloud]");
+                item.Metadata.Add("CredentialType", $"[{ct.Type}:{ct.Id}] {ct.Name}");
             }
-            sb.Append($" {Name}");
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
-            return sb.ToString();
+            return item;
         }
     }
 }

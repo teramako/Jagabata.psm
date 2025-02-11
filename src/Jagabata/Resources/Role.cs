@@ -9,7 +9,7 @@ namespace Jagabata.Resources
                       Role.Summary summaryFields,
                       string name,
                       string description)
-                : IResource, ICacheableResource
+                : IResource, ICacheableResource, IHasCacheableItems
     {
         public const string PATH = "/api/v2/roles/";
         /// <summary>
@@ -55,11 +55,28 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public string Description { get; } = description;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return SummaryFields.ResourceId is null
-                   ? $"{Name} ({Description})"
-                   : $"{Name} ({Description}) for [{SummaryFields.ResourceType}:{SummaryFields.ResourceId}] {SummaryFields.ResourceName}";
+            var item = new CacheItem(Type, Id, Name, Description);
+            if (SummaryFields.ResourceId is not null)
+            {
+                item.Metadata.Add("TargetObject", $"[{SummaryFields.ResourceType}:{SummaryFields.ResourceId}] {SummaryFields.ResourceName}");
+            }
+            return item;
+        }
+
+        public IEnumerable<CacheItem> GetCacheableItems()
+        {
+            if (SummaryFields.ResourceId is not null
+                && SummaryFields.ResourceType is not null
+                && SummaryFields.ResourceName is not null)
+            {
+                yield return new CacheItem((ResourceType)SummaryFields.ResourceType,
+                                           (ulong)SummaryFields.ResourceId,
+                                           SummaryFields.ResourceName,
+                                           string.Empty,
+                                           CacheType.Summary);
+            }
         }
     }
 }

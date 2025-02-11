@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -45,7 +44,7 @@ namespace Jagabata.Resources
                       bool enabled,
                       string instanceId,
                       string variables)
-        : IHost, IResource, ICacheableResource
+        : SummaryFieldsContainer, IHost, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/hosts/";
 
@@ -167,7 +166,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsHostConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -182,18 +181,14 @@ namespace Jagabata.Resources
 
         public string Variables { get; } = variables;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Enabled ? Name : $"[Disabled] {Name}");
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
+            var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
             {
-                sb.Append($" in [{inventory.Type}:{inventory.Id}] {inventory.Name}");
+                item.Metadata.Add("Inventory", $"[{inventory.Type}:{inventory.Id}] {inventory.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

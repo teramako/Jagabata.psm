@@ -142,5 +142,61 @@ namespace Jagabata
                                 .Select(attr => attr.Type)
                                 .FirstOrDefault();
         }
+
+        private static readonly char[] Whitespaces =
+        [
+            '\u0008',
+            '\u0009',
+            '\u000A',
+            '\u000C',
+            '\u000D',
+            '\u0020',
+            '\u0085',
+            '\u00A0',
+            '\u1680',
+            '\u2000',
+            '\u2001',
+            '\u2002',
+            '\u2003',
+            '\u2004',
+            '\u2005',
+            '\u2006',
+            '\u2007',
+            '\u2008',
+            '\u2009',
+            '\u200A',
+            '\u2028',
+            '\u2029',
+            '\u202F',
+            '\u205F',
+            '\u3000',
+        ];
+        public static string QuoteIfNeed(ReadOnlySpan<char> value, char quote = '\'', bool force = false)
+        {
+            bool needQuoted = force || value.ContainsAny(Whitespaces);
+            StringBuilder sb = new(value.Length + (needQuoted ? 2 : 0));
+            if (needQuoted)
+                sb.Append(quote);
+            int start = 0;
+            while (true)
+            {
+                int length = value[start..].IndexOf(quote);
+                if (length < 0)
+                {
+                    sb.Append(value[start..]);
+                    break;
+                }
+                if (length > 0)
+                {
+                    sb.Append(value.Slice(start, length));
+                }
+                sb.Append(needQuoted ? quote : '`')
+                  .Append(quote);
+                start += length + 1;
+            }
+            if (needQuoted)
+                sb.Append(quote);
+            return sb.ToString();
+        }
     }
 }

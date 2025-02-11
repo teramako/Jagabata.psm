@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -208,7 +207,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string LocalPath { get; } = localPath;
         public string ScmType { get; } = scmType;
         public string ScmUrl { get; } = scmUrl;
@@ -246,15 +245,15 @@ namespace Jagabata.Resources
             return await GetInventoryFiles(Id);
         }
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(string.IsNullOrEmpty(ScmType) ? "[Local]" : $"[{ScmType}]");
-            sb.Append($" {Name}");
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            return sb.ToString();
+                Metadata = {
+                    ["ScmType"] = string.IsNullOrEmpty(ScmType) ? "Local" : ScmType,
+                    ["Status"] = $"{Status}",
+                }
+            };
         }
     }
 }

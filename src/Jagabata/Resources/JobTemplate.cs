@@ -226,7 +226,7 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public JobType JobType { get; } = jobType;
         public ulong? Inventory { get; } = inventory;
         public ulong Project { get; } = project;
@@ -301,11 +301,15 @@ namespace Jagabata.Resources
             | (UseFactCache ? JobTemplateOptions.FactCache : 0)
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? $"{Name} Playbook={Playbook}"
-                   : $"{Name} ({Description}) Playbook={Playbook}";
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Playbook"] = Playbook,
+                    ["Status"] = $"{Status}",
+                }
+            };
         }
     }
 }

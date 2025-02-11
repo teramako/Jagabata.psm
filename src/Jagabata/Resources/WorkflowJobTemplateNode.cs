@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -58,7 +57,7 @@ namespace Jagabata.Resources
                                          ulong[] alwaysNodes,
                                          bool allParentsMustConverge,
                                          string identifier)
-                : IWorkflowJobTemplateNode, IResource, ICacheableResource
+                : SummaryFieldsContainer, IWorkflowJobTemplateNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_template_nodes/";
         /// <summary>
@@ -94,7 +93,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public Dictionary<string, object?> ExtraData { get; } = extraData;
@@ -118,18 +117,20 @@ namespace Jagabata.Resources
         public bool AllParentsMustConverge { get; } = allParentsMustConverge;
         public string Identifier { get; } = identifier;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
+            var item = new CacheItem(Type, Id, string.Empty, string.Empty);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
             {
-                sb.Append($"[{template.Type}:{template.Id}] {template.Name}");
+                item.Name = template.Name;
+                item.Description = template.Description;
+                item.Metadata.Add("Template", $"[{template.Type}:{template.Id}] {template.Name}");
             }
             if (SummaryFields.TryGetValue<WorkflowJobTemplateSummary>("WorkflowJobTemplate", out var wjTemplate))
             {
-                sb.Append($" in [{wjTemplate.Type}:{wjTemplate.Id}] {wjTemplate.Name}");
+                item.Metadata.Add("WorkflowJobTemplate", $"[{wjTemplate.Type}:{wjTemplate.Id}] {wjTemplate.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

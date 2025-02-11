@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -73,7 +72,7 @@ namespace Jagabata.Resources
                                  bool allParentsMustConverge,
                                  bool doNotRun,
                                  string identifier)
-                : IWorkflowJobNode, IResource, ICacheableResource
+                : SummaryFieldsContainer, IWorkflowJobNode, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
         /// <summary>
@@ -110,7 +109,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsWorkflowJobNodeConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
 
@@ -137,18 +136,20 @@ namespace Jagabata.Resources
         public bool DoNotRun { get; } = doNotRun;
         public string Identifier { get; } = identifier;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
+            var item = new CacheItem(Type, Id, string.Empty, string.Empty);
             if (SummaryFields.TryGetValue<WorkflowJobNodeJobSummary>("Job", out var job))
             {
-                sb.Append($"[{job.Type}:{job.Id}] {job.Name}");
+                item.Name = job.Name;
+                item.Description = job.Description;
+                item.Metadata.Add("Job", $"[{job.Type}:{job.Id}] {job.Name}");
             }
             if (SummaryFields.TryGetValue<WorkflowJobSummary>("WorkflowJob", out var workflowJob))
             {
-                sb.Append($" in [{workflowJob.Type}:{workflowJob.Id}] {workflowJob.Name}");
+                item.Metadata.Add("WorkflowJob", $"[{workflowJob.Type}:{workflowJob.Id}] {workflowJob.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

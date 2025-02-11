@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -21,7 +20,7 @@ namespace Jagabata.Resources
                                        string uuid, string hostName, string playbook, string play, string task,
                                        string role, string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                        ulong projectUpdate)
-        : IProjectUpdateJobEvent, IResource, ICacheableResource
+        : SummaryFieldsContainer, IProjectUpdateJobEvent, IResource, ICacheableResource
     {
         /// <summary>
         /// List Project Update Events for a Project Update.<br/>
@@ -49,7 +48,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public JobEventEvent Event { get; } = @event;
@@ -71,19 +70,16 @@ namespace Jagabata.Resources
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong ProjectUpdate { get; } = projectUpdate;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.ProjectUpdate}:{ProjectUpdate}] {Counter}:{StartLine}:{EndLine} {Event}");
-            if (!string.IsNullOrEmpty(Play))
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
-                sb.Append($" Play={Play}");
-            }
-            if (!string.IsNullOrEmpty(Task))
-            {
-                sb.Append($" Task={Task}");
-            }
-            sb.Append($" Failed={Failed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Play"] = Play,
+                    ["Task"] = Task,
+                    ["Failed"] = $"{Failed}"
+                }
+            };
         }
     }
 }

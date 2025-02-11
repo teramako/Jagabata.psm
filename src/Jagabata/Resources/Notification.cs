@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -23,7 +22,7 @@ namespace Jagabata.Resources
                               SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                               ulong notificationTemplate, string error, JobStatus status, int notificationsSent,
                               NotificationType notificationType, string recipients, string subject, string? body)
-                : INotification, IResource, ICacheableResource
+                : SummaryFieldsContainer, INotification, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/notifications/";
         /// <summary>
@@ -59,7 +58,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -72,23 +71,24 @@ namespace Jagabata.Resources
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{NotificationType}]");
+            var item = new CacheItem(Type, Id, string.Empty, string.Empty)
+            {
+                Metadata = {
+                    ["Type"] = $"{NotificationType}",
+                    ["Status"] = $"{Status}",
+                    ["Modified"] = $"{Modified}",
+                    ["Subject"] = Subject,
+                    ["Error"] = Error
+                }
+            };
             if (SummaryFields.TryGetValue<NotificationTemplateSummary>("NotificationTemplate", out var noti))
             {
-                sb.Append($" {noti.Name}");
+                item.Name = noti.Name;
+                item.Metadata.Add("Template", $"[{noti.Type}:{noti.Id}] {noti.Name}");
             }
-            sb.Append($" Status={Status} Modified={Modified}");
-            if (!string.IsNullOrEmpty(Error))
-            {
-                sb.Append($" Error={Error}");
-            }
-            if (!string.IsNullOrEmpty(Subject))
-            {
-                sb.Append($" Subject={Subject}");
-            }
-            return sb.ToString();
+            return item;
         }
     }
 }

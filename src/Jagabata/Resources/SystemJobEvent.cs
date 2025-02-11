@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -8,7 +7,7 @@ namespace Jagabata.Resources
                                 JobEventEvent @event, int counter, string eventDisplay, Dictionary<string, object?> eventData,
                                 bool failed, bool changed, string uuid, string stdout, int startLine, int endLine,
                                 JobVerbosity verbosity, ulong systemJob)
-        : IJobEventBase, IResource, ICacheableResource
+        : SummaryFieldsContainer, IJobEventBase, IResource, ICacheableResource
     {
         /// <summary>
         /// List Sytem Job Events for a System Job.<br/>
@@ -36,7 +35,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public JobEventEvent Event { get; } = @event;
@@ -52,12 +51,15 @@ namespace Jagabata.Resources
         public JobVerbosity Verbosity { get; } = verbosity;
         public ulong SystemJob { get; } = systemJob;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.SystemJob}:{SystemJob}] {Counter}:{StartLine}:{EndLine} {Event}");
-            sb.Append($" Failed={Failed}");
-            sb.Append($" Changed={Changed}");
-            return sb.ToString();
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
+            {
+                Metadata = {
+                    ["Failed"] = $"{Failed}",
+                    ["Changed"] = $"{Changed}",
+                }
+            };
         }
     }
 }

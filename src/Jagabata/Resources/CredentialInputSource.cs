@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -16,7 +15,7 @@ namespace Jagabata.Resources
                                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        string description, string inputFieldName, Dictionary<string, object?> metadata,
                                        ulong targetCredential, ulong sourceCredential)
-        : ICredentialInputSource, IResource, ICacheableResource
+        : SummaryFieldsContainer, ICredentialInputSource, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credential_input_sources/";
 
@@ -74,7 +73,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Description { get; } = description;
@@ -83,18 +82,16 @@ namespace Jagabata.Resources
         public ulong TargetCredential { get; } = targetCredential;
         public ulong SourceCredential { get; } = sourceCredential;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, string.Empty, Description)
             {
-                sb.Append(Description)
-                  .Append(' ');
-            }
-            sb.Append($"InputFieldName={InputFieldName}");
-            sb.Append($" TargetCredential={TargetCredential}");
-            sb.Append($" SourceCredential={SourceCredential}");
-            return sb.ToString();
+                Metadata = {
+                    ["InputFieldName"] = InputFieldName,
+                    ["TargetCredential"] = $"{TargetCredential}",
+                    ["SourceCredential"] = $"{SourceCredential}"
+                }
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -15,7 +14,7 @@ namespace Jagabata.Resources
                                       ulong adHocCommand, JobEventEvent @event, int counter, string eventDisplay,
                                       Dictionary<string, object?> eventData, bool failed, bool changed, string uuid, ulong? host,
                                       string hostName, string stdout, int startLine, int endLine, JobVerbosity verbosity)
-        : IAdHocCommandJobEvent, IResource, ICacheableResource
+        : SummaryFieldsContainer, IAdHocCommandJobEvent, IResource, ICacheableResource
     {
         /// <summary>
         /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
@@ -43,7 +42,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public ulong AdHocCommand { get; } = adHocCommand;
@@ -61,16 +60,16 @@ namespace Jagabata.Resources
         public int EndLine { get; } = endLine;
         public JobVerbosity Verbosity { get; } = verbosity;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{ResourceType.AdHocCommand}:{AdHocCommand}] {Counter}:{StartLine}:{EndLine} {Event}");
-            if (!string.IsNullOrEmpty(HostName))
+            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
-                sb.Append($" Hostname={HostName}");
-            }
-            sb.Append($" Failed={Failed}");
-            sb.Append($" Changed={Changed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Hostname"] = HostName,
+                    ["Failed"] = $"{Failed}",
+                    ["Changed"] = $"{Changed}"
+                }
+            };
         }
     }
 }

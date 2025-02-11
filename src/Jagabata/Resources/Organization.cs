@@ -23,7 +23,7 @@ namespace Jagabata.Resources
                               int maxHosts,
                               string? customVirtualenv,
                               int? defaultEnvironment)
-        : IOrganization, IResource, ICacheableResource
+        : SummaryFieldsContainer, IOrganization, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/organizations/";
         /// <summary>
@@ -102,7 +102,7 @@ namespace Jagabata.Resources
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsOrganizationConverter))]
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -111,11 +111,9 @@ namespace Jagabata.Resources
         public string? CustomVirtualenv { get; } = customVirtualenv;
         public int? DefaultEnvironment { get; } = defaultEnvironment;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

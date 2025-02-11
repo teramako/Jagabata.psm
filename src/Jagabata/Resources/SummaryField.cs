@@ -37,15 +37,18 @@ namespace Jagabata.Resources
     public abstract record ResourceSummary(ulong Id, ResourceType Type)
         : SummaryBase, IResource, ICacheableResource
     {
-        public abstract string GetDescription();
+        public virtual CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, string.Empty, string.Empty, CacheType.Summary);
+        }
     }
 
     public abstract record NamedResourceSummary(ulong Id, ResourceType Type, string Name)
         : SummaryBase, IResource, ICacheableResource
     {
-        public virtual string GetDescription()
+        public virtual CacheItem GetCacheItem()
         {
-            return Name;
+            return new CacheItem(Type, Id, Name, string.Empty, CacheType.Summary);
         }
     }
 
@@ -53,9 +56,9 @@ namespace Jagabata.Resources
                                                              string Name, string Description)
         : SummaryBase, IResource, ICacheableResource
     {
-        public virtual string GetDescription()
+        public virtual CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description) ? Name : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description, CacheType.Summary);
         }
     }
 
@@ -131,21 +134,15 @@ namespace Jagabata.Resources
     public sealed record UserSummary(ulong Id, string Username, string FirstName, string LastName)
         : ResourceSummary(Id, ResourceType.User)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return Username;
+            return new CacheItem(Type, Id, Username, string.Empty, CacheType.Summary);
         }
     }
 
     // ObjectRoles in Organization
     public sealed record OrganizationObjectRoleSummary(ulong Id, string Name, string Description, bool UserOnly = false)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Role, Name, Description)
-    {
-        public override string GetDescription()
-        {
-            return UserOnly ? $"{base.GetDescription()} [UserOnly]" : base.GetDescription();
-        }
-    }
+        : NameAndDescriptionResourceSummary(Id, ResourceType.Role, Name, Description);
 
     // ExecutionEnvironment in AdHocCommand, InventorySource, InventoryUpdate, JobTemplate, Job, SystemJob
     // DefaultEnvironment in Organization, Project, ProjectUpdate
@@ -153,9 +150,11 @@ namespace Jagabata.Resources
     public sealed record EnvironmentSummary(ulong Id, string Name, string Description, string Image)
         : NameAndDescriptionResourceSummary(Id, ResourceType.ExecutionEnvironment, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Image={Image}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Image", Image);
+            return item;
         }
     };
 
@@ -167,9 +166,11 @@ namespace Jagabata.Resources
     public sealed record TokenSummary(ulong Id, string Token, string Scope)
         : ResourceSummary(Id, ResourceType.OAuth2AccessToken)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"Scope={Scope}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Scope", Scope);
+            return item;
         }
     }
 
@@ -203,9 +204,11 @@ namespace Jagabata.Resources
                                     bool Cloud = false, bool Kubernetes = false, ulong? CredentialTypeId = null)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Credential, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"[{Kind}] {base.GetDescription()}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Kind", Kind);
+            return item;
         }
     };
 
@@ -213,9 +216,11 @@ namespace Jagabata.Resources
     public sealed record JobTemplateCredentialSummary(ulong Id, string Name, string Description, string Kind, bool Cloud)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Credential, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"[{Kind} {base.GetDescription()}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Kind", Kind);
+            return item;
         }
     };
 
@@ -228,11 +233,15 @@ namespace Jagabata.Resources
     public sealed record HostRecentJobSummary(ulong Id, string Name, ResourceType Type, JobStatus Status, DateTime? Finished)
         : NamedResourceSummary(Id, Type, Name)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return Finished is null
-                   ? $"{base.GetDescription()} Status={Status}"
-                   : $"{base.GetDescription()} Status={Status} Finished={Finished}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            if (Finished is not null)
+            {
+                item.Metadata.Add("Fnished", $"{Finished}");
+            }
+            return item;
         }
     }
 
@@ -241,18 +250,13 @@ namespace Jagabata.Resources
                                           DateTime? CanceledOn, ResourceType Type)
         : ResourceSummary(Id, Type), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"Status={Status}");
-            if (Finished is not null)
-            {
-                sb.Append($" Finished={Finished}");
-            }
-            if (CanceledOn is not null)
-            {
-                sb.Append($" CanceledOn={CanceledOn}");
-            }
-            return sb.ToString();
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Fnished", $"{Finished}");
+            item.Metadata.Add("CanceledOn", $"{CanceledOn}");
+            return item;
         }
     }
 
@@ -261,9 +265,12 @@ namespace Jagabata.Resources
                                                JobStatus Status, bool Failed, double Elapsed)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Job, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status} Elapsed={Elapsed}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Elapsed", $"{Elapsed}");
+            return item;
         }
     }
 
@@ -272,9 +279,12 @@ namespace Jagabata.Resources
                                                    bool Failed, double Elapsed, ResourceType Type)
         : NameAndDescriptionResourceSummary(Id, Type, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status} Elapsed={Elapsed}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Elapsed", $"{Elapsed}");
+            return item;
         }
     }
 
@@ -283,9 +293,13 @@ namespace Jagabata.Resources
                                             bool Failed, double Elapsed, ulong JobTemplateId, string JobTemplateName)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Job, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status} Elapsed={Elapsed} Template=[{ResourceType.JobTemplate}:{JobTemplateId}]{JobTemplateName}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Elapsed", $"{Elapsed}");
+            item.Metadata.Add("Template", $"[{ResourceType.JobTemplate}:{JobTemplateId}] {JobTemplateName}");
+            return item;
         }
     }
 
@@ -294,9 +308,13 @@ namespace Jagabata.Resources
                                       double Elapsed, ResourceType Type, ulong JobTemplateId, string JobTemplateName)
         : NameAndDescriptionResourceSummary(Id, Type, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status} Elapsed={Elapsed} Template=[{ResourceType.JobTemplate}:{JobTemplateId}]{JobTemplateName}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Elapsed", $"{Elapsed}");
+            item.Metadata.Add("Template", $"[{ResourceType.JobTemplate}:{JobTemplateId}] {JobTemplateName}");
+            return item;
         }
     }
 
@@ -305,9 +323,12 @@ namespace Jagabata.Resources
                                            bool Failed, double Elapsed)
         : NameAndDescriptionResourceSummary(Id, ResourceType.WorkflowJob, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status} Elapsed={Elapsed}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Elapsed", $"{Elapsed}");
+            return item;
         }
     }
 
@@ -319,9 +340,11 @@ namespace Jagabata.Resources
     public sealed record LastJobHostSummary(ulong Id, bool Failed)
         : ResourceSummary(Id, ResourceType.JobHostSummary)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"Failed={Failed}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Failed", $"{Failed}");
+            return item;
         }
     }
 
@@ -335,11 +358,12 @@ namespace Jagabata.Resources
                                    int TotalInventorySources, int InventorySourcesWithFailures, ulong OrganizationId, string Kind)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Inventory, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Kind)
-                   ? base.GetDescription()
-                   : $"{base.GetDescription()} [{Kind}]";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Kind", $"{Kind}");
+            item.Metadata.Add("Organization", $"{OrganizationId}");
+            return item;
         }
     };
 
@@ -347,9 +371,12 @@ namespace Jagabata.Resources
     public sealed record InventorySourceSummary(ulong Id, string Name, InventorySourceSource Source, DateTime LastUpdated, JobStatus Status)
         : NamedResourceSummary(Id, ResourceType.InventorySource, Name)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"[{Source}] {Name} Status={Status} LastUpdated={LastUpdated}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("LastUpdated", $"{LastUpdated}");
+            return item;
         }
     };
 
@@ -359,11 +386,12 @@ namespace Jagabata.Resources
                                  string ScmType, bool AllowOverride)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Project, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(ScmType)
-                ? $"[Local] {base.GetDescription()}"
-                : $"[{ScmType}] {base.GetDescription()}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("ScmType", string.IsNullOrEmpty(ScmType) ? "Local" : ScmType);
+            item.Metadata.Add("Status", $"{Status}");
+            return item;
         }
     }
 
@@ -371,9 +399,12 @@ namespace Jagabata.Resources
     public sealed record ProjectUpdateSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed)
         : NameAndDescriptionResourceSummary(Id, ResourceType.ProjectUpdate, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} Status={Status}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Failed", $"{Failed}");
+            return item;
         }
     }
 
@@ -393,13 +424,7 @@ namespace Jagabata.Resources
 
     // InstanceGroup in AdHocCommand, InventoryUpdate, Job, ProjectUpdate, SystemJob
     public sealed record InstanceGroupSummary(ulong Id, string Name, bool IsContainerGroup)
-        : NamedResourceSummary(Id, ResourceType.InstanceGroup, Name)
-    {
-        public override string GetDescription()
-        {
-            return $"{Name} IsContainerGroup={IsContainerGroup}";
-        }
-    }
+        : NamedResourceSummary(Id, ResourceType.InstanceGroup, Name);
 
     // Owners in Credential
     public sealed record OwnerSummary(ulong Id, ResourceType Type, string Name, string Description, string Url)
@@ -409,9 +434,11 @@ namespace Jagabata.Resources
     public sealed record ScheduleSummary(ulong Id, string Name, string Description, DateTime NextRun)
         : NameAndDescriptionResourceSummary(Id, ResourceType.Schedule, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{base.GetDescription()} NextRun={NextRun}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("NextRun", $"{NextRun}");
+            return item;
         }
     }
 
@@ -419,11 +446,13 @@ namespace Jagabata.Resources
     public sealed record RecentNotificationSummary(ulong Id, JobStatus Status, DateTime Created, string Error)
         : ResourceSummary(Id, ResourceType.Notification), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Error)
-                   ? $"Status={Status} Created={Created}"
-                   : $"Status={Status} Created={Created} Error={Error}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Created", $"{Created}");
+            item.Metadata.Add("Error", Error);
+            return item;
         }
     }
 
@@ -434,9 +463,12 @@ namespace Jagabata.Resources
     public sealed record AdHocCommandSummary(ulong Id, string Name, JobStatus Status, string Limit)
         : NamedResourceSummary(Id, ResourceType.AdHocCommand, Name)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{Name} Status={Status} Limit={Limit}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Limit", Limit);
+            return item;
         }
     }
 ;
@@ -444,27 +476,33 @@ namespace Jagabata.Resources
     public sealed record InstanceSummary(ulong Id, string Hostname)
         : ResourceSummary(Id, ResourceType.Instance), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return Hostname;
+            return new CacheItem(Type, Id, Hostname, string.Empty, CacheType.Summary);
         }
     }
 
     public sealed record NotificationSummary(ulong Id, JobStatus Status, string NotificationType, ulong NotificationTemplateId)
         : ResourceSummary(Id, ResourceType.Notification), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"{NotificationType} Status={Status}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Status", $"{Status}");
+            item.Metadata.Add("Type", NotificationType);
+            item.Metadata.Add("Template", $"[{ResourceType.NotificationTemplate}:{NotificationTemplateId}]");
+            return item;
         }
     }
 
     public sealed record RoleSummary(ulong Id, string RoleField)
         : ResourceSummary(Id, ResourceType.Role), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"RoleField={RoleField}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Field", RoleField);
+            return item;
         }
     }
 
@@ -480,9 +518,11 @@ namespace Jagabata.Resources
     public sealed record WorkflowJobTemplateNodeSummary(ulong Id, ulong UnifiedJobTemplateId)
         : ResourceSummary(Id, ResourceType.WorkflowJobTemplateNode), ICacheableResource
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return $"UnifiedJobTemplateId={UnifiedJobTemplateId}";
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Template", $"{UnifiedJobTemplateId}");
+            return item;
         }
     }
 
@@ -495,11 +535,14 @@ namespace Jagabata.Resources
                                            Capability UserCapabilities)
         : NameAndDescriptionResourceSummary(Id, Resources.ResourceType.Role, Name, Description)
     {
-        public override string GetDescription()
+        public override CacheItem GetCacheItem()
         {
-            return ResourceType is null
-                   ? base.GetDescription()
-                   : $"{base.GetDescription()} for [{ResourceType}]{ResourceName}";
+            var item = base.GetCacheItem();
+            if (ResourceType is not null)
+            {
+                item.Metadata.Add("Resource", $"[{ResourceType}] {ResourceName}");
+            }
+            return item;
         }
     }
 }

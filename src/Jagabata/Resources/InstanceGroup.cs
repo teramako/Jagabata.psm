@@ -37,7 +37,7 @@ namespace Jagabata.Resources
                                int policyInstanceMinimum,
                                string[] policyInstanceList,
                                string podSpecOverride)
-        : IInstanceGroup, IResource, ICacheableResource
+        : SummaryFieldsContainer, IInstanceGroup, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/instance_groups/";
         /// <summary>
@@ -220,7 +220,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Name { get; } = name;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -239,9 +239,15 @@ namespace Jagabata.Resources
         public string[] PolicyInstanceList { get; } = policyInstanceList;
         public string PodSpecOverride { get; } = podSpecOverride;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return $"{Name} IsContainerGroup={IsContainerGroup} Instances={Instances}";
+            return new CacheItem(Type, Id, Name, string.Empty)
+            {
+                Metadata = {
+                    ["IsContainerGroup"] = $"{IsContainerGroup}",
+                    ["Instances"] = $"{Instances}"
+                }
+            };
         }
     }
 }

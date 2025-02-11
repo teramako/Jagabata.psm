@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -120,7 +119,7 @@ namespace Jagabata.Resources
 
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public string Description { get; } = description;
         public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
@@ -141,24 +140,16 @@ namespace Jagabata.Resources
         public JobType JobType { get; } = jobType;
         public string JobTags { get; } = jobTags;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            sb.Append($" Status={Status}");
-            if (Finished is not null)
-            {
-                sb.Append($" Finished={Finished}");
-            }
-            sb.Append($" Elapsed={Elapsed}");
-            if (!string.IsNullOrEmpty(ScmType))
-            {
-                sb.Append($" [{ScmType}] {ScmUrl}:{ScmBranch} {ScmRevision}");
-            }
-            return sb.ToString();
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}",
+                }
+            };
         }
     }
 

@@ -23,7 +23,7 @@ namespace Jagabata.Resources
                        DateTime? modified,
                        string name,
                        ulong organization)
-        : ILabel, IResource, ICacheableResource
+        : SummaryFieldsContainer, ILabel, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/labels/";
         /// <summary>
@@ -59,18 +59,21 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
         public ulong Organization { get; } = organization;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org)
-                ? $"{Name} Organization=[{org.Id}]{org.Name}"
-                : $"{Name}";
+            var item = new CacheItem(Type, Id, Name, string.Empty);
+            if (SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org))
+            {
+                item.Metadata.Add("Organization", $"[{org.Type}:{org.Id}] {org.Name}");
+            }
+            return item;
         }
     }
 }

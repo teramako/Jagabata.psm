@@ -28,7 +28,7 @@ namespace Jagabata.Resources
                       string name,
                       string description,
                       ulong organization)
-        : ITeam, IResource, ICacheableResource
+        : SummaryFieldsContainer, ITeam, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/teams/";
 
@@ -170,7 +170,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -178,11 +178,9 @@ namespace Jagabata.Resources
         public string Description { get; } = description;
         public ulong Organization { get; } = organization;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? Name
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -27,7 +26,7 @@ namespace Jagabata.Resources
                                 string objectAssociation,
                                 string actionNode,
                                 ResourceType objectType)
-        : IResource, ICacheableResource
+        : SummaryFieldsContainer, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/activity_stream/";
 
@@ -443,7 +442,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         [JsonPropertyOrder(10)]
         public DateTime Timestamp { get; } = timestamp;
@@ -462,22 +461,21 @@ namespace Jagabata.Resources
         [JsonPropertyOrder(17)]
         public ResourceType ObjectType { get; } = objectType;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{Timestamp}] {Operation}");
-            if (!string.IsNullOrEmpty(ObjectType))
+            var item = new CacheItem(Type, Id, $"{Operation}", $"{Timestamp}")
             {
-                sb.Append($":{ObjectType}");
-            }
-            if (!string.IsNullOrEmpty(Object1))
+                Metadata = {
+                    ["Object1"] = $"{Object1}",
+                    ["Object2"] = $"{Object2}",
+                    ["ObjectAssociation"] = ObjectAssociation,
+                }
+            };
+            if (SummaryFields.TryGetValue<UserSummary>("Actor", out var actor))
             {
-                sb.Append($":{Object1}");
+                item.Metadata.Add("Actor", $"[{actor.Type}:{actor.Id}] {actor.Username}");
             }
-            if (!string.IsNullOrEmpty(Object2))
-            {
-                sb.Append($":{Object2}");
-            }
-            return sb.ToString();
+            return item;
         }
     }
 }

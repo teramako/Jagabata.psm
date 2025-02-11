@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -48,7 +47,7 @@ namespace Jagabata.Resources
                                       bool managed,
                                       ulong? credential,
                                       string pull)
-                : IExecutionEnvironment, IResource, ICacheableResource
+                : SummaryFieldsContainer, IExecutionEnvironment, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/execution_environments/";
 
@@ -106,7 +105,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -117,19 +116,14 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public string Pull { get; } = pull;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            sb.Append($" Image={Image}");
-            if (SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org))
-            {
-                sb.Append($" Organization={org.Name}");
-            }
-            return sb.ToString();
+                Metadata = {
+                    ["Image"] = Image
+                }
+            };
         }
     }
 }

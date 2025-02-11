@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -87,7 +86,7 @@ namespace Jagabata.Resources
                                 bool managed,
                                 FieldList inputs,
                                 Injectors injectors)
-        : ICredentialType, IResource, ICacheableResource
+        : SummaryFieldsContainer, ICredentialType, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/credential_types/";
 
@@ -124,7 +123,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -135,19 +134,16 @@ namespace Jagabata.Resources
         public FieldList Inputs { get; } = inputs;
         public Injectors Injectors { get; } = injectors;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder($"[{Kind}] {Name}");
-            if (!string.IsNullOrEmpty(Description))
+            return new CacheItem(Type, Id, Name, Description)
             {
-                sb.Append($" ({Description})");
-            }
-            if (!string.IsNullOrEmpty(Namespace))
-            {
-                sb.Append($" Namespace={Namespace}");
-            }
-            sb.Append($" Managed={Managed}");
-            return sb.ToString();
+                Metadata = {
+                    ["Kind"] = $"{Kind}",
+                    ["Namespace"] = Namespace,
+                    ["Managed"] = $"{Managed}"
+                }
+            };
         }
     }
 }

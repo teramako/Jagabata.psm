@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Text;
 
 namespace Jagabata.Resources
 {
@@ -33,7 +32,7 @@ namespace Jagabata.Resources
                        string description,
                        ulong inventory,
                        string variables)
-        : IGroup, IResource, ICacheableResource
+        : SummaryFieldsContainer, IGroup, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -175,7 +174,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
         public string Name { get; } = name;
@@ -183,18 +182,14 @@ namespace Jagabata.Resources
         public ulong Inventory { get; } = inventory;
         public string Variables { get; } = variables;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            var sb = new StringBuilder(Name);
-            if (!string.IsNullOrEmpty(Description))
-            {
-                sb.Append($" ({Description})");
-            }
+            var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
             {
-                sb.Append($" in [{inventory.Type}:{inventory.Id}] {inventory.Name}");
+                item.Metadata.Add("Inventory", $"[{inventory.Type}:{inventory.Id}] {inventory.Name}");
             }
-            return sb.ToString();
+            return item;
         }
     }
 }

@@ -1,53 +1,102 @@
+using System.Text;
 using Jagabata.Resources;
 
 namespace Jagabata;
 
 public interface ICacheableResource : IResource
 {
-    string GetDescription();
+    CacheItem GetCacheItem();
 }
 
-public interface IHasCachableItems
+public interface IHasCacheableItems
 {
-    IEnumerable<ICacheableResource> GetCacheableItems();
+    IEnumerable<CacheItem> GetCacheableItems();
 }
 
-public class Caches
+public enum CacheType
 {
-    private static readonly Lazy<List<Item>> _items = new(static () => []);
-    internal static List<Item> Data => _items.Value;
+    Container, Summary
+}
+
+public class CacheItem(ResourceType type, ulong id, string name, string description,
+                       CacheType cacheType = CacheType.Container)
+    : IEquatable<CacheItem>
+{
+    public ResourceType Type { get; } = type;
+    public ulong Id { get; } = id;
+    public string Name { get; internal set; } = name;
+    public string Description { get; set; } = description;
+    public Dictionary<string, string> Metadata { get; internal set; } = [];
+    public CacheType CacheType { get; } = cacheType;
+    public DateTime CachedTimestamp { get; internal set; } = DateTime.Now;
+
+    public bool Equals(CacheItem? other)
+    {
+        return other is not null && Type == other.Type && Id == other.Id;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as CacheItem);
+    }
+
+    public override int GetHashCode()
+    {
+        return ((int)Type).GetHashCode() ^ Id.GetHashCode();
+    }
+    /// <summary>
+    /// Returns <paramref name="Type"/>:<paramref name="Id"/>:<paramref name="Name"/>
+    /// or <paramref name="Type"/>:<paramref name="Id"/> (when <paramref name="Name"/> is empty)
+    /// </summary>
+    public override string ToString()
+    {
+        return string.IsNullOrEmpty(Name) ? $"{Type}:{Id}" : $"{Type}:{Id}:{Name}";
+    }
+    /// <summary>
+    /// Returns tooltip text for powershell <seealso cref="System.Management.Automation.CompletionResult"/>
+    /// </summary>
+    public string ToTooltip()
+    {
+        var sb = new StringBuilder($"[{Type}:{Id}]");
+        var hasName = !string.IsNullOrWhiteSpace(Name);
+        var hasDesc = !string.IsNullOrWhiteSpace(Description);
+        if (hasName)
+        {
+            sb.Append(' ').Append(Name);
+        }
+        if (hasDesc)
+        {
+            sb.Append(' ');
+            if (hasName)
+                sb.Append("- ");
+            sb.Append(Description);
+        }
+        if (hasDesc || hasName) sb.Append(' ');
+        if (Metadata.Count > 0)
+        {
+            sb.Append('{');
+            bool isWritten = false;
+            foreach (var kv in Metadata)
+            {
+                if (isWritten) sb.Append(',');
+                sb.Append(' ').Append(kv.Key).Append(" = ").Append(kv.Value);
+                isWritten = true;
+            }
+            if (isWritten) sb.Append(' ');
+            sb.Append('}');
+        }
+        return sb.ToString();
+    }
+}
+
+public static class Caches
+{
+    private static readonly Lazy<List<CacheItem>> _items = new(static () => []);
+    internal static List<CacheItem> Data => _items.Value;
     // FIXME: to be configurable
     public static int MAX_COUNT = 100;
 
-    public enum CacheType
-    {
-        Container, Summary
-    }
-    public class Item(ICacheableResource res, CacheType cacheType = CacheType.Container) : IEquatable<Item>
-    {
-        public ResourceType Type { get; } = res.Type;
-        public ulong Id { get; } = res.Id;
-        public string Description { get; set; } = res.GetDescription();
-        public CacheType CacheType { get; } = cacheType;
-        public DateTime CachedTimestamp { get; internal set; } = DateTime.Now;
-
-        public bool Equals(Item? other)
-        {
-            return other is not null && Type == other.Type && Id == other.Id;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as Item);
-        }
-
-        public override int GetHashCode()
-        {
-            return ((int)Type).GetHashCode() ^ Id.GetHashCode();
-        }
-    }
-
-    public static void Add(Item item)
+    public static void Add(CacheItem item)
     {
         var index = Data.IndexOf(item);
         if (index >= 0)
@@ -79,33 +128,33 @@ public class Caches
         }
     }
 
-    private static IEnumerable<Item> GetItems(IResource resource)
+    private static IEnumerable<CacheItem> GetItems(IResource resource)
     {
         if (resource is ICacheableResource res)
         {
-            yield return new Item(res, CacheType.Container);
+            yield return res.GetCacheItem();
         }
-        if (resource is IHasCachableItems c)
+        if (resource is IHasCacheableItems c)
         {
             foreach (var child in c.GetCacheableItems())
             {
-                yield return new Item(child, CacheType.Summary);
+                yield return child;
             }
         }
     }
-    private static IEnumerable<Item> GetItems(IEnumerable<IResource> resources)
+    private static IEnumerable<CacheItem> GetItems(IEnumerable<IResource> resources)
     {
         foreach (var resource in resources)
         {
             if (resource is ICacheableResource res)
             {
-                yield return new Item(res, CacheType.Container);
+                yield return res.GetCacheItem();
             }
-            if (resource is IHasCachableItems c)
+            if (resource is IHasCacheableItems c)
             {
                 foreach (var child in c.GetCacheableItems())
                 {
-                    yield return new Item(child, CacheType.Summary);
+                    yield return child;
                 }
             }
         }
@@ -113,7 +162,7 @@ public class Caches
 
     public static void Add(IResource resource)
     {
-        foreach (var item in new HashSet<Item>(GetItems(resource)))
+        foreach (var item in new HashSet<CacheItem>(GetItems(resource)))
         {
             Add(item);
         }
@@ -121,7 +170,7 @@ public class Caches
 
     public static void Add(IEnumerable<IResource> resources)
     {
-        foreach (var item in new HashSet<Item>(GetItems(resources)))
+        foreach (var item in new HashSet<CacheItem>(GetItems(resources)))
         {
             Add(item);
         }
@@ -132,35 +181,8 @@ public class Caches
         Data.Clear();
     }
 
-    public static IEnumerable<Item> GetEnumerator(params ResourceType[] types)
+    public static IEnumerable<CacheItem> GetEnumerator(params ResourceType[] types)
     {
         return types is { Length: 0 } ? Data : Data.Where(item => types.Contains(item.Type));
-    }
-
-    internal static IEnumerable<ICacheableResource> GetCacheableResources(IDictionary<string, object> summaryFields)
-    {
-        foreach (var summaryItem in summaryFields.Values)
-        {
-            switch (summaryItem)
-            {
-                case Array arr:
-                    foreach (var item in arr.OfType<ICacheableResource>())
-                    {
-                        yield return item;
-                    }
-                    continue;
-                case ListSummary<ICacheableResource> list:
-                    foreach (var item in list.Results.AsEnumerable())
-                    {
-                        yield return item;
-                    }
-                    continue;
-                case ICacheableResource res:
-                    yield return res;
-                    continue;
-                default:
-                    continue;
-            }
-        }
     }
 }

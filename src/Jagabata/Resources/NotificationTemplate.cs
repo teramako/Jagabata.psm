@@ -49,7 +49,7 @@ namespace Jagabata.Resources
                                       NotificationType notificationType,
                                       Dictionary<string, object?> notificationConfiguration,
                                       Messages? messages)
-                : INotificationTemplate, IResource, ICacheableResource
+                : SummaryFieldsContainer, INotificationTemplate, IResource, ICacheableResource
     {
         public const string PATH = "/api/v2/notification_templates/";
         /// <summary>
@@ -85,7 +85,7 @@ namespace Jagabata.Resources
         public ResourceType Type { get; } = type;
         public string Url { get; } = url;
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -96,11 +96,14 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? $"[{NotificationType}] {Name}"
-                   : $"[{NotificationType}] {Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Type"] = $"{NotificationType}"
+                }
+            };
         }
     }
 

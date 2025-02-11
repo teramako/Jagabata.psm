@@ -53,16 +53,19 @@ namespace Jagabata.Resources
         }
 
         public RelatedDictionary Related { get; } = related;
-        public SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
 
-        public string GetDescription()
+        public CacheItem GetCacheItem()
         {
-            return string.IsNullOrEmpty(Description)
-                   ? $"{Name}"
-                   : $"{Name} ({Description})";
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                }
+            };
         }
     }
 }

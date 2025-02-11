@@ -78,7 +78,7 @@ namespace Jagabata.Resources
                                              bool lastJobFailed,
                                              DateTime? nextJobRun,
                                              JobTemplateStatus status)
-        : IUnifiedJobTemplate
+        : SummaryFieldsContainer, IUnifiedJobTemplate
     {
         public const string PATH = "/api/v2/unified_job_templates/";
 
