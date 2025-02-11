@@ -8,15 +8,12 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
-            switch (inputData)
+            return inputData switch
             {
-                case string str:
-                    return str;
-                case IDictionary dict:
-                    return JsonSerializer.Serialize(dict, Json.SerializeOptions);
-                default:
-                    throw new ArgumentException($"Argument should be string or IDictionary");
-            }
+                string str => str,
+                IDictionary dict => JsonSerializer.Serialize(dict, Json.SerializeOptions),
+                _ => throw new ArgumentException($"Argument should be string or IDictionary"),
+            };
         }
     }
 }

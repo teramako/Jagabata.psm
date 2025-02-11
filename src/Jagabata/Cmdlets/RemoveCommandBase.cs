@@ -7,7 +7,7 @@ public abstract class RemoveCommandBase<TResource> : APICmdletBase
     [Parameter()]
     public SwitchParameter Force { get; set; }
 
-    private string? _apiPath = null;
+    private string? _apiPath;
     protected virtual string ApiPath
     {
         get

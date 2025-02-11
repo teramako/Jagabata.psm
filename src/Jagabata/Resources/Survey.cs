@@ -99,17 +99,12 @@ namespace Jagabata.Resources
                         }
                         break;
                     case "choices":
-                        switch (reader.TokenType)
+                        spec.Choices = reader.TokenType switch
                         {
-                            case JsonTokenType.StartArray:
-                                spec.Choices = JsonSerializer.Deserialize<string[]>(ref reader, options)
-                                    ?? throw new JsonException();
-                                break;
-                            case JsonTokenType.String:
-                            default:
-                                spec.Choices = reader.GetString() ?? "";
-                                break;
-                        }
+                            JsonTokenType.StartArray => JsonSerializer.Deserialize<string[]>(ref reader, options)
+                                                                ?? throw new JsonException(),
+                            _ => reader.GetString() ?? "",
+                        };
                         break;
                     case "default":
                         switch (reader.TokenType)

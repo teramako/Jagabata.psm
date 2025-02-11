@@ -102,7 +102,7 @@ public abstract class FindCommandBase : APICmdletBase
         if (OrderBy is not null)
         {
             Query.Add("order_by",
-                      string.Join(',', OrderBy.Select(item => item.StartsWith('!') ? $"-{item.Substring(1)}" : item)));
+                      string.Join(',', OrderBy.Select(static item => item.StartsWith('!') ? $"-{item[1..]}" : item)));
         }
         Query.Add("page_size", $"{Count}");
         Query.Add("page", $"{Page}");

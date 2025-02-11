@@ -29,7 +29,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                   tags: ["Ansible", "Indicator", $"job-{jp.Id}"],
                   dontshow: suppressJobLog);
     }
-    private ulong lastShownJob = 0;
+    private ulong lastShownJob;
     protected void WriteJobLog(JobProgress jp, bool suppressJobLog)
     {
         if (string.IsNullOrWhiteSpace(jp.CurrentLog))
@@ -153,9 +153,9 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
         };
 
         var survey = GetResource<Resources.Survey>(surveyPath);
-        var extraVars = sendData.ContainsKey("extra_vars")
-            ? Yaml.DeserializeToDict(sendData["extra_vars"] as string ?? "")
-            : new Dictionary<string, object?>();
+        var extraVars = sendData.TryGetValue("extra_vars", out var extraVarsValue)
+            ? Yaml.DeserializeToDict(extraVarsValue as string ?? "")
+            : [];
         if (survey.Spec.Length > 0)
         {
             if (CommandRuntime.Host is null)
@@ -166,9 +166,9 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
             foreach (var spec in survey.Spec)
             {
                 var varName = spec.Variable;
-                if (extraVars.ContainsKey(varName))
+                if (extraVars.TryGetValue(varName, out var varValue))
                 {
-                    WriteHost($"Skip Survey[{varName}] prompt. Already specified: {JsonSerializer.Serialize(extraVars[varName])}",
+                    WriteHost($"Skip Survey[{varName}] prompt. Already specified: {JsonSerializer.Serialize(varValue)}",
                               dontshow: true);
                     continue;
                 }
@@ -209,7 +209,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         }
                         return false;
                     case SurveySpecType.MultipleChoice:
-                        var choiceFields = (spec.Choices as string[] ?? []).Select(val => (val, val)).ToArray();
+                        var choiceFields = (spec.Choices as string[] ?? []).Select(static val => (val, val)).ToArray();
                         if (prompt.AskSelectOne(label, choiceFields, spec.Default as string ?? "", description, out var oneAnswer))
                         {
                             extraVars[varName] = oneAnswer.Input;
@@ -218,12 +218,12 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         }
                         return false;
                     case SurveySpecType.MultiSelect:
-                        var multiFields = (spec.Choices as string[] ?? []).Select(val => (val, val)).ToArray();
+                        var multiFields = (spec.Choices as string[] ?? []).Select(static val => (val, val)).ToArray();
                         var defaultValues = (spec.Default as string ?? "").Split('\n');
                         if (prompt.AskSelectMulti(label, key, multiFields, defaultValues, description, out var multiAnswer))
                         {
                             extraVars[varName] = multiAnswer.Input;
-                            PrintPromptResult(varName, $"[{string.Join(", ", multiAnswer.Input.Select(x => $"\"{x}\""))}]", multiAnswer.IsEmpty);
+                            PrintPromptResult(varName, $"[{string.Join(", ", multiAnswer.Input.Select(static x => $"\"{x}\""))}]", multiAnswer.IsEmpty);
                             continue;
                         }
                         return false;

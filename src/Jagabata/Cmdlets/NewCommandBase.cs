@@ -6,7 +6,7 @@ public abstract class NewCommandBase<TResource> : APICmdletBase where TResource 
 {
     protected abstract Dictionary<string, object> CreateSendData();
 
-    private string? _apiPath = null;
+    private string? _apiPath;
     protected virtual string ApiPath
     {
         get

@@ -182,26 +182,26 @@ namespace Jagabata.Cmdlets
         }
         public static string LookupTypeToString(FilterLookupType type)
         {
-            switch (type)
+            return type switch
             {
-                case FilterLookupType.Exact: return "";
-                case FilterLookupType.IExact: return "iexact";
-                case FilterLookupType.Contains: return "contains";
-                case FilterLookupType.IContains: return "icontains";
-                case FilterLookupType.StartsWith: return "startswith";
-                case FilterLookupType.IStartsWith: return "istartswith";
-                case FilterLookupType.EndsWith: return "endswith";
-                case FilterLookupType.IEndsWith: return "iendswith";
-                case FilterLookupType.Regex: return "regex";
-                case FilterLookupType.IRegex: return "iregex";
-                case FilterLookupType.GreaterThan: return "gt";
-                case FilterLookupType.GreaterThanOrEqual: return "gte";
-                case FilterLookupType.LessThan: return "lt";
-                case FilterLookupType.LessThanOrEqual: return "lte";
-                case FilterLookupType.IsNull: return "isnull";
-                case FilterLookupType.In: return "in";
-                default: return "";
-            }
+                FilterLookupType.Exact => "",
+                FilterLookupType.IExact => "iexact",
+                FilterLookupType.Contains => "contains",
+                FilterLookupType.IContains => "icontains",
+                FilterLookupType.StartsWith => "startswith",
+                FilterLookupType.IStartsWith => "istartswith",
+                FilterLookupType.EndsWith => "endswith",
+                FilterLookupType.IEndsWith => "iendswith",
+                FilterLookupType.Regex => "regex",
+                FilterLookupType.IRegex => "iregex",
+                FilterLookupType.GreaterThan => "gt",
+                FilterLookupType.GreaterThanOrEqual => "gte",
+                FilterLookupType.LessThan => "lt",
+                FilterLookupType.LessThanOrEqual => "lte",
+                FilterLookupType.IsNull => "isnull",
+                FilterLookupType.In => "in",
+                _ => "",
+            };
         }
 
         public string Name
