@@ -178,6 +178,12 @@ public abstract class APICmdletBase : Cmdlet
             apiTask.Wait();
             RestAPIPostResult<TValue> result = apiTask.Result;
             WriteVerboseResponse(result.Response);
+
+            // Add a resource to the cache for completion
+            if (result.Contents is IResource res)
+            {
+                Caches.Add(res);
+            }
             return result;
         }
         catch (RestAPIException ex)
