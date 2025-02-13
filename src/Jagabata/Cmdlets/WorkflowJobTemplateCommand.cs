@@ -598,12 +598,14 @@ namespace Jagabata.Cmdlets
         public SwitchParameter SurveyEnabled { get; set; }
 
         [Parameter()]
-        [ValidateSet("github", "gitlab")]
+        [AllowEmptyString]
+        [ValidateSet("github", "gitlab", "")]
         public string? WebhookService { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -728,12 +730,15 @@ namespace Jagabata.Cmdlets
         public bool? SurveyEnabled { get; set; }
 
         [Parameter()]
-        [ValidateSet("github", "gitlab")]
+        [AllowEmptyString]
+        [ValidateSet("github", "gitlab", "")]
         public string? WebhookService { get; set; }
 
         [Parameter()]
+        [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
