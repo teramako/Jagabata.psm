@@ -70,7 +70,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["registry"])]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -131,7 +132,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["registry"])]
         public ulong? Credential { get; set; }
 
         [Parameter()]
