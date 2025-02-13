@@ -140,7 +140,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["gpg_public_key"])]
         public ulong SignatureValidationCredential { get; set; }
 
         [Parameter(ParameterSetName = "Manual", Mandatory = true)]
@@ -165,7 +166,8 @@ namespace Jagabata.Cmdlets
         [Parameter(ParameterSetName = "Insights", Mandatory = true)]
         [Parameter(ParameterSetName = "Archive")]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["scm"])]
         public ulong Credential { get; set; }
 
         [Parameter(ParameterSetName = "Git")]
@@ -306,7 +308,8 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["gpg_public_key"])]
         public ulong? SignatureValidationCredential { get; set; }
 
         [Parameter()]
@@ -328,7 +331,8 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["scm"])]
         public ulong? Credential { get; set; }
 
         [Parameter()]
