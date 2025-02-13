@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Management.Automation;
 using System.Management.Automation.Language;
-using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets.Completer;
 
@@ -46,7 +45,9 @@ internal class ResourceCompleter(ResourceType[] types) : ResourceCompleterBase
         foreach (var item in Caches.GetEnumerator(ResourceTypes))
         {
             var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
-            if (isEmpty || name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
+            if (isEmpty
+                || name.StartsWith(word, StringComparison.OrdinalIgnoreCase)
+                || item.Name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
             {
                 yield return new CompletionResult(ToCompletionText(name, quote),
                                                   name,
@@ -89,7 +90,8 @@ internal class ResourceIdCompleter(ResourceType[] types) : ResourceCompleterBase
             var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
             if (isEmpty
                 || id.StartsWith(word, StringComparison.OrdinalIgnoreCase)
-                || name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
+                || name.StartsWith(word, StringComparison.OrdinalIgnoreCase)
+                || item.Name.StartsWith(word, StringComparison.OrdinalIgnoreCase))
             {
                 yield return new CompletionResult(ToCompletionText(id, quote), $"{id} ({name})",
                                                   CompletionResultType.ParameterValue, item.ToTooltip());
