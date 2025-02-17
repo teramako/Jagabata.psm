@@ -53,6 +53,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64[]
+List of database IDs for one or more Applications.
+
 ## OUTPUTS
 
 ### Jagabata.Resources.Application

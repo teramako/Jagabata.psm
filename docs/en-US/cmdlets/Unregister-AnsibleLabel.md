@@ -60,7 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Label ID to be unregistered.
+Label ID its resource object to be unregistered.
 
 ```yaml
 Type: UInt64
@@ -111,7 +111,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Label ID.
+Label ID or its resource object.
+See `-Id` parameter.
 
 ## OUTPUTS
 

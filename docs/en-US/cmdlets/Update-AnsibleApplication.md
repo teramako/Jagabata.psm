@@ -97,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Organization
-Organization ID.
+Organization ID or its resource object.
 
 ```yaml
 Type: UInt64

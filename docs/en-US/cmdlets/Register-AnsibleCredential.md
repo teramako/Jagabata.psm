@@ -36,7 +36,7 @@ PS C:\> Register-AnsibleCredential -Id 3 -To @{Type="JobTemplate"; Id=10}
 ## PARAMETERS
 
 ### -Id
-Credential ID.
+Credential ID or its resource to be registered.
 
 ```yaml
 Type: UInt64
@@ -109,7 +109,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Credential ID.
+Credential ID or its resource to be registered.
+See: `-Id` parameter.
 
 ## OUTPUTS
 

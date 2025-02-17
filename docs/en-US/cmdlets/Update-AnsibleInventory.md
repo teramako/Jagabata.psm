@@ -65,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Inventory ID to be updated.
+Inventory ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -165,7 +165,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Inventory Id.
+Inventory ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

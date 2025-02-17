@@ -65,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-User ID to be updated.
+User ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -190,6 +190,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
+User ID or its resource object to be updated.
+See `-Id` parameter.
+
 ## OUTPUTS
 
 ### Jagabata.Resources.User

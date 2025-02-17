@@ -105,7 +105,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExecutionEnvironment
-ExecutionEnvironemnt ID.
+ExecutionEnvironemnt ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -136,7 +136,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-InventorySource ID to be updated.
+InventorySource ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -272,7 +272,7 @@ Accept wildcard characters: False
 ```
 
 ### -SourceProject
-Project containing inventory file used as source.
+Project ID or its resource object containing inventory file used as source.
 
 ```yaml
 Type: UInt64
@@ -399,7 +399,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-InventorySource ID.
+InventorySource ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

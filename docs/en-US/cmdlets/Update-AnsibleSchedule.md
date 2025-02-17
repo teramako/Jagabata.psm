@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExecutionEnvironment
-ExecutionEnvironment ID.
+ExecutionEnvironment ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -143,7 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Schedule ID to be updated.
+Schedule ID or its resource to be updated.
 
 ```yaml
 Type: UInt64
@@ -158,7 +158,7 @@ Accept wildcard characters: False
 ```
 
 ### -Inventory
-Inventory ID.
+Inventory ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -374,6 +374,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
+Schedule ID or its resource to be updated.
+See: `-Id` parameter.
+
 ## OUTPUTS
 
 ### Jagabata.Resources.Schedule

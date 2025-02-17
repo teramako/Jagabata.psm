@@ -38,7 +38,7 @@ Retrieve a node in WorkflowJob for Database ID 1.
 ## PARAMETERS
 
 ### -Id
-List of database IDs for one or more nodes in WorkflowJobTemplate.
+List of database IDs for one or more nodes in WorkflowJobTemplates.
 
 ```yaml
 Type: UInt64[]
@@ -58,7 +58,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64[]
-One or more database IDs.
+List of database IDs for one or more nodes in WorkflowJobTemplates.
 
 ## OUTPUTS
 

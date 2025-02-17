@@ -34,7 +34,7 @@ Disassociate the Host of ID 3 from the Group ID 1.
 ## PARAMETERS
 
 ### -From
-Parent Group ID.
+Parent Group ID or its resource object.
 
 > [!NOTE]  
 > Can specify `IResource` object.  
@@ -53,7 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Host Id.
+Host ID or it's resource to be unregistered.
 
 ```yaml
 Type: UInt64
@@ -104,7 +104,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Host Id.
+Host ID or it's resource to be unregistered.
 
 ## OUTPUTS
 

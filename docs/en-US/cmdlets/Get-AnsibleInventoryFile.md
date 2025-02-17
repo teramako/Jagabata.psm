@@ -65,7 +65,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64[]
-One or more database IDs.
+List of database IDs for one or more Projects.
 
 ## OUTPUTS
 

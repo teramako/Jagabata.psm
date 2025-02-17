@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-ExecutionEnvironment ID to be updated.
+ExecutionEnvironment ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -109,7 +109,7 @@ Accept wildcard characters: False
 ```
 
 ### -Organization
-Organization ID used to determine access to the ExecutionEnvironment.
+Organization ID or its resource object used to determine access to the ExecutionEnvironment.
 
 ```yaml
 Type: UInt64
@@ -180,7 +180,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-ExecutionEnvironment ID.
+ExecutionEnvironment ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

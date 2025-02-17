@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-CredentialType ID to be updated.
+CredentialType ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -163,7 +163,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-CredentialType ID.
+CredentialType ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

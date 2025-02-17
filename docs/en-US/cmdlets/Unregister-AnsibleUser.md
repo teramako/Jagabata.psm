@@ -36,7 +36,21 @@ Disassociate the User of ID 2 from the Organization of ID 1.
 ## PARAMETERS
 
 ### -From
-{{ Fill From Description }}
+Parent resource object to be unregistered from.
+
+Following resource is available:  
+- `Organization`  
+- `Team`  
+- `Role`
+
+> [!TIP]  
+> Can specify the resource as string like `Team:1` (Format: `{Type}:{Id}`).
+> And also accept objects have `type` and `id` properties.  
+>
+> For example:  
+>  - `-From (Get-AnsibleTeam -Id 1)`  
+>  - `-From @{ type = "team"; id = 1 }`  
+>  - `-From team:1`
 
 ```yaml
 Type: IResource
@@ -51,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-User ID to be unregistered.
+User ID or its resource object to be unregistered.
 
 ```yaml
 Type: UInt64
@@ -102,7 +116,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-User ID.
+User ID or its resource object to be unregistered.
 
 ## OUTPUTS
 
