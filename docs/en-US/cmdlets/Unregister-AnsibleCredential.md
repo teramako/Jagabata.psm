@@ -58,7 +58,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Credential ID to be unregistered.
+Credential ID or its resource to be unregistered.
 
 ```yaml
 Type: UInt64
@@ -109,7 +109,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Credential ID.
+Credential ID or its resource to be registered.
+See: `-Id` parameter.
 
 ## OUTPUTS
 

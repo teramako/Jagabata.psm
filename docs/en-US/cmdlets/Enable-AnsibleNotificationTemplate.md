@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-NotificationTemplate ID.
+NotificationTemplate ID or its resource object to be enabled.
 
 ```yaml
 Type: UInt64
@@ -150,7 +150,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-NotificationTemplate ID.
+NotificationTemplate ID or its resource object to be enabled.
+See `-Id` parameter.
 
 ## OUTPUTS
 

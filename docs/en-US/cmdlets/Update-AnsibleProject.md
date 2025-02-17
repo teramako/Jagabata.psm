@@ -68,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultEnvironment
-The default Execution Environment for jobs run using the project.
+ExecutionEnvirontment ID or its resource object to be as default Execution Environment for jobs run using the project.
 
 > [!TIP]  
 > Specify `0` or `$null` if want to set empty.
@@ -101,7 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Project ID to be updated.
+Project ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -146,7 +146,7 @@ Accept wildcard characters: False
 ```
 
 ### -Organization
-Organization ID.
+Organization ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -282,7 +282,8 @@ Accept wildcard characters: False
 ```
 
 ### -SignatureValidationCredential
-An optional credential used for validating files in the project against unexpected changes.
+Credential ID or its resource object.
+This is an optional credential used for validating files in the project against unexpected changes.
 
 > [!TIP]  
 > Specify `0` or `$null` if want to set empty.
@@ -351,7 +352,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Project ID.
+Project ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

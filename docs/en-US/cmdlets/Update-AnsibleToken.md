@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-AccessToken ID to be updated.
+AccessToken ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -115,7 +115,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-AccessToken ID.
+AccessToken ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

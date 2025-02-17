@@ -42,7 +42,7 @@ Deny all pending WorkflowApprovals.
 ## PARAMETERS
 
 ### -Id
-Database ID for the WorkflowApproval.
+WorkflowApproval ID or its resource object to be denied.
 
 ```yaml
 Type: UInt64
@@ -61,15 +61,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Jagabata.Resources.ResourceType
-Input by `Type` property in the pipeline object.
-
-Acceptable values: `WorkflowApproval` (only)
-
 ### System.UInt64
-Input by `Id` property in the pipeline object.
-
-Database ID for `WorkflowApproval`
+WorkflowApproval ID or its resource object to be denied.
+See `-Id` parameter.
 
 ## OUTPUTS
 

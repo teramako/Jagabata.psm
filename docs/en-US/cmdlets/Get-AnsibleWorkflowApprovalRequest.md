@@ -38,7 +38,7 @@ Retrieve a WorkflowApproval for Database ID 10.
 ## PARAMETERS
 
 ### -Id
-List of database IDs for one or more WorkflowApproval.
+List of database IDs for one or more WorkflowApprovals.
 
 ```yaml
 Type: UInt64[]
@@ -58,7 +58,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64[]
-One or more database IDs.
+List of database IDs for one or more WorkflowApprovals.
 
 ## OUTPUTS
 

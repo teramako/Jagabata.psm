@@ -26,7 +26,7 @@ Implements following Rest API:
 
 ### Example 1
 ```powershell
-PS C:\> Register-AnsibleGroup -Id 3 -ToGroup 1
+PS C:\> Register-AnsibleGroup -Id 3 -To 1
 ```
 
 Associate the Group of ID 3 to the Group of ID 1.
@@ -34,7 +34,7 @@ Associate the Group of ID 3 to the Group of ID 1.
 ## PARAMETERS
 
 ### -Id
-Group ID to be a child.
+Group ID or its resource object to be registerted as a child.
 
 ```yaml
 Type: UInt64
@@ -49,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -To
-Group ID to be the parent.
+Group ID or its resource object to be as a parent.
 
 > [!NOTE]  
 > Can specify `IResource` object.  
@@ -104,7 +104,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-Group Id to be a child.
+Group ID or its resource object to be registerted as a child.
+See `-Id` parameter.
 
 ## OUTPUTS
 

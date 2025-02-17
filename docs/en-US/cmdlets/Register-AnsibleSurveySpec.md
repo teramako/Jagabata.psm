@@ -142,6 +142,10 @@ Accept wildcard characters: False
 ### -Template
 JobTemplate or WorkflowJobTemplate resource object to be registered to.
 
+The resource is accepted following types:  
+- `JobTemplate`  
+- `WorkflowJobTemplate`  
+
 > [!TIP]  
 > Can specify the resource as string like `JobTemplate:1` (Format: `{Type}:{Id}`).
 > And also accept objects have `type` and `id` properties.  
@@ -201,6 +205,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### Jagabata.IResource
 JobTemplate or WorkflowJobTemplate resource object to be registered to.
+See `-Template` parameter.
 
 ## OUTPUTS
 

@@ -310,7 +310,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExecutionEnvironment
-ExecutionEnvironment ID.
+ExecutionEnvironment ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -388,7 +388,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-JobTemplate ID to be updated.
+JobTemplate ID or its resource object to be updated.
 
 ```yaml
 Type: UInt64
@@ -403,7 +403,7 @@ Accept wildcard characters: False
 ```
 
 ### -Inventory
-Inventory ID.
+Inventory ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -510,7 +510,7 @@ Accept wildcard characters: False
 ```
 
 ### -Project
-Project ID.
+Project ID or its resource object.
 
 ```yaml
 Type: UInt64
@@ -644,7 +644,7 @@ Accept wildcard characters: False
 ```
 
 ### -WebhookCredential
-Credential ID of Personal Access Token (`github` or `gitlab`) for posting back the status to the service api.
+Credential ID or its resource object of Personal Access Token (`github` or `gitlab`) for posting back the status to the service api.
 
 ```yaml
 Type: UInt64
@@ -711,7 +711,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-JobTemplate ID.
+JobTemplate ID or its resource object to be updated.
+See `-Id` parameter.
 
 ## OUTPUTS
 

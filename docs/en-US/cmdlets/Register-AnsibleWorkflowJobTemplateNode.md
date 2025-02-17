@@ -35,7 +35,7 @@ PS C:\> Register-AnsibleWorkflowJobTemplateNode -Id 2 -To 1 -RunUpon always
 ## PARAMETERS
 
 ### -Id
-WorkflowJobTemplateNode ID to be child.
+WorkflowJobTemplateNode ID or its resource object to be registered as a child.
 
 ```yaml
 Type: UInt64
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -To
-WorkflowJobTemplateNode ID to be parent.
+WorkflowJobTemplateNode ID or its resource object to be registered to.
 
 ```yaml
 Type: UInt64
@@ -117,7 +117,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-WorkflowJobTemplateNode ID to be child.
+WorkflowJobTemplateNode ID or its resource object to be registered as a child.
+See `-Id` parameter.
 
 ## OUTPUTS
 

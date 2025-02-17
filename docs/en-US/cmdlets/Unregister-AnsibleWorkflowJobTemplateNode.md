@@ -35,7 +35,7 @@ PS C:\> Unregister-AnsibleWorkflowJobTemplateNode -Id 2 -From 1
 ## PARAMETERS
 
 ### -From
-WorkflowJobTemplateNode ID to be parent.
+WorkflowJobTemplateNode ID or its resource object to be parent.
 
 ```yaml
 Type: UInt64
@@ -50,7 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-WorkflowJobTemplateNode ID to be child.
+WorkflowJobTemplateNode ID or its resource object to be registered as a child.
 
 ```yaml
 Type: UInt64
@@ -101,7 +101,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.UInt64
-WorkflowJobTemplateNode ID to be child.
+WorkflowJobTemplateNode ID or its resource object to registered as a child.
+See `-Id` parameter.
 
 ## OUTPUTS
 
