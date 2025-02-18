@@ -19,13 +19,17 @@ internal class ResourceCompletionsAttribute(ResourceCompleteType completeType, p
 
     public ResourceType[] ResourceTypes { get; init; } = types;
     public ResourceCompleteType CompleteType { get; init; } = completeType;
+    public string? FilterKey { get; init; }
+    public string[]? FilterValues { get; init; }
 
     public IArgumentCompleter Create()
     {
         return CompleteType switch
         {
             ResourceCompleteType.Resource => new ResourceCompleter(ResourceTypes),
-            ResourceCompleteType.Id => new ResourceIdCompleter(ResourceTypes),
+            ResourceCompleteType.Id => FilterKey is null || FilterValues is null
+                ? new ResourceIdCompleter(ResourceTypes)
+                : new ResourceIdCompleter(ResourceTypes, FilterKey, FilterValues),
             _ => throw new NotImplementedException()
         };
     }
@@ -42,7 +46,7 @@ internal class ResourceCompleter(ResourceType[] types) : ResourceCompleterBase
     {
         var (word, quote, isEmpty) = ParseWord(wordToComplete);
         var availableTypes = new HashSet<ResourceType>();
-        foreach (var item in Caches.GetEnumerator(ResourceTypes))
+        foreach (var item in EnumerateCacheItems(ResourceTypes))
         {
             var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
             if (isEmpty
@@ -73,6 +77,12 @@ internal class ResourceCompleter(ResourceType[] types) : ResourceCompleterBase
 
 internal class ResourceIdCompleter(ResourceType[] types) : ResourceCompleterBase
 {
+    public ResourceIdCompleter(ResourceType[] types, string filterKey, string[] filterValues)
+        : this(types)
+    {
+        FilterKey = filterKey;
+        FilterValues = [.. filterValues];
+    }
     public ResourceType[] ResourceTypes { get; init; } = types;
     public string? FilterKey { get; }
     public HashSet<string>? FilterValues { get; }
@@ -84,7 +94,7 @@ internal class ResourceIdCompleter(ResourceType[] types) : ResourceCompleterBase
                                                                    IDictionary fakeBoundParameters)
     {
         var (word, quote, isEmpty) = ParseWord(wordToComplete);
-        foreach (var item in Caches.GetEnumerator(ResourceTypes))
+        foreach (var item in EnumerateCacheItems(ResourceTypes, FilterKey, FilterValues))
         {
             var id = $"{item.Id}";
             var name = item.ToString(); // "{Type}:{Id}[:{Name}]"
@@ -116,6 +126,16 @@ internal abstract class ResourceCompleterBase : IArgumentCompleter
             word = word.Length > 1 && word[^1] == quote ? word[1..^1] : word[1..];
         }
         return (word.ToString(), quote, word.Length == 0);
+    }
+    protected static IEnumerable<CacheItem> EnumerateCacheItems(ResourceType[] types,
+                                                                string? filterKey = null,
+                                                                IEnumerable<string>? filterValues = null)
+    {
+        return filterKey is null || filterValues is null
+            ? Caches.GetEnumerator(types)
+            : Caches.GetEnumerator(types)
+                    .Where(item => item.Metadata.TryGetValue(filterKey, out var val) && filterValues.Contains(val));
+
     }
     protected static string ToCompletionText(string text, char? quote = null)
     {

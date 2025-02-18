@@ -1148,6 +1148,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -1390,7 +1392,8 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
