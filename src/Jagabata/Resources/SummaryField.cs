@@ -22,44 +22,89 @@ namespace Jagabata.Resources
         }
     }
 
-    public abstract record SummaryBase
+    public abstract class SummaryBase
     {
-        public sealed override string ToString()
+        protected abstract string[] DisplayProperties { get; }
+        protected bool PrintMembers([MaybeNullWhen(false)] out ReadOnlySpan<char> contents)
         {
+            contents = default;
+            if (DisplayProperties.Length == 0)
+                return false;
+
             var sb = new StringBuilder();
-            sb.Append("{ ");
-            if (PrintMembers(sb)) sb.Append(' ');
-            sb.Append('}');
-            return sb.ToString();
+
+            bool hasContents = false;
+            var t = GetType();
+            foreach (var prop in DisplayProperties.Select(t.GetProperty))
+            {
+                if (prop is null) continue;
+                var val = prop.GetValue(this);
+                if (val is not null)
+                {
+                    if (val is string and "")
+                        continue;
+
+                    if (hasContents)
+                        sb.Append(", ");
+
+                    sb.Append(System.Globalization.CultureInfo.InvariantCulture,
+                              $"{prop.Name} = {val}");
+                    hasContents = true;
+                }
+            }
+            if (hasContents)
+                contents = sb.ToString();
+            return hasContents;
+        }
+        public override string ToString()
+        {
+            return PrintMembers(out var contents) ? $"{{ {contents} }}" : "{ … }";
         }
     }
 
-    public abstract record ResourceSummary(ulong Id, ResourceType Type)
+    public abstract class ResourceSummary
         : SummaryBase, IResource, ICacheableResource
     {
+        public abstract ResourceType Type { get; }
+        public abstract ulong Id { get; }
         public virtual CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, string.Empty, CacheType.Summary);
         }
+        protected override string[] DisplayProperties => [];
+        public override string ToString()
+        {
+            return PrintMembers(out var contents)
+                ? $"{Type}:{Id} {{ {contents} }}"
+                : $"{Type}:{Id}";
+        }
     }
 
-    public abstract record NamedResourceSummary(ulong Id, ResourceType Type, string Name)
-        : SummaryBase, IResource, ICacheableResource
+    public abstract class NamedResourceSummary
+        : ResourceSummary, IResource, ICacheableResource
     {
-        public virtual CacheItem GetCacheItem()
+        public abstract string Name { get; }
+        public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, string.Empty, CacheType.Summary);
         }
+        public sealed override string ToString()
+        {
+            return PrintMembers(out var contents)
+                ? $"{Type}:{Id}:{Name} {{ {contents} }}"
+                : $"{Type}:{Id}:{Name}";
+        }
     }
 
-    public abstract record NameAndDescriptionResourceSummary(ulong Id, ResourceType Type,
-                                                             string Name, string Description)
-        : SummaryBase, IResource, ICacheableResource
+    public abstract class NameAndDescriptionResourceSummary
+        : NamedResourceSummary, IResource, ICacheableResource
     {
-        public virtual CacheItem GetCacheItem()
+        public abstract string Description { get; }
+        public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description, CacheType.Summary);
         }
+        protected override string[] DisplayProperties => [nameof(Description)];
     }
 
     [JsonConverter(typeof(Json.CapabilityConverter))]
@@ -78,49 +123,122 @@ namespace Jagabata.Resources
     }
 
     // Application in Token
-    public sealed record ApplicationSummary(ulong Id, string Name)
-        : NamedResourceSummary(Id, ResourceType.OAuth2Application, Name);
+    public sealed class ApplicationSummary(ulong id, string name) : NamedResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.OAuth2Application;
+        public override ulong Id => id;
+        public override string Name => name;
+    }
 
     // List<Group> in Host
-    public sealed record GroupSummary(ulong Id, string Name)
-        : NamedResourceSummary(Id, ResourceType.Group, Name);
+    public sealed class GroupSummary(ulong id, string name) : NamedResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Group;
+        public override ulong Id => id;
+        public override string Name => name;
+    }
 
     // List<Label> in Inventory, Job, JobTemplate, WorkflowJob, WorkflowJobTemplate
-    public sealed record LabelSummary(ulong Id, string Name)
-        : NamedResourceSummary(Id, ResourceType.Label, Name);
+    public sealed class LabelSummary(ulong id, string name) : NamedResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Label;
+        public override ulong Id => id;
+        public override string Name => name;
+
+    }
 
     // Host in AdHocCommandJobEvent, JobEvent, JobHostSummary
-    public sealed record HostSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Host, Name, Description);
+    public sealed class HostSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Host;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+
+    }
 
     // Organization in Application, Credential, ExecutionEnvironment, Inventory, InventorySource, InventoryUpdate,
     //                 JobTemplate, Job, Label, NotificationTemplate, Project, ProjectUpdate, Team, WorkflowJobtemplate
-    public sealed record OrganizationSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Organization, Name, Description);
+    public sealed class OrganizationSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Organization;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // CredentialType in Credential
-    public sealed record CredentialTypeSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.CredentialType, Name, Description);
+    public sealed class CredentialTypeSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.CredentialType;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // ObjectRoles in Credential, InstanceGroup, Inventory, JobTemplate, Project, Team, WorkflowJobTemplate
-    public sealed record ObjectRoleSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Role, Name, Description);
+    public sealed class ObjectRoleSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Role;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // JobTemplate in Job
-    public sealed record JobTemplateSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.JobTemplate, Name, Description);
+    public sealed class JobTemplateSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.JobTemplate;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // NotificationTemplate in Notification
-    public sealed record NotificationTemplateSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.NotificationTemplate, Name, Description);
+    public sealed class NotificationTemplateSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.NotificationTemplate;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // WorkflowJobTemplate in WorkflowApproval, WorkflowApprovalTemplate, WorkflowJob, WorkflowJobTemplateNode
-    public sealed record WorkflowJobTemplateSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.WorkflowJobTemplate, Name, Description);
+    public sealed class WorkflowJobTemplateSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.WorkflowJobTemplateNode;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // WorkflowJob in WorkflowApproval, WorkflowJobNode
-    public sealed record WorkflowJobSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.WorkflowJob, Name, Description);
+    public sealed class WorkflowJobSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.WorkflowJob;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
 
     // Actor in ActivityStream
     // CreatedBy in AdHocCommand, Credential, CredentialInputSource, ExecutionEnvironment, Group, Inventory,
@@ -131,51 +249,103 @@ namespace Jagabata.Resources
     //               WorkflowApprovalTemplate, WorkflowJob, WorkflowJobTemplate
     // User in Token
     // ApprovedOrDeniedBy in WorkflowApproval
-    public sealed record UserSummary(ulong Id, string Username, string FirstName, string LastName)
-        : ResourceSummary(Id, ResourceType.User)
+    public sealed class UserSummary(ulong id, string username, string firstName, string lastName)
+        : ResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.User;
+        public override ulong Id => id;
+        public string Username => username;
+        public string FirstName => firstName;
+        public string LastName => lastName;
         public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Username, string.Empty, CacheType.Summary);
         }
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Username}";
+        }
     }
 
     // ObjectRoles in Organization
-    public sealed record OrganizationObjectRoleSummary(ulong Id, string Name, string Description, bool UserOnly = false)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Role, Name, Description);
+    public sealed class OrganizationObjectRoleSummary(ulong id, string name, string description, bool userOnly = false)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Role;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public bool UserOnly => userOnly;
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(UserOnly)];
+    }
 
     // ExecutionEnvironment in AdHocCommand, InventorySource, InventoryUpdate, JobTemplate, Job, SystemJob
     // DefaultEnvironment in Organization, Project, ProjectUpdate
     // ResolvedEnvironment in SystemJobTemplate, WorkflowApprovalTemplate
-    public sealed record EnvironmentSummary(ulong Id, string Name, string Description, string Image)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.ExecutionEnvironment, Name, Description)
+    public sealed class EnvironmentSummary(ulong id, string name, string description, string image)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.ExecutionEnvironment;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string Image => image;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Image", Image);
             return item;
         }
-    };
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Image)];
+    }
 
     // RelatedFieldCounts in Organization
-    public sealed record RelatedFieldCountsSummary(int Inventories, int Teams, int Users, int JobTemplates, int Admins, int Projects)
-        : SummaryBase;
+    public sealed class RelatedFieldCountsSummary(int inventories, int teams, int users, int jobTemplates, int admins,
+                                                  int projects)
+        : SummaryBase
+    {
+        public int Inventories => inventories;
+        public int Teams => teams;
+        public int Users => users;
+        public int JobTemplates => jobTemplates;
+        public int Admins => admins;
+        public int Projects => projects;
+        protected override string[] DisplayProperties =>
+        [
+            nameof(Inventories),
+            nameof(Teams),
+            nameof(Users),
+            nameof(JobTemplates),
+            nameof(Admins),
+            nameof(Projects)
+        ];
+    }
 
     // List<Token> in Application
-    public sealed record TokenSummary(ulong Id, string Token, string Scope)
-        : ResourceSummary(Id, ResourceType.OAuth2AccessToken)
+    public sealed class TokenSummary(ulong id, string token, string scope)
+        : ResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.OAuth2AccessToken;
+        public override ulong Id => id;
+        public string Token => token;
+        public string Scope => scope;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Scope", Scope);
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(Scope), nameof(Token)];
     }
 
-    public record ListSummary<T>(int Count, T[] Results)
+    public class ListSummary<T>(int count, T[] results)
     {
+        public int Count => count;
+        public T[] Results => results;
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -200,39 +370,86 @@ namespace Jagabata.Resources
     // Credential in AdHocCommand, InventorySource, InventoryUpdate, Project, ProjectUpdate
     // SourceCredential in CredentialInputSource
     // TargetCredential in CredentialInputSource
-    public sealed record CredentialSummary(ulong Id, string Name, string Description, string Kind,
-                                    bool Cloud = false, bool Kubernetes = false, ulong? CredentialTypeId = null)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Credential, Name, Description)
+    public sealed class CredentialSummary(ulong id, string name, string description, string kind, bool cloud = false,
+                                          bool kubernetes = false, ulong? credentialTypeId = null)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Credential;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string Kind => kind;
+        public bool Cloud => cloud;
+        public bool Kubernetes => kubernetes;
+        public ulong? CredentialTypeId => credentialTypeId;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Kind", Kind);
             return item;
         }
-    };
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Kind),
+            nameof(Cloud),
+            nameof(Kubernetes),
+            nameof(CredentialTypeId)
+        ];
+    }
 
     // Credentials in JobTemplate, Job
-    public sealed record JobTemplateCredentialSummary(ulong Id, string Name, string Description, string Kind, bool Cloud)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Credential, Name, Description)
+    public sealed class JobTemplateCredentialSummary(ulong id, string name, string description, string kind, bool cloud)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Credential;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string Kind => kind;
+        public bool Cloud => cloud;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Kind", Kind);
             return item;
         }
-    };
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Kind), nameof(Cloud)];
+    }
 
     // LastJob in InventorySource, JobTemplate, Project, SystemJobTemplate, WorkflowApprovalTemplate, WorkflowJobTemplate
-    public sealed record LastJobSummary(ulong Id, string Name, string Description, DateTime? Finished,
-                                 JobStatus Status, bool Failed)
-        : SummaryBase;
+    public sealed class LastJobSummary(ulong id, string name, string description, DateTime? finished,
+                                       JobStatus status, bool failed)
+        : SummaryBase
+    {
+        public ulong Id => id;
+        public string Name => name;
+        public string Description => description;
+        public DateTime? Finished => finished;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        protected override string[] DisplayProperties =>
+        [
+            nameof(Id),
+            nameof(Name),
+            nameof(Description),
+            nameof(Status),
+            nameof(Finished),
+        ];
+    }
 
     // RecentJobs in Host
-    public sealed record HostRecentJobSummary(ulong Id, string Name, ResourceType Type, JobStatus Status, DateTime? Finished)
-        : NamedResourceSummary(Id, Type, Name)
+    public sealed class HostRecentJobSummary(ulong id, string name, ResourceType type, JobStatus status,
+                                             DateTime? finished)
+        : NamedResourceSummary
     {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public override string Name => name;
+        public JobStatus Status => status;
+        public DateTime? Finished => finished;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -243,13 +460,19 @@ namespace Jagabata.Resources
             }
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(Finished)];
     }
 
     // RecentJobs in JobTemplate, WorkflowJobTemplate
-    public sealed record RecentJobSummary(ulong Id, JobStatus Status, DateTime? Finished,
-                                          DateTime? CanceledOn, ResourceType Type)
-        : ResourceSummary(Id, Type), ICacheableResource
+    public sealed class RecentJobSummary(ulong id, JobStatus status, DateTime? finished,
+                                          DateTime? canceledOn, ResourceType type)
+        : ResourceSummary, ICacheableResource
     {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public JobStatus Status => status;
+        public DateTime? Finished => finished;
+        public DateTime? CanceledOn => canceledOn;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -258,13 +481,22 @@ namespace Jagabata.Resources
             item.Metadata.Add("CanceledOn", $"{CanceledOn}");
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(Status), nameof(Finished), nameof(CanceledOn)];
     }
 
     // Job in ActivityStream
-    public sealed record JobTemplateJobSummary(ulong Id, string Name, string Description,
-                                               JobStatus Status, bool Failed, double Elapsed)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Job, Name, Description)
+    public sealed class JobTemplateJobSummary(ulong id, string name, string description, JobStatus status, bool failed,
+                                              double elapsed)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Job;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        public double Elapsed => elapsed;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -272,13 +504,21 @@ namespace Jagabata.Resources
             item.Metadata.Add("Elapsed", $"{Elapsed}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(Elapsed)];
     }
 
     // Job in WorkflowJobNode
-    public sealed record WorkflowJobNodeJobSummary(ulong Id, string Name, string Description, JobStatus Status,
-                                                   bool Failed, double Elapsed, ResourceType Type)
-        : NameAndDescriptionResourceSummary(Id, Type, Name, Description)
+    public sealed class WorkflowJobNodeJobSummary(ulong id, string name, string description, JobStatus status,
+                                                  bool failed, double elapsed, ResourceType type)
+        : NameAndDescriptionResourceSummary
     {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        public double Elapsed => elapsed;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -286,13 +526,24 @@ namespace Jagabata.Resources
             item.Metadata.Add("Elapsed", $"{Elapsed}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(Elapsed)];
     }
 
     // LastJob in Host
-    public sealed record HostLastJobSummary(ulong Id, string Name, string Description, JobStatus Status,
-                                            bool Failed, double Elapsed, ulong JobTemplateId, string JobTemplateName)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Job, Name, Description)
+    public sealed class HostLastJobSummary(ulong id, string name, string description, JobStatus status, bool failed,
+                                           double elapsed, ulong jobTemplateId, string jobTemplateName)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Job;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        public double Elapsed => elapsed;
+        public ulong JobTemplateId => jobTemplateId;
+        public string JobTemplateName => jobTemplateName;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -301,13 +552,30 @@ namespace Jagabata.Resources
             item.Metadata.Add("Template", $"[{ResourceType.JobTemplate}:{JobTemplateId}] {JobTemplateName}");
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Status),
+            nameof(Elapsed),
+            nameof(JobTemplateId),
+            nameof(JobTemplateName)
+        ];
     }
 
     // Job in JobEvent, JobHostSummary
-    public sealed record JobExSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed,
-                                      double Elapsed, ResourceType Type, ulong JobTemplateId, string JobTemplateName)
-        : NameAndDescriptionResourceSummary(Id, Type, Name, Description)
+    public sealed class JobExSummary(ulong id, string name, string description, JobStatus status, bool failed,
+                                     double elapsed, ResourceType type, ulong jobTemplateId, string jobTemplateName)
+        : NameAndDescriptionResourceSummary
     {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        public double Elapsed => elapsed;
+        public ulong JobTemplateId => jobTemplateId;
+        public string JobTemplateName => jobTemplateName;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -316,13 +584,29 @@ namespace Jagabata.Resources
             item.Metadata.Add("Template", $"[{ResourceType.JobTemplate}:{JobTemplateId}] {JobTemplateName}");
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Status),
+            nameof(Elapsed),
+            nameof(JobTemplateId),
+            nameof(JobTemplateName)
+        ];
     }
 
     // SourceWorkflowJob in Job, WorkflowApproval
-    public sealed record SourceWorkflowJobSummary(ulong Id, string Name, string Description, JobStatus Status,
-                                           bool Failed, double Elapsed)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.WorkflowJob, Name, Description)
+    public sealed class SourceWorkflowJobSummary(ulong id, string name, string description, JobStatus status,
+                                                 bool failed, double elapsed)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.WorkflowJob;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        public double Elapsed => elapsed;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -330,34 +614,74 @@ namespace Jagabata.Resources
             item.Metadata.Add("Elapsed", $"{Elapsed}");
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Status),
+            nameof(Elapsed)
+        ];
     }
 
     // AncestorJob in Job
-    public sealed record AncestorJobSummary(ulong Id, string Name, ResourceType Type, string Url)
-        : NamedResourceSummary(Id, Type, Name);
+    public sealed class AncestorJobSummary(ulong id, string name, ResourceType type, string url)
+        : NamedResourceSummary
+    {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public override string Name => name;
+        public string Url => url;
+    }
 
     // LastJobHostSummary in Host
-    public sealed record LastJobHostSummary(ulong Id, bool Failed)
-        : ResourceSummary(Id, ResourceType.JobHostSummary)
+    public sealed class LastJobHostSummary(ulong id, bool failed)
+        : ResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.JobHostSummary;
+        public override ulong Id => id;
+        public bool Failed => failed;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Failed", $"{Failed}");
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(Failed)];
     }
 
     // LastUpdate in InventorySource, JobTemplate, Project, SystemJobTemplate, WorkflowApprovalTemplate, WorkflowJobTemplate
-    public sealed record LastUpdateSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed)
-        : SummaryBase;
+    public sealed class LastUpdateSummary(ulong id, string name, string description, JobStatus status, bool failed)
+        : SummaryBase
+    {
+        public ulong Id => id;
+        public string Name => name;
+        public string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
+        protected override string[] DisplayProperties => [nameof(Id), nameof(Name), nameof(Description), nameof(Status)];
+    }
 
     // Inventory in AdHocCommand, Group, Host, InventorySource, InventoryUpdate, JobTemplate, Job, Schedule, WorkflowJobTemplate
-    public sealed record InventorySummary(ulong Id, string Name, string Description, bool HasActiveFailures, int TotalHosts,
-                                   int HostsWithActiveFailures, int TotalGroups, bool HasInventorySources,
-                                   int TotalInventorySources, int InventorySourcesWithFailures, ulong OrganizationId, string Kind)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Inventory, Name, Description)
+    public sealed class InventorySummary(ulong id, string name, string description, bool hasActiveFailures,
+                                         int totalHosts, int hostsWithActiveFailures, int totalGroups,
+                                         bool hasInventorySources, int totalInventorySources,
+                                         int inventorySourcesWithFailures, ulong organizationId, string kind)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Inventory;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public bool HasActiveFailures => hasActiveFailures;
+        public int TotalHosts => totalHosts;
+        public int HostsWithActiveFailures => hostsWithActiveFailures;
+        public int TotalGroups => totalGroups;
+        public bool HasInventorySources => hasInventorySources;
+        public int TotalInventorySources => totalInventorySources;
+        public int InventorySourcesWithFailures => inventorySourcesWithFailures;
+        public ulong OrganizationId => organizationId;
+        public string Kind => kind;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -365,12 +689,28 @@ namespace Jagabata.Resources
             item.Metadata.Add("Organization", $"{OrganizationId}");
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Kind),
+            nameof(TotalHosts),
+            nameof(TotalGroups),
+            nameof(OrganizationId),
+        ];
     };
 
     // InventorySource in InventoryUpdate
-    public sealed record InventorySourceSummary(ulong Id, string Name, InventorySourceSource Source, DateTime LastUpdated, JobStatus Status)
-        : NamedResourceSummary(Id, ResourceType.InventorySource, Name)
+    public sealed class InventorySourceSummary(ulong id, string name, InventorySourceSource source, DateTime lastUpdated,
+                                               JobStatus status)
+        : NamedResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.InventorySource;
+        public override ulong Id => id;
+        public override string Name => name;
+        public InventorySourceSource Source => source;
+        public DateTime LastUpdated => lastUpdated;
+        public JobStatus Status => status;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -378,14 +718,23 @@ namespace Jagabata.Resources
             item.Metadata.Add("LastUpdated", $"{LastUpdated}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Source), nameof(LastUpdated), nameof(Status)];
     };
 
     // SourceProject in InventorySource, InventoryUpdate
     // Project in JobTemplate, Job, ProjectUpdate
-    public sealed record ProjectSummary(ulong Id, string Name, string Description, JobTemplateStatus Status,
-                                 string ScmType, bool AllowOverride)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Project, Name, Description)
+    public sealed class ProjectSummary(ulong id, string name, string description, JobTemplateStatus status,
+                                       string scmType, bool allowOverride)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Project;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobTemplateStatus Status => status;
+        public string ScmType => scmType;
+        public bool AllowOverride => allowOverride;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -393,12 +742,20 @@ namespace Jagabata.Resources
             item.Metadata.Add("Status", $"{Status}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(ScmType)];
     }
 
     // ProjectUpdate in ProjectUpdateJobEvent
-    public sealed record ProjectUpdateSummary(ulong Id, string Name, string Description, JobStatus Status, bool Failed)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.ProjectUpdate, Name, Description)
+    public sealed class ProjectUpdateSummary(ulong id, string name, string description, JobStatus status, bool failed)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.ProjectUpdate;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public JobStatus Status => status;
+        public bool Failed => failed;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -406,12 +763,16 @@ namespace Jagabata.Resources
             item.Metadata.Add("Failed", $"{Failed}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(Failed)];
     }
 
     // UnifiedJobTemplate in InventoryUpdate, Job, ProjectUpdate, Schedule, SystemJob, WorkflowApproval, WorkflowJob,
     //                       WorkflowJobNode, WorkflowJobTemplateNode
-    public sealed record UnifiedJobTemplateSummary(ulong Id, string Name, string Description, ResourceType UnifiedJobType)
-        : NameAndDescriptionResourceSummary(Id, UnifiedJobType switch
+    public sealed class UnifiedJobTemplateSummary(ulong id, string name, string description, ResourceType unifiedJobType)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => unifiedJobType switch
         {
             ResourceType.Job => ResourceType.JobTemplate,
             ResourceType.ProjectUpdate => ResourceType.Project,
@@ -420,32 +781,66 @@ namespace Jagabata.Resources
             ResourceType.SystemJob => ResourceType.SystemJobTemplate,
             ResourceType.WorkflowApproval => ResourceType.WorkflowApprovalTemplate,
             _ => ResourceType.None
-        }, Name, Description);
+        };
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public ResourceType UnifiedJobType => unifiedJobType;
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(UnifiedJobType)];
+    }
 
     // InstanceGroup in AdHocCommand, InventoryUpdate, Job, ProjectUpdate, SystemJob
-    public sealed record InstanceGroupSummary(ulong Id, string Name, bool IsContainerGroup)
-        : NamedResourceSummary(Id, ResourceType.InstanceGroup, Name);
+    public sealed class InstanceGroupSummary(ulong id, string name, bool isContainerGroup)
+        : NamedResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.InstanceGroup;
+        public override ulong Id => id;
+        public override string Name => name;
+        public bool IsContainerGroup => isContainerGroup;
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(IsContainerGroup)];
+    }
 
     // Owners in Credential
-    public sealed record OwnerSummary(ulong Id, ResourceType Type, string Name, string Description, string Url)
-        : NameAndDescriptionResourceSummary(Id, Type, Name, Description);
+    public sealed class OwnerSummary(ulong id, ResourceType type, string name, string description, string url)
+        : NameAndDescriptionResourceSummary
+    {
+        public override ResourceType Type => type;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string Url => url;
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Url)];
+    }
 
     // Schedule in InventoryUpdate, Job, ProjectUpdate, SystemJob, WorkflowJob
-    public sealed record ScheduleSummary(ulong Id, string Name, string Description, DateTime NextRun)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Schedule, Name, Description)
+    public sealed class ScheduleSummary(ulong id, string name, string description, DateTime nextRun)
+        : NameAndDescriptionResourceSummary
     {
+        public override ResourceType Type => ResourceType.Schedule;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public DateTime NextRun => nextRun;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("NextRun", $"{NextRun}");
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(NextRun)];
     }
 
     // RecentNotification in NotificationTemplate
-    public sealed record RecentNotificationSummary(ulong Id, JobStatus Status, DateTime Created, string Error)
-        : ResourceSummary(Id, ResourceType.Notification), ICacheableResource
+    public sealed class RecentNotificationSummary(ulong id, JobStatus status, DateTime created, string error)
+        : ResourceSummary, ICacheableResource
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Notification;
+        public override ulong Id => id;
+        public JobStatus Status => status;
+        public DateTime Created => created;
+        public string Error => error;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -454,15 +849,31 @@ namespace Jagabata.Resources
             item.Metadata.Add("Error", Error);
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(Status), nameof(Created), nameof(Error)];
     }
 
     // WorkflowApprovalTemplate in WorkflowApproval
-    public sealed record WorkflowApprovalTemplateSummary(ulong Id, string Name, string Description, int Timeout)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.WorkflowApprovalTemplate, Name, Description);
-
-    public sealed record AdHocCommandSummary(ulong Id, string Name, JobStatus Status, string Limit)
-        : NamedResourceSummary(Id, ResourceType.AdHocCommand, Name)
+    public sealed class WorkflowApprovalTemplateSummary(ulong id, string name, string description, int timeout)
+        : NameAndDescriptionResourceSummary
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.WorkflowApprovalTemplate;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public int Timeout => timeout;
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Timeout)];
+    }
+
+    public sealed class AdHocCommandSummary(ulong id, string name, JobStatus status, string limit)
+        : NamedResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.AdHocCommand;
+        public override ulong Id => id;
+        public override string Name => name;
+        public JobStatus Status => status;
+        public string Limit => limit;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -470,21 +881,37 @@ namespace Jagabata.Resources
             item.Metadata.Add("Limit", Limit);
             return item;
         }
+        protected override string[] DisplayProperties => [.. base.DisplayProperties, nameof(Status), nameof(Limit)];
     }
 ;
 
-    public sealed record InstanceSummary(ulong Id, string Hostname)
-        : ResourceSummary(Id, ResourceType.Instance), ICacheableResource
+    public sealed class InstanceSummary(ulong id, string hostname)
+        : ResourceSummary, ICacheableResource
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Instance;
+        public override ulong Id => id;
+        public string Hostname { get; } = hostname;
         public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Hostname, string.Empty, CacheType.Summary);
         }
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Hostname}";
+        }
     }
 
-    public sealed record NotificationSummary(ulong Id, JobStatus Status, string NotificationType, ulong NotificationTemplateId)
-        : ResourceSummary(Id, ResourceType.Notification), ICacheableResource
+    public sealed class NotificationSummary(ulong id, JobStatus status, string notificationType,
+                                            ulong notificationTemplateId)
+        : ResourceSummary, ICacheableResource
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Notification;
+        public override ulong Id => id;
+        public JobStatus Status => status;
+        public string NotificationType => notificationType;
+        public ulong NotificationTemplateId => notificationTemplateId;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -493,48 +920,95 @@ namespace Jagabata.Resources
             item.Metadata.Add("Template", $"[{ResourceType.NotificationTemplate}:{NotificationTemplateId}]");
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            nameof(Status),
+            nameof(NotificationType),
+            nameof(NotificationTemplateId)
+        ];
     }
 
-    public sealed record RoleSummary(ulong Id, string RoleField)
-        : ResourceSummary(Id, ResourceType.Role), ICacheableResource
+    public sealed class RoleSummary(ulong id, string roleField)
+        : ResourceSummary, ICacheableResource
     {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Role;
+        public override ulong Id => id;
+        public string RoleField => roleField;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Field", RoleField);
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(RoleField)];
     }
 
-    public sealed record SettingSummary(string Name, string Category)
-        : SummaryBase;
-
-    public sealed record SurveySummary(string Title, string Description)
-        : SummaryBase;
-
-    public sealed record TeamSummary(ulong Id, string Name, string Description)
-        : NameAndDescriptionResourceSummary(Id, ResourceType.Team, Name, Description);
-
-    public sealed record WorkflowJobTemplateNodeSummary(ulong Id, ulong UnifiedJobTemplateId)
-        : ResourceSummary(Id, ResourceType.WorkflowJobTemplateNode), ICacheableResource
+    public sealed class SettingSummary(string name, string category)
+        : SummaryBase
     {
+        public string Name => name;
+        public string Category => category;
+        protected override string[] DisplayProperties => [nameof(Name), nameof(Category)];
+    }
+
+    public sealed class SurveySummary(string title, string description)
+        : SummaryBase
+    {
+        public string Title => title;
+        public string Description => description;
+        protected override string[] DisplayProperties => [nameof(Title), nameof(Description)];
+    }
+
+    public sealed class TeamSummary(ulong id, string name, string description)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Team;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+    }
+
+    public sealed class WorkflowJobTemplateNodeSummary(ulong id, ulong unifiedJobTemplateId)
+        : ResourceSummary, ICacheableResource
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.WorkflowJobTemplateNode;
+        public override ulong Id => id;
+        public ulong UnifiedJobTemplateId => unifiedJobTemplateId;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Template", $"{UnifiedJobTemplateId}");
             return item;
         }
+        protected override string[] DisplayProperties => [nameof(UnifiedJobTemplateId)];
     }
 
     // DirectAccess, IndirectAccess in User (from /api/v2/*/access_list/)
-    public sealed record AccessSummary(AccessRoleSummary Role, string[] DescendantRoles)
-        : SummaryBase;
-
-    public sealed record AccessRoleSummary(ulong Id, string Name, string Description, string? ResourceName,
-                                           ResourceType? ResourceType, RelatedDictionary? Related,
-                                           Capability UserCapabilities)
-        : NameAndDescriptionResourceSummary(Id, Jagabata.ResourceType.Role, Name, Description)
+    public sealed class AccessSummary(AccessRoleSummary role, string[] descendantRoles)
+        : SummaryBase
     {
+        public AccessRoleSummary Role => role;
+        public string[] DescendantRoles => descendantRoles;
+        protected override string[] DisplayProperties => [nameof(Role)];
+    }
+
+    public sealed class AccessRoleSummary(ulong id, string name, string description, string? resourceName,
+                                          ResourceType? resourceType, RelatedDictionary? related,
+                                          Capability userCapabilities)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => Jagabata.ResourceType.Role;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string? ResourceName => resourceName;
+        public ResourceType? ResourceType => resourceType;
+        public RelatedDictionary? Related => related;
+        public Capability UserCapabilities => userCapabilities;
         public override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
@@ -544,5 +1018,11 @@ namespace Jagabata.Resources
             }
             return item;
         }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(ResourceName),
+            nameof(ResourceType),
+        ];
     }
 }
