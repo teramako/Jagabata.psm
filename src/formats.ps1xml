@@ -1781,13 +1781,7 @@
                 <PropertyName>Description</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>ResourceId</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>ResourceType</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>ResourceName</PropertyName>
+                <PropertyName>TargetResource</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

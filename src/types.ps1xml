@@ -1769,14 +1769,22 @@
               <Name>Type</Name>
               <Name>Name</Name>
               <Name>Description</Name>
-              <Name>ResourceId</Name>
-              <Name>ResourceType</Name>
-              <Name>ResourceName</Name>
-              <Name>ResourceTypeDisplayName</Name>
+              <Name>TargetResource</Name>
             </ReferencedProperties>
           </PropertySet>
         </Members>
       </MemberSet>
+      <ScriptProperty>
+        <Name>TargetResource</Name>
+        <GetScriptBlock>
+          if ($null -ne $this.SummaryFields.ResourceId) {
+            $summary = $this.SummaryFields;
+            "{0}:{1}:{2}" -f $summary.ResourceType, $summary.ResourceId, $summary.ResourceName
+          } else {
+            $null
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
       <ScriptProperty>
         <Name>ResourceId</Name>
         <GetScriptBlock>$this.SummaryFields.ResourceId</GetScriptBlock>
