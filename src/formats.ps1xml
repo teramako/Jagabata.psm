@@ -187,10 +187,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -208,10 +208,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -250,10 +250,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -268,10 +268,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -306,10 +306,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Description -->
@@ -330,10 +330,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Description</PropertyName>
@@ -374,10 +374,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Hostname -->
@@ -408,10 +408,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Hostname</PropertyName>
@@ -456,10 +456,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -477,10 +477,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -506,10 +506,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -551,10 +551,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -604,10 +604,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Username -->
@@ -630,10 +630,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Username</PropertyName>
@@ -680,10 +680,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -703,10 +703,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -750,10 +750,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -766,10 +766,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -799,10 +799,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -824,10 +824,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -866,10 +866,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -886,10 +886,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -927,8 +927,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader/><!-- Id -->
           <TableColumnHeader><!-- Type -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Label -->
@@ -954,10 +956,10 @@
             <Wrap>true</Wrap>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Label</PropertyName>
@@ -998,10 +1000,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -1021,10 +1023,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1062,10 +1064,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -1088,10 +1090,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1133,10 +1135,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1150,10 +1152,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1186,10 +1188,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1208,10 +1210,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1246,10 +1248,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -1273,10 +1275,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1332,10 +1334,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1360,10 +1362,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1408,10 +1410,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader><!-- Job -->
@@ -1434,10 +1436,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Job</PropertyName>
@@ -1479,10 +1481,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader><!-- Job -->
@@ -1533,10 +1535,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>"[{0}]{1}" -f $_.Job,$_.JobName</ScriptBlock>
@@ -1595,10 +1597,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -1614,10 +1616,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1649,10 +1651,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1674,10 +1676,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1749,30 +1751,24 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
           <TableColumnHeader/><!-- Description -->
-          <TableColumnHeader><!--  ResourceId -->
-            <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader><!-- ResourceType -->
-            <Alignment>Right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader/><!-- ResourceName -->
+          <TableColumnHeader/><!-- TargetResource -->
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1795,10 +1791,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1811,10 +1807,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1843,10 +1839,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Modified -->
@@ -1862,10 +1858,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Modified</PropertyName>
@@ -1897,10 +1893,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -1913,10 +1909,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -1940,10 +1936,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Timestamp -->
@@ -1960,10 +1956,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Timestamp</PropertyName>
@@ -1998,10 +1994,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name-->
@@ -2025,10 +2021,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -2078,10 +2074,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader><!-- WorkflowJobTemplate -->
@@ -2106,10 +2102,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>"[{0}]{1}" -f $_.WorkflowJobTemplate,$_.WorkflowJobTemplateName</ScriptBlock>
@@ -2144,10 +2140,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader><!-- WorkflowJob -->
@@ -2179,10 +2175,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>"[{0}]{1}" -f $_.WorkflowJob,$_.WorkflowJobName</ScriptBlock>
@@ -2229,10 +2225,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Description -->
@@ -2249,10 +2245,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Description</PropertyName>
@@ -2281,10 +2277,10 @@
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -2300,10 +2296,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>
@@ -2442,10 +2438,10 @@
       <TableControl>
         <AutoSize/>
         <TableHeaders>
-          <TableColumnHeader><!-- Id -->
+          <TableColumnHeader><!-- Type -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader><!-- Type -->
+          <TableColumnHeader><!-- Id -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader/><!-- Name -->
@@ -2483,10 +2479,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
+                <PropertyName>Type</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Type</PropertyName>
+                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Name</PropertyName>

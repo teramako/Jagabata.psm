@@ -29,8 +29,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -66,8 +66,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Description</Name>
@@ -100,8 +100,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Hostname</Name>
@@ -143,8 +143,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -178,8 +178,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -236,8 +236,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Username</Name>
@@ -265,8 +265,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -340,8 +340,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -418,8 +418,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -469,8 +469,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -496,8 +496,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -534,8 +534,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -560,8 +560,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -595,8 +595,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -668,8 +668,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -756,8 +756,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -817,8 +817,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -844,8 +844,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -882,8 +882,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -979,115 +979,7 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
-              <Name>Created</Name>
-              <Name>Modified</Name>
-              <Name>Name</Name>
-              <Name>Description</Name>
-              <Name>LaunchType</Name>
-              <Name>Status</Name>
-              <Name>ExecutionEnvironment</Name>
-              <Name>Failed</Name>
-              <Name>Started</Name>
-              <Name>Finished</Name>
-              <Name>CanceledOn</Name>
-              <Name>Elapsed</Name>
-              <Name>JobExplanation</Name>
-              <Name>ExecutionNode</Name>
-              <Name>ControllerNode</Name>
-              <Name>LaunchedBy</Name>
-              <Name>WorkUnitId</Name>
-              <Name>JobType</Name>
-              <Name>Organization</Name>
-              <Name>OrganizationName</Name>
-              <Name>Project</Name>
-              <Name>ProjectName</Name>
-              <Name>Inventory</Name>
-              <Name>InventoryName</Name>
-              <Name>InstanceGroup</Name>
-              <Name>JobTemplate</Name>
-              <Name>SourceWorkflowJob</Name>
-              <Name>Labels</Name>
-              <Name>Playbook</Name>
-              <Name>ScmBranch</Name>
-              <Name>ScmRevision</Name>
-              <Name>Forks</Name>
-              <Name>Limit</Name>
-              <Name>Verbosity</Name>
-              <Name>ExtraVars</Name>
-              <Name>JobTags</Name>
-              <Name>SkipTags</Name>
-              <Name>ForceHandlers</Name>
-              <Name>StartAtTask</Name>
-              <Name>Timeout</Name>
-              <Name>UseFactCache</Name>
-              <Name>PasswordsNeededToStart</Name>
-              <Name>AllowSimultaneous</Name>
-              <Name>Artifacts</Name>
-              <Name>DiffMode</Name>
-              <Name>JobSliceNumber</Name>
-              <Name>JobSliceCount</Name>
-              <Name>WebhookService</Name>
-              <Name>WebhookCredential</Name>
-              <Name>WebhookGuid</Name>
-            </ReferencedProperties>
-          </PropertySet>
-        </Members>
-      </MemberSet>
-      <ScriptProperty>
-        <Name>ProjectName</Name>
-        <GetScriptBlock>$this.SummaryFields.Project.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>InstanceGroupName</Name>
-        <GetScriptBlock>$this.SummaryFields.InstanceGroup.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>ExecutionEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>SourceWorkflowJob</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceWorkflowJob</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>Labels</Name>
-        <GetScriptBlock>$this.SummaryFields.Labels.Results</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.JobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>Note</Name>
-        <GetScriptBlock>
-          [ordered]@{
-            Playbook = $this.Playbook;
-            Artifacts = $this.Artifacts | ConvertTo-Json -Compress;
-            Labels = $this.Labels.Name -join ",";
-          }
-        </GetScriptBlock>
-      </ScriptProperty>
-    </Members>
-  </Type>
-  <Type>
-    <Name>Jagabata.Resources.JobTemplateJob+Detail</Name>
-    <Members>
-      <MemberSet>
-        <Name>PSStandardMembers</Name>
-        <Members>
-          <PropertySet>
-            <Name>DefaultDisplayPropertySet</Name>
-            <ReferencedProperties>
               <Name>Id</Name>
               <Name>Type</Name>
               <Name>Created</Name>
@@ -1160,62 +1052,7 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
-              <Name>Created</Name>
-              <Name>Modified</Name>
-              <Name>Job</Name>
-              <Name>Counter</Name>
-              <Name>Event</Name>
-              <Name>EventDisplay</Name>
-              <Name>EventLevel</Name>
-              <Name>Failed</Name>
-              <Name>Changed</Name>
-              <Name>UUID</Name>
-              <Name>HostName</Name>
-              <Name>Playbook</Name>
-              <Name>Play</Name>
-              <Name>Task</Name>
-              <Name>Role</Name>
-              <Name>Stdout</Name>
-              <Name>StartLine</Name>
-              <Name>EndLine</Name>
-              <Name>Verbosity</Name>
-              <Name>TaskAction</Name>
-              <Name>TaskStart</Name>
-              <Name>TaskEnd</Name>
-              <Name>ActionDetail</Name>
-            </ReferencedProperties>
-          </PropertySet>
-        </Members>
-      </MemberSet>
-      <ScriptProperty>
-        <Name>TaskAction</Name>
-        <GetScriptBlock>$this.EventData["task_action"]</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>TaskStart</Name>
-        <GetScriptBlock>$this.EventData["start"]</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>TaskEnd</Name>
-        <GetScriptBlock>$this.EventData["end"]</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
-        <Name>ActionDetail</Name>
-        <GetScriptBlock>$this.EventData["res"]</GetScriptBlock>
-      </ScriptProperty>
-    </Members>
-  </Type>
-  <Type>
-    <Name>Jagabata.Resources.ProjectUpdateJobEvent</Name>
-    <Members>
-      <MemberSet>
-        <Name>PSStandardMembers</Name>
-        <Members>
-          <PropertySet>
-            <Name>DefaultDisplayPropertySet</Name>
-            <ReferencedProperties>
               <Name>Id</Name>
               <Name>Type</Name>
               <Name>Created</Name>
@@ -1276,8 +1113,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>InventoryUpdate</Name>
@@ -1310,8 +1147,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>SystemJob</Name>
@@ -1344,8 +1181,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>AdHocCommand</Name>
@@ -1401,8 +1238,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Job</Name>
@@ -1457,8 +1294,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1524,8 +1361,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1575,8 +1412,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1613,8 +1450,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1667,8 +1504,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1709,8 +1546,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1765,8 +1602,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Name</Name>
               <Name>Description</Name>
               <Name>TargetResource</Name>
@@ -1812,8 +1649,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1875,8 +1712,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>NotificationTemplate</Name>
@@ -1916,8 +1753,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -1942,8 +1779,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2014,8 +1851,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2091,8 +1928,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2143,8 +1980,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Timestamp</Name>
               <Name>Operation</Name>
               <Name>Changes</Name>
@@ -2173,8 +2010,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>WorkflowJobTemplate</Name>
@@ -2227,8 +2064,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>WorkflowJob</Name>
@@ -2298,8 +2135,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Description</Name>
@@ -2352,8 +2189,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2383,8 +2220,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Hostname</Name>
+              <Name>Id</Name>
               <Name>FirstAutomation</Name>
               <Name>LastAutomation</Name>
               <Name>LastDeleted</Name>
@@ -2428,8 +2265,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2469,8 +2306,8 @@
           <PropertySet>
             <Name>DefaultDisplayPropertySet</Name>
             <ReferencedProperties>
-              <Name>Id</Name>
               <Name>Type</Name>
+              <Name>Id</Name>
               <Name>Created</Name>
               <Name>Modified</Name>
               <Name>Name</Name>
@@ -2513,6 +2350,34 @@
       <ScriptProperty>
         <Name>ApprovedOrDeniedBy</Name>
         <GetScriptBlock>$this.SummaryFields.ApprovedOrDeniedBy</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Jagabata.Resources.UserSummary</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>Type</Name>
+              <Name>Id</Name>
+              <Name>Username</Name>
+              <Name>FirstName</Name>
+              <Name>LastName</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+      <AliasProperty>
+        <Name>Name</Name>
+        <ReferencedMemberName>Username</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptProperty>
+        <Name>Description</Name>
+        <GetScriptBlock>"{0} {1}" -f $this.FirstName, $this.LastName</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
