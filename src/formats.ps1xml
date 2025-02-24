@@ -3,40 +3,6 @@
                xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd">
   <ViewDefinitions>
     <View>
-      <Name>ApiHelp</Name>
-      <ViewSelectedBy>
-        <TypeName>Jagabata.Resources.ApiHelp</TypeName>
-      </ViewSelectedBy>
-      <ListControl>
-        <ListEntries>
-          <ListEntry>
-            <ListItems>
-              <ListItem><PropertyName>Name</PropertyName></ListItem>
-              <ListItem>
-                <Label>Description</Label>
-                <ScriptBlock>
-                  if ($Host.UI.SupportsVirtualTerminal) {
-                    $md = $_.Description | ConvertFrom-Markdown -AsVT100EncodedString;
-                    $md.VT100EncodedString
-                  } else {
-                    $_.Description
-                  }
-                </ScriptBlock>
-              </ListItem>
-              <ListItem><Label>Renders</Label><ScriptBlock>$_.Renders -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>Parses</Label><ScriptBlock>$_.Parses -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>Actions</Label><ScriptBlock>$_.Actions.Keys -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>Types</Label><ScriptBlock>$_.Types -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>SearchFields</Label><ScriptBlock>$_.SearchFields -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>RelatedSearchFields</Label><ScriptBlock>($_.RelatedSearchFields | ForEach-Object { $_ -replace "__search$","" }) -join "`n"</ScriptBlock></ListItem>
-              <ListItem><Label>ObjectRoles</Label><ScriptBlock>$_.ObjectRoles -join "`n"</ScriptBlock></ListItem>
-              <ListItem><PropertyName>MaxPageSize</PropertyName></ListItem>
-            </ListItems>
-          </ListEntry>
-        </ListEntries>
-      </ListControl>
-    </View>
-    <View>
       <Name>Dashboard</Name>
       <ViewSelectedBy>
         <TypeName>Jagabata.Resources.Dashboard</TypeName>

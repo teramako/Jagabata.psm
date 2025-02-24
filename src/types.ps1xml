@@ -2,6 +2,42 @@
 <Types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd">
   <Type>
+    <Name>Jagabata.Resources.ApiHelp</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>Name</Name>
+              <Name>Description</Name>
+              <Name>Renders</Name>
+              <Name>Parses</Name>
+              <Name>Actions</Name>
+              <Name>Types</Name>
+              <Name>SearchFields</Name>
+              <Name>RelatedSearchFields</Name>
+              <Name>ObjectRoles</Name>
+              <Name>MaxPageSize</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+      <ScriptProperty>
+        <Name>VT100Description</Name>
+        <GetScriptBlock>
+          if ($Host.UI.SupportsVirtualTerminal) {
+            $md = $this.Description | ConvertFrom-Markdown -AsVT100EncodedString;
+            $md.VT100EncodedString
+          } else {
+            $this.Description
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Jagabata.Resources.ResultSetBase</Name>
     <Members>
       <MemberSet>

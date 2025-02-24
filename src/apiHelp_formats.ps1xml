@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd">
+  <ViewDefinitions>
+    <View>
+      <Name>ApiHelp</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.ApiHelp</TypeName>
+      </ViewSelectedBy>
+      <Controls>
+        <Control>
+          <Name>List</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>* </Text>
+                  <ExpressionBinding>
+                    <ScriptBlock>$_</ScriptBlock>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>ActionMethod</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>Method: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>Key</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <RightIndent>8</RightIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>Value</PropertyName>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>ActionItem</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                  <NewLine />
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>ActionItemDescription</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>HelpText</PropertyName>
+                      </ExpressionBinding>
+                      <NewLine />
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>ActionItem</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Underline +  $_.Key  + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>: </Text>
+                  <ExpressionBinding>
+                    <ScriptBlock>"({0})" -f $_.Value.Type</ScriptBlock>
+                  </ExpressionBinding>
+                  <ExpressionBinding>
+                    <ScriptBlock>if ($_.Value.Required) { $PSStyle.Foreground.Red +  " [Required]"  + $PSStyle.Reset }</ScriptBlock>
+                  </ExpressionBinding>
+                  <ExpressionBinding>
+                    <ScriptBlock>if ($_.Value.Filterable) { $PSStyle.Foreground.Yellow + " [Filterable]" + $PSStyle.Reset }</ScriptBlock>
+                  </ExpressionBinding>
+                  <ExpressionBinding>
+                    <ScriptBlock>if ($null -eq $_.Value.Default) { "" } else { " (Default = ``{0}``)" -f $_.Value.Default }</ScriptBlock>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <PropertyName>Value</PropertyName>
+                    <ItemSelectionCondition>
+                      <ScriptBlock>-not [string]::IsNullOrEmpty($_.Value.HelpText)</ScriptBlock>
+                    </ItemSelectionCondition>
+                    <CustomControlName>ActionItemDescription</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Renders</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "Renders" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Actions</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "Actions"+ $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>ActionMethod</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>SearchFields</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "SearchFields" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>RelatedSearchFields</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "RelatedSearchFields" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>ObjectRoles</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "ObjectRoles" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine/>
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Parses</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "Parses" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>:</Text>
+                  <NewLine/>
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>MaxPageSize</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "MaxPageSize" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>: </Text>
+                  <ExpressionBinding>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Types</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <ScriptBlock>$PSStyle.Formatting.TableHeader + "Types" + $PSStyle.Reset</ScriptBlock>
+                  </ExpressionBinding>
+                  <Text>: </Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>4</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>List</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+      </Controls>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$PSStyle.Formatting.TableHeader + "Name"+ $PSStyle.Reset</ScriptBlock>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Name</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+              <NewLine />
+              <ExpressionBinding>
+                <ScriptBlock>$PSStyle.Formatting.TableHeader + "Description"+ $PSStyle.Reset</ScriptBlock>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <RightIndent>4</RightIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>VT100Description</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+              <ExpressionBinding>
+                <PropertyName>Renders</PropertyName>
+                <ItemSelectionCondition><PropertyName>Renders</PropertyName></ItemSelectionCondition>
+                <CustomControlName>Renders</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>Parses</PropertyName>
+                <ItemSelectionCondition><PropertyName>Parses</PropertyName></ItemSelectionCondition>
+                <CustomControlName>Parses</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>Types</PropertyName>
+                <ItemSelectionCondition><PropertyName>Types</PropertyName></ItemSelectionCondition>
+                <CustomControlName>Types</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>Actions</PropertyName>
+                <ItemSelectionCondition><PropertyName>Actions</PropertyName></ItemSelectionCondition>
+                <CustomControlName>Actions</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>SearchFields</PropertyName>
+                <ItemSelectionCondition><PropertyName>SearchFields</PropertyName></ItemSelectionCondition>
+                <CustomControlName>SearchFields</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>RelatedSearchFields</PropertyName>
+                <ItemSelectionCondition><PropertyName>RelatedSearchFields</PropertyName></ItemSelectionCondition>
+                <CustomControlName>RelatedSearchFields</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>ObjectRoles</PropertyName>
+                <ItemSelectionCondition><PropertyName>ObjectRoles</PropertyName></ItemSelectionCondition>
+                <CustomControlName>ObjectRoles</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <PropertyName>MaxPageSize</PropertyName>
+                <ItemSelectionCondition><PropertyName>MaxPageSize</PropertyName></ItemSelectionCondition>
+                <CustomControlName>MaxPageSize</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>ApiHelp</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.ApiHelp</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem><PropertyName>Name</PropertyName></ListItem>
+              <ListItem><Label>Description</Label><PropertyName>VT100Description</PropertyName></ListItem>
+              <ListItem><Label>Renders</Label><ScriptBlock>$_.Renders -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>Parses</Label><ScriptBlock>$_.Parses -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>Actions</Label><ScriptBlock>$_.Actions.Keys -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>Types</Label><ScriptBlock>$_.Types -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>SearchFields</Label><ScriptBlock>$_.SearchFields -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>RelatedSearchFields</Label><ScriptBlock>($_.RelatedSearchFields | ForEach-Object { $_ -replace "__search$","" }) -join "`n"</ScriptBlock></ListItem>
+              <ListItem><Label>ObjectRoles</Label><ScriptBlock>$_.ObjectRoles -join "`n"</ScriptBlock></ListItem>
+              <ListItem><PropertyName>MaxPageSize</PropertyName></ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>
+
