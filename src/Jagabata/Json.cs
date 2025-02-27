@@ -242,6 +242,7 @@ namespace Jagabata
         public static readonly JsonSerializerOptions DeserializeOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
             PropertyNameCaseInsensitive = true,
             Converters =
             {
@@ -255,6 +256,7 @@ namespace Jagabata
         {
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             Converters =
             {
