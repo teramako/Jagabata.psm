@@ -14,7 +14,7 @@ namespace Jagabata
     {
         public static string Stringify(object obj, bool pretty = false)
         {
-            var options = pretty ? SerializeOptions : DeserializeOptions;
+            var options = pretty ? SerializeOptionsForPrettyPrinting : SerializeOptions;
             return JsonSerializer.Serialize(obj, options);
         }
         private static OrderedDictionary ToDict(JsonElement json)
@@ -229,42 +229,90 @@ namespace Jagabata
                 writer.WriteStringValue(value.ToUniversalTime().ToString("o"));
             }
         }
-        /// <summary>
-        /// Json Serialize / Deserialize OPTIONS for this API.
-        /// <list type="bullet">
-        ///   <item>Property PathName to snake_case for serialization</item>
-        ///   <item>Property PathName In case sensitive for deserialization</item>
-        ///   <item>DateTime to Local time zone for deserialization, to Utc for serialization</item>
-        ///   <item>Non classed object to <c>Dictionary&lt;string, object?&gt;</c> for deserialization</item>
-        ///   <item>Non classed array to <c>object?[]</c> for deserialization</item>
-        /// </list>
-        /// </summary>
-        public static readonly JsonSerializerOptions DeserializeOptions = new()
+
+        private static readonly Lazy<LocalDateTimeConverter> _localDateTimeConverter = new();
+        private static readonly Lazy<SecureStringConverter> _secureStringConverter = new(static () => new SecureStringConverter(mask: false));
+        private static readonly Lazy<SecureStringConverter> _maskedSecureStringConverter = new(static () => new SecureStringConverter(mask: true));
+        private static readonly Lazy<PSObjectConverter> _psObjectConverter = new();
+        private static readonly Lazy<DictConverter> _dictConverter = new();
+        private static readonly Lazy<ArrayConverter> _arrayConverter = new();
+
+        private static readonly Lazy<JavaScriptEncoder> _javaScriptEncoder = new(static () => JavaScriptEncoder.Create(UnicodeRanges.All));
+
+        /// <seealso cref="DeserializeOptions"/>
+        private static readonly Lazy<JsonSerializerOptions> _deserializeOptions = new(static () => new JsonSerializerOptions()
         {
+            // UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-            DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
             PropertyNameCaseInsensitive = true,
             Converters =
             {
-                new LocalDateTimeConverter(),
-                new DictConverter(),
-                new SecureStringConverter(false),
-                // new ArrayConverter()
+                _localDateTimeConverter.Value,
+                _dictConverter.Value,
+                _secureStringConverter.Value,
             }
-        };
-        public static readonly JsonSerializerOptions SerializeOptions = new()
+        });
+        /// <summary>
+        /// Json Serialize / Deserialize OPTIONS for this API.
+        /// <list type="bullet">
+        ///   <item>Property name to snake_case for serialization</item>
+        ///   <item>Property name in case sensitive for deserialization</item>
+        ///   <item>DateTime to Local time zone for deserialization, to Utc for serialization</item>
+        ///   <item>Non classed object to <c>Dictionary&lt;string, object?&gt;</c> for deserialization</item>
+        /// </list>
+        /// </summary>
+        public static JsonSerializerOptions DeserializeOptions => _deserializeOptions.Value;
+
+        /// <seealso cref="SerializeOptions"/>
+        private static readonly Lazy<JsonSerializerOptions> _serializeOptions = new(static () => new JsonSerializerOptions()
+        {
+            WriteIndented = false,
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+            Encoder = _javaScriptEncoder.Value,
+            Converters =
+            {
+                _psObjectConverter.Value,
+                _localDateTimeConverter.Value,
+                _maskedSecureStringConverter.Value,
+            }
+        });
+        /// <summary>
+        /// Json Serialize OPTIONS for this API.
+        /// <list type="bullet">
+        ///   <item>Serialize property name to snake_case</item>
+        ///   <item>Serialize <see cref="DateTime"/> to Utc</item>
+        ///   <item>Serialize <see cref="PSObject"/></item>
+        ///   <item>Serialize <see cref="System.Security.SecureString"/> to masked (<c>*****</c>) string</item>
+        /// </list>
+        /// </summary>
+        public static JsonSerializerOptions SerializeOptions => _serializeOptions.Value;
+
+        /// <seealso cref="SerializeOptionsForPrettyPrinting"/>
+        private static readonly Lazy<JsonSerializerOptions> _serializeOptionsForPrettyPrinting = new(static () => new JsonSerializerOptions()
         {
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            Encoder = _javaScriptEncoder.Value,
             Converters =
             {
-                new PSObjectConverter(),
-                new LocalDateTimeConverter(),
-                new SecureStringConverter(true),
+                _psObjectConverter.Value,
+                _localDateTimeConverter.Value,
+                _maskedSecureStringConverter.Value,
             }
-        };
+        });
+        /// <summary>
+        /// Json Serialize OPTIONS for pretty printing
+        /// <list type="bullet">
+        ///   <item>Serialize property name to snake_case</item>
+        ///   <item>Serialize <see cref="DateTime"/> to Utc</item>
+        ///   <item>Serialize <see cref="PSObject"/></item>
+        ///   <item>Serialize <see cref="System.Security.SecureString"/> to masked (<c>*****</c>) string</item>
+        /// </list>
+        /// </summary>
+        public static JsonSerializerOptions SerializeOptionsForPrettyPrinting => _serializeOptionsForPrettyPrinting.Value;
+
         /// <summary>
         /// Converter to deserialize PSObject while preventing circular references
         /// </summary>
@@ -343,7 +391,6 @@ namespace Jagabata
         /// </summary>
         private class DictConverter : JsonConverter<Dictionary<string, object?>>
         {
-            private static readonly ArrayConverter arrayConverter = new();
             public override Dictionary<string, object?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 var dict = new Dictionary<string, object?>();
@@ -395,7 +442,7 @@ namespace Jagabata
                         case JsonTokenType.False:
                             dict.Add(propertyName, reader.GetBoolean()); break;
                         case JsonTokenType.StartArray:
-                            dict.Add(propertyName, arrayConverter.Read(ref reader, typeof(IList), options));
+                            dict.Add(propertyName, _arrayConverter.Value.Read(ref reader, typeof(IList), options));
                             break;
                         case JsonTokenType.StartObject:
                             dict.Add(propertyName, Read(ref reader, typeToConvert, options));
@@ -423,7 +470,6 @@ namespace Jagabata
         /// </summary>
         private class ArrayConverter : JsonConverter<object?[]>
         {
-            private static readonly DictConverter dictConverter = new();
             public override object?[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 ArrayList array = [];
@@ -470,7 +516,7 @@ namespace Jagabata
                             array.Add(Read(ref reader, typeToConvert, options));
                             break;
                         case JsonTokenType.StartObject:
-                            array.Add(dictConverter.Read(ref reader, typeof(Dictionary<string, object?>), options));
+                            array.Add(_dictConverter.Value.Read(ref reader, typeof(Dictionary<string, object?>), options));
                             break;
                         default:
                             throw new JsonException($"Invalid TokenType: {reader.TokenType}");
