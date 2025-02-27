@@ -100,7 +100,15 @@ namespace Jagabata
                 case JsonValueKind.String:
                     return val.GetString() ?? string.Empty;
                 case JsonValueKind.Number:
-                    return val.GetRawText().IndexOf('.') > 0 ? val.GetDouble() : val.GetInt64();
+                    if (val.TryGetInt32(out var intVal))
+                        return intVal;
+                    else if (val.TryGetInt64(out var longVal))
+                        return longVal;
+                    else if (val.TryGetUInt64(out var ulongVal))
+                        return ulongVal;
+                    else if (val.TryGetDouble(out var doubleVal))
+                        return doubleVal;
+                    throw new JsonException($"Could not convert number: {val.GetRawText()}");
                 case JsonValueKind.True:
                 case JsonValueKind.False:
                     return val.GetBoolean();
@@ -426,10 +434,6 @@ namespace Jagabata
                             {
                                 array.Add(int32val);
                             }
-                            else if (reader.TryGetDouble(out double doubleVal))
-                            {
-                                array.Add(doubleVal);
-                            }
                             else if (reader.TryGetInt64(out long int64val))
                             {
                                 array.Add(int64val);
@@ -437,6 +441,10 @@ namespace Jagabata
                             else if (reader.TryGetUInt64(out ulong uint64val))
                             {
                                 array.Add(uint64val);
+                            }
+                            else if (reader.TryGetDouble(out double doubleVal))
+                            {
+                                array.Add(doubleVal);
                             }
                             break;
                         case JsonTokenType.True:
