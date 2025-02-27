@@ -17,7 +17,7 @@ namespace Jagabata
             var options = pretty ? SerializeOptions : DeserializeOptions;
             return JsonSerializer.Serialize(obj, options);
         }
-        public static OrderedDictionary ToDict(JsonElement json)
+        private static OrderedDictionary ToDict(JsonElement json)
         {
             var dict = new OrderedDictionary();
             foreach (var kv in json.EnumerateObject())
@@ -26,7 +26,7 @@ namespace Jagabata
             }
             return dict;
         }
-        public static object?[] ToArray(JsonElement json)
+        private static object?[] ToArray(JsonElement json)
         {
             var length = json.GetArrayLength();
             object?[] array = new object?[length];
@@ -114,7 +114,7 @@ namespace Jagabata
         /// "related" property converter.<br/>
         /// See <see cref="RelatedDictionary"/>
         /// </summary>
-        public class RelatedResourceConverter : JsonConverter<RelatedDictionary>
+        internal class RelatedResourceConverter : JsonConverter<RelatedDictionary>
         {
             public override RelatedDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
@@ -193,7 +193,7 @@ namespace Jagabata
         /// <list type="bullet">Deserialize: to Enum named "UpperCamelCase"</list>
         /// </summary>
         /// <typeparam name="TEnum"></typeparam>
-        public class EnumUpperCamelCaseStringConverter<TEnum> : JsonConverter<TEnum> where TEnum : struct, Enum
+        internal class EnumUpperCamelCaseStringConverter<TEnum> : JsonConverter<TEnum> where TEnum : struct, Enum
         {
             public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
@@ -219,7 +219,7 @@ namespace Jagabata
         /// <list type="bullet">Serialize to string of UTC</list>
         /// <list type="bullet">Deserialize to Local DateTime</list>
         /// </summary>
-        public class LocalDateTimeConverter : JsonConverter<DateTime>
+        private class LocalDateTimeConverter : JsonConverter<DateTime>
         {
             public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
@@ -468,7 +468,7 @@ namespace Jagabata
             }
         }
 
-        public class CapabilityConverter : JsonConverter<Capability>
+        internal class CapabilityConverter : JsonConverter<Capability>
         {
             public override Capability Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
