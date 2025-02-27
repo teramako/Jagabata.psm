@@ -294,7 +294,28 @@ namespace Jagabata
 
             public override void Write(Utf8JsonWriter writer, PSObject value, JsonSerializerOptions options)
             {
-                JsonSerializer.Serialize(writer, value.BaseObject, options);
+                if (value.BaseObject is PSCustomObject)
+                {
+                    writer.WriteStartObject();
+                    foreach (var prop in value.Properties)
+                    {
+                        switch (prop.MemberType)
+                        {
+                            case PSMemberTypes.CodeProperty:
+                            case PSMemberTypes.Property:
+                            case PSMemberTypes.NoteProperty:
+                            case PSMemberTypes.ScriptProperty:
+                                writer.WritePropertyName(prop.Name);
+                                JsonSerializer.Serialize(writer, prop.Value, options);
+                                continue;
+                        }
+                    }
+                    writer.WriteEndObject();
+                }
+                else
+                {
+                    JsonSerializer.Serialize(writer, value.BaseObject, options);
+                }
             }
         }
 
