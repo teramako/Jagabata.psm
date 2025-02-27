@@ -36,13 +36,25 @@ namespace Jagabata
             }
             return array;
         }
+
+        /// <summary>
+        /// Deserialize JSON string to Jagabata resource object or <see cref="OrderedDictionary"/>
+        /// </summary>
+        /// <param name="json">Json String</param>
+        /// <returns>Deserialized object or <c>null</c></returns>
+        public static object? Load(ReadOnlySpan<char> json)
+        {
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(json, DeserializeOptions);
+            return ObjectToInferredType(jsonElement, true);
+        }
+
         /// <summary>
         /// Deserialize <see cref="JsonElement"/> to Jagabata resource object or <see cref="OrderedDictionary"/>
         /// </summary>
         /// <param name="val">Json String</param>
         /// <param name="isRoot">when <c>true</c>, infer the object type</param>
         /// <returns>Deserialized object or <c>null</c></returns>
-        public static object? ObjectToInferredType(JsonElement val, bool isRoot = false)
+        internal static object? ObjectToInferredType(JsonElement val, bool isRoot = false)
         {
             switch (val.ValueKind)
             {
