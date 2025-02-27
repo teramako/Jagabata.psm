@@ -149,26 +149,10 @@ namespace Jagabata
                     switch (reader.TokenType)
                     {
                         case JsonTokenType.String:
-                            var val = reader.GetString();
-                            if (val is not null)
-                                dict.Add(propertyName, val);
+                            dict.Add(propertyName, reader.GetString() ?? string.Empty);
                             break;
                         case JsonTokenType.StartArray:
-                            var list = new List<string>();
-                            reader.Read();
-                            while (reader.TokenType != JsonTokenType.EndArray)
-                            {
-                                if (reader.TokenType != JsonTokenType.String)
-                                {
-                                    throw new JsonException($"[InArray] value is not String: {reader.TokenType}");
-                                }
-                                string? arrayVal = reader.GetString();
-                                if (!string.IsNullOrEmpty(arrayVal))
-                                    list.Add(arrayVal);
-
-                                reader.Read();
-                            }
-                            dict.Add(propertyName, list.ToArray());
+                            dict.Add(propertyName, JsonSerializer.Deserialize<string[]>(ref reader, options) ?? []);
                             break;
                         default:
                             throw new JsonException($"TokenType is not String or StartArray: {reader.TokenType}");
