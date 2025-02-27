@@ -36,6 +36,12 @@ namespace Jagabata
             }
             return array;
         }
+        /// <summary>
+        /// Deserialize <see cref="JsonElement"/> to Jagabata resource object or <see cref="OrderedDictionary"/>
+        /// </summary>
+        /// <param name="val">Json String</param>
+        /// <param name="isRoot">when <c>true</c>, infer the object type</param>
+        /// <returns>Deserialized object or <c>null</c></returns>
         public static object? ObjectToInferredType(JsonElement val, bool isRoot = false)
         {
             switch (val.ValueKind)
@@ -293,8 +299,9 @@ namespace Jagabata
         }
 
         /// <summary>
-        /// Converter to serialize/deserialize SecureString
+        /// Converter to serialize/deserialize <see cref="System.Security.SecureString"/>
         /// </summary>
+        /// <param name="mask">Serialize to masked string (<c>*****</c>) when <c>true</c></param>
         private class SecureStringConverter(bool mask) : JsonConverter<System.Security.SecureString>
         {
             public override System.Security.SecureString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -325,7 +332,7 @@ namespace Jagabata
         }
 
         /// <summary>
-        /// Deserialize JSON to <see cref="Dictionary{string, object?}"/> and serialize
+        /// Deserialize <c>Object</c> to <c>Dictionary&lt;string, object?&gt;</c>
         /// </summary>
         private class DictConverter : JsonConverter<Dictionary<string, object?>>
         {
