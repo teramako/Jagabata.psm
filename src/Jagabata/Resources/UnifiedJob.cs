@@ -23,7 +23,6 @@ namespace Jagabata.Resources
         DateTime? Finished { get; }
         DateTime? CanceledOn { get; }
         string JobExplanation { get; }
-        LaunchedBy LaunchedBy { get; }
         string? WorkUnitId { get; }
     }
 
@@ -41,7 +40,6 @@ namespace Jagabata.Resources
                                      DateTime? canceledOn,
                                      double elapsed,
                                      string jobExplanation,
-                                     LaunchedBy launchedBy,
                                      string? workUnitId)
         : SummaryFieldsContainer, IUnifiedJob
     {
@@ -62,7 +60,6 @@ namespace Jagabata.Resources
         public DateTime? CanceledOn { get; } = canceledOn;
         public double Elapsed { get; } = elapsed;
         public string JobExplanation { get; } = jobExplanation;
-        public LaunchedBy LaunchedBy { get; } = launchedBy;
         public string? WorkUnitId { get; } = workUnitId;
 
         /// <summary>

@@ -7,8 +7,7 @@ namespace Jagabata.Resources
                                   string name, string description, ulong? unifiedJobTemplate, JobLaunchType launchType,
                                   JobStatus status, ulong? executionEnvironment, bool failed, DateTime? started,
                                   DateTime? finished, DateTime? canceledOn, double elapsed, string jobExplanation,
-                                  LaunchedBy launchedBy, string? workUnitId, bool canApproveOrDeny,
-                                  DateTime? approvalExpiration, bool timedOut)
+                                  string? workUnitId, bool canApproveOrDeny, DateTime? approvalExpiration, bool timedOut)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed, started,
                      finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
           IResource, ICacheableResource
@@ -62,17 +61,17 @@ namespace Jagabata.Resources
             return item;
         }
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
-                            DateTime created, DateTime? modified, string name, string description,
-                            ulong? unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
+        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                            string description, ulong? unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
                             ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
                             DateTime? canceledOn, double elapsed, string jobArgs, string jobCwd,
                             Dictionary<string, string> jobEnv, string jobExplanation, string resultTraceback,
-                            LaunchedBy launchedBy, string? workUnitId, bool canApproveOrDeny,
+                            bool eventProcessingFinished, string? workUnitId, bool canApproveOrDeny,
                             DateTime? approvalExpiration, bool timedOut)
             : WorkflowApproval(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
                                launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed,
-                               jobExplanation, launchedBy, workUnitId, canApproveOrDeny, approvalExpiration, timedOut),
+                               jobExplanation, workUnitId, canApproveOrDeny, approvalExpiration, timedOut),
               IJobDetail, IResource
         {
             public string JobArgs { get; } = jobArgs;
