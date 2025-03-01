@@ -17,16 +17,9 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     private string? _apiPath;
     protected virtual string ApiPath
     {
-        get
-        {
-            if (_apiPath is not null)
-            {
-                return _apiPath;
-            }
-
-            _apiPath = GetApiPath(typeof(TResource));
-            return _apiPath;
-        }
+        get => _apiPath is not null || Utils.TryGetApiPath<TResource>(out _apiPath)
+              ? _apiPath
+              : throw new NotImplementedException($"'PATH' field is not implemented on {typeof(TResource)}");
         set => _apiPath = value;
     }
 

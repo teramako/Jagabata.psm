@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 
@@ -61,6 +62,20 @@ namespace Jagabata
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Get <c>PATH</c> field value in the Resource class
+        /// </summary>
+        /// <typeparam name="TType">Type has 'PATH' static field</typeparam>
+        /// <param name="apiPath">API Path; Example: <c>/api/v2/jobs/</c></param>
+        public static bool TryGetApiPath<TType>([MaybeNullWhen(false)] out string apiPath)
+        {
+            var t = typeof(TType);
+            apiPath = t.GetField("PATH", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                      ?.GetValue(t) as string;
+            return apiPath is not null;
+        }
+
         public static bool TryGetTypeFromPath(string path, Method method, out Type type)
         {
             var t = GetTypeFromPath(path, method);
