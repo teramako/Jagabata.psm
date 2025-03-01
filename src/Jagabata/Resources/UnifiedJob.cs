@@ -19,7 +19,6 @@ namespace Jagabata.Resources
         DateTime Created { get; }
         DateTime? Modified { get; }
         JobLaunchType LaunchType { get; }
-        ulong? ExecutionEnvironment { get; }
         DateTime? Started { get; }
         DateTime? Finished { get; }
         DateTime? CanceledOn { get; }
@@ -36,7 +35,6 @@ namespace Jagabata.Resources
                                      string name,
                                      JobLaunchType launchType,
                                      JobStatus status,
-                                     ulong? executionEnvironment,
                                      bool failed,
                                      DateTime? started,
                                      DateTime? finished,
@@ -58,7 +56,6 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public JobLaunchType LaunchType { get; } = launchType;
         public JobStatus Status { get; } = status;
-        public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public bool Failed { get; } = failed;
         public DateTime? Started { get; } = started;
         public DateTime? Finished { get; } = finished;

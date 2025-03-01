@@ -37,12 +37,11 @@ namespace Jagabata.Resources
     public class WorkflowJob(ulong id, ResourceType type, string url, RelatedDictionary related,
                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                              string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
-                             ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
-                             DateTime? canceledOn, double elapsed, string jobExplanation, LaunchedBy launchedBy,
-                             string? workUnitId, ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous,
-                             ulong? jobTemplate, bool isSlicedJob, ulong? inventory, string? limit, string? scmBranch,
-                             string webhookService, ulong? webhookCredential, string webhookGuid, string? skipTags,
-                             string? jobTags)
+                             bool failed, DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
+                             string jobExplanation, LaunchedBy launchedBy, string? workUnitId,
+                             ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous, ulong? jobTemplate,
+                             bool isSlicedJob, ulong? inventory, string? limit, string? scmBranch, string webhookService,
+                             ulong? webhookCredential, string webhookGuid, string? skipTags, string? jobTags)
         : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
                      started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
           IWorkflowJob, IResource, ICacheableResource
@@ -133,21 +132,19 @@ namespace Jagabata.Resources
             };
         }
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
-                            DateTime created, DateTime? modified, string name, string description,
-                            ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
-                            ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
-                            DateTime? canceledOn, double elapsed, string jobArgs, string jobCwd,
-                            Dictionary<string, string> jobEnv, string jobExplanation, string resultTraceback,
-                            LaunchedBy launchedBy, string? workUnitId, ulong? workflowJobTemplate, string extraVars,
-                            bool allowSimultaneous, ulong? jobTemplate, bool isSlicedJob, ulong? inventory,
-                            string? limit, string? scmBranch, string webhookService, ulong? webhookCredential,
-                            string webhookGuid, string? skipTags, string? jobTags)
+        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                            string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
+                            bool failed, DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
+                            string jobArgs, string jobCwd, Dictionary<string, string> jobEnv, string jobExplanation,
+                            string resultTraceback, LaunchedBy launchedBy, string? workUnitId,
+                            ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous, ulong? jobTemplate,
+                            bool isSlicedJob, ulong? inventory, string? limit, string? scmBranch, string webhookService,
+                            ulong? webhookCredential, string webhookGuid, string? skipTags, string? jobTags)
             : WorkflowJob(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
-                          launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed,
-                          jobExplanation, launchedBy, workUnitId, workflowJobTemplate, extraVars, allowSimultaneous,
-                          jobTemplate, isSlicedJob, inventory, limit, scmBranch, webhookService, webhookCredential,
-                          webhookGuid, skipTags, jobTags),
+                          launchType, status, failed, started, finished, canceledOn, elapsed, jobExplanation, launchedBy,
+                          workUnitId, workflowJobTemplate, extraVars, allowSimultaneous, jobTemplate, isSlicedJob, inventory,
+                          limit, scmBranch, webhookService, webhookCredential, webhookGuid, skipTags, jobTags),
               IWorkflowJob, IJobDetail, IResource
         {
             public string JobArgs { get; } = jobArgs;
@@ -157,21 +154,20 @@ namespace Jagabata.Resources
         }
         public class LaunchResult(ulong workflowJob, Dictionary<string, object?> ignoredFields, ulong id,
                                   ResourceType type, string url, RelatedDictionary related,
-                                  SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
-                                  string description, ulong unifiedJobTemplate, JobLaunchType launchType,
-                                  JobStatus status, ulong? executionEnvironment, bool failed, DateTime? started,
-                                  DateTime? finished, DateTime? canceledOn, double elapsed, string jobArgs,
-                                  string jobCwd, Dictionary<string, string> jobEnv, string jobExplanation,
-                                  string resultTraceback, LaunchedBy launchedBy, string? workUnitId,
-                                  ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous,
-                                  ulong? jobTemplate, bool isSlicedJob, ulong? inventory, string? limit,
-                                  string? scmBranch, string webhookService, ulong? webhookCredential, string webhookGuid,
-                                  string? skipTags, string? jobTags)
+                                  SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                  string name, string description, ulong unifiedJobTemplate, JobLaunchType launchType,
+                                  JobStatus status, bool failed, DateTime? started, DateTime? finished,
+                                  DateTime? canceledOn, double elapsed, string jobArgs, string jobCwd,
+                                  Dictionary<string, string> jobEnv, string jobExplanation, string resultTraceback,
+                                  LaunchedBy launchedBy, string? workUnitId, ulong? workflowJobTemplate,
+                                  string extraVars, bool allowSimultaneous, ulong? jobTemplate, bool isSlicedJob,
+                                  ulong? inventory, string? limit, string? scmBranch, string webhookService,
+                                  ulong? webhookCredential, string webhookGuid, string? skipTags, string? jobTags)
             : Detail(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
-                     launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed, jobArgs,
-                     jobCwd, jobEnv, jobExplanation, resultTraceback, launchedBy, workUnitId, workflowJobTemplate,
-                     extraVars, allowSimultaneous, jobTemplate, isSlicedJob, inventory, limit, scmBranch,
-                     webhookService, webhookCredential, webhookGuid, skipTags, jobTags),
+                     launchType, status, failed, started, finished, canceledOn, elapsed, jobArgs, jobCwd, jobEnv,
+                     jobExplanation, resultTraceback, launchedBy, workUnitId, workflowJobTemplate, extraVars,
+                     allowSimultaneous, jobTemplate, isSlicedJob, inventory, limit, scmBranch, webhookService,
+                     webhookCredential, webhookGuid, skipTags, jobTags),
               IWorkflowJob, IJobDetail, IResource
 
         {
