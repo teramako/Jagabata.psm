@@ -2521,7 +2521,6 @@
               <Name>CanceledOn</Name>
               <Name>Elapsed</Name>
               <Name>JobExplanation</Name>
-              <Name>LaunchedBy</Name>
               <Name>WorkUnitId</Name>
               <Name>CanApproveOrDeny</Name>
               <Name>ApprovalExpiration</Name>
