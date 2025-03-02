@@ -2430,7 +2430,6 @@
           <TableColumnHeader><!-- Elapsed -->
             <Alignment>Right</Alignment>
           </TableColumnHeader>
-          <TableColumnHeader/><!-- LaunchedBy -->
           <TableColumnHeader><!-- WorkflowJob -->
             <Label>WorkflowJob</Label>
           </TableColumnHeader>
@@ -2473,9 +2472,6 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Elapsed</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>LaunchedBy</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>"[{0}]{1}" -f $_.WorkflowJob.Id,$_.WorkflowJob.Name</ScriptBlock>
