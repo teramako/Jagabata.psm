@@ -105,6 +105,11 @@ namespace Jagabata.Resources
                 }
             };
         }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
     }
 
     public record Messages(

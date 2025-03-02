@@ -345,6 +345,11 @@ namespace Jagabata.Resources
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
 
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
+        }
+
         public CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)

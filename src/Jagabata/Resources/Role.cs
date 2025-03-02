@@ -78,5 +78,10 @@ namespace Jagabata.Resources
                                            CacheType.Summary);
             }
         }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
     }
 }

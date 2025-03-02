@@ -150,7 +150,7 @@ namespace Jagabata.Resources
 
         public override string ToString()
         {
-            return $"[{Id}] {Name}";
+            return $"{Type}:{Id}:{Kind}:{Name}";
         }
 
         public CacheItem GetCacheItem()

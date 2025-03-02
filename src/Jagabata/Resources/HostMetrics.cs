@@ -17,5 +17,10 @@ namespace Jagabata.Resources
         public int DeletedCounter { get; } = deletedCounter;
         public bool Deleted { get; } = deleted;
         public int? UsedInInventories { get; } = usedInInventories;
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Hostname}";
+        }
     }
 }

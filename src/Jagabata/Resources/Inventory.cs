@@ -157,7 +157,7 @@ namespace Jagabata.Resources
 
         public override string ToString()
         {
-            return $"[{Id}] {Name}";
+            return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
         }
 
         public CacheItem GetCacheItem()

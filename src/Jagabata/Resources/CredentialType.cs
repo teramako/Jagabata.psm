@@ -145,5 +145,10 @@ namespace Jagabata.Resources
                 }
             };
         }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Kind}:{Name}";
+        }
     }
 }

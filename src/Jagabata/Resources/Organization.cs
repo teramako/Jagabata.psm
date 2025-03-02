@@ -115,5 +115,10 @@ namespace Jagabata.Resources
         {
             return new CacheItem(Type, Id, Name, Description);
         }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
     }
 }

@@ -75,5 +75,10 @@ namespace Jagabata.Resources
             }
             return item;
         }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
     }
 }
