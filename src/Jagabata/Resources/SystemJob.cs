@@ -20,6 +20,38 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
+    public abstract class SystemJobBase : UnifiedJob, ISystemJob, ICacheableResource
+    {
+        public new const string PATH = "/api/v2/system_jobs/";
+
+        public abstract string Description { get; }
+        public abstract ulong UnifiedJobTemplate { get; }
+        public abstract ulong? ExecutionEnvironment { get; }
+        public abstract string ExecutionNode { get; }
+        public abstract LaunchedBy LaunchedBy { get; }
+        public abstract ulong SystemJobTemplate { get; }
+        public abstract string JobType { get; }
+        public abstract string ExtraVars { get; }
+        public abstract string ResultStdout { get; }
+
+        public Dictionary<string, object?> GetExtraVars()
+        {
+            return Yaml.DeserializeToDict(ExtraVars);
+        }
+
+        public CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
+        }
+    }
+
     public class SystemJob(ulong id, ResourceType type, string url, RelatedDictionary related,
                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                            string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
@@ -27,11 +59,8 @@ namespace Jagabata.Resources
                            DateTime? canceledOn, double elapsed, string jobExplanation, string executionNode,
                            LaunchedBy launchedBy, string? workUnitId, ulong systemJobTemplate, string jobType,
                            string extraVars, string resultStdout)
-        : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
-                     started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          ISystemJob, IResource, ICacheableResource
+        : SystemJobBase
     {
-        public new const string PATH = "/api/v2/system_jobs/";
         /// <summary>
         /// Retrieve a System Job Template.<br/>
         /// API Path: <c>/api/v2/system_job_templates/<paramref name="id"/>/</c>
@@ -61,6 +90,33 @@ namespace Jagabata.Resources
             }
         }
 
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+        public override JobLaunchType LaunchType { get; } = launchType;
+        public override JobStatus Status { get; } = status;
+        public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+        public override bool Failed { get; } = failed;
+        public override DateTime? Started { get; } = started;
+        public override DateTime? Finished { get; } = finished;
+        public override DateTime? CanceledOn { get; } = canceledOn;
+        public override double Elapsed { get; } = elapsed;
+        public override string JobExplanation { get; } = jobExplanation;
+        public override string ExecutionNode { get; } = executionNode;
+        public override LaunchedBy LaunchedBy { get; } = launchedBy;
+        public override string? WorkUnitId { get; } = workUnitId;
+        public override ulong SystemJobTemplate { get; } = systemJobTemplate;
+        public override string JobType { get; } = jobType;
+        public override string ExtraVars { get; } = extraVars;
+        public override string ResultStdout { get; } = resultStdout;
+
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
@@ -70,46 +126,39 @@ namespace Jagabata.Resources
                             string resultTraceback, bool eventProcessingFinished, LaunchedBy launchedBy,
                             string? workUnitId, ulong systemJobTemplate, string jobType, string extraVars,
                             string resultStdout)
-            : SystemJob(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
-                        launchType, status, executionEnvironment, failed, started, finished, canceledOn, elapsed,
-                        jobExplanation, executionNode, launchedBy, workUnitId, systemJobTemplate, jobType, extraVars, resultStdout),
-              ISystemJob, IJobDetail, IResource
+            : SystemJobBase, IJobDetail
         {
-
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
+            public override string ExecutionNode { get; } = executionNode;
             public string ResultTraceback { get; } = resultTraceback;
             public bool EventProcessingFinished { get; } = eventProcessingFinished;
-        }
-
-        public RelatedDictionary Related { get; } = related;
-        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public string Description { get; } = description;
-        public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
-
-        public string ExecutionNode { get; } = executionNode;
-
-        public ulong SystemJobTemplate { get; } = systemJobTemplate;
-        public string JobType { get; } = jobType;
-        public string ExtraVars { get; } = extraVars;
-        public string ResultStdout { get; } = resultStdout;
-
-        public Dictionary<string, object?> GetExtraVars()
-        {
-            return Yaml.DeserializeToDict(ExtraVars);
-        }
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Status"] = $"{Status}",
-                    ["Finished"] = $"{Finished}",
-                    ["Elapsed"] = $"{Elapsed}"
-                }
-            };
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override ulong SystemJobTemplate { get; } = systemJobTemplate;
+            public override string JobType { get; } = jobType;
+            public override string ExtraVars { get; } = extraVars;
+            public override string ResultStdout { get; } = resultStdout;
         }
     }
 }

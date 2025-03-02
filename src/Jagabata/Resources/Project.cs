@@ -97,9 +97,7 @@ namespace Jagabata.Resources
                          int scmUpdateCacheTimeout, bool allowOverride, string? customVirtualenv,
                          ulong? defaultEnvironment, ulong? signatureValidationCredential, bool lastUpdateFailed,
                          DateTime? lastUpdated)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IProject, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IProject, ICacheableResource
     {
         public new const string PATH = "/api/v2/projects/";
 
@@ -206,8 +204,15 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public string LocalPath { get; } = localPath;
         public string ScmType { get; } = scmType;
         public string ScmUrl { get; } = scmUrl;
@@ -219,6 +224,10 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public int Timeout { get; } = timeout;
         public string ScmRevision { get; } = scmRevision;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong Organization { get; } = organization;
         public bool ScmUpdateOnLaunch { get; } = scmUpdateOnLaunch;
         public int ScmUpdateCacheTimeout { get; } = scmUpdateCacheTimeout;

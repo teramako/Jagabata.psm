@@ -158,7 +158,7 @@ namespace Jagabata.Resources
                                                                    NameValueCollection? query = null,
                                                                    bool getAll = false)
         {
-            var path = $"{JobTemplateJob.PATH}{jobId}/job_events/";
+            var path = $"{JobTemplateJobBase.PATH}{jobId}/job_events/";
             await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
             {
                 foreach (var jobEvent in result.Contents.Results)
@@ -210,10 +210,10 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsJobEventConverter))]
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 

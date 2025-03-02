@@ -3,10 +3,8 @@ using System.Web;
 
 namespace Jagabata.Resources
 {
-    public interface IUnifiedJobSummary
+    public interface IUnifiedJobSummary : IResource
     {
-        ulong Id { get; }
-        ResourceType Type { get; }
         string Url { get; }
         string Name { get; }
         JobStatus Status { get; }
@@ -26,41 +24,27 @@ namespace Jagabata.Resources
         string? WorkUnitId { get; }
     }
 
-    public abstract class UnifiedJob(ulong id,
-                                     ResourceType type,
-                                     string url,
-                                     DateTime created,
-                                     DateTime? modified,
-                                     string name,
-                                     JobLaunchType launchType,
-                                     JobStatus status,
-                                     bool failed,
-                                     DateTime? started,
-                                     DateTime? finished,
-                                     DateTime? canceledOn,
-                                     double elapsed,
-                                     string jobExplanation,
-                                     string? workUnitId)
-        : SummaryFieldsContainer, IUnifiedJob
+    public abstract class UnifiedJob : SummaryFieldsContainer, IUnifiedJob
     {
         public const string PATH = "/api/v2/unified_jobs/";
 
-        public ulong Id { get; } = id;
+        public abstract DateTime Created { get; }
+        public abstract DateTime? Modified { get; }
+        public abstract string Name { get; }
+        public abstract JobLaunchType LaunchType { get; }
+        public abstract JobStatus Status { get; }
+        public abstract bool Failed { get; }
+        public abstract DateTime? Started { get; }
+        public abstract DateTime? Finished { get; }
+        public abstract DateTime? CanceledOn { get; }
+        public abstract double Elapsed { get; }
+        public abstract string JobExplanation { get; }
+        public abstract string? WorkUnitId { get; }
 
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public JobLaunchType LaunchType { get; } = launchType;
-        public JobStatus Status { get; } = status;
-        public bool Failed { get; } = failed;
-        public DateTime? Started { get; } = started;
-        public DateTime? Finished { get; } = finished;
-        public DateTime? CanceledOn { get; } = canceledOn;
-        public double Elapsed { get; } = elapsed;
-        public string JobExplanation { get; } = jobExplanation;
-        public string? WorkUnitId { get; } = workUnitId;
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
 
         /// <summary>
         /// Retrieve a job.

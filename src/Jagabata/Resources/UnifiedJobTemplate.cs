@@ -67,32 +67,23 @@ namespace Jagabata.Resources
         JobTemplateStatus Status { get; }
     }
 
-    public abstract class UnifiedJobTemplate(ulong id,
-                                             ResourceType type,
-                                             string url,
-                                             DateTime created,
-                                             DateTime? modified,
-                                             string name,
-                                             string description,
-                                             DateTime? lastJobRun,
-                                             bool lastJobFailed,
-                                             DateTime? nextJobRun,
-                                             JobTemplateStatus status)
-        : SummaryFieldsContainer, IUnifiedJobTemplate
+    public abstract class UnifiedJobTemplate : SummaryFieldsContainer, IUnifiedJobTemplate
     {
         public const string PATH = "/api/v2/unified_job_templates/";
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public DateTime? LastJobRun { get; } = lastJobRun;
-        public bool LastJobFailed { get; } = lastJobFailed;
-        public DateTime? NextJobRun { get; } = nextJobRun;
-        public JobTemplateStatus Status { get; } = status;
+        public abstract DateTime Created { get; }
+        public abstract DateTime? Modified { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract DateTime? LastJobRun { get; }
+        public abstract bool LastJobFailed { get; }
+        public abstract DateTime? NextJobRun { get; }
+        public abstract JobTemplateStatus Status { get; }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
 
         /// <summary>
         /// Retrieve a job template.

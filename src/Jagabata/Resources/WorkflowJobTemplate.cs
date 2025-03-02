@@ -60,9 +60,7 @@ namespace Jagabata.Resources
                                      bool askInventoryOnLaunch, bool askScmBranchOnLaunch, bool askLimitOnLaunch,
                                      string webhookService, ulong? webhookCredential, bool askLabelsOnLaunch,
                                      bool askSkipTagsOnLaunch, bool askTagsOnLaunch, string? skipTags, string? jobTags)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IWorkflowJobTemplate, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IWorkflowJobTemplate, ICacheableResource
     {
         public new const string PATH = "/api/v2/workflow_job_templates/";
         /// <summary>
@@ -115,15 +113,24 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public string ExtraVars { get; } = extraVars;
         public ulong? Organization { get; } = organization;
         public bool SurveyEnabled { get; } = surveyEnabled;
         public bool AllowSimultaneous { get; } = allowSimultaneous;
         public bool AskVariablesOnLaunch { get; } = askVariablesOnLaunch;
-
         public ulong? Inventory { get; } = inventory;
         public string? Limit { get; } = limit;
         public string? ScmBranch { get; } = scmBranch;

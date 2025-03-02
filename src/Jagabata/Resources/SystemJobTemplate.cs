@@ -17,9 +17,7 @@ namespace Jagabata.Resources
                                    JobTemplateStatus status,
                                    ulong? executionEnvironment,
                                    string jobType)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, ICacheableResource
     {
         public new const string PATH = "/api/v2/system_job_templates/";
 
@@ -52,9 +50,19 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
 

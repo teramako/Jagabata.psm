@@ -343,7 +343,7 @@ namespace Jagabata.Resources
                                                                          NameValueCollection? query = null,
                                                                          bool getAll = false)
         {
-            var path = $"{JobTemplateJob.PATH}{jobId}/activity_stream/";
+            var path = $"{JobTemplateJobBase.PATH}{jobId}/activity_stream/";
             await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
             {
                 foreach (var activity in result.Contents.Results)
@@ -364,7 +364,7 @@ namespace Jagabata.Resources
                                                                                   NameValueCollection? query = null,
                                                                                   bool getAll = false)
         {
-            var path = $"{AdHocCommand.PATH}{cmdId}/activity_stream/";
+            var path = $"{AdHocCommandBase.PATH}{cmdId}/activity_stream/";
             await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
             {
                 foreach (var activity in result.Contents.Results)
@@ -406,7 +406,7 @@ namespace Jagabata.Resources
                                                                                  NameValueCollection? query = null,
                                                                                  bool getAll = false)
         {
-            var path = $"{WorkflowJob.PATH}{jobId}/activity_stream/";
+            var path = $"{WorkflowJobBase.PATH}{jobId}/activity_stream/";
             await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
             {
                 foreach (var activity in result.Contents.Results)
@@ -437,11 +437,10 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         [JsonPropertyOrder(10)]

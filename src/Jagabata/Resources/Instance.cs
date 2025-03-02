@@ -123,10 +123,10 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Hostname { get; } = hostname;
         public string Uuid { get; } = uuid;

@@ -161,10 +161,10 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsHostConverter))]
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;

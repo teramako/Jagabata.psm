@@ -26,19 +26,56 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
-    public class AdHocCommand(ulong id, ResourceType type, string url, RelatedDictionary related,
-                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
-                              JobLaunchType launchType, JobStatus status, ulong? executionEnvironment, bool failed,
-                              DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
-                              string jobExplanation, LaunchedBy launchedBy, string? workUnitId, string executionNode,
-                              string controllerNode, JobType jobType, ulong inventory, string limit, ulong credential,
-                              string moduleName, string moduleArgs, byte forks, JobVerbosity verbosity, string extraVars,
-                              bool becomeEnabled, bool diffMode)
-        : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
-                     started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IAdHocCommand, IResource, ICacheableResource
+    public abstract class AdHocCommandBase : UnifiedJob, IAdHocCommand, ICacheableResource
     {
         public new const string PATH = "/api/v2/ad_hoc_commands/";
+
+        public abstract ulong? ExecutionEnvironment { get; }
+        public abstract string ExecutionNode { get; }
+        public abstract string ControllerNode { get; }
+        public abstract LaunchedBy LaunchedBy { get; }
+        public abstract JobType JobType { get; }
+        public abstract ulong Inventory { get; }
+        public abstract string Limit { get; }
+        public abstract ulong Credential { get; }
+        public abstract string ModuleName { get; }
+        public abstract string ModuleArgs { get; }
+        public abstract byte Forks { get; }
+        public abstract JobVerbosity Verbosity { get; }
+        public abstract string ExtraVars { get; }
+        public abstract bool BecomeEnabled { get; }
+        public abstract bool DiffMode { get; }
+
+        public CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, Name, ModuleArgs)
+            {
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Limit"] = Limit,
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
+        }
+
+        public Dictionary<string, object?> GetExtraVars()
+        {
+            return Yaml.DeserializeToDict(ExtraVars);
+        }
+    }
+
+    public sealed class AdHocCommand(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                     SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                     string name, JobLaunchType launchType, JobStatus status,
+                                     ulong? executionEnvironment, bool failed, DateTime? started, DateTime? finished,
+                                     DateTime? canceledOn, double elapsed, string jobExplanation, LaunchedBy launchedBy,
+                                     string? workUnitId, string executionNode, string controllerNode, JobType jobType,
+                                     ulong inventory, string limit, ulong credential, string moduleName,
+                                     string moduleArgs, byte forks, JobVerbosity verbosity, string extraVars,
+                                     bool becomeEnabled, bool diffMode)
+        : AdHocCommandBase
+    {
         /// <summary>
         /// Retrieve an Ad Hoc Command.<br/>
         /// API Path: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
@@ -131,61 +168,90 @@ namespace Jagabata.Resources
             }
         }
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
-                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
-                            JobLaunchType launchType, JobStatus status, ulong? executionEnvironment, bool failed,
-                            DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
-                            string jobExplanation, LaunchedBy launchedBy, string? workUnitId, string executionNode,
-                            string controllerNode, JobType jobType, ulong inventory, string limit, ulong credential,
-                            string moduleName, string moduleArgs, byte forks, JobVerbosity verbosity, string extraVars,
-                            bool becomeEnabled, bool diffMode, string jobArgs, string jobCwd,
-                            Dictionary<string, string> jobEnv, string resultTraceback, bool eventProcessingFinished,
-                            Dictionary<string, int> hostStatusCounts)
-            : AdHocCommand(id, type, url, related, summaryFields, created, modified, name, launchType, status,
-                           executionEnvironment, failed, started, finished, canceledOn, elapsed, jobExplanation,
-                           launchedBy, workUnitId, executionNode, controllerNode, jobType, inventory, limit, credential,
-                           moduleName, moduleArgs, forks, verbosity, extraVars, becomeEnabled, diffMode),
-              IAdHocCommand, IJobDetail, IResource
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override JobLaunchType LaunchType { get; } = launchType;
+        public override JobStatus Status { get; } = status;
+        public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+        public override bool Failed { get; } = failed;
+        public override DateTime? Started { get; } = started;
+        public override DateTime? Finished { get; } = finished;
+        public override DateTime? CanceledOn { get; } = canceledOn;
+        public override double Elapsed { get; } = elapsed;
+        public override string JobExplanation { get; } = jobExplanation;
+        public override string ExecutionNode { get; } = executionNode;
+        public override string ControllerNode { get; } = controllerNode;
+        public override LaunchedBy LaunchedBy { get; } = launchedBy;
+        public override string? WorkUnitId { get; } = workUnitId;
+        public override JobType JobType { get; } = jobType;
+        public override ulong Inventory { get; } = inventory;
+        public override string Limit { get; } = limit;
+        public override ulong Credential { get; } = credential;
+        public override string ModuleName { get; } = moduleName;
+        public override string ModuleArgs { get; } = moduleArgs;
+        public override byte Forks { get; } = forks;
+        public override JobVerbosity Verbosity { get; } = verbosity;
+        public override string ExtraVars { get; } = extraVars;
+        public override bool BecomeEnabled { get; } = becomeEnabled;
+        public override bool DiffMode { get; } = diffMode;
+
+        public sealed class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                   SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                   string name, JobLaunchType launchType, JobStatus status, ulong? executionEnvironment,
+                                   bool failed, DateTime? started, DateTime? finished, DateTime? canceledOn,
+                                   double elapsed, string jobExplanation, LaunchedBy launchedBy, string? workUnitId,
+                                   string executionNode, string controllerNode, JobType jobType, ulong inventory,
+                                   string limit, ulong credential, string moduleName, string moduleArgs, byte forks,
+                                   JobVerbosity verbosity, string extraVars, bool becomeEnabled, bool diffMode,
+                                   string jobArgs, string jobCwd, Dictionary<string, string> jobEnv,
+                                   string resultTraceback, bool eventProcessingFinished,
+                                   Dictionary<string, int> hostStatusCounts)
+            : AdHocCommandBase, IJobDetail
         {
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
+            public override string ExecutionNode { get; } = executionNode;
+            public override string ControllerNode { get; } = controllerNode;
             public string ResultTraceback { get; } = resultTraceback;
             public bool EventProcessingFinished { get; } = eventProcessingFinished;
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override JobType JobType { get; } = jobType;
+            public override ulong Inventory { get; } = inventory;
+            public override string Limit { get; } = limit;
+            public override ulong Credential { get; } = credential;
+            public override string ModuleName { get; } = moduleName;
+            public override string ModuleArgs { get; } = moduleArgs;
+            public override byte Forks { get; } = forks;
+            public override JobVerbosity Verbosity { get; } = verbosity;
+            public override string ExtraVars { get; } = extraVars;
+            public override bool BecomeEnabled { get; } = becomeEnabled;
+            public override bool DiffMode { get; } = diffMode;
             public Dictionary<string, int> HostStatusCounts { get; } = hostStatusCounts;
-        }
-        public RelatedDictionary Related { get; } = related;
-        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public string ExecutionNode { get; } = executionNode;
-        public string ControllerNode { get; } = controllerNode;
-        public JobType JobType { get; } = jobType;
-        public ulong Inventory { get; } = inventory;
-        public string Limit { get; } = limit;
-        public ulong Credential { get; } = credential;
-        public string ModuleName { get; } = moduleName;
-        public string ModuleArgs { get; } = moduleArgs;
-        public byte Forks { get; } = forks;
-        public JobVerbosity Verbosity { get; } = verbosity;
-        public string ExtraVars { get; } = extraVars;
-        public bool BecomeEnabled { get; } = becomeEnabled;
-        public bool DiffMode { get; } = diffMode;
-
-        public Dictionary<string, object?> GetExtraVars()
-        {
-            return Yaml.DeserializeToDict(ExtraVars);
-        }
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, ModuleArgs)
-            {
-                Metadata = {
-                    ["Status"] = $"{Status}",
-                    ["Limit"] = Limit,
-                    ["Finished"] = $"{Finished}",
-                    ["Elapsed"] = $"{Elapsed}"
-                }
-            };
         }
     }
 }

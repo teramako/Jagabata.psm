@@ -171,9 +171,7 @@ namespace Jagabata.Resources
                                  JobTemplateStatus status, ulong? executionEnvironment, ulong inventory,
                                  bool updateOnLaunch, int updateCacheTimeout, ulong? sourceProject,
                                  bool lastUpdateFailed, DateTime? lastUpdated)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IInventorySource, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IInventorySource, ICacheableResource
     {
         public new const string PATH = "/api/v2/inventory_sources/";
 
@@ -290,9 +288,15 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public InventorySourceSource Source { get; } = source;
         public string SourcePath { get; } = sourcePath;
         public string SourceVars { get; } = sourceVars;
@@ -307,6 +311,10 @@ namespace Jagabata.Resources
         public int Timeout { get; } = timeout;
         public int Verbosity { get; } = verbosity;
         public string Limit { get; } = limit;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public ulong Inventory { get; } = inventory;
         public bool UpdateOnLaunch { get; } = updateOnLaunch;

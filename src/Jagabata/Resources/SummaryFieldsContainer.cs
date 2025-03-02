@@ -1,8 +1,7 @@
 namespace Jagabata.Resources;
 
-public abstract class SummaryFieldsContainer : IHasCacheableItems
+public abstract class SummaryFieldsContainer : ResourceBase, IHasCacheableItems
 {
-    public abstract SummaryFieldsDictionary SummaryFields { get; }
     public virtual IEnumerable<CacheItem> GetCacheableItems()
     {
         foreach (var summaryItem in SummaryFields.Values)

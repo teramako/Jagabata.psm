@@ -368,7 +368,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.ProjectUpdateJob</Name>
+    <Name>Jagabata.Resources.ProjectUpdateJobBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -696,7 +696,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.InventoryUpdateJob</Name>
+    <Name>Jagabata.Resources.InventoryUpdateJobBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1007,7 +1007,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.JobTemplateJob</Name>
+    <Name>Jagabata.Resources.JobTemplateJobBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1485,7 +1485,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.AdHocCommand</Name>
+    <Name>Jagabata.Resources.AdHocCommandBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -1641,7 +1641,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.SystemJob</Name>
+    <Name>Jagabata.Resources.SystemJobBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2042,7 +2042,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.WorkflowJob</Name>
+    <Name>Jagabata.Resources.WorkflowJobBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -2497,7 +2497,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.WorkflowApproval</Name>
+    <Name>Jagabata.Resources.WorkflowApprovalBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>

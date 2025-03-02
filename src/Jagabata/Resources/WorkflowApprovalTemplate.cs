@@ -5,8 +5,7 @@ namespace Jagabata.Resources
                                           DateTime? modified, string name, string description, DateTime? lastJobRun,
                                           bool lastJobFailed, DateTime? nextJobRun, JobTemplateStatus status,
                                           ulong? executionEnvironment, int timeout)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun, lastJobFailed, nextJobRun, status),
-          IResource, ICacheableResource
+        : UnifiedJobTemplate, ICacheableResource
     {
         public new const string PATH = "/api/v2/workflow_approval_templates/";
 
@@ -22,8 +21,19 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
 

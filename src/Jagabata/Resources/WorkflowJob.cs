@@ -33,6 +33,44 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
+    public abstract class WorkflowJobBase : UnifiedJob, IWorkflowJob, ICacheableResource
+    {
+        public new const string PATH = "/api/v2/workflow_jobs/";
+
+        public abstract string Description { get; }
+        public abstract ulong UnifiedJobTemplate { get; }
+        public abstract LaunchedBy LaunchedBy { get; }
+        public abstract ulong? WorkflowJobTemplate { get; }
+        public abstract string ExtraVars { get; }
+        public abstract bool AllowSimultaneous { get; }
+        public abstract ulong? JobTemplate { get; }
+        public abstract bool IsSlicedJob { get; }
+        public abstract ulong? Inventory { get; }
+        public abstract string? Limit { get; }
+        public abstract string? ScmBranch { get; }
+        public abstract string WebhookService { get; }
+        public abstract ulong? WebhookCredential { get; }
+        public abstract string WebhookGuid { get; }
+        public abstract string? SkipTags { get; }
+        public abstract string? JobTags { get; }
+
+        public Dictionary<string, object?> GetExtraVars()
+        {
+            return Yaml.DeserializeToDict(ExtraVars);
+        }
+
+        public CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
+        }
+    }
 
     public class WorkflowJob(ulong id, ResourceType type, string url, RelatedDictionary related,
                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
@@ -42,11 +80,8 @@ namespace Jagabata.Resources
                              ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous, ulong? jobTemplate,
                              bool isSlicedJob, ulong? inventory, string? limit, string? scmBranch, string webhookService,
                              ulong? webhookCredential, string webhookGuid, string? skipTags, string? jobTags)
-        : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
-                     started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IWorkflowJob, IResource, ICacheableResource
+        : WorkflowJobBase
     {
-        public new const string PATH = "/api/v2/workflow_jobs/";
         /// <summary>
         /// Retrieve a Workflow Job.<br/>
         /// API Path: <c>/api/v2/workflow_jobs/<paramref name="id"/>/</c>
@@ -97,40 +132,39 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public string Description { get; } = description;
-        public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
-        public ulong? WorkflowJobTemplate { get; } = workflowJobTemplate;
-        public string ExtraVars { get; } = extraVars;
-        public bool AllowSimultaneous { get; } = allowSimultaneous;
-        public ulong? JobTemplate { get; } = jobTemplate;
-        public bool IsSlicedJob { get; } = isSlicedJob;
-        public ulong? Inventory { get; } = inventory;
-        public string? Limit { get; } = limit;
-        public string? ScmBranch { get; } = scmBranch;
-        public string WebhookService { get; } = webhookService;
-        public ulong? WebhookCredential { get; } = webhookCredential;
-        public string WebhookGuid { get; } = webhookGuid;
-        public string? SkipTags { get; } = skipTags;
-        public string? JobTags { get; } = jobTags;
-
-        public Dictionary<string, object?> GetExtraVars()
-        {
-            return Yaml.DeserializeToDict(ExtraVars);
-        }
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Status"] = $"{Status}",
-                    ["Finished"] = $"{Finished}",
-                    ["Elapsed"] = $"{Elapsed}"
-                }
-            };
-        }
+        public override string Description { get; } = description;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+        public override JobLaunchType LaunchType { get; } = launchType;
+        public override JobStatus Status { get; } = status;
+        public override bool Failed { get; } = failed;
+        public override DateTime? Started { get; } = started;
+        public override DateTime? Finished { get; } = finished;
+        public override DateTime? CanceledOn { get; } = canceledOn;
+        public override double Elapsed { get; } = elapsed;
+        public override string JobExplanation { get; } = jobExplanation;
+        public override LaunchedBy LaunchedBy { get; } = launchedBy;
+        public override string? WorkUnitId { get; } = workUnitId;
+        public override ulong? WorkflowJobTemplate { get; } = workflowJobTemplate;
+        public override string ExtraVars { get; } = extraVars;
+        public override bool AllowSimultaneous { get; } = allowSimultaneous;
+        public override ulong? JobTemplate { get; } = jobTemplate;
+        public override bool IsSlicedJob { get; } = isSlicedJob;
+        public override ulong? Inventory { get; } = inventory;
+        public override string? Limit { get; } = limit;
+        public override string? ScmBranch { get; } = scmBranch;
+        public override string WebhookService { get; } = webhookService;
+        public override ulong? WebhookCredential { get; } = webhookCredential;
+        public override string WebhookGuid { get; } = webhookGuid;
+        public override string? SkipTags { get; } = skipTags;
+        public override string? JobTags { get; } = jobTags;
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
@@ -141,17 +175,47 @@ namespace Jagabata.Resources
                             ulong? workflowJobTemplate, string extraVars, bool allowSimultaneous, ulong? jobTemplate,
                             bool isSlicedJob, ulong? inventory, string? limit, string? scmBranch, string webhookService,
                             ulong? webhookCredential, string webhookGuid, string? skipTags, string? jobTags)
-            : WorkflowJob(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
-                          launchType, status, failed, started, finished, canceledOn, elapsed, jobExplanation, launchedBy,
-                          workUnitId, workflowJobTemplate, extraVars, allowSimultaneous, jobTemplate, isSlicedJob, inventory,
-                          limit, scmBranch, webhookService, webhookCredential, webhookGuid, skipTags, jobTags),
-              IWorkflowJob, IJobDetail, IResource
+            : WorkflowJobBase, IJobDetail
         {
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override string Description { get; } = description;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
             public string ResultTraceback { get; } = resultTraceback;
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override ulong? WorkflowJobTemplate { get; } = workflowJobTemplate;
+            public override string ExtraVars { get; } = extraVars;
+            public override bool AllowSimultaneous { get; } = allowSimultaneous;
+            public override ulong? JobTemplate { get; } = jobTemplate;
+            public override bool IsSlicedJob { get; } = isSlicedJob;
+            public override ulong? Inventory { get; } = inventory;
+            public override string? Limit { get; } = limit;
+            public override string? ScmBranch { get; } = scmBranch;
+            public override string WebhookService { get; } = webhookService;
+            public override ulong? WebhookCredential { get; } = webhookCredential;
+            public override string WebhookGuid { get; } = webhookGuid;
+            public override string? SkipTags { get; } = skipTags;
+            public override string? JobTags { get; } = jobTags;
         }
+
         public class LaunchResult(ulong workflowJob, Dictionary<string, object?> ignoredFields, ulong id,
                                   ResourceType type, string url, RelatedDictionary related,
                                   SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
@@ -167,9 +231,7 @@ namespace Jagabata.Resources
                      launchType, status, failed, started, finished, canceledOn, elapsed, jobArgs, jobCwd, jobEnv,
                      jobExplanation, resultTraceback, launchedBy, workUnitId, workflowJobTemplate, extraVars,
                      allowSimultaneous, jobTemplate, isSlicedJob, inventory, limit, scmBranch, webhookService,
-                     webhookCredential, webhookGuid, skipTags, jobTags),
-              IWorkflowJob, IJobDetail, IResource
-
+                     webhookCredential, webhookGuid, skipTags, jobTags)
         {
             public ulong WorkflowJob { get; } = workflowJob;
             public Dictionary<string, object?> IgnoredFields { get; } = ignoredFields;

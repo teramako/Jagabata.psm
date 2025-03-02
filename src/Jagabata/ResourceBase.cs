@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Jagabata.Resources;
 
 namespace Jagabata
 {
@@ -42,6 +43,30 @@ namespace Jagabata
             return false;
         }
         public override readonly string ToString()
+        {
+            return $"{Type}:{Id}";
+        }
+    }
+
+    public abstract class ResourceBase : IResource
+    {
+        public abstract ulong Id { get; }
+        public abstract ResourceType Type { get; }
+        /// <summary>
+        /// URL for this resource
+        /// </summary>
+        public abstract string Url { get; }
+        /// <summary>
+        /// Data structure with URLs of related resources.
+        /// </summary>
+        public abstract RelatedDictionary Related { get; }
+        /// <summary>
+        /// Data structure with name/description for related resources.
+        /// The output for some objects may be limited for performance reasons.
+        /// </summary>
+        public abstract SummaryFieldsDictionary SummaryFields { get; }
+
+        public override string ToString()
         {
             return $"{Type}:{Id}";
         }

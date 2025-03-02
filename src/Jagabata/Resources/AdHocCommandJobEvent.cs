@@ -28,7 +28,7 @@ namespace Jagabata.Resources
                                                                                      NameValueCollection? query = null,
                                                                                      bool getAll = false)
         {
-            var path = $"{Resources.AdHocCommand.PATH}{adHocCommandId}/events/";
+            var path = $"{AdHocCommandBase.PATH}{adHocCommandId}/events/";
             await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query, getAll))
             {
                 foreach (var jobEvent in result.Contents.Results)
@@ -38,10 +38,10 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;

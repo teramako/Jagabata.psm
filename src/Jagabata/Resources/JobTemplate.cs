@@ -148,9 +148,7 @@ namespace Jagabata.Resources
                              bool askInstanceGroupsOnLaunch, bool surveyEnabled, bool becomeEnabled, bool diffMode,
                              bool allowSimultaneous, string? customVirtualenv, int jobSliceCount, string webhookService,
                              ulong? webhookCredential, bool preventInstanceGroupFallback)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IJobTemplate, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IJobTemplate, ICacheableResource
     {
         public new const string PATH = "/api/v2/job_templates/";
 
@@ -225,8 +223,15 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public JobType JobType { get; } = jobType;
         public ulong? Inventory { get; } = inventory;
         public ulong Project { get; } = project;
@@ -242,6 +247,10 @@ namespace Jagabata.Resources
         public int Timeout { get; } = timeout;
         public bool UseFactCache { get; } = useFactCache;
         public ulong Organization { get; } = organization;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string HostConfigKey { get; } = hostConfigKey;
         public bool AskScmBranchOnLaunch { get; } = askScmBranchOnLaunch;

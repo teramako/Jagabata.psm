@@ -96,24 +96,68 @@ namespace Jagabata.Resources
         string ScmRevision { get; }
     }
 
-    public class InventoryUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
-                                    SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
-                                    string name, string description, ulong unifiedJobTemplate, JobLaunchType launchType,
-                                    JobStatus status, ulong? executionEnvironment, string controllerNode, bool failed,
-                                    DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
-                                    string jobExplanation, string executionNode, LaunchedBy launchedBy,
-                                    string? workUnitId, InventorySourceSource source, string sourcePath,
-                                    string sourceVars, string scmBranch, ulong? credential, string enabledVar,
-                                    string enabledValue, string hostFilter, bool overwrite, bool overwriteVars,
-                                    string? customVirtualenv, int timeout, int verbosity, string limit, ulong inventory,
-                                    ulong inventorySource, bool licenseError, bool orgHostLimitError,
-                                    ulong? sourceProjectUpdate, ulong? instanceGroup, string scmRevision)
-        : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
-                     started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IInventoryUpdateJob, IResource, ICacheableResource
+    public abstract class InventoryUpdateJobBase : UnifiedJob, IInventoryUpdateJob, ICacheableResource
     {
         public new const string PATH = "/api/v2/inventory_updates/";
 
+        public abstract string Description { get; }
+        public abstract ulong UnifiedJobTemplate { get; }
+        public abstract ulong? ExecutionEnvironment { get; }
+        public abstract string ExecutionNode { get; }
+        public abstract string ControllerNode { get; }
+        public abstract LaunchedBy LaunchedBy { get; }
+        public abstract InventorySourceSource Source { get; }
+        public abstract string SourcePath { get; }
+        public abstract string SourceVars { get; }
+        public abstract string ScmBranch { get; }
+        public abstract ulong? Credential { get; }
+        public abstract string EnabledVar { get; }
+        public abstract string EnabledValue { get; }
+        public abstract string HostFilter { get; }
+        public abstract bool Overwrite { get; }
+        public abstract bool OverwriteVars { get; }
+        public abstract string? CustomVirtualenv { get; }
+        public abstract int Timeout { get; }
+        public abstract int Verbosity { get; }
+        public abstract string Limit { get; }
+        public abstract ulong Inventory { get; }
+        public abstract ulong InventorySource { get; }
+        public abstract bool LicenseError { get; }
+        public abstract bool OrgHostLimitError { get; }
+        public abstract ulong? SourceProjectUpdate { get; }
+        public abstract ulong? InstanceGroup { get; }
+        public abstract string ScmRevision { get; }
+
+        public CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Source"] = $"{Source}",
+                    ["Status"] = $"{Status}",
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
+        }
+    }
+
+    public sealed class InventoryUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                           SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                           string name, string description, ulong unifiedJobTemplate,
+                                           JobLaunchType launchType, JobStatus status, ulong? executionEnvironment,
+                                           string controllerNode, bool failed, DateTime? started, DateTime? finished,
+                                           DateTime? canceledOn, double elapsed, string jobExplanation,
+                                           string executionNode, LaunchedBy launchedBy, string? workUnitId,
+                                           InventorySourceSource source, string sourcePath, string sourceVars,
+                                           string scmBranch, ulong? credential, string enabledVar, string enabledValue,
+                                           string hostFilter, bool overwrite, bool overwriteVars,
+                                           string? customVirtualenv, int timeout, int verbosity, string limit,
+                                           ulong inventory, ulong inventorySource, bool licenseError,
+                                           bool orgHostLimitError, ulong? sourceProjectUpdate, ulong? instanceGroup,
+                                           string scmRevision)
+        : InventoryUpdateJobBase
+    {
         /// <summary>
         /// Retrieve an Inventory Update.<br/>
         /// API Path: <c>/api/v2/inventory_updates/<paramref name="id"/>/</c>
@@ -154,7 +198,7 @@ namespace Jagabata.Resources
                                                                                        NameValueCollection? query = null,
                                                                                        bool getAll = false)
         {
-            var path = $"{ProjectUpdateJob.PATH}{projectUpdateId}/scm_inventory_updates/";
+            var path = $"{ProjectUpdateJobBase.PATH}{projectUpdateId}/scm_inventory_updates/";
             await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query, getAll))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
@@ -185,76 +229,117 @@ namespace Jagabata.Resources
             }
         }
 
-        public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields,
-                            DateTime created, DateTime? modified, string name, string description,
-                            ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
-                            ulong? executionEnvironment, string controllerNode, bool failed, DateTime? started,
-                            DateTime? finished, DateTime? canceledOn, double elapsed, string jobArgs, string jobCwd,
-                            Dictionary<string, string> jobEnv, string jobExplanation, string executionNode,
-                            LaunchedBy launchedBy, string resultTraceback, bool eventProcessingFinished,
-                            string? workUnitId, InventorySourceSource source, string sourcePath, string sourceVars,
-                            string scmBranch, ulong? credential, string enabledVar, string enabledValue,
-                            string hostFilter, bool overwrite, bool overwriteVars, string? customVirtualenv, int timeout,
-                            int verbosity, string limit, ulong inventory, ulong inventorySource, bool licenseError,
-                            bool orgHostLimitError, ulong? sourceProjectUpdate, ulong? instanceGroup, string scmRevision,
-                            ulong? sourceProject)
-            : InventoryUpdateJob(id, type, url, related, summaryFields, created, modified, name, description, unifiedJobTemplate,
-                                 launchType, status, executionEnvironment, controllerNode, failed, started, finished, canceledOn,
-                                 elapsed, jobExplanation, executionNode, launchedBy, workUnitId, source, sourcePath, sourceVars,
-                                 scmBranch, credential, enabledVar, enabledValue, hostFilter, overwrite, overwriteVars,
-                                 customVirtualenv, timeout, verbosity, limit, inventory, inventorySource, licenseError,
-                                 orgHostLimitError, sourceProjectUpdate, instanceGroup, scmRevision),
-              IInventoryUpdateJob, IJobDetail
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+        public override JobLaunchType LaunchType { get; } = launchType;
+        public override JobStatus Status { get; } = status;
+        public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+        public override bool Failed { get; } = failed;
+        public override DateTime? Started { get; } = started;
+        public override DateTime? Finished { get; } = finished;
+        public override DateTime? CanceledOn { get; } = canceledOn;
+        public override double Elapsed { get; } = elapsed;
+        public override string JobExplanation { get; } = jobExplanation;
+        public override string ExecutionNode { get; } = executionNode;
+        public override string ControllerNode { get; } = controllerNode;
+        public override LaunchedBy LaunchedBy { get; } = launchedBy;
+        public override string? WorkUnitId { get; } = workUnitId;
+        public override InventorySourceSource Source { get; } = source;
+        public override string SourcePath { get; } = sourcePath;
+        public override string SourceVars { get; } = sourceVars;
+        public override string ScmBranch { get; } = scmBranch;
+        public override ulong? Credential { get; } = credential;
+        public override string EnabledVar { get; } = enabledVar;
+        public override string EnabledValue { get; } = enabledValue;
+        public override string HostFilter { get; } = hostFilter;
+        public override bool Overwrite { get; } = overwrite;
+        public override bool OverwriteVars { get; } = overwriteVars;
+        public override string? CustomVirtualenv { get; } = customVirtualenv;
+        public override int Timeout { get; } = timeout;
+        public override int Verbosity { get; } = verbosity;
+        public override string Limit { get; } = limit;
+        public override ulong Inventory { get; } = inventory;
+        public override ulong InventorySource { get; } = inventorySource;
+        public override bool LicenseError { get; } = licenseError;
+        public override bool OrgHostLimitError { get; } = orgHostLimitError;
+        public override ulong? SourceProjectUpdate { get; } = sourceProjectUpdate;
+        public override ulong? InstanceGroup { get; } = instanceGroup;
+        public override string ScmRevision { get; } = scmRevision;
+
+        public sealed class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                   SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                   string name, string description, ulong unifiedJobTemplate, JobLaunchType launchType,
+                                   JobStatus status, ulong? executionEnvironment, string controllerNode, bool failed,
+                                   DateTime? started, DateTime? finished, DateTime? canceledOn, double elapsed,
+                                   string jobArgs, string jobCwd, Dictionary<string, string> jobEnv,
+                                   string jobExplanation, string executionNode, LaunchedBy launchedBy,
+                                   string resultTraceback, bool eventProcessingFinished, string? workUnitId,
+                                   InventorySourceSource source, string sourcePath, string sourceVars, string scmBranch,
+                                   ulong? credential, string enabledVar, string enabledValue, string hostFilter,
+                                   bool overwrite, bool overwriteVars, string? customVirtualenv, int timeout,
+                                   int verbosity, string limit, ulong inventory, ulong inventorySource,
+                                   bool licenseError, bool orgHostLimitError, ulong? sourceProjectUpdate,
+                                   ulong? instanceGroup, string scmRevision, ulong? sourceProject)
+            : InventoryUpdateJobBase, IJobDetail
         {
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
+            public override string ExecutionNode { get; } = executionNode;
+            public override string ControllerNode { get; } = controllerNode;
             public string ResultTraceback { get; } = resultTraceback;
             public bool EventProcessingFinished { get; } = eventProcessingFinished;
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override InventorySourceSource Source { get; } = source;
+            public override string SourcePath { get; } = sourcePath;
+            public override string SourceVars { get; } = sourceVars;
+            public override string ScmBranch { get; } = scmBranch;
+            public override ulong? Credential { get; } = credential;
+            public override string EnabledVar { get; } = enabledVar;
+            public override string EnabledValue { get; } = enabledValue;
+            public override string HostFilter { get; } = hostFilter;
+            public override bool Overwrite { get; } = overwrite;
+            public override bool OverwriteVars { get; } = overwriteVars;
+            public override string? CustomVirtualenv { get; } = customVirtualenv;
+            public override int Timeout { get; } = timeout;
+            public override int Verbosity { get; } = verbosity;
+            public override string Limit { get; } = limit;
+            public override ulong Inventory { get; } = inventory;
+            public override ulong InventorySource { get; } = inventorySource;
+            public override bool LicenseError { get; } = licenseError;
+            public override bool OrgHostLimitError { get; } = orgHostLimitError;
+            public override ulong? SourceProjectUpdate { get; } = sourceProjectUpdate;
+            public override ulong? InstanceGroup { get; } = instanceGroup;
+            public override string ScmRevision { get; } = scmRevision;
             public ulong? SourceProject { get; } = sourceProject;
-        }
-
-        public RelatedDictionary Related { get; } = related;
-        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
-        public string Description { get; } = description;
-        public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
-        public string ControllerNode { get; } = controllerNode;
-        public string ExecutionNode { get; } = executionNode;
-
-        public InventorySourceSource Source { get; } = source;
-        public string SourcePath { get; } = sourcePath;
-        public string SourceVars { get; } = sourceVars;
-        public string ScmBranch { get; } = scmBranch;
-        public ulong? Credential { get; } = credential;
-        public string EnabledVar { get; } = enabledVar;
-        public string EnabledValue { get; } = enabledValue;
-        public string HostFilter { get; } = hostFilter;
-        public bool Overwrite { get; } = overwrite;
-        public bool OverwriteVars { get; } = overwriteVars;
-        public string? CustomVirtualenv { get; } = customVirtualenv;
-        public int Timeout { get; } = timeout;
-        public int Verbosity { get; } = verbosity;
-        public string Limit { get; } = limit;
-        public ulong Inventory { get; } = inventory;
-        public ulong InventorySource { get; } = inventorySource;
-        public bool LicenseError { get; } = licenseError;
-        public bool OrgHostLimitError { get; } = orgHostLimitError;
-        public ulong? SourceProjectUpdate { get; } = sourceProjectUpdate;
-        public ulong? InstanceGroup { get; } = instanceGroup;
-        public string ScmRevision { get; } = scmRevision;
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Source"] = $"{Source}",
-                    ["Status"] = $"{Status}",
-                    ["Finished"] = $"{Finished}",
-                    ["Elapsed"] = $"{Elapsed}"
-                }
-            };
         }
     }
 
