@@ -3,19 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
-    public interface IJobEvent : IJobEventBase
-    {
-        int EventLevel { get; }
-        string ParentUUID { get; }
-        ulong? Host { get; }
-        string HostName { get; }
-        string Playbook { get; }
-        string Play { get; }
-        string Task { get; }
-        string Role { get; }
-        ulong Job { get; }
-    }
-
     [JsonConverter(typeof(Json.EnumUpperCamelCaseStringConverter<JobEventEvent>))]
     public enum JobEventEvent
     {
@@ -142,7 +129,7 @@ namespace Jagabata.Resources
                           int eventLevel, bool failed, bool changed, string uuid, string parentUUID, ulong? host,
                           string hostName, string playbook, string play, string task, string role, string stdout,
                           int startLine, int endLine, JobVerbosity verbosity)
-                : SummaryFieldsContainer, IJobEvent, IResource, ICacheableResource
+        : JobEventBase
     {
         public const string PATH = "/api/v2/job_events/";
 
@@ -217,17 +204,17 @@ namespace Jagabata.Resources
         [JsonConverter(typeof(Json.SummaryFieldsJobEventConverter))]
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
         public ulong Job { get; } = job;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
         public int EventLevel { get; } = eventLevel;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
         public string ParentUUID { get; } = parentUUID;
         public ulong? Host { get; } = host;
         public string HostName { get; } = hostName;
@@ -235,12 +222,12 @@ namespace Jagabata.Resources
         public string Play { get; } = play;
         public string Task { get; } = task;
         public string Role { get; } = role;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
 
-        public CacheItem GetCacheItem()
+        public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
@@ -249,7 +236,10 @@ namespace Jagabata.Resources
                     ["Play"] = Play,
                     ["Task"] = Task,
                     ["Failed"] = $"{Failed}",
-                    ["Changed"] = $"{Changed}"
+                    ["Changed"] = $"{Changed}",
+                    ["Job"] = SummaryFields.TryGetValue<JobExSummary>("Job", out var pu)
+                              ? $"{pu.Type}:{pu.Id}:{pu.Name}"
+                              : string.Empty
                 }
             };
         }

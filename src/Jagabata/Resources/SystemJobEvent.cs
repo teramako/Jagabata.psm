@@ -7,7 +7,7 @@ namespace Jagabata.Resources
                                 JobEventEvent @event, int counter, string eventDisplay, Dictionary<string, object?> eventData,
                                 bool failed, bool changed, string uuid, string stdout, int startLine, int endLine,
                                 JobVerbosity verbosity, ulong systemJob)
-        : SummaryFieldsContainer, IJobEventBase, IResource, ICacheableResource
+        : JobEventBase
     {
         /// <summary>
         /// List Sytem Job Events for a System Job.<br/>
@@ -36,30 +36,19 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
         public ulong SystemJob { get; } = systemJob;
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
-            {
-                Metadata = {
-                    ["Failed"] = $"{Failed}",
-                    ["Changed"] = $"{Changed}",
-                }
-            };
-        }
     }
 }

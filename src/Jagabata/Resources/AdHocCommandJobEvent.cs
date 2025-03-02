@@ -2,19 +2,12 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public interface IAdHocCommandJobEvent : IJobEventBase
-    {
-        ulong AdHocCommand { get; }
-        ulong? Host { get; }
-        string HostName { get; }
-    }
-
     public class AdHocCommandJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
                                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                       ulong adHocCommand, JobEventEvent @event, int counter, string eventDisplay,
                                       Dictionary<string, object?> eventData, bool failed, bool changed, string uuid, ulong? host,
                                       string hostName, string stdout, int startLine, int endLine, JobVerbosity verbosity)
-        : SummaryFieldsContainer, IAdHocCommandJobEvent, IResource, ICacheableResource
+        : JobEventBase
     {
         /// <summary>
         /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
@@ -43,24 +36,24 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
         public ulong AdHocCommand { get; } = adHocCommand;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
         public ulong? Host { get; } = host;
         public string HostName { get; } = hostName;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
 
-        public CacheItem GetCacheItem()
+        public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {

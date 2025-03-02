@@ -2,17 +2,6 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public interface IProjectUpdateJobEvent : IJobEventBase
-    {
-        int EventLevel { get; }
-        string HostName { get; }
-        string Playbook { get; }
-        string Play { get; }
-        string Task { get; }
-        string Role { get; }
-        ulong ProjectUpdate { get; }
-    }
-
     public class ProjectUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
                                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        JobEventEvent @event, int counter, string eventDisplay,
@@ -20,7 +9,7 @@ namespace Jagabata.Resources
                                        string uuid, string hostName, string playbook, string play, string task,
                                        string role, string stdout, int startLine, int endLine, JobVerbosity verbosity,
                                        ulong projectUpdate)
-        : SummaryFieldsContainer, IProjectUpdateJobEvent, IResource, ICacheableResource
+        : JobEventBase
     {
         /// <summary>
         /// List Project Update Events for a Project Update.<br/>
@@ -49,35 +38,38 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
         public int EventLevel { get; } = eventLevel;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
         public string HostName { get; } = hostName;
         public string Playbook { get; } = playbook;
         public string Play { get; } = play;
         public string Task { get; } = task;
         public string Role { get; } = role;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
         public ulong ProjectUpdate { get; } = projectUpdate;
 
-        public CacheItem GetCacheItem()
+        public override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
                 Metadata = {
                     ["Play"] = Play,
                     ["Task"] = Task,
-                    ["Failed"] = $"{Failed}"
+                    ["Failed"] = $"{Failed}",
+                    ["Job"] = SummaryFields.TryGetValue<ProjectUpdateSummary>("ProjectUpdate", out var pu)
+                              ? $"{pu.Type}:{pu.Id}:{pu.Name}"
+                              : string.Empty
                 }
             };
         }
