@@ -238,7 +238,7 @@ namespace Jagabata.Resources
         public bool LastUpdateFailed { get; } = lastUpdateFailed;
         public DateTime? LastUpdated { get; } = lastUpdated;
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public ProjectOptions Options => (ScmClean ? ProjectOptions.ScmClean : 0) |
                        (ScmDeleteOnUpdate ? ProjectOptions.ScmDeleteOnUpdate : 0) |
                        (ScmTrackSubmodules ? ProjectOptions.ScmTrackSubmodules : 0) |

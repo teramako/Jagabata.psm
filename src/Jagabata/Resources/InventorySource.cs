@@ -323,7 +323,7 @@ namespace Jagabata.Resources
         public bool LastUpdateFailed { get; } = lastUpdateFailed;
         public DateTime? LastUpdated { get; } = lastUpdated;
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public InventorySourceOptions Options => (Overwrite ? InventorySourceOptions.Overwrite : 0)
                                                  | (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0)
                                                  | (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);

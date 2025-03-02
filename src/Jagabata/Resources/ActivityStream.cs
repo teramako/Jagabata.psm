@@ -443,21 +443,13 @@ namespace Jagabata.Resources
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
-        [JsonPropertyOrder(10)]
         public DateTime Timestamp { get; } = timestamp;
-        [JsonPropertyOrder(11)]
         public ActivityStreamOperation Operation { get; } = operation;
-        [JsonPropertyOrder(12)]
         public Dictionary<string, object?> Changes { get; } = changes;
-        [JsonPropertyOrder(13)]
         public ResourceType Object1 { get; } = object1;
-        [JsonPropertyOrder(14)]
         public ResourceType Object2 { get; } = object2;
-        [JsonPropertyOrder(15)]
         public string ObjectAssociation { get; } = objectAssociation;
-        [JsonPropertyOrder(16)]
         public string ActionNode { get; } = actionNode;
-        [JsonPropertyOrder(17)]
         public ResourceType ObjectType { get; } = objectType;
 
         public CacheItem GetCacheItem()

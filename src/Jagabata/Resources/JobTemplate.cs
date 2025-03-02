@@ -284,7 +284,7 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public JobTemplateAskOnLaunch AskOnLaunch => (AskJobTypeOnLaunch ? JobTemplateAskOnLaunch.JobType : 0)
             | (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0)
             | (AskScmBranchOnLaunch ? JobTemplateAskOnLaunch.ScmBranch : 0)
@@ -301,7 +301,7 @@ namespace Jagabata.Resources
             | (AskInstanceGroupsOnLaunch ? JobTemplateAskOnLaunch.InstanceGroups : 0)
             | (AskTagsOnLaunch ? JobTemplateAskOnLaunch.JobTags : 0)
             | (AskSkipTagsOnLaunch ? JobTemplateAskOnLaunch.SkipTags : 0);
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public JobTemplateOptions Options => (SurveyEnabled ? JobTemplateOptions.Survey : 0)
             | (BecomeEnabled ? JobTemplateOptions.Become : 0)
             | (!string.IsNullOrEmpty(HostConfigKey) ? JobTemplateOptions.ProvisioningCallback : 0)
