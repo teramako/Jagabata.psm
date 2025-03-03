@@ -3,6 +3,7 @@ namespace Jagabata.Resources
     public class HostMetric(ulong id, string hostname, string url, DateTime? firstAutomation, DateTime? lastAutomation,
                              DateTime? lastDeleted, int automatedCounter, int deletedCounter, bool deleted,
                              int? usedInInventories)
+        : IResource
     {
         public const string PATH = "/api/v2/host_metrics/";
 
