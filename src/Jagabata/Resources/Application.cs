@@ -58,7 +58,7 @@ namespace Jagabata.Resources
                              string authorizationGrantType,
                              bool skipAuthorization,
                              ulong organization)
-        : SummaryFieldsContainer, IApplication, IResource, ICacheableResource
+        : ResourceBase, IApplication
     {
         public const string PATH = "/api/v2/applications/";
         /// <summary>
@@ -149,7 +149,7 @@ namespace Jagabata.Resources
         public bool SkipAuthorization { get; } = skipAuthorization;
         public ulong Organization { get; } = organization;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

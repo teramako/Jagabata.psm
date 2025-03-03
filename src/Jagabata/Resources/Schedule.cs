@@ -33,7 +33,7 @@ namespace Jagabata.Resources
                           JobVerbosity? verbosity, ulong? executionEnvironment, int? forks, int? jobSliceCount,
                           int? timeout, ulong unifiedJobTemplate, bool enabled, DateTime? dtStart, DateTime? dtEnd,
                           DateTime? nextRun, string timezone, string until)
-                : SummaryFieldsContainer, ISchedule, IResource, ICacheableResource
+        : ResourceBase, ISchedule
     {
         public const string PATH = "/api/v2/schedules/";
         /// <summary>
@@ -100,7 +100,7 @@ namespace Jagabata.Resources
         public string TimeZone { get; } = timezone;
         public string Until { get; } = until;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))

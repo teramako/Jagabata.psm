@@ -13,25 +13,11 @@ namespace Jagabata.Resources
         string Password { get; }
     }
 
-    public class User(ulong id,
-                      ResourceType type,
-                      string url,
-                      RelatedDictionary related,
-                      SummaryFieldsDictionary summaryFields,
-                      DateTime created,
-                      DateTime? modified,
-                      string username,
-                      string firstName,
-                      string lastName,
-                      string email,
-                      bool isSuperuser,
-                      bool isSystemAuditor,
-                      string password,
-                      string ldapDn,
-                      DateTime? lastLogin,
-                      string externalAccount,
-                      string[] auth)
-        : SummaryFieldsContainer, IUser, IResource, ICacheableResource
+    public class User(ulong id, ResourceType type, string url, RelatedDictionary related,
+                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string username,
+                      string firstName, string lastName, string email, bool isSuperuser, bool isSystemAuditor,
+                      string password, string ldapDn, DateTime? lastLogin, string externalAccount, string[] auth)
+        : ResourceBase, IUser
     {
         public const string PATH = "/api/v2/users/";
         /// <summary>
@@ -191,7 +177,7 @@ namespace Jagabata.Resources
             };
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
             if (!string.IsNullOrEmpty(Email))

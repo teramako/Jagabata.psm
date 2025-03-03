@@ -22,7 +22,7 @@ namespace Jagabata.Resources
                               SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                               ulong notificationTemplate, string error, JobStatus status, int notificationsSent,
                               NotificationType notificationType, string recipients, string subject, string? body)
-                : SummaryFieldsContainer, INotification, IResource, ICacheableResource
+        : ResourceBase, INotification
     {
         public const string PATH = "/api/v2/notifications/";
         /// <summary>
@@ -71,7 +71,7 @@ namespace Jagabata.Resources
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty)
             {

@@ -96,7 +96,7 @@ namespace Jagabata.Resources
         string ScmRevision { get; }
     }
 
-    public abstract class InventoryUpdateJobBase : UnifiedJob, IInventoryUpdateJob, ICacheableResource
+    public abstract class InventoryUpdateJobBase : UnifiedJob, IInventoryUpdateJob
     {
         public new const string PATH = "/api/v2/inventory_updates/";
 
@@ -128,7 +128,7 @@ namespace Jagabata.Resources
         public abstract ulong? InstanceGroup { get; }
         public abstract string ScmRevision { get; }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

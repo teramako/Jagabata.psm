@@ -39,38 +39,15 @@ namespace Jagabata.Resources
     }
 
 
-    public class Instance(ulong id,
-                          ResourceType type,
-                          string url,
-                          RelatedDictionary related,
-                          SummaryFieldsDictionary summaryFields,
-                          string hostname,
-                          string uuid,
-                          DateTime created,
-                          DateTime? modified,
-                          DateTime lastSeen,
-                          DateTime? healthCheckStarted,
-                          bool healthCheckPending,
-                          DateTime? lastHealthCheck,
-                          string errors,
-                          string capacityAdjustment,
-                          string version,
-                          int capacity,
-                          int consumedCapacity,
-                          double percentCapacityRemaining,
-                          int jobsRunning,
-                          int jobsTotal,
-                          string cpu,
-                          ulong memory,
-                          int cpuCapacity,
-                          int memCapacity,
-                          bool enabled,
-                          bool managedByPolicy,
-                          InstanceNodeType nodeType,
-                          string nodeState,
-                          string ipAddress,
+    public class Instance(ulong id, ResourceType type, string url, RelatedDictionary related,
+                          SummaryFieldsDictionary summaryFields, string hostname, string uuid, DateTime created,
+                          DateTime? modified, DateTime lastSeen, DateTime? healthCheckStarted, bool healthCheckPending,
+                          DateTime? lastHealthCheck, string errors, string capacityAdjustment, string version,
+                          int capacity, int consumedCapacity, double percentCapacityRemaining, int jobsRunning,
+                          int jobsTotal, string cpu, ulong memory, int cpuCapacity, int memCapacity, bool enabled,
+                          bool managedByPolicy, InstanceNodeType nodeType, string nodeState, string ipAddress,
                           int listenerPort)
-        : SummaryFieldsContainer, IInstance, IResource, ICacheableResource
+        : ResourceBase, IInstance
     {
         public const string PATH = "/api/v2/instances/";
         /// <summary>
@@ -155,7 +132,7 @@ namespace Jagabata.Resources
         public string IpAddress { get; } = ipAddress;
         public int ListenerPort { get; } = listenerPort;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Hostname, string.Empty)
             {

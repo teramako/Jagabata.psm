@@ -15,29 +15,13 @@ namespace Jagabata.Resources
         string PodSpecOverride { get; }
     }
 
-    public class InstanceGroup(ulong id,
-                               ResourceType type,
-                               string url,
-                               RelatedDictionary related,
-                               SummaryFieldsDictionary summaryFields,
-                               string name,
-                               DateTime created,
-                               DateTime? modified,
-                               int capacity,
-                               int consumedCapacity,
-                               double percentCapacityRemaining,
-                               int jobsRunning,
-                               int maxConcurrentJobs,
-                               int maxForks,
-                               int jobsTotal,
-                               int instances,
-                               bool isContainerGroup,
-                               ulong? credential,
-                               double policyInstancePercentage,
-                               int policyInstanceMinimum,
-                               string[] policyInstanceList,
-                               string podSpecOverride)
-        : SummaryFieldsContainer, IInstanceGroup, IResource, ICacheableResource
+    public class InstanceGroup(ulong id, ResourceType type, string url, RelatedDictionary related,
+                               SummaryFieldsDictionary summaryFields, string name, DateTime created, DateTime? modified,
+                               int capacity, int consumedCapacity, double percentCapacityRemaining, int jobsRunning,
+                               int maxConcurrentJobs, int maxForks, int jobsTotal, int instances, bool isContainerGroup,
+                               ulong? credential, double policyInstancePercentage, int policyInstanceMinimum,
+                               string[] policyInstanceList, string podSpecOverride)
+        : ResourceBase, IInstanceGroup
     {
         public const string PATH = "/api/v2/instance_groups/";
         /// <summary>
@@ -239,7 +223,7 @@ namespace Jagabata.Resources
         public string[] PolicyInstanceList { get; } = policyInstanceList;
         public string PodSpecOverride { get; } = podSpecOverride;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, string.Empty)
             {

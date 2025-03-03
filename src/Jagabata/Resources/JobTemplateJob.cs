@@ -44,7 +44,7 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
-    public abstract class JobTemplateJobBase : UnifiedJob, IJobTemplateJob, ICacheableResource
+    public abstract class JobTemplateJobBase : UnifiedJob, IJobTemplateJob
     {
         public new const string PATH = "/api/v2/jobs/";
 
@@ -88,7 +88,7 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {
@@ -99,7 +99,6 @@ namespace Jagabata.Resources
                 }
             };
         }
-
     }
 
     public class JobTemplateJob(ulong id, ResourceType type, string url, RelatedDictionary related,

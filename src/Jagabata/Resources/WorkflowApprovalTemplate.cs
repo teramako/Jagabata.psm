@@ -5,7 +5,7 @@ namespace Jagabata.Resources
                                           DateTime? modified, string name, string description, DateTime? lastJobRun,
                                           bool lastJobFailed, DateTime? nextJobRun, JobTemplateStatus status,
                                           ulong? executionEnvironment, int timeout)
-        : UnifiedJobTemplate, ICacheableResource
+        : UnifiedJobTemplate
     {
         public new const string PATH = "/api/v2/workflow_approval_templates/";
 
@@ -37,7 +37,7 @@ namespace Jagabata.Resources
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

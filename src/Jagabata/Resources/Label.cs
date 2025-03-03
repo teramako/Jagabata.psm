@@ -14,16 +14,10 @@ namespace Jagabata.Resources
         ulong Organization { get; }
     }
 
-    public class Label(ulong id,
-                       ResourceType type,
-                       string url,
-                       RelatedDictionary related,
-                       SummaryFieldsDictionary summaryFields,
-                       DateTime created,
-                       DateTime? modified,
-                       string name,
+    public class Label(ulong id, ResourceType type, string url, RelatedDictionary related,
+                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                        ulong organization)
-        : SummaryFieldsContainer, ILabel, IResource, ICacheableResource
+        : ResourceBase, ILabel
     {
         public const string PATH = "/api/v2/labels/";
         /// <summary>
@@ -66,7 +60,7 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public ulong Organization { get; } = organization;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, string.Empty);
             if (SummaryFields.TryGetValue<OrganizationSummary>("Organization", out var org))

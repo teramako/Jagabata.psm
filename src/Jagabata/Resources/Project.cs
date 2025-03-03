@@ -97,7 +97,7 @@ namespace Jagabata.Resources
                          int scmUpdateCacheTimeout, bool allowOverride, string? customVirtualenv,
                          ulong? defaultEnvironment, ulong? signatureValidationCredential, bool lastUpdateFailed,
                          DateTime? lastUpdated)
-        : UnifiedJobTemplate, IProject, ICacheableResource
+        : UnifiedJobTemplate, IProject
     {
         public new const string PATH = "/api/v2/projects/";
 
@@ -254,7 +254,7 @@ namespace Jagabata.Resources
             return await GetInventoryFiles(Id);
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

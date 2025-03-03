@@ -171,7 +171,7 @@ namespace Jagabata.Resources
                                  JobTemplateStatus status, ulong? executionEnvironment, ulong inventory,
                                  bool updateOnLaunch, int updateCacheTimeout, ulong? sourceProject,
                                  bool lastUpdateFailed, DateTime? lastUpdated)
-        : UnifiedJobTemplate, IInventorySource, ICacheableResource
+        : UnifiedJobTemplate, IInventorySource
     {
         public new const string PATH = "/api/v2/inventory_sources/";
 
@@ -328,7 +328,7 @@ namespace Jagabata.Resources
                                                  | (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0)
                                                  | (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
             {

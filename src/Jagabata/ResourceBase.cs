@@ -48,7 +48,7 @@ namespace Jagabata
         }
     }
 
-    public abstract class ResourceBase : IResource
+    public abstract class ResourceBase : IResource, ICacheableResource, IHasCacheableItems
     {
         public abstract ulong Id { get; }
         public abstract ResourceType Type { get; }
@@ -65,6 +65,39 @@ namespace Jagabata
         /// The output for some objects may be limited for performance reasons.
         /// </summary>
         public abstract SummaryFieldsDictionary SummaryFields { get; }
+
+        protected abstract CacheItem GetCacheItem();
+        CacheItem ICacheableResource.GetCacheItem()
+        {
+            return GetCacheItem();
+        }
+
+        IEnumerable<CacheItem> IHasCacheableItems.GetCacheableItems()
+        {
+            foreach (var summaryItem in SummaryFields.Values)
+            {
+                switch (summaryItem)
+                {
+                    case Array arr:
+                        foreach (var item in arr.OfType<ICacheableResource>())
+                        {
+                            yield return item.GetCacheItem();
+                        }
+                        continue;
+                    case ListSummary<ICacheableResource> list:
+                        foreach (var item in list.Results)
+                        {
+                            yield return item.GetCacheItem();
+                        }
+                        continue;
+                    case ICacheableResource res:
+                        yield return res.GetCacheItem();
+                        continue;
+                    default:
+                        continue;
+                }
+            }
+        }
 
         public override string ToString()
         {

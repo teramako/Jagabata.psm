@@ -24,7 +24,7 @@ namespace Jagabata.Resources
         string? WorkUnitId { get; }
     }
 
-    public abstract class UnifiedJob : SummaryFieldsContainer, IUnifiedJob
+    public abstract class UnifiedJob : ResourceBase, IUnifiedJob
     {
         public const string PATH = "/api/v2/unified_jobs/";
 

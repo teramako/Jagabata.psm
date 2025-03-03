@@ -18,17 +18,10 @@ namespace Jagabata.Resources
         ulong Organization { get; }
     }
 
-    public class Team(ulong id,
-                      ResourceType type,
-                      string url,
-                      RelatedDictionary related,
-                      SummaryFieldsDictionary summaryFields,
-                      DateTime created,
-                      DateTime? modified,
-                      string name,
-                      string description,
-                      ulong organization)
-        : SummaryFieldsContainer, ITeam, IResource, ICacheableResource
+    public class Team(ulong id, ResourceType type, string url, RelatedDictionary related,
+                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                      string description, ulong organization)
+        : ResourceBase, ITeam
     {
         public const string PATH = "/api/v2/teams/";
 
@@ -178,7 +171,7 @@ namespace Jagabata.Resources
         public string Description { get; } = description;
         public ulong Organization { get; } = organization;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

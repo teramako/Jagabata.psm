@@ -24,7 +24,7 @@ namespace Jagabata.Resources
         string JobTags { get; }
     }
 
-    public abstract class ProjectUpdateJobBase : UnifiedJob, IProjectUpdateJob, ICacheableResource
+    public abstract class ProjectUpdateJobBase : UnifiedJob, IProjectUpdateJob
     {
         public new const string PATH = "/api/v2/project_updates/";
 
@@ -48,7 +48,7 @@ namespace Jagabata.Resources
         public abstract JobType JobType { get; }
         public abstract string JobTags { get; }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

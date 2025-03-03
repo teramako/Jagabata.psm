@@ -26,7 +26,7 @@ namespace Jagabata.Resources
                                 string objectAssociation,
                                 string actionNode,
                                 ResourceType objectType)
-        : SummaryFieldsContainer, IResource, ICacheableResource
+        : ResourceBase
     {
         public const string PATH = "/api/v2/activity_stream/";
 
@@ -452,7 +452,7 @@ namespace Jagabata.Resources
         public string ActionNode { get; } = actionNode;
         public ResourceType ObjectType { get; } = objectType;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, $"{Operation}", $"{Timestamp}")
             {

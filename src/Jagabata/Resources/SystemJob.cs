@@ -20,7 +20,7 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
-    public abstract class SystemJobBase : UnifiedJob, ISystemJob, ICacheableResource
+    public abstract class SystemJobBase : UnifiedJob, ISystemJob
     {
         public new const string PATH = "/api/v2/system_jobs/";
 
@@ -39,7 +39,7 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

@@ -57,7 +57,7 @@ namespace Jagabata.Resources
                            bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures, int totalGroups,
                            bool hasInventorySources, int totalInventorySources, int inventorySourcesWithFailures,
                            bool pendingDeletion, bool preventInstanceGroupFallback)
-        : SummaryFieldsContainer, IInventory, IResource, ICacheableResource
+        : ResourceBase, IInventory
     {
         public const string PATH = "/api/v2/inventories/";
 
@@ -160,7 +160,7 @@ namespace Jagabata.Resources
             return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

@@ -72,21 +72,11 @@ namespace Jagabata.Resources
         Injectors Injectors { get; }
     }
 
-    public class CredentialType(ulong id,
-                                ResourceType type,
-                                string url,
-                                RelatedDictionary related,
-                                SummaryFieldsDictionary summaryFields,
-                                DateTime created,
-                                DateTime? modified,
-                                string name,
-                                string description,
-                                CredentialTypeKind kind,
-                                string nameSpace,
-                                bool managed,
-                                FieldList inputs,
-                                Injectors injectors)
-        : SummaryFieldsContainer, ICredentialType, IResource, ICacheableResource
+    public class CredentialType(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                                string description, CredentialTypeKind kind, string nameSpace, bool managed,
+                                FieldList inputs, Injectors injectors)
+        : ResourceBase, ICredentialType
     {
         public const string PATH = "/api/v2/credential_types/";
 
@@ -134,7 +124,7 @@ namespace Jagabata.Resources
         public FieldList Inputs { get; } = inputs;
         public Injectors Injectors { get; } = injectors;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

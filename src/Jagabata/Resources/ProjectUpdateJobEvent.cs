@@ -59,7 +59,7 @@ namespace Jagabata.Resources
         public override JobVerbosity Verbosity { get; } = verbosity;
         public ulong ProjectUpdate { get; } = projectUpdate;
 
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {

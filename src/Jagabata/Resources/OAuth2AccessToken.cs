@@ -19,21 +19,11 @@ namespace Jagabata.Resources
         string Scope { get; }
     }
 
-    public class OAuth2AccessToken(ulong id,
-                                   ResourceType type,
-                                   string url,
-                                   RelatedDictionary related,
-                                   SummaryFieldsDictionary summaryFields,
-                                   DateTime created,
-                                   DateTime? modified,
-                                   string description,
-                                   ulong user,
-                                   string token,
-                                   string? refreshToken,
-                                   ulong? application,
-                                   DateTime expires,
-                                   string scope)
-            : SummaryFieldsContainer, IOAuth2AccessToken, IResource, ICacheableResource
+    public class OAuth2AccessToken(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                   SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                   string description, ulong user, string token, string? refreshToken,
+                                   ulong? application, DateTime expires, string scope)
+        : ResourceBase, IOAuth2AccessToken
     {
         public const string PATH = "/api/v2/tokens/";
         /// <summary>
@@ -166,7 +156,7 @@ namespace Jagabata.Resources
         public DateTime Expires { get; } = expires;
         public string Scope { get; } = scope;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, Description);
             if (Application is null && SummaryFields.TryGetValue<UserSummary>("User", out var user))

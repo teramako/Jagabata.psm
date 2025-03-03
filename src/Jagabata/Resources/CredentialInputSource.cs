@@ -15,7 +15,7 @@ namespace Jagabata.Resources
                                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                        string description, string inputFieldName, Dictionary<string, object?> metadata,
                                        ulong targetCredential, ulong sourceCredential)
-        : SummaryFieldsContainer, ICredentialInputSource, IResource, ICacheableResource
+        : ResourceBase, ICredentialInputSource
     {
         public const string PATH = "/api/v2/credential_input_sources/";
 
@@ -82,7 +82,7 @@ namespace Jagabata.Resources
         public ulong TargetCredential { get; } = targetCredential;
         public ulong SourceCredential { get; } = sourceCredential;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, Description)
             {

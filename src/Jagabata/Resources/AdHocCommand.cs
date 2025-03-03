@@ -26,7 +26,7 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
-    public abstract class AdHocCommandBase : UnifiedJob, IAdHocCommand, ICacheableResource
+    public abstract class AdHocCommandBase : UnifiedJob, IAdHocCommand
     {
         public new const string PATH = "/api/v2/ad_hoc_commands/";
 
@@ -46,7 +46,7 @@ namespace Jagabata.Resources
         public abstract bool BecomeEnabled { get; }
         public abstract bool DiffMode { get; }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, ModuleArgs)
             {

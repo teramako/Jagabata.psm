@@ -36,20 +36,12 @@ namespace Jagabata.Resources
         Messages? Messages { get; }
     }
 
-    public class NotificationTemplate(ulong id,
-                                      ResourceType type,
-                                      string url,
-                                      RelatedDictionary related,
-                                      SummaryFieldsDictionary summaryFields,
-                                      DateTime created,
-                                      DateTime? modified,
-                                      string name,
-                                      string description,
-                                      ulong organization,
+    public class NotificationTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                      string name, string description, ulong organization,
                                       NotificationType notificationType,
-                                      Dictionary<string, object?> notificationConfiguration,
-                                      Messages? messages)
-                : SummaryFieldsContainer, INotificationTemplate, IResource, ICacheableResource
+                                      Dictionary<string, object?> notificationConfiguration, Messages? messages)
+        : ResourceBase, INotificationTemplate
     {
         public const string PATH = "/api/v2/notification_templates/";
         /// <summary>
@@ -96,7 +88,7 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

@@ -67,7 +67,7 @@ namespace Jagabata.Resources
         JobTemplateStatus Status { get; }
     }
 
-    public abstract class UnifiedJobTemplate : SummaryFieldsContainer, IUnifiedJobTemplate
+    public abstract class UnifiedJobTemplate : ResourceBase, IUnifiedJobTemplate
     {
         public const string PATH = "/api/v2/unified_job_templates/";
 

@@ -11,19 +11,10 @@ namespace Jagabata.Resources
         int? DefaultEnvironment { get; }
     }
 
-    public class Organization(ulong id,
-                              ResourceType type,
-                              string url,
-                              RelatedDictionary related,
-                              SummaryFieldsDictionary summaryFields,
-                              DateTime created,
-                              DateTime? modified,
-                              string name,
-                              string description,
-                              int maxHosts,
-                              string? customVirtualenv,
-                              int? defaultEnvironment)
-        : SummaryFieldsContainer, IOrganization, IResource, ICacheableResource
+    public class Organization(ulong id, ResourceType type, string url, RelatedDictionary related,
+                              SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                              string description, int maxHosts, string? customVirtualenv, int? defaultEnvironment)
+        : ResourceBase, IOrganization
     {
         public const string PATH = "/api/v2/organizations/";
         /// <summary>
@@ -111,7 +102,7 @@ namespace Jagabata.Resources
         public string? CustomVirtualenv { get; } = customVirtualenv;
         public int? DefaultEnvironment { get; } = defaultEnvironment;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

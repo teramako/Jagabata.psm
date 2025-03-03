@@ -17,7 +17,7 @@ namespace Jagabata.Resources
         JobVerbosity Verbosity { get; }
     }
 
-    public abstract class JobEventBase : SummaryFieldsContainer, IJobEventBase, ICacheableResource
+    public abstract class JobEventBase : ResourceBase, IJobEventBase
     {
         public abstract DateTime Created { get; }
         public abstract DateTime? Modified { get; }
@@ -33,7 +33,7 @@ namespace Jagabata.Resources
         public abstract int EndLine { get; }
         public abstract JobVerbosity Verbosity { get; }
 
-        public virtual CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {

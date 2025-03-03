@@ -26,23 +26,11 @@ namespace Jagabata.Resources
     }
 
 
-    public class Credential(ulong id,
-                            ResourceType type,
-                            string url,
-                            RelatedDictionary related,
-                            SummaryFieldsDictionary summaryFields,
-                            DateTime created,
-                            DateTime? modified,
-                            string name,
-                            string description,
-                            ulong? organization,
-                            ulong credentialType,
-                            bool managed,
-                            Dictionary<string, object?> inputs,
-                            string kind,
-                            bool cloud,
-                            bool kubernetes)
-        : SummaryFieldsContainer, ICredential, IResource, ICacheableResource
+    public class Credential(ulong id, ResourceType type, string url, RelatedDictionary related,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                            string description, ulong? organization, ulong credentialType, bool managed,
+                            Dictionary<string, object?> inputs, string kind, bool cloud, bool kubernetes)
+        : ResourceBase, ICredential
     {
         public const string PATH = "/api/v2/credentials/";
 
@@ -350,7 +338,7 @@ namespace Jagabata.Resources
             return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
             {

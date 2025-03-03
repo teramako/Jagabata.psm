@@ -64,32 +64,15 @@ namespace Jagabata.Resources
         JobVerbosity Verbosity { get; }
     }
 
-    public class ConstructedInventory(ulong id,
-                                      ResourceType type,
-                                      string url,
-                                      RelatedDictionary related,
-                                      SummaryFieldsDictionary summaryFields,
-                                      DateTime created,
-                                      DateTime? modified,
-                                      string name,
-                                      string description,
-                                      ulong organization,
-                                      string kind,
-                                      string variables,
-                                      bool hasActiveFailures,
-                                      int totalHosts,
-                                      int hostsWithActiveFailures,
-                                      int totalGroups,
-                                      bool hasInventorySources,
-                                      int totalInventorySources,
-                                      int inventorySourcesWithFailures,
-                                      bool pendingDeletion,
-                                      bool preventInstanceGroupFallback,
-                                      string sourceVars,
-                                      int updateCacheTimeout,
-                                      string limit,
-                                      JobVerbosity verbosity)
-        : SummaryFieldsContainer, IConstructedInventory, IResource, ICacheableResource
+    public class ConstructedInventory(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                      string name, string description, ulong organization, string kind, string variables,
+                                      bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures,
+                                      int totalGroups, bool hasInventorySources, int totalInventorySources,
+                                      int inventorySourcesWithFailures, bool pendingDeletion,
+                                      bool preventInstanceGroupFallback, string sourceVars, int updateCacheTimeout,
+                                      string limit, JobVerbosity verbosity)
+        : ResourceBase, IConstructedInventory
     {
         public const string PATH = "/api/v2/constructed_inventories/";
 
@@ -153,7 +136,7 @@ namespace Jagabata.Resources
             return $"{Type}:{Id}:{Kind}:{Name}";
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

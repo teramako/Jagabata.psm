@@ -21,18 +21,10 @@ namespace Jagabata.Resources
         /// </summary>
         string Variables { get; }
     }
-    public class Group(ulong id,
-                       ResourceType type,
-                       string url,
-                       RelatedDictionary related,
-                       SummaryFieldsDictionary summaryFields,
-                       DateTime created,
-                       DateTime? modified,
-                       string name,
-                       string description,
-                       ulong inventory,
-                       string variables)
-        : SummaryFieldsContainer, IGroup, IResource, ICacheableResource
+    public class Group(ulong id, ResourceType type, string url, RelatedDictionary related,
+                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                       string description, ulong inventory, string variables)
+        : ResourceBase, IGroup
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -182,7 +174,7 @@ namespace Jagabata.Resources
         public ulong Inventory { get; } = inventory;
         public string Variables { get; } = variables;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))

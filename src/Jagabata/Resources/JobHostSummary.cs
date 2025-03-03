@@ -8,7 +8,7 @@ namespace Jagabata.Resources
                           DateTime created, DateTime? modified, ulong job, ulong host, ulong? constructedHost,
                           string hostName, int changed, int dark, int failures, int oK, int processed, int skipped,
                           bool failed, int ignored, int rescued)
-                : SummaryFieldsContainer, IResource, ICacheableResource
+        : ResourceBase
     {
         public const string PATH = "/api/v2/job_host_summaries/";
         /// <summary>
@@ -108,7 +108,7 @@ namespace Jagabata.Resources
         public int Ignored { get; } = ignored;
         public int Rescued { get; } = rescued;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, HostName, string.Empty);
             if (SummaryFields.TryGetValue<JobExSummary>("Job", out var job))

@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public abstract class WorkflowApprovalBase : UnifiedJob, ICacheableResource
+    public abstract class WorkflowApprovalBase : UnifiedJob
     {
         public new const string PATH = "/api/v2/workflow_approvals/";
 
@@ -13,7 +13,7 @@ namespace Jagabata.Resources
         public abstract DateTime? ApprovalExpiration { get; }
         public abstract bool TimedOut { get; }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, Description);
             if (SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template))
@@ -22,7 +22,6 @@ namespace Jagabata.Resources
             }
             return item;
         }
-
     }
 
     public class WorkflowApproval(ulong id, ResourceType type, string url, RelatedDictionary related,

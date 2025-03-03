@@ -148,7 +148,7 @@ namespace Jagabata.Resources
                              bool askInstanceGroupsOnLaunch, bool surveyEnabled, bool becomeEnabled, bool diffMode,
                              bool allowSimultaneous, string? customVirtualenv, int jobSliceCount, string webhookService,
                              ulong? webhookCredential, bool preventInstanceGroupFallback)
-        : UnifiedJobTemplate, IJobTemplate, ICacheableResource
+        : UnifiedJobTemplate, IJobTemplate
     {
         public new const string PATH = "/api/v2/job_templates/";
 
@@ -310,7 +310,7 @@ namespace Jagabata.Resources
             | (UseFactCache ? JobTemplateOptions.FactCache : 0)
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

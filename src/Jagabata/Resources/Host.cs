@@ -31,20 +31,10 @@ namespace Jagabata.Resources
         string Variables { get; }
     }
 
-    public class Host(ulong id,
-                      ResourceType type,
-                      string url,
-                      RelatedDictionary related,
-                      SummaryFieldsDictionary summaryFields,
-                      DateTime created,
-                      DateTime? modified,
-                      string name,
-                      string description,
-                      ulong inventory,
-                      bool enabled,
-                      string instanceId,
-                      string variables)
-        : SummaryFieldsContainer, IHost, IResource, ICacheableResource
+    public class Host(ulong id, ResourceType type, string url, RelatedDictionary related,
+                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                      string description, ulong inventory, bool enabled, string instanceId, string variables)
+        : ResourceBase, IHost
     {
         public const string PATH = "/api/v2/hosts/";
 
@@ -181,7 +171,7 @@ namespace Jagabata.Resources
 
         public string Variables { get; } = variables;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))

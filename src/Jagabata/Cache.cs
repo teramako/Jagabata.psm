@@ -2,12 +2,12 @@ using System.Text;
 
 namespace Jagabata;
 
-public interface ICacheableResource : IResource
+internal interface ICacheableResource : IResource
 {
     CacheItem GetCacheItem();
 }
 
-public interface IHasCacheableItems
+internal interface IHasCacheableItems
 {
     IEnumerable<CacheItem> GetCacheableItems();
 }

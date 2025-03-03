@@ -43,36 +43,15 @@ namespace Jagabata.Resources
         string Identifier { get; }
     }
 
-    public class WorkflowJobNode(ulong id,
-                                 ResourceType type,
-                                 string url,
-                                 RelatedDictionary related,
-                                 SummaryFieldsDictionary summaryFields,
-                                 DateTime created,
-                                 DateTime? modified,
-                                 Dictionary<string, object?> extraData,
-                                 ulong? inventory,
-                                 string? scmBranch,
-                                 string? jobType,
-                                 string? jobTags,
-                                 string? skipTags,
-                                 string? limit,
-                                 bool? diffMode,
-                                 JobVerbosity? verbosity,
-                                 ulong? executionEnvironment,
-                                 int? forks,
-                                 int? jobSliceCount,
-                                 int? timeout,
-                                 ulong? job,
-                                 ulong workflowJob,
-                                 ulong? unifiedJobTemplate,
-                                 ulong[] successNodes,
-                                 ulong[] failureNodes,
-                                 ulong[] alwaysNodes,
-                                 bool allParentsMustConverge,
-                                 bool doNotRun,
-                                 string identifier)
-                : SummaryFieldsContainer, IWorkflowJobNode, IResource, ICacheableResource
+    public class WorkflowJobNode(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                 SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                 Dictionary<string, object?> extraData, ulong? inventory, string? scmBranch,
+                                 string? jobType, string? jobTags, string? skipTags, string? limit, bool? diffMode,
+                                 JobVerbosity? verbosity, ulong? executionEnvironment, int? forks, int? jobSliceCount,
+                                 int? timeout, ulong? job, ulong workflowJob, ulong? unifiedJobTemplate,
+                                 ulong[] successNodes, ulong[] failureNodes, ulong[] alwaysNodes,
+                                 bool allParentsMustConverge, bool doNotRun, string identifier)
+        : ResourceBase, IWorkflowJobNode
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
         /// <summary>
@@ -136,7 +115,7 @@ namespace Jagabata.Resources
         public bool DoNotRun { get; } = doNotRun;
         public string Identifier { get; } = identifier;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
             if (SummaryFields.TryGetValue<WorkflowJobNodeJobSummary>("Job", out var job))

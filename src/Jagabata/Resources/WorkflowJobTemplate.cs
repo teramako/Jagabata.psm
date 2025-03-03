@@ -60,7 +60,7 @@ namespace Jagabata.Resources
                                      bool askInventoryOnLaunch, bool askScmBranchOnLaunch, bool askLimitOnLaunch,
                                      string webhookService, ulong? webhookCredential, bool askLabelsOnLaunch,
                                      bool askSkipTagsOnLaunch, bool askTagsOnLaunch, string? skipTags, string? jobTags)
-        : UnifiedJobTemplate, IWorkflowJobTemplate, ICacheableResource
+        : UnifiedJobTemplate, IWorkflowJobTemplate
     {
         public new const string PATH = "/api/v2/workflow_job_templates/";
         /// <summary>
@@ -163,7 +163,7 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

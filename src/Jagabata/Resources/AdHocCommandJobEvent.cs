@@ -53,7 +53,7 @@ namespace Jagabata.Resources
         public override int EndLine { get; } = endLine;
         public override JobVerbosity Verbosity { get; } = verbosity;
 
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {

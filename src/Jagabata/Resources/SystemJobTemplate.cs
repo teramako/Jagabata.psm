@@ -2,22 +2,12 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public class SystemJobTemplate(ulong id,
-                                   ResourceType type,
-                                   string url,
-                                   RelatedDictionary related,
-                                   SummaryFieldsDictionary summaryFields,
-                                   DateTime created,
-                                   DateTime? modified,
-                                   string name,
-                                   string description,
-                                   DateTime? lastJobRun,
-                                   bool lastJobFailed,
-                                   DateTime? nextJobRun,
-                                   JobTemplateStatus status,
-                                   ulong? executionEnvironment,
+    public class SystemJobTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                   SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                   string name, string description, DateTime? lastJobRun, bool lastJobFailed,
+                                   DateTime? nextJobRun, JobTemplateStatus status, ulong? executionEnvironment,
                                    string jobType)
-        : UnifiedJobTemplate, ICacheableResource
+        : UnifiedJobTemplate
     {
         public new const string PATH = "/api/v2/system_job_templates/";
 
@@ -66,7 +56,7 @@ namespace Jagabata.Resources
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

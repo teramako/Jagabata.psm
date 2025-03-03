@@ -33,21 +33,11 @@ namespace Jagabata.Resources
         string Pull { get; }
     }
 
-    public class ExecutionEnvironment(ulong id,
-                                      ResourceType type,
-                                      string url,
-                                      RelatedDictionary related,
-                                      SummaryFieldsDictionary summaryFields,
-                                      DateTime created,
-                                      DateTime? modified,
-                                      string name,
-                                      string description,
-                                      ulong? organization,
-                                      string image,
-                                      bool managed,
-                                      ulong? credential,
-                                      string pull)
-                : SummaryFieldsContainer, IExecutionEnvironment, IResource, ICacheableResource
+    public class ExecutionEnvironment(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                      string name, string description, ulong? organization, string image, bool managed,
+                                      ulong? credential, string pull)
+        : ResourceBase, IExecutionEnvironment
     {
         public const string PATH = "/api/v2/execution_environments/";
 
@@ -116,7 +106,7 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public string Pull { get; } = pull;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {
