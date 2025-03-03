@@ -67,10 +67,6 @@ namespace Jagabata.Resources
     {
         public abstract ResourceType Type { get; }
         public abstract ulong Id { get; }
-        public virtual CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, string.Empty, string.Empty, CacheType.Summary);
-        }
         protected override string[] DisplayProperties => [];
         public override string ToString()
         {
@@ -78,13 +74,21 @@ namespace Jagabata.Resources
                 ? $"{Type}:{Id} {{ {contents} }}"
                 : $"{Type}:{Id}";
         }
+        protected virtual CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, string.Empty, string.Empty, CacheType.Summary);
+        }
+        CacheItem ICacheableResource.GetCacheItem()
+        {
+            return GetCacheItem();
+        }
     }
 
     public abstract class NamedResourceSummary
         : ResourceSummary, IResource, ICacheableResource
     {
         public abstract string Name { get; }
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, string.Empty, CacheType.Summary);
         }
@@ -100,7 +104,7 @@ namespace Jagabata.Resources
         : NamedResourceSummary, IResource, ICacheableResource
     {
         public abstract string Description { get; }
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description, CacheType.Summary);
         }
@@ -258,7 +262,7 @@ namespace Jagabata.Resources
         public string Username => username;
         public string FirstName => firstName;
         public string LastName => lastName;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Username, string.Empty, CacheType.Summary);
         }
@@ -293,7 +297,7 @@ namespace Jagabata.Resources
         public override string Name => name;
         public override string Description => description;
         public string Image => image;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Image", Image);
@@ -333,7 +337,7 @@ namespace Jagabata.Resources
         public override ulong Id => id;
         public string Token => token;
         public string Scope => scope;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Scope", Scope);
@@ -383,7 +387,7 @@ namespace Jagabata.Resources
         public bool Cloud => cloud;
         public bool Kubernetes => kubernetes;
         public ulong? CredentialTypeId => credentialTypeId;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Kind", Kind);
@@ -410,7 +414,7 @@ namespace Jagabata.Resources
         public override string Description => description;
         public string Kind => kind;
         public bool Cloud => cloud;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Kind", Kind);
@@ -450,7 +454,7 @@ namespace Jagabata.Resources
         public override string Name => name;
         public JobStatus Status => status;
         public DateTime? Finished => finished;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -473,7 +477,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public DateTime? Finished => finished;
         public DateTime? CanceledOn => canceledOn;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -497,7 +501,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public bool Failed => failed;
         public double Elapsed => elapsed;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -519,7 +523,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public bool Failed => failed;
         public double Elapsed => elapsed;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -544,7 +548,7 @@ namespace Jagabata.Resources
         public double Elapsed => elapsed;
         public ulong JobTemplateId => jobTemplateId;
         public string JobTemplateName => jobTemplateName;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -576,7 +580,7 @@ namespace Jagabata.Resources
         public double Elapsed => elapsed;
         public ulong JobTemplateId => jobTemplateId;
         public string JobTemplateName => jobTemplateName;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -607,7 +611,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public bool Failed => failed;
         public double Elapsed => elapsed;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -640,7 +644,7 @@ namespace Jagabata.Resources
         public override ResourceType Type => ResourceType.JobHostSummary;
         public override ulong Id => id;
         public bool Failed => failed;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Failed", $"{Failed}");
@@ -682,7 +686,7 @@ namespace Jagabata.Resources
         public int InventorySourcesWithFailures => inventorySourcesWithFailures;
         public ulong OrganizationId => organizationId;
         public string Kind => kind;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Kind", $"{Kind}");
@@ -711,7 +715,7 @@ namespace Jagabata.Resources
         public InventorySourceSource Source => source;
         public DateTime LastUpdated => lastUpdated;
         public JobStatus Status => status;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -735,7 +739,7 @@ namespace Jagabata.Resources
         public JobTemplateStatus Status => status;
         public string ScmType => scmType;
         public bool AllowOverride => allowOverride;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("ScmType", string.IsNullOrEmpty(ScmType) ? "Local" : ScmType);
@@ -756,7 +760,7 @@ namespace Jagabata.Resources
         public override string Description => description;
         public JobStatus Status => status;
         public bool Failed => failed;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -822,7 +826,7 @@ namespace Jagabata.Resources
         public override string Name => name;
         public override string Description => description;
         public DateTime NextRun => nextRun;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("NextRun", $"{NextRun}");
@@ -841,7 +845,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public DateTime Created => created;
         public string Error => error;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -874,7 +878,7 @@ namespace Jagabata.Resources
         public override string Name => name;
         public JobStatus Status => status;
         public string Limit => limit;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -892,7 +896,7 @@ namespace Jagabata.Resources
         public override ResourceType Type => ResourceType.Instance;
         public override ulong Id => id;
         public string Hostname { get; } = hostname;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Hostname, string.Empty, CacheType.Summary);
         }
@@ -912,7 +916,7 @@ namespace Jagabata.Resources
         public JobStatus Status => status;
         public string NotificationType => notificationType;
         public ulong NotificationTemplateId => notificationTemplateId;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Status", $"{Status}");
@@ -935,7 +939,7 @@ namespace Jagabata.Resources
         public override ResourceType Type => ResourceType.Role;
         public override ulong Id => id;
         public string RoleField => roleField;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Field", RoleField);
@@ -977,7 +981,7 @@ namespace Jagabata.Resources
         public override ResourceType Type => ResourceType.WorkflowJobTemplateNode;
         public override ulong Id => id;
         public ulong UnifiedJobTemplateId => unifiedJobTemplateId;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             item.Metadata.Add("Template", $"{UnifiedJobTemplateId}");
@@ -1009,7 +1013,7 @@ namespace Jagabata.Resources
         public ResourceType? ResourceType => resourceType;
         public RelatedDictionary? Related => related;
         public Capability UserCapabilities => userCapabilities;
-        public override CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             var item = base.GetCacheItem();
             if (ResourceType is not null)

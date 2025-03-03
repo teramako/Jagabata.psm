@@ -2,14 +2,9 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public class Role(ulong id,
-                      ResourceType type,
-                      string url,
-                      RelatedDictionary related,
-                      Role.Summary summaryFields,
-                      string name,
-                      string description)
-                : IResource, ICacheableResource, IHasCacheableItems
+    public class Role(ulong id, ResourceType type, string url, RelatedDictionary related, Role.Summary summaryFields,
+                      string name, string description)
+        : IResource, ICacheableResource, IHasCacheableItems
     {
         public const string PATH = "/api/v2/roles/";
         /// <summary>
@@ -55,7 +50,7 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public string Description { get; } = description;
 
-        public CacheItem GetCacheItem()
+        CacheItem ICacheableResource.GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
             if (SummaryFields.ResourceId is not null)
@@ -65,7 +60,7 @@ namespace Jagabata.Resources
             return item;
         }
 
-        public IEnumerable<CacheItem> GetCacheableItems()
+        IEnumerable<CacheItem> IHasCacheableItems.GetCacheableItems()
         {
             if (SummaryFields.ResourceId is not null
                 && SummaryFields.ResourceType is not null
