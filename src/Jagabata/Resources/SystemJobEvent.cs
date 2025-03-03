@@ -21,7 +21,7 @@ namespace Jagabata.Resources
                                                                          NameValueCollection? query = null,
                                                                          bool getAll = false)
         {
-            var path = $"{Resources.SystemJob.PATH}{systemJobId}/events/";
+            var path = $"{SystemJobBase.PATH}{systemJobId}/events/";
             await foreach (var result in RestAPI.GetResultSetAsync<SystemJobEvent>(path, query, getAll))
             {
                 foreach (var jobEvent in result.Contents.Results)
