@@ -39,7 +39,7 @@ namespace Jagabata
                     BaseAddress = config.Origin,
                     DefaultRequestVersion = HttpVersion.Version11,
                 };
-                _client.DefaultRequestHeaders.Add("Accept", "application/json");
+                _client.DefaultRequestHeaders.Add("Accept", JsonContentType);
                 _client.DefaultRequestHeaders.Add("Accept-Language", CreateAcceptLanguages(config.Lang));
                 var token = config.GetTokenString();
                 if (!string.IsNullOrEmpty(token))
@@ -73,7 +73,7 @@ namespace Jagabata
                 Client = client;
             }
             client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept", JsonContentType);
             client.DefaultRequestHeaders.Add("Accept-Language", CreateAcceptLanguages(config.Lang));
             var token = config.GetTokenString();
             if (!string.IsNullOrEmpty(token))
