@@ -34,6 +34,11 @@ namespace Jagabata.Resources
         public abstract string ExtraVars { get; }
         public abstract string ResultStdout { get; }
 
+        public SystemJobTemplate? GetTemplate()
+        {
+            return GetTemplate<SystemJobTemplate>();
+        }
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);

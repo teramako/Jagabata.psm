@@ -128,6 +128,11 @@ namespace Jagabata.Resources
         public abstract ulong? InstanceGroup { get; }
         public abstract string ScmRevision { get; }
 
+        public InventorySource? GetTemplate()
+        {
+            return GetTemplate<InventorySource>();
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)

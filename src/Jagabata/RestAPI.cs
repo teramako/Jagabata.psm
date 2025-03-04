@@ -268,6 +268,25 @@ namespace Jagabata
             }
             return await HandleResponse<T>(response);
         }
+
+        /// <summary>
+        /// Request <see cref="HttpMethod.Get">GET</see> to AWX
+        /// and deserialize the contents json to <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pathAndQuery"></param>
+        /// <param name="type"></param>
+        /// <returns><typeparamref name="T"/> object of deserialized from JSON</returns>
+        /// <exception cref="HttpRequestException"></exception>
+        /// <exception cref="RestAPIException"></exception>
+        /// <seealso cref="GetAsync{T}(string, AcceptType)"/>
+        public static T Get<T>(string pathAndQuery, AcceptType type = AcceptType.Json) where T : class
+        {
+            var task = GetAsync<T>(pathAndQuery, type);
+            task.Wait();
+            return task.Result.Contents;
+        }
+
         /// <summary>
         /// Request <see cref="HttpMethod.Get">GET</see> to AWX
         /// and deserialize the contents json to <see cref="ResultSet{T}">ResultSet&lt;<typeparamref name="T"/>&gt;</see>.

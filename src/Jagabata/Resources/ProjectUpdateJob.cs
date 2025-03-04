@@ -59,6 +59,11 @@ namespace Jagabata.Resources
                 }
             };
         }
+
+        public Project? GetTemplate()
+        {
+            return GetTemplate<Project>();
+        }
     }
 
     public class ProjectUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,

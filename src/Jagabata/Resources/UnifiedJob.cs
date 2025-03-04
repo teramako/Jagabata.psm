@@ -41,6 +41,17 @@ namespace Jagabata.Resources
         public abstract string JobExplanation { get; }
         public abstract string? WorkUnitId { get; }
 
+        /// <summary>
+        /// Get the Template resource related this job.
+        /// </summary>
+        /// <typeparam name="TResource">Resource class</typeparam>
+        protected TResource? GetTemplate<TResource>() where TResource : class
+        {
+            return Related.TryGetPath("unified_job_template", out var path)
+                ? RestAPI.Get<TResource>(path)
+                : null;
+        }
+
         public override string ToString()
         {
             return $"{Type}:{Id}:{Name}";

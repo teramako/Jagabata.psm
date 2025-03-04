@@ -83,6 +83,11 @@ namespace Jagabata.Resources
         public abstract uint? WebhookCredential { get; }
         public abstract string WebhookGuid { get; }
 
+        public JobTemplate? GetTemplate()
+        {
+            return GetTemplate<JobTemplate>();
+        }
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);

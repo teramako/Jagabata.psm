@@ -54,6 +54,11 @@ namespace Jagabata.Resources
         public abstract string? SkipTags { get; }
         public abstract string? JobTags { get; }
 
+        public WorkflowJobTemplate? GetTemplate()
+        {
+            return GetTemplate<WorkflowJobTemplate>();
+        }
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);

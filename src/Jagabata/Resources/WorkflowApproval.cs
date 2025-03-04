@@ -85,6 +85,11 @@ namespace Jagabata.Resources
         public override DateTime? ApprovalExpiration { get; } = approvalExpiration;
         public override bool TimedOut { get; } = timedOut;
 
+        public WorkflowApprovalTemplate? GetTemplate()
+        {
+            return GetTemplate<WorkflowApprovalTemplate>();
+        }
+
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                             string description, ulong? unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
