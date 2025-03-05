@@ -254,6 +254,15 @@ namespace Jagabata.Resources
             return RestAPI.Get<string[]>($"{PATH}{Id}/inventories/");
         }
 
+        /// <summary>
+        /// Get playbooks available within this project.
+        /// </summary>
+        /// <returns>Array of playbooks</returns>
+        public string[] GetPlaybooks()
+        {
+            return RestAPI.Get<string[]>($"{PATH}{Id}/playbooks/");
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
