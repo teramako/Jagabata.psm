@@ -2,68 +2,6 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public interface IConstructedInventory
-    {
-        /// <summary>
-        /// Name of this inventory.
-        /// </summary>
-        string Name { get; }
-        /// <summary>
-        /// Optional description of this inventry.
-        /// </summary>
-        string Description { get; }
-        /// <summary>
-        /// Organization containing this inventory.
-        /// </summary>
-        ulong Organization { get; }
-        /// <summary>
-        /// Kind of inventory being represented.
-        /// <list type="bullet">
-        ///     <item>
-        ///         <term><c>""</c></term>
-        ///         <description>Hosts have a direct link to this inventory.(default></description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"smart"</c></term>
-        ///         <description>Hosts for inventory generated using the host_filter property</description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"constructed"</c></term>
-        ///         <description>Parse list of source inventories with the constructed inventory plugin.</description>
-        ///     </item>
-        /// </list>
-        /// </summary>
-        string Kind { get; }
-        /// <summary>
-        /// Inventory variables in JSON or YAML
-        /// </summary>
-        string Variables { get; }
-        /// <summary>
-        /// If enabled, the inventory will prevent adding any organization instance groups
-        /// to the list of preferred instances groups to run associated job templates on.
-        /// If this setting is enabled and you provided an empty list, the global instance groups
-        /// will be applied.
-        /// </summary>
-        bool PreventInstanceGroupFallback { get; }
-        /// <summary>
-        /// The source_vars for the related auto-create inventory source, special to constructed inventory.
-        /// </summary>
-        string SourceVars { get; }
-        /// <summary>
-        /// The cache timeout for the related auto-created inventory source, special to constructed inventory.
-        /// </summary>
-        int UpdateCacheTimeout { get; }
-        /// <summary>
-        /// The limit to restrict the returned hosts for the related auto-created inventory source,
-        /// special to constructed inventory.
-        /// </summary>
-        string Limit { get; }
-        /// <summary>
-        /// The verbosity level for the related auto-created inventory source, special to constructed inventory.
-        /// </summary>
-        JobVerbosity Verbosity { get; }
-    }
-
     public class ConstructedInventory(ulong id, ResourceType type, string url, RelatedDictionary related,
                                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                       string name, string description, ulong organization, string kind, string variables,
@@ -72,7 +10,7 @@ namespace Jagabata.Resources
                                       int inventorySourcesWithFailures, bool pendingDeletion,
                                       bool preventInstanceGroupFallback, string sourceVars, int updateCacheTimeout,
                                       string limit, JobVerbosity verbosity)
-        : ResourceBase, IConstructedInventory
+        : InventoryBase
     {
         public const string PATH = "/api/v2/constructed_inventories/";
 
@@ -110,40 +48,38 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public ulong Organization { get; } = organization;
-        public string Kind { get; } = kind;
-        public string Variables { get; } = variables;
-        public bool HasActiveFailures { get; } = hasActiveFailures;
-        public int TotalHosts { get; } = totalHosts;
-        public int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
-        public int TotalGroups { get; } = totalGroups;
-        public bool HasInventorySources { get; } = hasInventorySources;
-        public int TotalInventorySources { get; } = totalInventorySources;
-        public int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
-        public bool PendingDeletion { get; } = pendingDeletion;
-        public bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong Organization { get; } = organization;
+        public override string Kind { get; } = kind;
+        public override string Variables { get; } = variables;
+        public override bool HasActiveFailures { get; } = hasActiveFailures;
+        public override int TotalHosts { get; } = totalHosts;
+        public override int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
+        public override int TotalGroups { get; } = totalGroups;
+        public override bool HasInventorySources { get; } = hasInventorySources;
+        public override int TotalInventorySources { get; } = totalInventorySources;
+        public override int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
+        public override bool PendingDeletion { get; } = pendingDeletion;
+        public override bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
+        /// <summary>
+        /// The source_vars for the related auto-create inventory source, special to constructed inventory.
+        /// </summary>
         public string SourceVars { get; } = sourceVars;
+        /// <summary>
+        /// The cache timeout for the related auto-created inventory source, special to constructed inventory.
+        /// </summary>
         public int UpdateCacheTimeout { get; } = updateCacheTimeout;
+        /// <summary>
+        /// The limit to restrict the returned hosts for the related auto-created inventory source,
+        /// special to constructed inventory.
+        /// </summary>
         public string Limit { get; } = limit;
+        /// <summary>
+        /// The verbosity level for the related auto-created inventory source, special to constructed inventory.
+        /// </summary>
         public JobVerbosity Verbosity { get; } = verbosity;
-
-        public override string ToString()
-        {
-            return $"{Type}:{Id}:{Kind}:{Name}";
-        }
-
-        protected override CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Kind"] = Kind
-                }
-            };
-        }
     }
 }

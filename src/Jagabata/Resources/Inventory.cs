@@ -2,62 +2,13 @@ using System.Collections.Specialized;
 
 namespace Jagabata.Resources
 {
-    public interface IInventory
-    {
-        /// <summary>
-        /// Name of this inventory.
-        /// </summary>
-        string Name { get; }
-        /// <summary>
-        /// Optional description of this inventry.
-        /// </summary>
-        string Description { get; }
-        /// <summary>
-        /// Organization containing this inventory.
-        /// </summary>
-        ulong Organization { get; }
-        /// <summary>
-        /// Kind of inventory being represented.
-        /// <list type="bullet">
-        ///     <item>
-        ///         <term><c>""</c></term>
-        ///         <description>Hosts have a direct link to this inventory.(default></description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"smart"</c></term>
-        ///         <description>Hosts for inventory generated using the host_filter property</description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"constructed"</c></term>
-        ///         <description>Parse list of source inventories with the constructed inventory plugin.</description>
-        ///     </item>
-        /// </list>
-        /// </summary>
-        string Kind { get; }
-        /// <summary>
-        /// Filter that will be applied to the hosts of this inventory.
-        /// </summary>
-        string HostFilter { get; }
-        /// <summary>
-        /// Inventory variables in JSON or YAML
-        /// </summary>
-        string Variables { get; }
-        /// <summary>
-        /// If enabled, the inventory will prevent adding any organization instance groups
-        /// to the list of preferred instances groups to run associated job templates on.
-        /// If this setting is enabled and you provided an empty list, the global instance groups
-        /// will be applied.
-        /// </summary>
-        bool PreventInstanceGroupFallback { get; }
-    }
-
     public class Inventory(ulong id, ResourceType type, string url, RelatedDictionary related,
                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                            string description, ulong organization, string kind, string hostFilter, string variables,
                            bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures, int totalGroups,
                            bool hasInventorySources, int totalInventorySources, int inventorySourcesWithFailures,
                            bool pendingDeletion, bool preventInstanceGroupFallback)
-        : ResourceBase, IInventory
+        : InventoryBase
     {
         public const string PATH = "/api/v2/inventories/";
 
@@ -137,37 +88,25 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public ulong Organization { get; } = organization;
-        public string Kind { get; } = kind;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong Organization { get; } = organization;
+        public override string Kind { get; } = kind;
+        /// <summary>
+        /// Filter that will be applied to the hosts of this inventory.
+        /// </summary>
         public string HostFilter { get; } = hostFilter;
-        public string Variables { get; } = variables;
-        public bool HasActiveFailures { get; } = hasActiveFailures;
-        public int TotalHosts { get; } = totalHosts;
-        public int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
-        public int TotalGroups { get; } = totalGroups;
-        public bool HasInventorySources { get; } = hasInventorySources;
-        public int TotalInventorySources { get; } = totalInventorySources;
-        public int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
-        public bool PendingDeletion { get; } = pendingDeletion;
-        public bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
-
-        public override string ToString()
-        {
-            return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
-        }
-
-        protected override CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Kind"] = Kind
-                }
-            };
-        }
+        public override string Variables { get; } = variables;
+        public override bool HasActiveFailures { get; } = hasActiveFailures;
+        public override int TotalHosts { get; } = totalHosts;
+        public override int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
+        public override int TotalGroups { get; } = totalGroups;
+        public override bool HasInventorySources { get; } = hasInventorySources;
+        public override int TotalInventorySources { get; } = totalInventorySources;
+        public override int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
+        public override bool PendingDeletion { get; } = pendingDeletion;
+        public override bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
     }
 }
