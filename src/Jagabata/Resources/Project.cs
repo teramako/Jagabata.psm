@@ -246,12 +246,12 @@ namespace Jagabata.Resources
                        (AllowOverride ? ProjectOptions.AllowOverride : 0);
 
         /// <summary>
-        /// Get inventory files and directories.
+        /// Get inventory files and directories available within this project, not comprehensive.
         /// </summary>
-        /// <returns>Array of inventory files and directories available with in this project, not comprehensive</returns>
-        public async Task<string[]> GetInventoryFiles()
+        /// <returns>Array of inventory files and directories</returns>
+        public string[] GetInventoryFiles()
         {
-            return await GetInventoryFiles(Id);
+            return RestAPI.Get<string[]>($"{PATH}{Id}/inventories/");
         }
 
         protected override CacheItem GetCacheItem()
