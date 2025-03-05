@@ -322,6 +322,30 @@ namespace Jagabata
                 nextPathAndQuery = string.IsNullOrEmpty(apiResult.Contents.Next) ? string.Empty : apiResult.Contents.Next;
             } while (all && !string.IsNullOrEmpty(nextPathAndQuery));
         }
+
+        /// <summary>
+        /// Request <see cref="HttpMethod.Get">GET</see> to AWX
+        /// and deserialize the contents json to <see cref="ResultSet{T}" />.
+        /// </summary>
+        /// <typeparam name="T">Resource class</typeparam>
+        /// <param name="path"></param>
+        /// <param name="query"></param>
+        /// <param name="all"></param>
+        /// <returns></returns>
+        /// <exception cref="HttpRequestException"></exception>
+        /// <exception cref="RestAPIException"></exception>
+        /// <seealso cref="GetResultSetAsync{T}(string, NameValueCollection?, bool)"/>
+        public static IEnumerable<T> GetResultSet<T>(string path, NameValueCollection? query, bool all = false) where T : class
+        {
+            foreach (var resultSet in GetResultSetAsync<T>(path, query, all).ToBlockingEnumerable())
+            {
+                foreach (T result in resultSet.Contents.Results)
+                {
+                    yield return result;
+                }
+            }
+        }
+
         /// <summary>
         /// Request <see cref="HttpMethod.Options">OPTIONS</see> to AWX
         /// for getting API help document.

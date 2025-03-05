@@ -46,6 +46,14 @@ namespace Jagabata.Resources
         public abstract bool BecomeEnabled { get; }
         public abstract bool DiffMode { get; }
 
+        /// <summary>
+        /// Get adhoc command events for this job
+        /// </summary>
+        public IEnumerable<AdHocCommandJobEvent> GetEvents()
+        {
+            return GetEvents<AdHocCommandJobEvent>();
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, ModuleArgs)

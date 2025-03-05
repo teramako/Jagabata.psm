@@ -128,6 +128,14 @@ namespace Jagabata.Resources
         public abstract ulong? InstanceGroup { get; }
         public abstract string ScmRevision { get; }
 
+        /// <summary>
+        /// Get inventory update events for this job
+        /// </summary>
+        public IEnumerable<InventoryUpdateJobEvent> GetEvents()
+        {
+            return GetEvents<InventoryUpdateJobEvent>();
+        }
+
         public InventorySource? GetTemplate()
         {
             return GetTemplate<InventorySource>();

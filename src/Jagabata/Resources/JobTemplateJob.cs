@@ -88,6 +88,14 @@ namespace Jagabata.Resources
             return GetTemplate<JobTemplate>();
         }
 
+        /// <summary>
+        /// Get job events for this job
+        /// </summary>
+        public IEnumerable<JobEvent> GetEvents()
+        {
+            return GetEvents<JobEvent>("job_events");
+        }
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);

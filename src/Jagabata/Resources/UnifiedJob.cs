@@ -52,6 +52,20 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get job events for this job
+        /// </summary>
+        /// <param name="relatedKey">key for job events URL path in <see cref="ResourceBase.Related"/> dictionary</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">thrown when this resource has no <paramref name="relatedKey"/> data</exception>
+        protected IEnumerable<TResource> GetEvents<TResource>(string relatedKey = "events")
+            where TResource : class
+        {
+            return Related.TryGetPath(relatedKey, out var path)
+                ? RestAPI.GetResultSet<TResource>(path, HttpUtility.ParseQueryString("order_by=counter&page_size=200"), true)
+                : throw new InvalidOperationException($"Has no events: {Type}:{Id}");
+        }
+
         public override string ToString()
         {
             return $"{Type}:{Id}:{Name}";

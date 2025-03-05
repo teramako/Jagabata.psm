@@ -64,6 +64,14 @@ namespace Jagabata.Resources
         {
             return GetTemplate<Project>();
         }
+
+        /// <summary>
+        /// Get project update events for this job
+        /// </summary>
+        public IEnumerable<ProjectUpdateJobEvent> GetEvents()
+        {
+            return GetEvents<ProjectUpdateJobEvent>();
+        }
     }
 
     public class ProjectUpdateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
