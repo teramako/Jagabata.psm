@@ -64,6 +64,14 @@ public abstract class InventoryBase : ResourceBase, IInventory
     public abstract bool PendingDeletion { get; }
     public abstract bool PreventInstanceGroupFallback { get; }
 
+    /// <summary>
+    /// Desrialize <see cref="Variables" /> to Dictionary
+    /// </summary>
+    public Dictionary<string, object?> GetVariables()
+    {
+        return Yaml.DeserializeToDict(Variables);
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";

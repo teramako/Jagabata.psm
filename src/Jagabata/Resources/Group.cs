@@ -174,6 +174,14 @@ namespace Jagabata.Resources
         public ulong Inventory { get; } = inventory;
         public string Variables { get; } = variables;
 
+        /// <summary>
+        /// Desrialize <see cref="Variables" /> to Dictionary
+        /// </summary>
+        public Dictionary<string, object?> GetVariables()
+        {
+            return Yaml.DeserializeToDict(Variables);
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
