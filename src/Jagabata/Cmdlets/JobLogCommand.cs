@@ -64,7 +64,7 @@ namespace Jagabata.Cmdlets
         private void GetJobsFromWorkflowJob(ulong id)
         {
             var query = HttpUtility.ParseQueryString("do_not_run=false&order_by=modified&page_size=20");
-            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJob.PATH}{id}/workflow_nodes/?{query}", true))
+            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJobBase.PATH}{id}/workflow_nodes/?{query}", true))
             {
                 foreach (var node in resultSet.Results)
                 {
@@ -154,11 +154,11 @@ namespace Jagabata.Cmdlets
         {
             return type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{id}/stdout/",
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{id}/stdout/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{id}/stdout/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{id}/stdout/",
-                ResourceType.SystemJob => $"{SystemJob.PATH}{id}/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{id}/stdout/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{id}/stdout/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{id}/stdout/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{id}/stdout/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{id}/",
                 _ => throw new NotImplementedException(),
             };
         }
