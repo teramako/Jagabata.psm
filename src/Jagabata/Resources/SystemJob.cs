@@ -40,6 +40,16 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
+        /// Get log of this job.
+        /// This is same as <see cref="ResultStdout"/> Property
+        /// </summary>
+        /// <param name="vt100Color">This parameter is ignored</param>
+        public override string GetJobLog(bool vt100Color = false)
+        {
+            return ResultStdout;
+        }
+
+        /// <summary>
         /// Get system job events for this job
         /// </summary>
         public IEnumerable<SystemJobEvent> GetEvents()

@@ -42,6 +42,20 @@ namespace Jagabata.Resources
         public abstract string? WorkUnitId { get; }
 
         /// <summary>
+        /// Get log of this job
+        /// </summary>
+        /// <param name="vt100Color">Get log as ANSI color format, otherwise as plain text format</param>
+        public virtual string GetJobLog(bool vt100Color = true)
+        {
+            if (Related.TryGetPath("stdout", out var path))
+            {
+                var query = vt100Color ? "format=ansi" : "format=txt";
+                return RestAPI.Get<string>($"{path}?{query}", AcceptType.Text);
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Get the Template resource related this job.
         /// </summary>
         /// <typeparam name="TResource">Resource class</typeparam>
