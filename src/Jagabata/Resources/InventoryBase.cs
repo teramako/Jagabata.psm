@@ -72,6 +72,17 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return Yaml.DeserializeToDict(Variables);
     }
 
+    /// <summary>
+    /// Get  a hierarchical view of groups assiciated with this inventory.
+    /// Implement API: <c>/api/v2/inventries/{id}/tree/</c>.
+    /// </summary>
+    public Group.Tree[]? GetGroupTree()
+    {
+        return Related.TryGetPath("tree", out var path)
+            ? RestAPI.Get<Group.Tree[]>(path)
+            : null;
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
