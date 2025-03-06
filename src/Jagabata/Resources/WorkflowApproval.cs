@@ -13,6 +13,11 @@ namespace Jagabata.Resources
         public abstract DateTime? ApprovalExpiration { get; }
         public abstract bool TimedOut { get; }
 
+        public WorkflowApprovalTemplate? GetTemplate()
+        {
+            return GetTemplate<WorkflowApprovalTemplate>();
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, Description);
@@ -84,11 +89,6 @@ namespace Jagabata.Resources
         public override bool CanApproveOrDeny { get; } = canApproveOrDeny;
         public override DateTime? ApprovalExpiration { get; } = approvalExpiration;
         public override bool TimedOut { get; } = timedOut;
-
-        public WorkflowApprovalTemplate? GetTemplate()
-        {
-            return GetTemplate<WorkflowApprovalTemplate>();
-        }
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
