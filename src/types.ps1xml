@@ -845,7 +845,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.Group</Name>
+    <Name>Jagabata.Resources.GroupBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
