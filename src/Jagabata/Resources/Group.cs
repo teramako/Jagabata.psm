@@ -207,5 +207,24 @@ namespace Jagabata.Resources
         public override string Description { get; } = description;
         public override ulong Inventory { get; } = inventory;
         public override string Variables { get; } = variables;
+
+        public sealed class Tree(ulong id, ResourceType type, string url, RelatedDictionary related,
+                           SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                           string description, ulong inventory, string variables, Tree[]? children)
+            : GroupBase
+        {
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong Inventory { get; } = inventory;
+            public override string Variables { get; } = variables;
+            public Tree[]? Children { get; } = children;
+        }
     }
 }
