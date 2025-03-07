@@ -91,6 +91,10 @@
 - [Unregister-AnsibleGroup](./cmdlets/Unregister-AnsibleGroup.md)
 - [Update-AnsibleGroup](./cmdlets/Update-AnsibleGroup.md)
 
+## GroupTree
+
+- [Get-AnsibleGroupTree](./cmdlets/Get-AnsibleGroupTree.md)
+
 ## Host
 
 - [Find-AnsibleHost](./cmdlets/Find-AnsibleHost.md)

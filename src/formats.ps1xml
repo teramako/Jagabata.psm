@@ -1096,7 +1096,7 @@
     <View>
       <Name>Group</Name>
       <ViewSelectedBy>
-        <TypeName>Jagabata.Resources.Group</TypeName>
+        <TypeName>Jagabata.Resources.GroupBase</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
@@ -1145,6 +1145,168 @@
           </TableRowEntry>
         </TableRowEntries>
       </TableControl>
+    </View>
+    <View>
+      <Name>GroupTree</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.Group+Tree</TypeName>
+      </ViewSelectedBy>
+      <Controls>
+        <Control>
+          <Name>GroupItem</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>- id: </Text>
+                  <ExpressionBinding><PropertyName>Id</PropertyName></ExpressionBinding>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <Text>name: </Text>
+                      <ExpressionBinding><PropertyName>Name</PropertyName></ExpressionBinding>
+                      <NewLine />
+                      <ExpressionBinding>
+                        <PropertyName>Description</PropertyName>
+                        <ItemSelectionCondition>
+                          <PropertyName>Description</PropertyName>
+                        </ItemSelectionCondition>
+                        <CustomControlName>Description</CustomControlName>
+                      </ExpressionBinding>
+                      <ExpressionBinding>
+                        <PropertyName>Variables</PropertyName>
+                        <ItemSelectionCondition>
+                          <ScriptBlock>$_.Variables.Trim() -cnotin '---','{}'</ScriptBlock>
+                        </ItemSelectionCondition>
+                        <CustomControlName>Variables</CustomControlName>
+                      </ExpressionBinding>
+                      <ExpressionBinding>
+                        <PropertyName>Children</PropertyName>
+                        <ItemSelectionCondition>
+                          <PropertyName>Children</PropertyName>
+                        </ItemSelectionCondition>
+                        <CustomControlName>Children</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Children</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>children:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <EnumerateCollection>true</EnumerateCollection>
+                        <CustomControlName>GroupItem</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Description</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>description: </Text>
+                  <ExpressionBinding>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+        <Control>
+          <Name>Variables</Name>
+          <CustomControl>
+            <CustomEntries>
+              <CustomEntry>
+                <CustomItem>
+                  <Text>variables: |</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <ScriptBlock>$_.Trim()</ScriptBlock>
+                      </ExpressionBinding>
+                      <NewLine />
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </CustomEntry>
+            </CustomEntries>
+          </CustomControl>
+        </Control>
+      </Controls>
+      <GroupBy>
+        <PropertyName>Inventory</PropertyName>
+        <CustomControl>
+          <CustomEntries>
+            <CustomEntry>
+              <CustomItem>
+                <Text># Inventory: </Text>
+                <ExpressionBinding>
+                  <ScriptBlock>"[{0}] {1}" -f $_.Inventory, $_.InventoryName</ScriptBlock>
+                </ExpressionBinding>
+              </CustomItem>
+            </CustomEntry>
+          </CustomEntries>
+        </CustomControl>
+      </GroupBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <CustomControlName>GroupItem</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>GroupTree</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.Group+Tree</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <ScriptBlock>"[{0}] {1}" -f $_.Inventory, $_.InventoryName</ScriptBlock>
+        <Label>Inventory</Label>
+      </GroupBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem><PropertyName>Type</PropertyName></ListItem>
+              <ListItem><PropertyName>Id</PropertyName></ListItem>
+              <ListItem><PropertyName>Created</PropertyName></ListItem>
+              <ListItem><PropertyName>Modified</PropertyName></ListItem>
+              <ListItem><PropertyName>Name</PropertyName></ListItem>
+              <ListItem><PropertyName>Description</PropertyName></ListItem>
+              <ListItem><PropertyName>Variables</PropertyName></ListItem>
+              <ListItem><PropertyName>Children</PropertyName></ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
     </View>
     <View>
       <Name>Host</Name>

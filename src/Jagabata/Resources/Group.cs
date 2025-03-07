@@ -21,10 +21,44 @@ namespace Jagabata.Resources
         /// </summary>
         string Variables { get; }
     }
+
+    public abstract class GroupBase : ResourceBase, IGroup
+    {
+        public abstract DateTime Created { get; }
+        public abstract DateTime? Modified { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract ulong Inventory { get; }
+        public abstract string Variables { get; }
+
+        /// <summary>
+        /// Desrialize <see cref="Variables" /> to Dictionary
+        /// </summary>
+        public Dictionary<string, object?> GetVariables()
+        {
+            return Yaml.DeserializeToDict(Variables);
+        }
+
+        protected override CacheItem GetCacheItem()
+        {
+            var item = new CacheItem(Type, Id, Name, Description);
+            if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
+            {
+                item.Metadata.Add("Inventory", $"[{inventory.Type}:{inventory.Id}] {inventory.Name}");
+            }
+            return item;
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
+    }
+
     public class Group(ulong id, ResourceType type, string url, RelatedDictionary related,
                        SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                        string description, ulong inventory, string variables)
-        : ResourceBase, IGroup
+        : GroupBase
     {
         public const string PATH = "/api/v2/groups/";
 
@@ -167,34 +201,30 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public ulong Inventory { get; } = inventory;
-        public string Variables { get; } = variables;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong Inventory { get; } = inventory;
+        public override string Variables { get; } = variables;
 
-        /// <summary>
-        /// Desrialize <see cref="Variables" /> to Dictionary
-        /// </summary>
-        public Dictionary<string, object?> GetVariables()
+        public sealed class Tree(ulong id, ResourceType type, string url, RelatedDictionary related,
+                           SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                           string description, ulong inventory, string variables, Tree[]? children)
+            : GroupBase
         {
-            return Yaml.DeserializeToDict(Variables);
-        }
-
-        protected override CacheItem GetCacheItem()
-        {
-            var item = new CacheItem(Type, Id, Name, Description);
-            if (SummaryFields.TryGetValue<InventorySummary>("Inventory", out var inventory))
-            {
-                item.Metadata.Add("Inventory", $"[{inventory.Type}:{inventory.Id}] {inventory.Name}");
-            }
-            return item;
-        }
-
-        public override string ToString()
-        {
-            return $"{Type}:{Id}:{Name}";
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong Inventory { get; } = inventory;
+            public override string Variables { get; } = variables;
+            public Tree[]? Children { get; } = children;
         }
     }
 }
