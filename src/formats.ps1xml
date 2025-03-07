@@ -1096,7 +1096,7 @@
     <View>
       <Name>Group</Name>
       <ViewSelectedBy>
-        <TypeName>Jagabata.Resources.Group</TypeName>
+        <TypeName>Jagabata.Resources.GroupBase</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <AutoSize/>
