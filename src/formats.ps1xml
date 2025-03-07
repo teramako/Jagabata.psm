@@ -1147,6 +1147,32 @@
       </TableControl>
     </View>
     <View>
+      <Name>GroupTree</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.Group+Tree</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <ScriptBlock>"[{0}] {1}" -f $_.Inventory, $_.InventoryName</ScriptBlock>
+        <Label>Inventory</Label>
+      </GroupBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem><PropertyName>Type</PropertyName></ListItem>
+              <ListItem><PropertyName>Id</PropertyName></ListItem>
+              <ListItem><PropertyName>Created</PropertyName></ListItem>
+              <ListItem><PropertyName>Modified</PropertyName></ListItem>
+              <ListItem><PropertyName>Name</PropertyName></ListItem>
+              <ListItem><PropertyName>Description</PropertyName></ListItem>
+              <ListItem><PropertyName>Variables</PropertyName></ListItem>
+              <ListItem><PropertyName>Children</PropertyName></ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+    <View>
       <Name>Host</Name>
       <ViewSelectedBy>
         <TypeName>Jagabata.Resources.Host</TypeName>
