@@ -212,19 +212,13 @@ namespace Jagabata
                                                                                          NameValueCollection? query,
                                                                                          bool all = false)
         {
-            var sb = new StringBuilder(path);
-            if (query is not null && query.Count > 0)
-            {
-                sb.Append('?');
-                sb.Append(query.ToString());
-            }
-            string nextPathAndQuery = sb.ToString();
+            string nextPathAndQuery = query is null || query.Count == 0 ? path : $"{path}?{query}";
             RestAPIResult<ResultSet> apiResult;
             do
             {
                 apiResult = await GetAsync<ResultSet>(nextPathAndQuery);
                 yield return apiResult;
-                nextPathAndQuery = string.IsNullOrEmpty(apiResult.Contents.Next) ? string.Empty : apiResult.Contents.Next;
+                nextPathAndQuery = apiResult.Contents.Next ?? string.Empty;
             } while (all && !string.IsNullOrEmpty(nextPathAndQuery));
         }
         /// <summary>
@@ -304,13 +298,7 @@ namespace Jagabata
             where T : class
         {
             RestAPIResult<ResultSet<T>> apiResult;
-            var sb = new StringBuilder(path);
-            if (query is not null && query.Count > 0)
-            {
-                sb.Append('?');
-                sb.Append(query.ToString());
-            }
-            string nextPathAndQuery = sb.ToString();
+            string nextPathAndQuery = query is null || query.Count == 0 ? path : $"{path}?{query}";
             do
             {
                 apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery);
@@ -319,7 +307,7 @@ namespace Jagabata
                 {
                     break;
                 }
-                nextPathAndQuery = string.IsNullOrEmpty(apiResult.Contents.Next) ? string.Empty : apiResult.Contents.Next;
+                nextPathAndQuery = apiResult.Contents.Next ?? string.Empty;
             } while (all && !string.IsNullOrEmpty(nextPathAndQuery));
         }
 
