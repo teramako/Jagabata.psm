@@ -101,21 +101,13 @@ namespace Jagabata
             yield return $"*;q={q}";
         }
 
-        private static async Task<RestAPIException> CreateException(HttpResponseMessage response, string contentType)
+        private static RestAPIException CreateException(HttpResponseMessage response, string errorMessage)
         {
             var msg1 = $"{response.StatusCode:d} ({response.ReasonPhrase}): ";
             var msg2 = (response.RequestMessage is not null && response.RequestMessage.RequestUri is not null)
                        ? $" on {response.RequestMessage.Method} {response.RequestMessage.RequestUri.PathAndQuery}"
                        : string.Empty;
-            switch (contentType)
-            {
-                case JsonContentType:
-                    var error = await response.Content.ReadAsStringAsync();
-                    return new RestAPIException($"{msg1}{error}{msg2}", response);
-                default:
-                    return new RestAPIException($"{msg1}{contentType}{msg2}", response);
-            }
-
+            return new RestAPIException($"{msg1}{errorMessage}{msg2}", response);
         }
         /// <summary>
         /// Handle HTTP response contents.<br/>
@@ -157,7 +149,7 @@ namespace Jagabata
                 }
             }
             // Error handling
-            throw await CreateException(response, contentType);
+            throw CreateException(response, contentType == JsonContentType ? await response.Content.ReadAsStringAsync() : contentType);
         }
         /// <summary>
         /// Handle HTTP response contents.<br/>
@@ -202,7 +194,7 @@ namespace Jagabata
                 }
             }
             // Error handling
-            throw await CreateException(response, contentType);
+            throw CreateException(response, contentType == JsonContentType ? await response.Content.ReadAsStringAsync() : contentType);
         }
         public const string JsonContentType = "application/json";
         public const string HtmlContentType = "text/html";
