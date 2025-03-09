@@ -8,9 +8,6 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
 {
     public virtual ulong[] Id { get; set; } = [];
 
-    [Parameter(ValueFromPipelineByPropertyName = true, DontShow = true)]
-    public ResourceType? Type { get; set; }
-
     protected HashSet<ulong> IdSet { get; } = [];
     protected NameValueCollection Query { get; } = HttpUtility.ParseQueryString("");
 
