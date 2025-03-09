@@ -328,6 +328,17 @@ namespace Jagabata.Resources
                                                  | (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0)
                                                  | (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
 
+        /// <summary>
+        /// Get the most recently executed jobs.
+        /// API Path: <c>/api/v2/inventory_sources/{id}/inventory_updates/</c>
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public InventoryUpdateJob[] GetRecentJobs(int count = 20)
+        {
+            var path = $"{PATH}{Id}/inventory_updates/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<InventoryUpdateJob>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)

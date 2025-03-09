@@ -310,6 +310,23 @@ namespace Jagabata.Resources
             | (UseFactCache ? JobTemplateOptions.FactCache : 0)
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
+        /// <summary>
+        /// Get the most recently executed jobs
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public JobTemplateJob[] GetRecentJobs(int count = 20)
+        {
+            // don't GET request when the recent jobs is empty
+            if (!SummaryFields.TryGetValue<RecentJobSummary[]>("RecentJobs", out var recentJobs)
+                || recentJobs.Length == 0)
+            {
+                return [];
+            }
+
+            var path = $"{PATH}{Id}/jobs/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<JobTemplateJob>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)

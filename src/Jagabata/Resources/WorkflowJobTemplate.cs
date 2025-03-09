@@ -163,6 +163,23 @@ namespace Jagabata.Resources
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
+        /// <summary>
+        /// Get the most recently executed jobs
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public WorkflowJob[] GetRecentJobs(int count = 20)
+        {
+            // don't GET request when the recent jobs is empty
+            if (!SummaryFields.TryGetValue<RecentJobSummary[]>("RecentJobs", out var recentJobs)
+                || recentJobs.Length == 0)
+            {
+                return [];
+            }
+
+            var path = $"{PATH}{Id}/workflow_jobs/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<WorkflowJob>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);

@@ -37,6 +37,16 @@ namespace Jagabata.Resources
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
 
+        /// <summary>
+        /// Get the most recently executed jobs
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public WorkflowApproval[] GetRecentJobs(int count = 20)
+        {
+            var path = $"{PATH}{Id}/approvals/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<WorkflowApproval>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);

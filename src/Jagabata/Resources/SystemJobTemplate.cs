@@ -56,6 +56,16 @@ namespace Jagabata.Resources
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string JobType { get; } = jobType;
 
+        /// <summary>
+        /// Get the most recently executed jobs
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public SystemJob[] GetRecentJobs(int count = 20)
+        {
+            var path = $"{PATH}{Id}/jobs/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<SystemJob>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)

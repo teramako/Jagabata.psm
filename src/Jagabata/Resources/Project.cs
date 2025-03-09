@@ -263,6 +263,16 @@ namespace Jagabata.Resources
             return RestAPI.Get<string[]>($"{PATH}{Id}/playbooks/");
         }
 
+        /// <summary>
+        /// Get the most recently executed jobs
+        /// </summary>
+        /// <param name="count">Max count</param>
+        public ProjectUpdateJob[] GetRecentJobs(int count = 20)
+        {
+            var path = $"{PATH}{Id}/project_updates/?order_by=-id&page_size={count}";
+            return [.. RestAPI.GetResultSet<ProjectUpdateJob>(path)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
