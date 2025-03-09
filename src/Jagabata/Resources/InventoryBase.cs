@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace Jagabata.Resources;
 
 public interface IInventory
@@ -81,6 +83,38 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return Related.TryGetPath("tree", out var path)
             ? RestAPI.Get<Group.Tree[]>(path)
             : null;
+    }
+
+    /// <summary>
+    /// Get an inventory script.
+    /// Implement API: <c>/api/v2/inventries/{id}/script/</c>.
+    /// </summary>
+    /// <param name="includeHostVars">
+    /// Include all host variables.
+    /// The <c>['_meta']['hostvars']</c> object in the response contains an entry for each host with its variables.
+    /// </param>
+    /// <param name="includeDisabled">
+    /// By default, the inventory script will only return hosts that are enabled in the inventory.
+    /// This feature returns all hosts (including disabled ones).
+    /// </param>
+    /// <param name="includeTowerVars">
+    /// Add variables to the hostvars of each host that specifies its enabled state and database ID.
+    /// </param>
+    public Dictionary<string, object?> GetInventoryScript(bool includeHostVars = false,
+                                                          bool includeDisabled = false,
+                                                          bool includeTowerVars = false)
+    {
+        if (!Related.TryGetPath("script", out var path))
+            return [];
+
+        var query = HttpUtility.ParseQueryString("");
+        if (includeHostVars)
+            query.Add("hostvars", "1");
+        if (includeDisabled)
+            query.Add("all", "1");
+        if (includeTowerVars)
+            query.Add("towervars", "1");
+        return RestAPI.Get<Dictionary<string, object?>>(query.Count == 0 ? path : $"{path}?{query}");
     }
 
     public override string ToString()
