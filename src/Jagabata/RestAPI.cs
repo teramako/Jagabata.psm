@@ -315,7 +315,7 @@ namespace Jagabata
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
         /// <seealso cref="GetResultSetAsync{T}(string, NameValueCollection?, bool)"/>
-        public static IEnumerable<T> GetResultSet<T>(string path, NameValueCollection? query, bool all = false) where T : class
+        public static IEnumerable<T> GetResultSet<T>(string path, NameValueCollection? query = null, bool all = false) where T : class
         {
             foreach (var resultSet in GetResultSetAsync<T>(path, query, all).ToBlockingEnumerable())
             {

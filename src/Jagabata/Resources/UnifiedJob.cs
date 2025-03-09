@@ -76,7 +76,7 @@ namespace Jagabata.Resources
             where TResource : class
         {
             return Related.TryGetPath(relatedKey, out var path)
-                ? RestAPI.GetResultSet<TResource>(path, HttpUtility.ParseQueryString("order_by=counter&page_size=200"), true)
+                ? RestAPI.GetResultSet<TResource>($"{path}?order_by=counter&page_size=200", all: true)
                 : throw new InvalidOperationException($"Has no events: {Type}:{Id}");
         }
 
