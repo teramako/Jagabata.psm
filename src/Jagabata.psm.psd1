@@ -143,6 +143,7 @@ CmdletsToExport = @(
     'Get-Inventory',
     'Get-InventoryFile',
     'Get-InventorySource',
+    'Get-InventoryScript',
     'Get-InventoryUpdateJob',
     'Get-Job',
     'Get-JobHostSummary',
