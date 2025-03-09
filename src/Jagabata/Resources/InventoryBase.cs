@@ -117,6 +117,18 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return RestAPI.Get<Dictionary<string, object?>>(query.Count == 0 ? path : $"{path}?{query}");
     }
 
+    /// <summary>
+    /// Get host variables for the specified <paramref name="hostName"/> from the inventory script.
+    /// Implement API: <c>/api/v2/inventries/{id}/script/</c>.
+    /// </summary>
+    /// <param name="hostName">Hostname belonging to the inventory</param>.
+    public Dictionary<string, object?> GetInventoryScript(string hostName)
+    {
+        return Related.TryGetPath("script", out var path)
+            ? RestAPI.Get<Dictionary<string, object?>>($"{path}?host={hostName}")
+            : [];
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
