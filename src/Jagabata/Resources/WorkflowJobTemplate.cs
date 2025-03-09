@@ -164,9 +164,10 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the most recently executed jobs
+        /// Get the most recently executed workflow jobs.
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/workflow_jobs/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public WorkflowJob[] GetRecentJobs(int count = 20)
         {
             // don't GET request when the recent jobs is empty

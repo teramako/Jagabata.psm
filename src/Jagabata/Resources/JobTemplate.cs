@@ -311,9 +311,10 @@ namespace Jagabata.Resources
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
         /// <summary>
-        /// Get the most recently executed jobs
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/job_templates/{id}/jobs/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public JobTemplateJob[] GetRecentJobs(int count = 20)
         {
             // don't GET request when the recent jobs is empty

@@ -38,9 +38,10 @@ namespace Jagabata.Resources
         public int Timeout { get; } = timeout;
 
         /// <summary>
-        /// Get the most recently executed jobs
+        /// Get the most recently requested workflow approvals.
+        /// Implement API: <c>/api/v2/workflow_approval_templates/{id}/approvals/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public WorkflowApproval[] GetRecentJobs(int count = 20)
         {
             var path = $"{PATH}{Id}/approvals/?order_by=-id&page_size={count}";

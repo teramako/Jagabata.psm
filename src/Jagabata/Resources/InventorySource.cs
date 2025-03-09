@@ -330,9 +330,9 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Get the most recently executed jobs.
-        /// API Path: <c>/api/v2/inventory_sources/{id}/inventory_updates/</c>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/inventory_updates/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public InventoryUpdateJob[] GetRecentJobs(int count = 20)
         {
             var path = $"{PATH}{Id}/inventory_updates/?order_by=-id&page_size={count}";

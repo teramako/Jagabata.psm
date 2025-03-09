@@ -264,9 +264,10 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the most recently executed jobs
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/projects/{id}/project_updates/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public ProjectUpdateJob[] GetRecentJobs(int count = 20)
         {
             var path = $"{PATH}{Id}/project_updates/?order_by=-id&page_size={count}";

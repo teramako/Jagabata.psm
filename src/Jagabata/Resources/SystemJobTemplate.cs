@@ -57,9 +57,10 @@ namespace Jagabata.Resources
         public string JobType { get; } = jobType;
 
         /// <summary>
-        /// Get the most recently executed jobs
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/system_job_templates/{id}/jobs/</c>
         /// </summary>
-        /// <param name="count">Max count</param>
+        /// <param name="count">Number of jobs to retrieve</param>
         public SystemJob[] GetRecentJobs(int count = 20)
         {
             var path = $"{PATH}{Id}/jobs/?order_by=-id&page_size={count}";
