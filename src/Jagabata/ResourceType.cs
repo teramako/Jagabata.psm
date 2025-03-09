@@ -253,7 +253,7 @@ namespace Jagabata
         [ResourceSubPath("object_roles", typeof(ResultSet<Role>), Description = "List Roles for an Inventory")]
         [ResourceSubPath("root_groups", typeof(ResultSet<Group>), Description = "List Root Groups for an Inventory")]
         [ResourceSubPath("root_groups", typeof(Group), Method = Method.POST, Description = "Create a Root Group for an Inventory")]
-        [ResourceSubPath("script", Description = "Generate inventory group and host data as needed for an inventory script")]
+        [ResourceSubPath("script", typeof(Dictionary<string, object?>), Description = "Generate inventory group and host data as needed for an inventory script")]
         [ResourceSubPath("tree", typeof(Group.Tree[]), Description = "Group Tree for an Inventory")]
         [ResourceSubPath("update_inventory_sources", Description = "")]
         [ResourceSubPath("update_inventory_sources", Method = Method.POST, Description = "Update Inventory Sources")]
