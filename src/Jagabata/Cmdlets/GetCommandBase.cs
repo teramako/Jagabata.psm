@@ -68,6 +68,11 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     /// <param name="subPath">sub path</param>
     protected IEnumerable<TResource> GetResource(string subPath = "")
     {
+        if (!string.IsNullOrEmpty(subPath) && !subPath.EndsWith('/'))
+            subPath += '/';
+
+        var tailingPathAndQuery = Query.Count == 0 ? subPath : $"{subPath}?{Query}";
+
         foreach (var id in Id.Where(static id => id > 0))
         {
             if (!IdSet.Add(id))
@@ -75,7 +80,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
                 // skip already processed
                 continue;
             }
-            var res = GetResource<TResource>($"{ApiPath}{id}/{subPath}");
+            var res = GetResource<TResource>($"{ApiPath}{id}/{tailingPathAndQuery}");
             yield return res;
         }
     }
