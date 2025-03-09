@@ -134,6 +134,7 @@ CmdletsToExport = @(
     'Get-Dashboard',
     'Get-ExecutionEnvironment',
     'Get-Group',
+    'Get-GroupTree',
     'Get-Host',
     'Get-HostFactsCache',
     'Get-HostMetric',

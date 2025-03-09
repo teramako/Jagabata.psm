@@ -845,7 +845,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>Jagabata.Resources.Group</Name>
+    <Name>Jagabata.Resources.GroupBase</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -869,6 +869,30 @@
         <Name>InventoryName</Name>
         <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Jagabata.Resources.Group+Tree</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>Type</Name>
+              <Name>Id</Name>
+              <Name>Created</Name>
+              <Name>Modified</Name>
+              <Name>Name</Name>
+              <Name>Description</Name>
+              <Name>InventoryName</Name>
+              <Name>Variables</Name>
+              <Name>Children</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
     </Members>
   </Type>
   <Type>

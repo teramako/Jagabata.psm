@@ -78,6 +78,7 @@
 - [Get-AnsibleDashboard](./cmdlets/Get-AnsibleDashboard.md)
 - [Get-AnsibleExecutionEnvironment](./cmdlets/Get-AnsibleExecutionEnvironment.md)
 - [Get-AnsibleGroup](./cmdlets/Get-AnsibleGroup.md)
+- [Get-AnsibleGroupTree](./cmdlets/Get-AnsibleGroupTree.md)
 - [Get-AnsibleHost](./cmdlets/Get-AnsibleHost.md)
 - [Get-AnsibleHostFactsCache](./cmdlets/Get-AnsibleHostFactsCache.md)
 - [Get-AnsibleHostMetric](./cmdlets/Get-AnsibleHostMetric.md)
