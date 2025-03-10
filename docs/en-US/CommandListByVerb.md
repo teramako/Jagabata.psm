@@ -86,6 +86,7 @@
 - [Get-AnsibleInstanceGroup](./cmdlets/Get-AnsibleInstanceGroup.md)
 - [Get-AnsibleInventory](./cmdlets/Get-AnsibleInventory.md)
 - [Get-AnsibleInventoryFile](./cmdlets/Get-AnsibleInventoryFile.md)
+- [Get-AnsibleInventoryScript](./cmdlets/Get-AnsibleInventoryScript.md)
 - [Get-AnsibleInventorySource](./cmdlets/Get-AnsibleInventorySource.md)
 - [Get-AnsibleInventoryUpdateJob](./cmdlets/Get-AnsibleInventoryUpdateJob.md)
 - [Get-AnsibleJob](./cmdlets/Get-AnsibleJob.md)

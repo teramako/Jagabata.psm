@@ -136,6 +136,10 @@
 
 - [Get-AnsibleInventoryFile](./cmdlets/Get-AnsibleInventoryFile.md)
 
+## InventoryScript
+
+- [Get-AnsibleInventoryScript](./cmdlets/Get-AnsibleInventoryScript.md)
+
 ## InventorySource
 
 - [Find-AnsibleInventorySource](./cmdlets/Find-AnsibleInventorySource.md)
