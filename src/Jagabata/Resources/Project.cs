@@ -274,6 +274,17 @@ namespace Jagabata.Resources
             return [.. RestAPI.GetResultSet<ProjectUpdateJob>(path)];
         }
 
+        /// <summary>
+        /// Get the recent activity stream for this resource
+        /// </summary>
+        /// <param name="count">Number of activity streams to retrieve</param>.
+        public IEnumerable<ActivityStream> GetRecentActivityStream(int count = 20)
+        {
+            return Related.TryGetPath("activity_stream", out var path)
+                ? RestAPI.GetResultSet<ActivityStream>($"{path}?order_by=-timestamp&page_size={count}")
+                : [];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
