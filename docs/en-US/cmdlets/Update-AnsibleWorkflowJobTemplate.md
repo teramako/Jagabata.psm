@@ -346,7 +346,7 @@ Service that webhook requests will be accepted from `github` or `gitlab`
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: github, gitlab
+Accepted values: github, gitlab, 
 
 Required: False
 Position: Named

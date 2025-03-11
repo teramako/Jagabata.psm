@@ -87,7 +87,7 @@ List of database IDs for one or more Inventories.
 ```yaml
 Type: UInt64[]
 Parameter Sets: (All)
-Aliases:
+Aliases: inventory
 
 Required: True
 Position: 0
