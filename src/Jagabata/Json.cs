@@ -670,6 +670,7 @@ namespace Jagabata
                     case "AncestorJob":
                         return Deserialize<AncestorJobSummary>(ref reader, options, isArray);
                     case "Application":
+                    case "OAuth2Application":
                         return Deserialize<ApplicationSummary>(ref reader, options, isArray);
                     case "Credential":
                     case "SourceCredential":
