@@ -16,7 +16,7 @@ public static class Yaml
     {
         if (string.IsNullOrWhiteSpace(yaml))
         {
-            return new Dictionary<string, object?>();
+            return [];
         }
         var parser = new Parser(new StringReader(yaml));
         parser.Consume<StreamStart>();
@@ -25,11 +25,9 @@ public static class Yaml
         {
             // parsed as `Scalar` if the string is only document separator such as "---\n".
             // returns empty Dictionary in this case.
-            if (parser.Current is Scalar scalar && string.IsNullOrWhiteSpace(scalar.Value))
-            {
-                return new Dictionary<string, object?>();
-            }
-            throw new InvalidDataException($"YAML root is not dictionary.: {parser.Current}");
+            return parser.Current is Scalar scalar && string.IsNullOrWhiteSpace(scalar.Value)
+                ? []
+                : throw new InvalidDataException($"YAML root is not dictionary.: {parser.Current}");
         }
         try
         {
@@ -57,14 +55,13 @@ public static class Yaml
             case "no":
                 return false;
         }
-        if (int.TryParse(stringValue, out var intVal))
-            return intVal;
-        if (long.TryParse(stringValue, out var longVal))
-            return longVal;
-        if (double.TryParse(stringValue, out var doubleVal))
-            return doubleVal;
-
-        return stringValue;
+        return int.TryParse(stringValue, out var intVal)
+            ? intVal
+            : long.TryParse(stringValue, out var longVal)
+            ? longVal
+            : double.TryParse(stringValue, out var doubleVal)
+            ? doubleVal
+            : stringValue;
     }
 
     private static Dictionary<string, object?> ParseDict(IParser parser)
