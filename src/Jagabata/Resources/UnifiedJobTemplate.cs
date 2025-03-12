@@ -80,6 +80,35 @@ namespace Jagabata.Resources
         public abstract DateTime? NextJobRun { get; }
         public abstract JobTemplateStatus Status { get; }
 
+        /// <summary>
+        /// Get schedules for this resource.
+        /// <para>Query:</para>
+        /// <list type="bullet">
+        ///     <item><c>order_by=next_run</c></item>
+        ///     <item><c>enabled=true</c> (when not <paramref name="all"/>)</item>
+        ///     <item><c>not__next_run__isnull=true</c> (when not <paramref name="all"/>)</item>
+        ///     <item><c>page_size=<paramref name="count"/></c></item>
+        /// </list>
+        /// </summary>
+        /// <param name="all">Include disabled or next_run is emptied schedules</param>
+        /// <param name="count">Number of schedules to retrieve</param>
+        public IEnumerable<Schedule> GetSchedules(bool all = false, int count = 20)
+        {
+            if (Related.TryGetPath("schedules", out var path))
+            {
+                var query = HttpUtility.ParseQueryString("");
+                query.Add("order_by", "next_run");
+                if (!all)
+                {
+                    query.Add("enabled", "true");
+                    query.Add("not__next_run__isnull", "true");
+                }
+                query.Add("page_size", $"{count}");
+                return RestAPI.GetResultSet<Schedule>(path, query, false);
+            }
+            return [];
+        }
+
         public override string ToString()
         {
             return $"{Type}:{Id}:{Name}";
