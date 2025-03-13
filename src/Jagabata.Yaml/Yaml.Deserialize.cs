@@ -4,7 +4,7 @@ using YamlDotNet.Core.Events;
 
 namespace Jagabata.AlcEngine;
 
-public static class Yaml
+public static partial class Yaml
 {
     /// <summary>
     /// Deserialize YAML string to Dictionary
@@ -106,5 +106,4 @@ public static class Yaml
         }
         return array.ToArray();
     }
-
 }
