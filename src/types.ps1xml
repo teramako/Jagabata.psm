@@ -26,7 +26,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>VT100Description</Name>
-        <GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")] param()
           if ($Host.UI.SupportsVirtualTerminal) {
             $md = $this.Description | ConvertFrom-Markdown -AsVT100EncodedString;
             $md.VT100EncodedString
@@ -85,11 +85,11 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Tokens</Name>
-        <GetScriptBlock>$this.SummaryFields.Tokens.Results | ForEach-Object { [PSCustomObject]$_ }</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.TokenSummary[]])]param() $this.SummaryFields.Tokens.Results</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -119,11 +119,11 @@
       </MemberSet>
       <ScriptProperty>
         <Name>Username</Name>
-        <GetScriptBlock>$this.SummaryFields.User.Username</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.User.Username</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ApplicationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Application.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Application.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -235,31 +235,31 @@
       </MemberSet>
       <ScriptProperty>
         <Name>InventoryCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.Inventories</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.Inventories</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TeamCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.Teams</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.Teams</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UserCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.Users</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.Users</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobTemplateCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.JobTemplates</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.JobTemplates</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>AdminCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.Admins</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.Admins</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectCount</Name>
-        <GetScriptBlock>$this.SummaryFields.RelatedFieldCounts.Projects</GetScriptBlock>
+        <GetScriptBlock>[OutputType("int")]param() $this.SummaryFields.RelatedFieldCounts.Projects</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>DefaultEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.DefaultEnvironment.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.DefaultEnvironment.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -332,23 +332,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>CredentialName</Name>
-        <GetScriptBlock>$this.SummaryFields.Credential.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Credential.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LastUpdatedJobId</Name>
-        <GetScriptBlock>$this.SummaryFields.LastUpdate.Id</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.LastUpdate.Id</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>DefaultEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.DefaultEnvironment.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.DefaultEnvironment.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LastJob</Name>
-        <GetScriptBlock>$this.SummaryFields.LastJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -415,23 +415,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>Organization</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Id</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.Organization.Id</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>CredentialName</Name>
-        <GetScriptBlock>$this.SummaryFields.Credential.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Credential.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectName</Name>
-        <GetScriptBlock>$this.SummaryFields.Project.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Project.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.Project;"[{0}][{1}]{2}" -f $t.Id,$t.ScmType,$t.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.Project;"[{0}][{1}]{2}" -f $t.Id,$t.ScmType,$t.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -519,7 +519,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -553,11 +553,11 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>CredentialTypeName</Name>
-        <GetScriptBlock>$this.SummaryFields.CredentialType.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.CredentialType.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -618,7 +618,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -664,23 +664,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceProjectName</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceProject.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.SourceProject.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Credentials</Name>
-        <GetScriptBlock>$this.SummaryFields.Credentials</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.JobTemplateCredentialSummary[]])]param() $this.SummaryFields.Credentials</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LastJob</Name>
-        <GetScriptBlock>$this.SummaryFields.LastJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -753,23 +753,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>Organization</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Id</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.Organization.Id</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventorySourceName</Name>
-        <GetScriptBlock>$this.SummaryFields.InventorySource.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.InventorySource.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.InventorySource;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.InventorySource;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -867,7 +867,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -921,15 +921,15 @@
       </MemberSet>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Groups</Name>
-        <GetScriptBlock>$this.SummaryFields.Groups.Results.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string[]")]param() $this.SummaryFields.Groups.Results.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>RecentJobs</Name>
-        <GetScriptBlock>$this.SummaryFields.RecentJobs</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.RecentJobSummary[]])]param() $this.SummaryFields.RecentJobs</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -987,35 +987,35 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ExecutionEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectName</Name>
-        <GetScriptBlock>$this.SummaryFields.Project.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Project.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Credentials</Name>
-        <GetScriptBlock>$this.SummaryFields.Credentials</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.JobTemplateCredentialSummary[]])]param() $this.SummaryFields.Credentials</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Labels</Name>
-        <GetScriptBlock>$this.SummaryFields.Labels.Results</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LabelSummary[]])]param() $this.SummaryFields.Labels.Results</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LastJob</Name>
-        <GetScriptBlock>$this.SummaryFields.LastJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>RecentJobs</Name>
-        <GetScriptBlock>$this.SummaryFields.RecentJobs</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.RecentJobSummary[]])]param() $this.SummaryFields.RecentJobs</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -1097,35 +1097,35 @@
       </MemberSet>
       <ScriptProperty>
         <Name>ProjectName</Name>
-        <GetScriptBlock>$this.SummaryFields.Project.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Project.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InstanceGroupName</Name>
-        <GetScriptBlock>$this.SummaryFields.InstanceGroup.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.InstanceGroup.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ExecutionEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceWorkflowJob</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceWorkflowJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.WorkflowJobSummary])]param() if ($this.LaunchType -eq 'Workflow') { $this.SummaryFields.SourceWorkflowJob }</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Labels</Name>
-        <GetScriptBlock>$this.SummaryFields.Labels.Results</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LabelSummary])]param() $this.SummaryFields.Labels.Results</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.JobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.JobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -1251,19 +1251,19 @@
       </MemberSet>
       <ScriptProperty>
         <Name>TaskAction</Name>
-        <GetScriptBlock>$this.EventData["task_action"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.EventData["task_action"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskStart</Name>
-        <GetScriptBlock>$this.EventData["start"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["start"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskEnd</Name>
-        <GetScriptBlock>$this.EventData["end"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["end"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ActionDetail</Name>
-        <GetScriptBlock>$this.EventData["res"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType([System.Collections.Generic.Dictionary`2])]param() $this.EventData["res"]</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1311,19 +1311,19 @@
       </AliasProperty>
       <ScriptProperty>
         <Name>TaskAction</Name>
-        <GetScriptBlock>$this.EventData["task_action"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.EventData["task_action"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskStart</Name>
-        <GetScriptBlock>$this.EventData["start"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["start"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskEnd</Name>
-        <GetScriptBlock>$this.EventData["end"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["end"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ActionDetail</Name>
-        <GetScriptBlock>$this.EventData["res"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType([System.Collections.Generic.Dictionary`2])]param() $this.EventData["res"]</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1436,19 +1436,19 @@
       </AliasProperty>
       <ScriptProperty>
         <Name>TaskAction</Name>
-        <GetScriptBlock>$this.EventData["task_action"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.EventData["task_action"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskStart</Name>
-        <GetScriptBlock>$this.EventData["start"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["start"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TaskEnd</Name>
-        <GetScriptBlock>$this.EventData["end"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType("datetime")]param() $this.EventData["end"]</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ActionDetail</Name>
-        <GetScriptBlock>$this.EventData["res"]</GetScriptBlock>
+        <GetScriptBlock>[OutputType([System.Collections.Generic.Dictionary`2])]param() $this.EventData["res"]</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1488,23 +1488,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>JobName</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Job.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobStatus</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Status</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.JobStatus])]param() $this.SummaryFields.Job.Status</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobElapsed</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Elapsed</GetScriptBlock>
+        <GetScriptBlock>[OutputType("double")]param() $this.SummaryFields.Job.Elapsed</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobTemplate</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.JobTemplateId</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.Job.JobTemplateId</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.JobTemplateName</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Job.JobTemplateName</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1553,11 +1553,11 @@
       </MemberSet>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>CredentialName</Name>
-        <GetScriptBlock>$this.SummaryFields.Credential.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Credential.Name</GetScriptBlock>
       </ScriptProperty>
       <AliasProperty>
         <Name>Template</Name>
@@ -1652,7 +1652,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>LastJob</Name>
-        <GetScriptBlock>$this.SummaryFields.LastJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -1701,11 +1701,11 @@
       </MemberSet>
       <ScriptProperty>
         <Name>ExecutionEnvironmentName</Name>
-        <GetScriptBlock>$this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.ExecutionEnvironment.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.UnifiedJobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.UnifiedJobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -1804,15 +1804,15 @@
       </MemberSet>
       <ScriptProperty>
         <Name>UnifiedJobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UnifiedJobType</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.ResourceType])]param() $this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>"[{0}]{1}" -f $this.UnifiedJobTemplate,$this.UnifiedJobTemplateName</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() "[{0}]{1}" -f $this.UnifiedJobTemplate,$this.UnifiedJobTemplateName</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1836,7 +1836,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>TargetResource</Name>
-        <GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param()
           if ($null -ne $this.SummaryFields.ResourceId) {
             $summary = $this.SummaryFields;
             "{0}:{1}:{2}" -f $summary.ResourceType, $summary.ResourceId, $summary.ResourceName
@@ -1847,19 +1847,19 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>ResourceId</Name>
-        <GetScriptBlock>$this.SummaryFields.ResourceId</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.ResourceId</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ResourceType</Name>
-        <GetScriptBlock>$this.SummaryFields.ResourceType</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.ResourceType])]param() $this.SummaryFields.ResourceType</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ResourceName</Name>
-        <GetScriptBlock>$this.SummaryFields.ResourceName</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.ResourceName</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ResourceTypeDisplayName</Name>
-        <GetScriptBlock>$this.SummaryFields.ResourceTypeDisplayName</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.ResourceTypeDisplayName</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1894,35 +1894,35 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>StartedMessage</Name>
-        <GetScriptBlock>$this.Messages.Started</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.Started</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SuccessMessage</Name>
-        <GetScriptBlock>$this.Messages.Success</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.Success</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ErrorMessage</Name>
-        <GetScriptBlock>$this.Messages.Error</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.Error</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ApprovedMessage</Name>
-        <GetScriptBlock>$this.Messages.WorkflowApproval.Approved</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.WorkflowApproval.Approved</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>DeniedMessage</Name>
-        <GetScriptBlock>$this.Messages.WorkflowApproval.Denied</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.WorkflowApproval.Denied</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>RunningMessage</Name>
-        <GetScriptBlock>$this.Messages.WorkflowApproval.Running</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.WorkflowApproval.Running</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TimedOutMessage</Name>
-        <GetScriptBlock>$this.Messages.WorkflowApproval.TimedOut</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.NMessage])]param() $this.Messages.WorkflowApproval.TimedOut</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1955,15 +1955,15 @@
       </MemberSet>
       <ScriptProperty>
         <Name>Name</Name>
-        <GetScriptBlock>$this.SummaryFields.NotificationTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.NotificationTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Description</Name>
-        <GetScriptBlock>$this.SummaryFields.NotificationTemplate.Description</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.NotificationTemplate.Description</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>"[{0}]{1}" -f $this.NotificationTemplate,$this.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() "[{0}]{1}" -f $this.NotificationTemplate,$this.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -1989,7 +1989,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2032,23 +2032,23 @@
       </MemberSet>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Labels</Name>
-        <GetScriptBlock>$this.SummaryFields.Labels.Results</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LabelSummary[]])]param() $this.SummaryFields.Labels.Results</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>LastJob</Name>
-        <GetScriptBlock>$this.SummaryFields.LastJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>RecentJobs</Name>
-        <GetScriptBlock>$this.SummaryFields.RecentJobs</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.RecentJobSummary[]])]param() $this.SummaryFields.RecentJobs</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -2113,19 +2113,19 @@
       </MemberSet>
       <ScriptProperty>
         <Name>WorkflowJobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJobTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.WorkflowJobTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>InventoryName</Name>
-        <GetScriptBlock>$this.SummaryFields.Inventory.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Inventory.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Labels</Name>
-        <GetScriptBlock>$this.SummaryFields.Labels.Results</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.LabelSummary[]])]param() $this.SummaryFields.Labels.Results</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Template</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.UnifiedJobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.UnifiedJobTemplate;"[{0}]{1}" -f $t.Id,$t.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -2220,7 +2220,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>Actor</Name>
-        <GetScriptBlock>$t=$this.SummaryFields.Actor; if ($t){ "[{0}]{1}" -f $t.Id,$t.Username; }</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $t=$this.SummaryFields.Actor; if ($t){ "[{0}]{1}" -f $t.Id,$t.Username; }</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2266,15 +2266,15 @@
       </MemberSet>
       <ScriptProperty>
         <Name>WorkflowJobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJobTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.WorkflowJobTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UnifiedJobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UnifiedJobTemplateType</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.ResourceType])]param() $this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2325,27 +2325,27 @@
       </MemberSet>
       <ScriptProperty>
         <Name>WorkflowJobName</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJob.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.WorkflowJob.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobName</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Job.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobStatus</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Status</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.JobStatus])]param() $this.SummaryFields.Job.Status</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>JobElapsed</Name>
-        <GetScriptBlock>$this.SummaryFields.Job.Elapsed</GetScriptBlock>
+        <GetScriptBlock>[OutputType("double")]param() $this.SummaryFields.Job.Elapsed</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UnifiedJobTemplateName</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.UnifiedJobTemplate.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>UnifiedJobTemplateType</Name>
-        <GetScriptBlock>$this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.ResourceType])]param() $this.SummaryFields.UnifiedJobTemplate.UnifiedJobType</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2379,27 +2379,27 @@
       </MemberSet>
       <ScriptProperty>
         <Name>TargetCredentialName</Name>
-        <GetScriptBlock>$this.SummaryFields.TargetCredential.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.TargetCredential.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TargetCredentialKind</Name>
-        <GetScriptBlock>$this.SummaryFields.TargetCredential.Kind</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.TargetCredential.Kind</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>TargetCredentialType</Name>
-        <GetScriptBlock>$this.SummaryFields.TargetCredential.CredentialTypeId</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.TargetCredential.CredentialTypeId</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceCredentialName</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceCredential.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.SourceCredential.Name</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceCredentialKind</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceCredential.Kind</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.SourceCredential.Kind</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceCredentialType</Name>
-        <GetScriptBlock>$this.SummaryFields.SourceCredential.CredentialTypeId</GetScriptBlock>
+        <GetScriptBlock>[OutputType("ulong")]param() $this.SummaryFields.SourceCredential.CredentialTypeId</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2430,7 +2430,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>OrganizationName</Name>
-        <GetScriptBlock>$this.SummaryFields.Organization.Name</GetScriptBlock>
+        <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Organization.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -2507,7 +2507,7 @@
       </MemberSet>
       <ScriptProperty>
         <Name>WorkflowJobTemplate</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJobTemplate</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.WorkflowJobTemplateSummary])]param() $this.SummaryFields.WorkflowJobTemplate</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>Note</Name>
@@ -2559,19 +2559,19 @@
       </MemberSet>
       <ScriptProperty>
         <Name>WorkflowJobTemplate</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJobTemplate</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.WorkflowJobTemplateSummary])]param() $this.SummaryFields.WorkflowJobTemplate</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>WorkflowJob</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowJob</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.WorkflowJobSummary])]param() $this.SummaryFields.WorkflowJob</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>WorkflowApprovalTemplate</Name>
-        <GetScriptBlock>$this.SummaryFields.WorkflowApprovalTemplate</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.WorkflowApprovalTemplateSummary])]param() $this.SummaryFields.WorkflowApprovalTemplate</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>ApprovedOrDeniedBy</Name>
-        <GetScriptBlock>$this.SummaryFields.ApprovedOrDeniedBy</GetScriptBlock>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.UserSummary])]param() $this.SummaryFields.ApprovedOrDeniedBy</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
