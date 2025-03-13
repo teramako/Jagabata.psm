@@ -21,9 +21,6 @@ public static class Yaml
     /// </list>
     /// </summary>
     /// <param name="obj">object to be serialized</param>
-    /// <remarks>
-    /// CAUTION: Not supported <see cref="System.Management.Automation.PSObject"/>
-    /// </remarks>
     public static string SerializeToString(object obj)
     {
         return AlcEngine.Yaml.SerializeToString(obj);
