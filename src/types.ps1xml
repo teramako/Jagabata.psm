@@ -1096,6 +1096,10 @@
         </Members>
       </MemberSet>
       <ScriptProperty>
+        <Name>Credentials</Name>
+        <GetScriptBlock>[OutputType([Jagabata.Resources.CredentialSummary[]])]param() $this.SummaryFields.Credentials</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>ProjectName</Name>
         <GetScriptBlock>[OutputType("string")]param() $this.SummaryFields.Project.Name</GetScriptBlock>
       </ScriptProperty>
