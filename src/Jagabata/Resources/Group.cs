@@ -50,6 +50,16 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Get the inventory associated with this rersource.
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path)
+                ? RestAPI.Get<Inventory>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
