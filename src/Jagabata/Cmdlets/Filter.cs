@@ -59,7 +59,7 @@ namespace Jagabata.Cmdlets
         /// <Summary>
         /// Greater than comparsion. (Alias to <c>GreaterThan</c>)
         /// </Summary>
-        GT = 10,
+        GT = GreaterThan,
         /// <Summary>
         /// Greater than or equal to comparsion.
         /// </Summary>
@@ -67,7 +67,7 @@ namespace Jagabata.Cmdlets
         /// <Summary>
         /// Greater than or equal to comparsion. (Alias to <c>GreaterThanOrEqual</c>)
         /// </Summary>
-        GTE = 11,
+        GTE = GreaterThanOrEqual,
         /// <Summary>
         /// Less than comparsion.
         /// </Summary>
@@ -75,7 +75,7 @@ namespace Jagabata.Cmdlets
         /// <Summary>
         /// Less than comparsion. (Alias to <c>LessThan</c>)
         /// </Summary>
-        LT = 12,
+        LT = LessThan,
         /// <Summary>
         /// Less than or equal to comparsion.
         /// </Summary>
@@ -83,7 +83,7 @@ namespace Jagabata.Cmdlets
         /// <Summary>
         /// Less than or equal to comparsion. (Alias to <c>LessThanOrEqual</c>)
         /// </Summary>
-        LTE = 13,
+        LTE = LessThanOrEqual,
         /// <Summary>
         /// Check whether the given field or related object is null: expects a boolean value
         /// </Summary>
@@ -118,10 +118,9 @@ namespace Jagabata.Cmdlets
                 return new Filter();
 
             var kv = str.Split('=', 2, StringSplitOptions.TrimEntries);
-            if (kv.Length == 1)
-                return new Filter(kv[0], null);
-
-            return new Filter(kv[0], kv[1]);
+            return kv.Length == 1
+                ? new Filter(kv[0], null)
+                : new Filter(kv[0], kv[1]);
         }
         public static Filter Parse(IDictionary dict)
         {
@@ -140,40 +139,25 @@ namespace Jagabata.Cmdlets
                     case "type":
                         {
                             var val = $"{dict[keyObj]}";
-                            if (Enum.TryParse<FilterLookupType>(val, true, out var type))
-                            {
-                                query.Type = type;
-                            }
-                            else
-                            {
-                                throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to FilterLookupType");
-                            }
+                            query.Type = Enum.TryParse<FilterLookupType>(val, true, out var type)
+                                ? type
+                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to FilterLookupType");
                             continue;
                         }
                     case "or":
                         {
                             var val = $"{dict[keyObj]}";
-                            if (Boolean.TryParse(val, out bool isOr))
-                            {
-                                query.Or = isOr;
-                            }
-                            else
-                            {
-                                throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
-                            }
+                            query.Or = bool.TryParse(val, out bool isOr)
+                                ? isOr
+                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
                             continue;
                         }
                     case "not":
                         {
                             var val = $"{dict[keyObj]}";
-                            if (Boolean.TryParse(val, out bool isNot))
-                            {
-                                query.Not = isNot;
-                            }
-                            else
-                            {
-                                throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
-                            }
+                            query.Not = bool.TryParse(val, out bool isNot)
+                                ? isNot
+                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
                             continue;
                         }
                 }
@@ -206,7 +190,7 @@ namespace Jagabata.Cmdlets
 
         public string Name
         {
-            get { return _name; }
+            get => _name;
             set
             {
                 var keyFields = value.ToLowerInvariant().Split("__");
@@ -230,7 +214,7 @@ namespace Jagabata.Cmdlets
         private string _name = string.Empty;
         public object? Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (value is PSObject pso)
@@ -267,10 +251,10 @@ namespace Jagabata.Cmdlets
                 }
             }
         }
-        private object? _value = null;
+        private object? _value;
         public FilterLookupType Type { get; set; } = FilterLookupType.Exact;
-        public bool Or { get; set; } = false;
-        public bool Not { get; set; } = false;
+        public bool Or { get; set; }
+        public bool Not { get; set; }
 
         public string GetKey()
         {
@@ -280,7 +264,7 @@ namespace Jagabata.Cmdlets
             sb.Append(Name);
             var lookup = LookupTypeToString(Type);
             if (!string.IsNullOrEmpty(lookup))
-                sb.Append($"__{lookup}");
+                sb.Append("__").Append(lookup);
             return sb.ToString();
         }
 
