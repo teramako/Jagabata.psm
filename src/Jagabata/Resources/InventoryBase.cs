@@ -76,7 +76,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
 
     /// <summary>
     /// Get  a hierarchical view of groups assiciated with this inventory.
-    /// Implement API: <c>/api/v2/inventries/{id}/tree/</c>.
+    /// Implement API: <c>/api/v2/inventories/{id}/tree/</c>.
     /// </summary>
     public Group.Tree[]? GetGroupTree()
     {
@@ -87,7 +87,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
 
     /// <summary>
     /// Get an inventory script.
-    /// Implement API: <c>/api/v2/inventries/{id}/script/</c>.
+    /// Implement API: <c>/api/v2/inventories/{id}/script/</c>.
     /// </summary>
     /// <param name="includeHostVars">
     /// Include all host variables.
@@ -119,7 +119,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
 
     /// <summary>
     /// Get host variables for the specified <paramref name="hostName"/> from the inventory script.
-    /// Implement API: <c>/api/v2/inventries/{id}/script/</c>.
+    /// Implement API: <c>/api/v2/inventories/{id}/script/</c>.
     /// </summary>
     /// <param name="hostName">Hostname belonging to the inventory</param>.
     public Dictionary<string, object?> GetInventoryScript(string hostName)
