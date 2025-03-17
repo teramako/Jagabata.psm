@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Management.Automation;
 using System.Text;
 
@@ -100,7 +102,7 @@ namespace Jagabata
     /// See: <a href="https://docs.ansible.com/automation-controller/latest/html/controllerapi/filtering.html">
     /// 6. Filtering — Automation Controller API Guide</a>
     /// </summary>
-    public class Filter
+    public class Filter : ISpanParsable<Filter>
     {
         public Filter()
         { }
@@ -112,16 +114,69 @@ namespace Jagabata
             Name = name;
             Value = value;
         }
-        public static Filter Parse(string str)
+        public Filter(ReadOnlySpan<char> name, ReadOnlySpan<char> value, FilterLookupType type = FilterLookupType.Exact, bool or = false, bool not = false)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            Or = or;
+            Not = not;
+            Type = type;
+            SetKey(name);
+            _value = value.ToString();
+        }
+
+        public static Filter Parse(ReadOnlySpan<char> s)
+        {
+            return Parse(s, CultureInfo.InvariantCulture);
+        }
+        public static Filter Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+        {
+            if (s.IsEmpty || s.IsWhiteSpace())
                 return new Filter();
 
-            var kv = str.Split('=', 2, StringSplitOptions.TrimEntries);
-            return kv.Length == 1
-                ? new Filter(kv[0], null)
-                : new Filter(kv[0], kv[1]);
+            Span<Range> kvRanges = new Range[2];
+            var kvRangeLength = s.Split(kvRanges, '=', StringSplitOptions.TrimEntries);
+            return kvRangeLength == 1
+                ? new Filter(s[kvRanges[0]], null)
+                : new Filter(s[kvRanges[0]], s[kvRanges[1]]);
         }
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Filter result)
+        {
+            result = null;
+            if (s.IsEmpty || s.IsWhiteSpace())
+            {
+                result = new Filter();
+                return true;
+            }
+            try
+            {
+                Span<Range> kvRanges = new Range[2];
+                var kvRangeLength = s.Split(kvRanges, '=', StringSplitOptions.TrimEntries);
+                result = kvRangeLength == 1
+                    ? new Filter(s[kvRanges[0]], null)
+                    : new Filter(s[kvRanges[0]], s[kvRanges[1]]);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static Filter Parse(string s)
+        {
+            return Parse(s.AsSpan(), CultureInfo.InvariantCulture);
+        }
+
+        public static Filter Parse(string s, IFormatProvider? provider)
+        {
+            return Parse(s.AsSpan(), provider);
+        }
+
+        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Filter result)
+        {
+            return TryParse(s.AsSpan(), provider, out result);
+        }
+
         public static Filter Parse(IDictionary dict)
         {
             var query = new Filter();
@@ -251,7 +306,7 @@ namespace Jagabata
                 }
             }
         }
-        private object? _value;
+        private string _value = string.Empty;
         public FilterLookupType Type { get; set; } = FilterLookupType.Exact;
         public bool Or { get; set; }
         public bool Not { get; set; }
@@ -267,10 +322,41 @@ namespace Jagabata
                 sb.Append("__").Append(lookup);
             return sb.ToString();
         }
+        private void SetKey(ReadOnlySpan<char> key)
+        {
+            Span<char> lowerKey = new char[key.Length];
+            key.ToLowerInvariant(lowerKey);
+            ReadOnlySpan<char> separator = "__";
+            Span<Range> ranges = new Range[lowerKey.Count(separator) + 1];
+            ((ReadOnlySpan<char>)lowerKey).Split(ranges, separator, StringSplitOptions.None);
+            var rangeIndex = 0;
+            if (lowerKey[ranges[rangeIndex]].SequenceEqual("or"))
+            {
+                Or = true;
+                rangeIndex++;
+            }
+            if (lowerKey[ranges[rangeIndex]].SequenceEqual("not"))
+            {
+                Not = true;
+                rangeIndex++;
+            }
+            ranges = ranges[rangeIndex..];
+            if (ranges.Length == 0)
+                throw new ArgumentException($"Invalid Filter key: {key}");
+            if (ranges.Length > 1)
+            {
+                if (Enum.TryParse<FilterLookupType>(lowerKey[ranges[^1]], true, out var type))
+                {
+                    Type = type;
+                    ranges = ranges[..^1];
+                }
+            }
+            _name = lowerKey[ranges[0].Start..ranges[^1].End].ToString();
+        }
 
         public string GetValue()
         {
-            return $"{Value}";
+            return _value;
         }
 
         public override string ToString()
