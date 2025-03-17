@@ -181,13 +181,14 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Get the recent activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/activity_stream/</c>
+        /// </para>
         /// </summary>
-        /// <param name="count">Number of activity streams to retrieve</param>.
-        public IEnumerable<ActivityStream> GetRecentActivityStream(int count = 20)
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public IEnumerable<ActivityStream> GetRecentActivityStream(int pageSize = 20)
         {
-            return Related.TryGetPath("activity_stream", out var path)
-                ? RestAPI.GetResultSet<ActivityStream>($"{path}?order_by=-timestamp&page_size={count}")
-                : [];
+            return GetResultsByRelatedKey<ActivityStream>("activity_stream", string.Empty, "-timestamp", pageSize);
         }
 
         /// <summary>

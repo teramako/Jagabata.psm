@@ -66,6 +66,25 @@ namespace Jagabata
         /// </summary>
         public abstract SummaryFieldsDictionary SummaryFields { get; }
 
+        protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey,
+                                                           string queryString,
+                                                           string orderBy,
+                                                           int pageSize = 20,
+                                                           int page = 1)
+            where T : class
+        {
+            if (Related.TryGetPath(relatedKey, out var path))
+            {
+                var query = System.Web.HttpUtility.ParseQueryString(queryString);
+                if (!string.IsNullOrEmpty(orderBy))
+                    query.Set("order_by", orderBy);
+                query.Set("page_size", $"{pageSize}");
+                query.Set("page", $"{page}");
+                return RestAPI.GetResultSet<T>(path, query);
+            }
+            return [];
+        }
+
         protected abstract CacheItem GetCacheItem();
         CacheItem ICacheableResource.GetCacheItem()
         {
