@@ -246,25 +246,7 @@ namespace Jagabata
         public string Name
         {
             get => _name;
-            set
-            {
-                var keyFields = value.ToLowerInvariant().Split("__");
-                var keyIndex = 0;
-                if (keyFields[keyIndex] == "or") { Or = true; keyIndex++; }
-                if (keyFields[keyIndex] == "not") { Not = true; keyIndex++; }
-                keyFields = keyFields[keyIndex..];
-                if (keyFields.Length == 0)
-                    throw new ArgumentException($"Invalid Filter key: {value}");
-                if (keyFields.Length > 1)
-                {
-                    if (Enum.TryParse<FilterLookupType>(keyFields.LastOrDefault(), true, out var type))
-                    {
-                        Type = type;
-                        keyFields = keyFields[..^1];
-                    }
-                }
-                _name = string.Join("__", keyFields);
-            }
+            set => SetKey(value);
         }
         private string _name = string.Empty;
         public object? Value
