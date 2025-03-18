@@ -252,41 +252,7 @@ namespace Jagabata
         public object? Value
         {
             get => _value;
-            set
-            {
-                if (value is PSObject pso)
-                {
-                    value = pso.BaseObject;
-                }
-                switch (value)
-                {
-                    case null:
-                        _value = string.Empty;
-                        return;
-                    case string str:
-                        _value = str;
-                        return;
-                    case bool boolean:
-                        _value = boolean ? "True" : "False";
-                        return;
-                    case DateTime datetime:
-                        if (datetime.Kind == DateTimeKind.Unspecified)
-                            datetime = datetime.ToUniversalTime().ToLocalTime();
-                        _value = datetime.ToString("o");
-                        return;
-                    case IList list:
-                        var strList = new string[list.Count];
-                        for (var i = 0; i < list.Count; i++)
-                        {
-                            strList[i] = $"{list[i]}";
-                        }
-                        _value = string.Join(',', strList);
-                        return;
-                    default:
-                        _value = $"{value}";
-                        return;
-                }
-            }
+            set => SetValue(value);
         }
         private string _value = string.Empty;
         public FilterLookupType Type { get; set; } = FilterLookupType.Exact;
@@ -304,7 +270,14 @@ namespace Jagabata
                 sb.Append("__").Append(lookup);
             return sb.ToString();
         }
-        private void SetKey(ReadOnlySpan<char> key)
+        /// <summary>
+        /// Parse <paramref name="key"/> and split to <see cref="Or"/>, <see cref="Not"/>, <see cref="Name"/> and <see cref="Type"/>.
+        /// </summary>
+        /// <param name="key">
+        /// format: <c>(or__)?(not__)?(?&lt;name&gt;\w+)(?:__(?&lt;lookupType&gt;\w+))?</c>
+        /// </param>
+        /// <returns>this instance</returns>
+        public Filter SetKey(ReadOnlySpan<char> key)
         {
             Span<char> lowerKey = new char[key.Length];
             key.ToLowerInvariant(lowerKey);
@@ -334,11 +307,47 @@ namespace Jagabata
                 }
             }
             _name = lowerKey[ranges[0].Start..ranges[^1].End].ToString();
+            return this;
         }
 
         public string GetValue()
         {
             return _value;
+        }
+        public Filter SetValue(object? value)
+        {
+            if (value is PSObject psobj)
+                value = psobj.BaseObject;
+
+            switch (value)
+            {
+                case null:
+                    _value = string.Empty;
+                    break;
+                case string str:
+                    _value = str;
+                    break;
+                case bool boolean:
+                    _value = boolean ? "True" : "False";
+                    break;
+                case DateTime datetime:
+                    if (datetime.Kind == DateTimeKind.Unspecified)
+                        datetime = datetime.ToUniversalTime().ToLocalTime();
+                    _value = datetime.ToString("o");
+                    break;
+                case IList list:
+                    var strList = new string[list.Count];
+                    for (var i = 0; i < list.Count; i++)
+                    {
+                        strList[i] = $"{list[i]}";
+                    }
+                    _value = string.Join(',', strList);
+                    break;
+                default:
+                    _value = $"{value}";
+                    break;
+            }
+            return this;
         }
 
         public override string ToString()
