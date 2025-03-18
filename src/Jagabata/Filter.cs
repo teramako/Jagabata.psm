@@ -350,6 +350,36 @@ namespace Jagabata
             return this;
         }
 
+        /// <summary>
+        /// Set <see cref="Or"/> flag to <c>false</c>.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetAnd()
+        {
+            Or = false;
+            return this;
+        }
+
+        /// <summary>
+        /// Set <see cref="Or"/> flag to <c>true</c>.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetOr()
+        {
+            Or = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Set <see cref="Not"/> flag to <paramref name="not"/>.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetNot(bool not = true)
+        {
+            Not = not;
+            return this;
+        }
+
         public override string ToString()
         {
             return $"{GetKey()}={Value}";
