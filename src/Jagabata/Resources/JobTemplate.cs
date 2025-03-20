@@ -335,7 +335,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public IEnumerable<ActivityStream> GetRecentActivityStream(int pageSize = 20)
+        public IEnumerable<ActivityStream> GetRecentActivityStream(ushort pageSize = 20)
         {
             return GetResultsByRelatedKey<ActivityStream>("activity_stream", string.Empty, "-timestamp", pageSize);
         }

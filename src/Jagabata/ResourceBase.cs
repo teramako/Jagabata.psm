@@ -68,9 +68,9 @@ namespace Jagabata
 
         protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey,
                                                            string queryString,
-                                                           string orderBy,
-                                                           int pageSize = 20,
-                                                           int page = 1)
+                                                           string orderBy = "",
+                                                           ushort pageSize = 20,
+                                                           uint page = 1)
             where T : class
         {
             if (Related.TryGetPath(relatedKey, out var path))
