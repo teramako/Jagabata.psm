@@ -177,6 +177,11 @@ namespace Jagabata
             return TryParse(s.AsSpan(), provider, out result);
         }
 
+        /// <summary>
+        /// Parse <see cref="IDictionary"/> to Filter.
+        /// This may be useful on PowerShell.
+        /// </summary>
+        /// <exception cref="ArgumentException">thrown when failed to parse value</exception>
         public static Filter Parse(IDictionary dict)
         {
             var query = new Filter();
@@ -192,29 +197,14 @@ namespace Jagabata
                         query.Value = dict[keyObj];
                         continue;
                     case "type":
-                        {
-                            var val = $"{dict[keyObj]}";
-                            query.Type = Enum.TryParse<FilterLookupType>(val, true, out var type)
-                                ? type
-                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to FilterLookupType");
-                            continue;
-                        }
+                        query.Type = Enum.Parse<FilterLookupType>($"{dict[keyObj]}", true);
+                        continue;
                     case "or":
-                        {
-                            var val = $"{dict[keyObj]}";
-                            query.Or = bool.TryParse(val, out bool isOr)
-                                ? isOr
-                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
-                            continue;
-                        }
+                        query.Or = bool.Parse($"{dict[keyObj]}");
+                        continue;
                     case "not":
-                        {
-                            var val = $"{dict[keyObj]}";
-                            query.Not = bool.TryParse(val, out bool isNot)
-                                ? isNot
-                                : throw new ArgumentException($"Invalid Dictionay Key: \"{key}\" ({val}) is not convertable to Boolean");
-                            continue;
-                        }
+                        query.Not = bool.Parse($"{dict[keyObj]}");
+                        continue;
                 }
             }
             return query;
