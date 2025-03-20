@@ -123,6 +123,9 @@ namespace Jagabata
             _value = value.ToString();
         }
 
+        /// <summary>
+        /// Alias to <see cref="Parse(ReadOnlySpan{char}, IFormatProvider?)"/>
+        /// </summary>
         public static Filter Parse(ReadOnlySpan<char> s)
         {
             return Parse(s, CultureInfo.InvariantCulture);
@@ -134,9 +137,7 @@ namespace Jagabata
 
             Span<Range> kvRanges = new Range[2];
             var kvRangeLength = s.Split(kvRanges, '=', StringSplitOptions.TrimEntries);
-            return kvRangeLength == 1
-                ? new Filter(s[kvRanges[0]], null)
-                : new Filter(s[kvRanges[0]], s[kvRanges[1]]);
+            return new Filter(s[kvRanges[0]], kvRangeLength == 2 ? s[kvRanges[1]] : []);
         }
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Filter result)
@@ -151,9 +152,7 @@ namespace Jagabata
             {
                 Span<Range> kvRanges = new Range[2];
                 var kvRangeLength = s.Split(kvRanges, '=', StringSplitOptions.TrimEntries);
-                result = kvRangeLength == 1
-                    ? new Filter(s[kvRanges[0]], null)
-                    : new Filter(s[kvRanges[0]], s[kvRanges[1]]);
+                result = new Filter(s[kvRanges[0]], kvRangeLength == 2 ? s[kvRanges[1]] : []);
             }
             catch
             {
@@ -162,6 +161,9 @@ namespace Jagabata
             return true;
         }
 
+        /// <summary>
+        /// Alias to <see cref="Parse(string, IFormatProvider?)"/>
+        /// </summary>
         public static Filter Parse(string s)
         {
             return Parse(s.AsSpan(), CultureInfo.InvariantCulture);
