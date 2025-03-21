@@ -374,7 +374,7 @@ namespace Jagabata
 
         public override string ToString()
         {
-            return $"{GetKey()}={Value}";
+            return $"{GetKey()}={GetValue()}";
         }
     }
 }
