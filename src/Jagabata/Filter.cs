@@ -336,14 +336,12 @@ namespace Jagabata
             Span<Range> ranges = new Range[lowerKey.Count(separator) + 1];
             ((ReadOnlySpan<char>)lowerKey).Split(ranges, separator, StringSplitOptions.None);
             var rangeIndex = 0;
-            if (lowerKey[ranges[rangeIndex]].SequenceEqual("or"))
+            if (Or = lowerKey[ranges[rangeIndex]].SequenceEqual("or"))
             {
-                Or = true;
                 rangeIndex++;
             }
-            if (lowerKey[ranges[rangeIndex]].SequenceEqual("not"))
+            if (Not = lowerKey[ranges[rangeIndex]].SequenceEqual("not"))
             {
-                Not = true;
                 rangeIndex++;
             }
             ranges = ranges[rangeIndex..];
