@@ -196,7 +196,7 @@ namespace Jagabata
                         query.Name = $"{dict[keyObj]}";
                         continue;
                     case "value":
-                        query.Value = dict[keyObj];
+                        query.SetValue(dict[keyObj]);
                         continue;
                     case "type":
                         query.Type = Enum.Parse<FilterLookupType>($"{dict[keyObj]}", true);
@@ -306,6 +306,59 @@ namespace Jagabata
         {
             return _value;
         }
+
+        /// <summary>
+        /// Set value to <paramref name="str"/>
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetValue(string? str)
+        {
+            _value = str ?? string.Empty;
+            return this;
+        }
+        /// <summary>
+        /// Set value to <paramref name="str"/>
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetValue(ReadOnlySpan<char> str)
+        {
+            _value = str.ToString();
+            return this;
+        }
+        /// <summary>
+        /// Set value to <c>True</c> or <c>False</c> of string.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetValue(bool boolean)
+        {
+            _value = boolean ? "True" : "False";
+            return this;
+        }
+        /// <summary>
+        /// Set value to ISO datetime string.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetValue(DateTime dateTime)
+        {
+            if (dateTime.Kind == DateTimeKind.Unspecified)
+                dateTime = dateTime.ToUniversalTime().ToLocalTime();
+            _value = dateTime.ToString("o");
+            return this;
+        }
+        /// <summary>
+        /// Set value to <c>,</c> separated string.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetValue(IList list)
+        {
+            var strList = new string[list.Count];
+            for (var i = 0; i < list.Count; i++)
+            {
+                strList[i] = $"{list[i]}";
+            }
+            _value = string.Join(',', strList);
+            return this;
+        }
         public Filter SetValue(object? value)
         {
             if (value is PSObject psobj)
@@ -314,27 +367,15 @@ namespace Jagabata
             switch (value)
             {
                 case null:
-                    _value = string.Empty;
-                    break;
+                    return SetValue(string.Empty);
                 case string str:
-                    _value = str;
-                    break;
+                    return SetValue(str);
                 case bool boolean:
-                    _value = boolean ? "True" : "False";
-                    break;
+                    return SetValue(boolean);
                 case DateTime datetime:
-                    if (datetime.Kind == DateTimeKind.Unspecified)
-                        datetime = datetime.ToUniversalTime().ToLocalTime();
-                    _value = datetime.ToString("o");
-                    break;
+                    return SetValue(datetime);
                 case IList list:
-                    var strList = new string[list.Count];
-                    for (var i = 0; i < list.Count; i++)
-                    {
-                        strList[i] = $"{list[i]}";
-                    }
-                    _value = string.Join(',', strList);
-                    break;
+                    return SetValue(list);
                 default:
                     _value = $"{value}";
                     break;
