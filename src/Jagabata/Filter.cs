@@ -106,21 +106,83 @@ namespace Jagabata
     {
         public Filter()
         { }
-        public Filter(string name, object? value, FilterLookupType type = FilterLookupType.Exact, bool or = false, bool not = false)
+        /// <summary>
+        /// Simple constructor.
+        /// <list type="table">
+        /// <item><term><paramref name="key"/></term><description>See: <see cref="SetKey(ReadOnlySpan{char})"/></description></item>
+        /// <item><term><paramref name="value"/></term><description>See: <see cref="SetValue(object?)"/></description></item>
+        /// </list>
+        /// </summary>
+        public Filter(string key, object? value)
         {
-            Or = or;
-            Not = not;
-            Type = type;
-            Name = name;
-            Value = value;
+            SetKey(key);
+            SetValue(value);
         }
-        public Filter(ReadOnlySpan<char> name, ReadOnlySpan<char> value, FilterLookupType type = FilterLookupType.Exact, bool or = false, bool not = false)
+        /// <summary>
+        /// For string type of <paramref name="value"/>
+        /// </summary>
+        public Filter(string key, string? value)
         {
+            SetKey(key);
+            SetValue(value);
+        }
+        /// <summary>
+        /// For string type of <paramref name="value"/>
+        /// </summary>
+        public Filter(string name, string? value, FilterLookupType type, bool or = false, bool not = false)
+        {
+            SetKey(name);
+            SetValue(value);
             Or = or;
             Not = not;
             Type = type;
+        }
+        /// <summary>
+        /// For <see cref="DateTime"/> type of <paramref name="value"/>
+        /// </summary>
+        public Filter(string name, DateTime value, FilterLookupType type, bool or = false, bool not = false)
+        {
             SetKey(name);
-            _value = value.ToString();
+            SetValue(value);
+            Type = type;
+            Or = or;
+            Not = not;
+        }
+        /// <summary>
+        /// For <see cref="IList"/> type of <paramref name="value"/>.
+        /// <see cref="Type"/> will be set to <see cref="FilterLookupType.In"/> automatically.
+        /// </summary>
+        public Filter(string name, IList value, bool or = false, bool not = false)
+        {
+            SetKey(name);
+            SetValue(value);
+            Type = FilterLookupType.In;
+            Or = or;
+            Not = not;
+        }
+        /// <summary>
+        /// For unknown type of <paramref name="value"/>.
+        /// </summary>
+        public Filter(string name, object? value, FilterLookupType type, bool or = false, bool not = false)
+        {
+            SetKey(name);
+            SetValue(value);
+            Type = type;
+            Or = or;
+            Not = not;
+        }
+        public Filter(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
+        {
+            SetKey(key);
+            SetValue(value);
+        }
+        public Filter(ReadOnlySpan<char> name, ReadOnlySpan<char> value, FilterLookupType type, bool or = false, bool not = false)
+        {
+            SetKey(name);
+            SetValue(value);
+            Type = type;
+            Or = or;
+            Not = not;
         }
 
         /// <summary>
