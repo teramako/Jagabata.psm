@@ -140,22 +140,17 @@ namespace Jagabata
             return new Filter(s[kvRanges[0]], kvRangeLength == 2 ? s[kvRanges[1]] : []);
         }
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Filter result)
+        public static bool TryParse(ReadOnlySpan<char> s,
+                                    IFormatProvider? provider,
+                                    [MaybeNullWhen(false)] out Filter result)
         {
-            result = null;
-            if (s.IsEmpty || s.IsWhiteSpace())
-            {
-                result = new Filter();
-                return true;
-            }
             try
             {
-                Span<Range> kvRanges = new Range[2];
-                var kvRangeLength = s.Split(kvRanges, '=', StringSplitOptions.TrimEntries);
-                result = new Filter(s[kvRanges[0]], kvRangeLength == 2 ? s[kvRanges[1]] : []);
+                result = Parse(s, provider);
             }
             catch
             {
+                result = default;
                 return false;
             }
             return true;
@@ -174,7 +169,9 @@ namespace Jagabata
             return Parse(s.AsSpan(), provider);
         }
 
-        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Filter result)
+        public static bool TryParse([NotNullWhen(true)] string? s,
+                                    IFormatProvider? provider,
+                                    [MaybeNullWhen(false)] out Filter result)
         {
             return TryParse(s.AsSpan(), provider, out result);
         }
