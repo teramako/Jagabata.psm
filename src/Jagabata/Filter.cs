@@ -302,6 +302,16 @@ namespace Jagabata
             return this;
         }
 
+        /// <summary>
+        /// Set <see cref="Type"/> to specified <see cref="FilterLookupType"/>.
+        /// </summary>
+        /// <returns>this instance</returns>
+        public Filter SetType(FilterLookupType type)
+        {
+            Type = type;
+            return this;
+        }
+
         public string GetValue()
         {
             return _value;
