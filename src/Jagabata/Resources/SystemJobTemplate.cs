@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class SystemJobTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -27,11 +25,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/system_job_templates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<SystemJobTemplate> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<SystemJobTemplate> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobTemplate>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobTemplate>(PATH, query))
             {
                 foreach (var systemJobTemplate in result.Contents.Results)
                 {

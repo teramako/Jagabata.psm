@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -96,11 +95,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/credential_types/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialType> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<CredentialType> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query))
             {
                 foreach (var credentialType in result.Contents.Results)
                 {

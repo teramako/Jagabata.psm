@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IInventoryUpdateJob : IUnifiedJob
@@ -187,11 +185,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/inventory_updates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<InventoryUpdateJob> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<InventoryUpdateJob> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(PATH, query))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
                 {
@@ -205,14 +202,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectUpdateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventoryUpdateJob> FindFromProjectUpdate(ulong projectUpdateId,
-                                                                                       NameValueCollection? query = null,
-                                                                                       bool getAll = false)
+                                                                                       HttpQuery? query = null)
         {
             var path = $"{ProjectUpdateJobBase.PATH}{projectUpdateId}/scm_inventory_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
                 {
@@ -226,14 +221,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventorySourceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventoryUpdateJob> FindFromInventorySource(ulong inventorySourceId,
-                                                                                         NameValueCollection? query = null,
-                                                                                         bool getAll = false)
+                                                                                         HttpQuery? query = null)
         {
             var path = $"{Resources.InventorySource.PATH}{inventorySourceId}/inventory_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class AdHocCommandJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -15,14 +13,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="adHocCommandId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommandJobEvent> FindFromAdHocCommand(ulong adHocCommandId,
-                                                                                     NameValueCollection? query = null,
-                                                                                     bool getAll = false)
+                                                                                        HttpQuery? query = null)
         {
             var path = $"{AdHocCommandBase.PATH}{adHocCommandId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {

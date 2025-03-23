@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -52,11 +51,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/schedules/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Schedule> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Schedule> Find(HttpQuery? query)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Schedule>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Schedule>(PATH, query))
             {
                 foreach (var schedule in result.Contents.Results)
                 {

@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -191,11 +190,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/inventory_sources/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<InventorySource> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<InventorySource> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -209,14 +207,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventorySource> FindFromProject(ulong projectId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+                                                                              HttpQuery? query = null)
         {
             var path = $"{Project.PATH}{projectId}/scm_inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -230,14 +226,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventorySource> FindFromInventory(ulong inventoryId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -251,14 +245,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventorySource> FindFromGroup(ulong groupId,
-                                                                            NameValueCollection? query = null,
-                                                                            bool getAll = false)
+                                                                            HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -272,14 +264,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InventorySource> FindFromHost(ulong hostId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{Host.PATH}{hostId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {

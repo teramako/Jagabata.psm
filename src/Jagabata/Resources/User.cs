@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IUser
@@ -46,11 +44,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/users/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<User> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<User> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(PATH, query))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -64,14 +61,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<User> FindFromOrganization(ulong organizationId,
-                                                                        NameValueCollection? query = null,
-                                                                        bool getAll = false)
+                                                                        HttpQuery? query = null)
         {
             var path = $"{Organization.PATH}{organizationId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -85,14 +80,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="teamId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<User> FindFromTeam(ulong teamId,
-                                                                NameValueCollection? query = null,
-                                                                bool getAll = false)
+                                                                HttpQuery? query = null)
         {
             var path = $"{Team.PATH}{teamId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -106,14 +99,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="credentialId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<User> FindOwnerFromCredential(ulong credentialId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{Credential.PATH}{credentialId}/owner_users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -127,14 +118,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="roleId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<User> FindFromRole(ulong roleId,
-                                                                NameValueCollection? query = null,
-                                                                bool getAll = false)
+                                                                HttpQuery? query = null)
         {
             var path = $"{Role.PATH}{roleId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
             {
                 foreach (var user in result.Contents.Results)
                 {

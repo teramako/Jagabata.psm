@@ -237,13 +237,13 @@ namespace Jagabata.Cmdlets.Utilities
         }
         private async Task UpdateWorkflowJobNodes()
         {
-            var query = HttpUtility.ParseQueryString("do_not_run=False&page_size=50&order_by=id");
+            var query = new HttpQuery("do_not_run=False&page_size=50&order_by=id", QueryCount.Infinity);
             var completedIds = Children.Values.Where(static jp => jp.Completed).Select(static jp => jp.Id).ToArray();
             if (completedIds.Length > 0)
             {
                 query.Add("not__job__in", string.Join(',', completedIds));
             }
-            await foreach (var apiResult in RestAPI.GetResultSetAsync<WorkflowJobNode>($"{WorkflowJob.PATH}{Id}/workflow_nodes/", query, true))
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<WorkflowJobNode>($"{WorkflowJobBase.PATH}{Id}/workflow_nodes/", query))
             {
                 foreach (var node in apiResult.Contents.Results)
                 {

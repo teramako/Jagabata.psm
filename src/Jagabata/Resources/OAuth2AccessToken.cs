@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IOAuth2AccessToken
@@ -42,11 +40,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/tokens/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<OAuth2AccessToken> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<OAuth2AccessToken> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(PATH, query))
             {
                 foreach (var token in result.Contents.Results)
                 {
@@ -60,14 +57,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="applicationId">Application ID</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<OAuth2AccessToken> FindFromApplication(ulong applicationId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
+                                                                                    HttpQuery? query = null)
         {
             var path = $"{Resources.Application.PATH}{applicationId}/tokens/";
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query))
             {
                 foreach (var token in result.Contents.Results)
                 {
@@ -81,14 +76,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<OAuth2AccessToken> FindFromUser(ulong userId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Resources.User.PATH}{userId}/tokens/";
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query))
             {
                 foreach (var token in result.Contents.Results)
                 {
@@ -103,14 +96,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<OAuth2AccessToken> FindPersonalTokensFromUser(ulong userId,
-                                                                                           NameValueCollection? query = null,
-                                                                                           bool getAll = false)
+                                                                                           HttpQuery? query = null)
         {
             var path = $"{Resources.User.PATH}{userId}/personal_tokens/";
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query))
             {
                 foreach (var token in result.Contents.Results)
                 {
@@ -125,14 +116,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<OAuth2AccessToken> FindAuthorizedTokensFromUser(ulong userId,
-                                                                                             NameValueCollection? query = null,
-                                                                                             bool getAll = false)
+                                                                                             HttpQuery? query = null)
         {
             var path = $"{Resources.User.PATH}{userId}/authorized_tokens/";
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query))
             {
                 foreach (var token in result.Contents.Results)
                 {

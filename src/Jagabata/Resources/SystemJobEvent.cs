@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class SystemJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -15,14 +13,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="systemJobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<SystemJobEvent> FindFromSystemJob(ulong systemJobId,
-                                                                         NameValueCollection? query = null,
-                                                                         bool getAll = false)
+                                                                               HttpQuery? query = null)
         {
             var path = $"{SystemJobBase.PATH}{systemJobId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IInstanceGroup
@@ -40,11 +38,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/instance_groups/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<InstanceGroup> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(PATH, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -58,14 +55,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="instanceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromInstance(ulong instanceId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Instance.PATH}{instanceId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -79,14 +74,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromOrganization(ulong organizationId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{Organization.PATH}{organizationId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -100,14 +93,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromInventory(ulong inventoryId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+                                                                              HttpQuery? query = null)
         {
             var path = $"{Inventory.PATH}{inventoryId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -121,14 +112,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobTemplateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                HttpQuery? query = null)
         {
             var path = $"{JobTemplate.PATH}{jobTemplateId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -142,14 +131,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="scheduleId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromSchedule(ulong scheduleId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Schedule.PATH}{scheduleId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -163,14 +150,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjtnId">Id of Workflow Job Tempalte Node</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromWorkflowJobTemplateNode(ulong wjtnId,
-                                                                                            NameValueCollection? query = null,
-                                                                                            bool getAll = false)
+                                                                                            HttpQuery? query = null)
         {
             var path = $"{WorkflowJobTemplateNode.PATH}{wjtnId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -184,14 +169,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjnId">Id of Workflow Job Tempalte Node</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<InstanceGroup> FindFromWorkflowJobNode(ulong wjnId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
+                                                                                    HttpQuery? query = null)
         {
             var path = $"{WorkflowJobNode.PATH}{wjnId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {

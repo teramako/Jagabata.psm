@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -70,11 +69,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/workflow_job_nodes/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<WorkflowJobNode> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<WorkflowJobNode> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query))
             {
                 foreach (var jobNode in result.Contents.Results)
                 {

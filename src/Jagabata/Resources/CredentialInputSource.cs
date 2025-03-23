@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface ICredentialInputSource
@@ -35,11 +33,10 @@ namespace Jagabata.Resources
         /// API Path: <c>api/v2/credential_input_sources/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialInputSource> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<CredentialInputSource> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(PATH, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -53,14 +50,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="credentialId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<CredentialInputSource> FindFromCredential(ulong credentialId,
-                                                                                       NameValueCollection? query = null,
-                                                                                       bool getAll = false)
+                                                                                       HttpQuery? query = null)
         {
             var path = $"{Credential.PATH}{credentialId}/input_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {

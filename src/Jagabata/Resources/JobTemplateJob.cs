@@ -157,11 +157,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/jobs/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplateJob> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<JobTemplateJob> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -175,14 +174,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobTemplateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobTemplateJob> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{Resources.JobTemplate.PATH}{jobTemplateId}/jobs/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query))
             {
                 foreach (var job in result.Contents.Results)
                 {

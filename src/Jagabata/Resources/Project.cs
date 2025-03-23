@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -118,11 +117,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/projects/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<Project> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<Project> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -136,14 +134,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Project> FindFromOrganization(ulong organizationId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -157,14 +153,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Project> FindFromUser(ulong userId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+                                                                   HttpQuery? query = null)
         {
             var path = $"{User.PATH}{userId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -178,14 +172,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="teamId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Project> FindFromTeam(ulong teamId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+                                                                   HttpQuery? query = null)
         {
             var path = $"{Team.PATH}{teamId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
             {
                 foreach (var project in result.Contents.Results)
                 {

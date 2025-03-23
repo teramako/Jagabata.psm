@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IExecutionEnvironment
@@ -57,11 +55,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/execution_environments/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ExecutionEnvironment> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<ExecutionEnvironment> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query))
             {
                 foreach (var exeEnv in result.Contents.Results)
                 {
@@ -75,14 +72,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ExecutionEnvironment> FindFromOrganization(ulong organizationId,
-                                                                                        NameValueCollection? query = null,
-                                                                                        bool getAll = false)
+                                                                                        HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/execution_environments/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query))
             {
                 foreach (var exeEnv in result.Contents.Results)
                 {

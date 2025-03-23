@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -139,14 +138,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobEvent> FindFromJob(ulong jobId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+                                                                   HttpQuery? query = null)
         {
             var path = $"{JobTemplateJobBase.PATH}{jobId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
@@ -160,14 +157,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobEvent> FindFromGroup(ulong groupId,
-                                                                     NameValueCollection? query = null,
-                                                                     bool getAll = false)
+                                                                     HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
@@ -181,14 +176,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobEvent> FindFromHost(ulong hostId,
-                                                                    NameValueCollection? query = null,
-                                                                    bool getAll = false)
+                                                                    HttpQuery? query = null)
         {
             var path = $"{Resources.Host.PATH}{hostId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {

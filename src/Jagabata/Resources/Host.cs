@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -54,11 +53,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/hosts/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Host> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Host> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(PATH, query))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -72,14 +70,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Host> FindFromInventory(ulong inventoryId,
-                                                                     NameValueCollection? query = null,
-                                                                     bool getAll = false)
+                                                                     HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -93,14 +89,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventorySourceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Host> FindFromInventorySource(ulong inventorySourceId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{InventorySource.PATH}{inventorySourceId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -114,14 +108,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Host> FindAllFromGroup(ulong groupId,
-                                                                    NameValueCollection? query = null,
-                                                                    bool getAll = false)
+                                                                    HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/all_hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -135,14 +127,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Host> FindFromGroup(ulong groupId,
-                                                                 NameValueCollection? query = null,
-                                                                 bool getAll = false)
+                                                                 HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
             {
                 foreach (var host in result.Contents.Results)
                 {

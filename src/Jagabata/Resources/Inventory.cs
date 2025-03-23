@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class Inventory(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -28,11 +26,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/inventories/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Inventory> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
@@ -46,14 +43,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Inventory> FindFromOrganization(ulong organizationId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
@@ -67,14 +62,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Inventory> FindInputInventoires(ulong inventoryId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{PATH}{inventoryId}/input_inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query))
             {
                 foreach (var inventory in result.Contents.Results)
                 {

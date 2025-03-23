@@ -75,11 +75,11 @@ namespace Jagabata
         {
             if (Related.TryGetPath(relatedKey, out var path))
             {
-                var query = System.Web.HttpUtility.ParseQueryString(queryString);
-                if (!string.IsNullOrEmpty(orderBy))
-                    query.Set("order_by", orderBy);
-                query.Set("page_size", $"{pageSize}");
-                query.Set("page", $"{page}");
+                var query = QueryBuilder.Parse(queryString, null)
+                                        .SetOrderBy(orderBy)
+                                        .SetPageSize(pageSize)
+                                        .SetStartPage(page)
+                                        .Build();
                 return RestAPI.GetResultSet<T>(path, query);
             }
             return [];

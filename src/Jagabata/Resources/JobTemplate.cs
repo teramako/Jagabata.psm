@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -168,11 +167,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/job_templates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplate> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<JobTemplate> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -186,14 +184,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobTemplate> FindFromOrganization(ulong organizationId,
-                                                                               NameValueCollection? query = null,
-                                                                               bool getAll = false)
+                                                                               HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -207,14 +203,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobTemplate> FindFromInventory(ulong inventoryId,
-                                                                            NameValueCollection? query = null,
-                                                                            bool getAll = false)
+                                                                            HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {

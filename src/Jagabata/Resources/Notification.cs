@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface INotification
@@ -41,11 +39,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/notifications/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Notification> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Notification> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Notification>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Notification>(PATH, query))
             {
                 foreach (var notification in result.Contents.Results)
                 {

@@ -46,11 +46,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/activity_stream/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<ActivityStream> Find(HttpQuery? query)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(PATH, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -64,14 +63,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="applicationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromApplication(ulong applicationId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{Application.PATH}{applicationId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -85,14 +82,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromToken(ulong tokenId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{OAuth2AccessToken.PATH}{tokenId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -106,14 +101,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromOrganization(ulong organizationId,
-                                                                                  NameValueCollection? query = null,
-                                                                                  bool getAll = false)
+                                                                                  HttpQuery? query = null)
         {
             var path = $"{Organization.PATH}{organizationId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -127,14 +120,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromUser(ulong userId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
+                                                                          HttpQuery? query = null)
         {
             var path = $"{User.PATH}{userId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -148,14 +139,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromProject(ulong projectId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Project.PATH}{projectId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -169,14 +158,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="teamId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromTeam(ulong teamId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
+                                                                          HttpQuery? query = null)
         {
             var path = $"{Team.PATH}{teamId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -190,14 +177,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="credentialId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromCredential(ulong credentialId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                HttpQuery? query = null)
         {
             var path = $"{Credential.PATH}{credentialId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -211,14 +196,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="credentialTypeId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromCredentialType(ulong credentialTypeId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                    HttpQuery? query = null)
         {
             var path = $"{CredentialType.PATH}{credentialTypeId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -232,14 +215,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromInventory(ulong inventoryId,
-                                                                               NameValueCollection? query = null,
-                                                                               bool getAll = false)
+                                                                               HttpQuery? query = null)
         {
             var path = $"{Inventory.PATH}{inventoryId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -253,14 +234,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventorySourceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromInventorySource(ulong inventorySourceId,
-                                                                                     NameValueCollection? query = null,
-                                                                                     bool getAll = false)
+                                                                                     HttpQuery? query = null)
         {
             var path = $"{InventorySource.PATH}{inventorySourceId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -274,14 +253,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromGroup(ulong groupId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -298,11 +275,10 @@ namespace Jagabata.Resources
         /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromHost(ulong hostId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
+                                                                          HttpQuery? query = null)
         {
             var path = $"{Host.PATH}{hostId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -316,14 +292,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobTemplateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{JobTemplate.PATH}{jobTemplateId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -337,14 +311,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromJob(ulong jobId,
-                                                                         NameValueCollection? query = null,
-                                                                         bool getAll = false)
+                                                                         HttpQuery? query = null)
         {
             var path = $"{JobTemplateJobBase.PATH}{jobId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -358,14 +330,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="cmdId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromAdHocCommand(ulong cmdId,
-                                                                                  NameValueCollection? query = null,
-                                                                                  bool getAll = false)
+                                                                                  HttpQuery? query = null)
         {
             var path = $"{AdHocCommandBase.PATH}{cmdId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -379,14 +349,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjtId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromWorkflowJobTemplate(ulong wjtId,
-                                                                                         NameValueCollection? query = null,
-                                                                                         bool getAll = false)
+                                                                                         HttpQuery? query = null)
         {
             var path = $"{WorkflowJobTemplate.PATH}{wjtId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -400,14 +368,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromWorkflowJob(ulong jobId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{WorkflowJobBase.PATH}{jobId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -421,14 +387,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="exeEnvId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindFromExecutionEnvironment(ulong exeEnvId,
-                                                                                          NameValueCollection? query = null,
-                                                                                          bool getAll = false)
+                                                                                          HttpQuery? query = null)
         {
             var path = $"{ExecutionEnvironment.PATH}{exeEnvId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
             {
                 foreach (var activity in result.Contents.Results)
                 {

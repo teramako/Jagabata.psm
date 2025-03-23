@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IProjectUpdateJob : IUnifiedJob
@@ -101,11 +99,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/project_updates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<ProjectUpdateJob> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<ProjectUpdateJob> Find(HttpQuery? query)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(PATH, query))
             {
                 foreach (var projectUpdateJob in result.Contents.Results)
                 {
@@ -119,14 +116,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ProjectUpdateJob> FindFromProject(ulong projectId,
-                                                                               NameValueCollection? query = null,
-                                                                               bool getAll = false)
+                                                                               HttpQuery? query = null)
         {
             var path = $"{Resources.Project.PATH}{projectId}/project_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(path, query))
             {
                 foreach (var projectUpdateJob in result.Contents.Results)
                 {

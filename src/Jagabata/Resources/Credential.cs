@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface ICredential
@@ -50,11 +48,10 @@ namespace Jagabata.Resources
         /// API Path: <c>api/v2/credentials/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Credential> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(PATH, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -68,14 +65,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromOrganization(ulong organizationId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+                                                                              HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -89,14 +84,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindGalaxyFromOrganization(ulong organizationId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
+                                                                                    HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/galaxy_credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -110,14 +103,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromUser(ulong userId,
-                                                                      NameValueCollection? query = null,
-                                                                      bool getAll = false)
+                                                                      HttpQuery? query = null)
         {
             var path = $"{User.PATH}{userId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -131,14 +122,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="teamId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromTeam(ulong teamId,
-                                                                      NameValueCollection? query = null,
-                                                                      bool getAll = false)
+                                                                      HttpQuery? query = null)
         {
             var path = $"{Team.PATH}{teamId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -152,14 +141,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="credentialTypeId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromCredentialType(ulong credentialTypeId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                HttpQuery? query = null)
         {
             var path = $"{Resources.CredentialType.PATH}{credentialTypeId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -173,14 +160,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventorySourceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromInventorySource(ulong inventorySourceId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{InventorySource.PATH}{inventorySourceId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -194,14 +179,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryUpdateJobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromInventoryUpdateJob(ulong inventoryUpdateJobId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
+                                                                                    HttpQuery? query = null)
         {
             var path = $"{InventoryUpdateJobBase.PATH}{inventoryUpdateJobId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -215,14 +198,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobTemplateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromJobTemplate(ulong jobTemplateId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{JobTemplate.PATH}{jobTemplateId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -236,14 +217,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromJobTemplateJob(ulong jobId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                HttpQuery? query = null)
         {
             var path = $"{JobTemplateJobBase.PATH}{jobId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -257,14 +236,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="scheduleId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromSchedule(ulong scheduleId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
+                                                                          HttpQuery? query = null)
         {
             var path = $"{Schedule.PATH}{scheduleId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -278,14 +255,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjtnId">ID of Workflow Job Template Node</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromWorkflowJobTemplateNode(ulong wjtnId,
-                                                                                         NameValueCollection? query = null,
-                                                                                         bool getAll = false)
+                                                                                         HttpQuery? query = null)
         {
             var path = $"{WorkflowJobTemplateNode.PATH}{wjtnId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -299,14 +274,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjnId">ID of Workflow Job Node</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindFromWorkflowJobNode(ulong wjnId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+                                                                                 HttpQuery? query = null)
         {
             var path = $"{WorkflowJobNode.PATH}{wjnId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
             {
                 foreach (var credential in result.Contents.Results)
                 {

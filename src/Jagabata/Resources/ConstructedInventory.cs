@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class ConstructedInventory(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -30,11 +28,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/constructed_inventories/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ConstructedInventory> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<ConstructedInventory> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ConstructedInventory>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ConstructedInventory>(PATH, query))
             {
                 foreach (var inventory in result.Contents.Results)
                 {

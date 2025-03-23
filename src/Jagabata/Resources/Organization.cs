@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -33,11 +32,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/organizations/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Organization> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Organization> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(PATH, query))
             {
                 foreach (var org in result.Contents.Results)
                 {
@@ -51,14 +49,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Organization> FindAdministeredByUser(ulong userId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
+                                                                                  HttpQuery? query = null)
         {
             var path = $"{User.PATH}/{userId}/admin_of_organizations/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query))
             {
                 foreach (var org in result.Contents.Results)
                 {
@@ -72,14 +68,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Organization> FindFromUser(ulong userId,
-                                                                        NameValueCollection? query = null,
-                                                                        bool getAll = false)
+                                                                        HttpQuery? query = null)
         {
             var path = $"{User.PATH}/{userId}/organizations/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query))
             {
                 foreach (var org in result.Contents.Results)
                 {

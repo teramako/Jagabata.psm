@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IAdHocCommand : IUnifiedJob
@@ -112,11 +110,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/ad_hoc_commands/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<AdHocCommand> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<AdHocCommand> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(PATH, query))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -130,14 +127,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommand> FindFromInventory(ulong inventoryId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+                                                                             HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -151,14 +146,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommand> FindFromGroup(ulong groupId,
-                                                                         NameValueCollection? query = null,
-                                                                         bool getAll = false)
+                                                                         HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -172,14 +165,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommand> FindFromHost(ulong hostId,
-                                                                        NameValueCollection? query = null,
-                                                                        bool getAll = false)
+                                                                        HttpQuery? query = null)
         {
             var path = $"{Host.PATH}{hostId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
             {
                 foreach (var job in result.Contents.Results)
                 {

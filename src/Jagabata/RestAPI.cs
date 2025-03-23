@@ -1,5 +1,4 @@
 using Jagabata.Resources;
-using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
@@ -280,27 +279,27 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="query"></param>
-        /// <param name="all"></param>
         /// <returns></returns>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
         public static async IAsyncEnumerable<RestAPIResult<ResultSet<T>>> GetResultSetAsync<T>(string path,
-                                                                                               NameValueCollection? query,
-                                                                                               bool all = false)
+                                                                                               HttpQuery? query = null)
             where T : class
         {
-            RestAPIResult<ResultSet<T>> apiResult;
-            string nextPathAndQuery = query is null || query.Count == 0 ? path : $"{path}?{query}";
+            query ??= [];
+            var count = 0;
+            var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
             do
             {
-                apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery);
+                var apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery);
                 yield return apiResult;
                 if (apiResult.Contents is null)
                 {
                     break;
                 }
                 nextPathAndQuery = apiResult.Contents.Next ?? string.Empty;
-            } while (all && !string.IsNullOrEmpty(nextPathAndQuery));
+            } while ((query.IsInfinity || ++count < query.QueryCount)
+                     && !string.IsNullOrEmpty(nextPathAndQuery));
         }
 
         /// <summary>
@@ -310,14 +309,13 @@ namespace Jagabata
         /// <typeparam name="T">Resource class</typeparam>
         /// <param name="path"></param>
         /// <param name="query"></param>
-        /// <param name="all"></param>
         /// <returns></returns>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
-        /// <seealso cref="GetResultSetAsync{T}(string, NameValueCollection?, bool)"/>
-        public static IEnumerable<T> GetResultSet<T>(string path, NameValueCollection? query = null, bool all = false) where T : class
+        /// <seealso cref="GetResultSetAsync{T}(string, HttpQuery)"/>
+        public static IEnumerable<T> GetResultSet<T>(string path, HttpQuery? query = null) where T : class
         {
-            foreach (var resultSet in GetResultSetAsync<T>(path, query, all).ToBlockingEnumerable())
+            foreach (var resultSet in GetResultSetAsync<T>(path, query).ToBlockingEnumerable())
             {
                 foreach (T result in resultSet.Contents.Results)
                 {

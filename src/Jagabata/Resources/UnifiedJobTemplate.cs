@@ -96,15 +96,14 @@ namespace Jagabata.Resources
         {
             if (Related.TryGetPath("schedules", out var path))
             {
-                var query = HttpUtility.ParseQueryString("");
-                query.Add("order_by", "next_run");
+                var query = new HttpQuery("order_by=next_run");
                 if (!all)
                 {
                     query.Add("enabled", "true");
                     query.Add("not__next_run__isnull", "true");
                 }
                 query.Add("page_size", $"{count}");
-                return RestAPI.GetResultSet<Schedule>(path, query, false);
+                return RestAPI.GetResultSet<Schedule>(path, query);
             }
             return [];
         }

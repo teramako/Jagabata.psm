@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IWorkflowJob : IUnifiedJob
@@ -115,11 +113,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/workflow_jobs/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<WorkflowJob> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<WorkflowJob> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJob>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJob>(PATH, query))
             {
                 foreach (var workflowJob in result.Contents.Results)
                 {
@@ -133,14 +130,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="wjtId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<WorkflowJob> FindFromWorkflowJobTemplate(ulong wjtId,
-                                                                                      NameValueCollection? query = null,
-                                                                                      bool getAll = false)
+                                                                                      HttpQuery? query = null)
         {
             var path = $"{Resources.WorkflowJobTemplate.PATH}{wjtId}/workflow_jobs/";
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJob>(path, query))
             {
                 foreach (var workflowJob in result.Contents.Results)
                 {

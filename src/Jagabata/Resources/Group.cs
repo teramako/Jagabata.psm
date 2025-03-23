@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IGroup
@@ -100,11 +98,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/groups/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Group> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Group> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(PATH, query))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -118,14 +115,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Group> FindFromInventory(ulong inventoryId,
-                                                                      NameValueCollection? query = null,
-                                                                      bool getAll = false)
+                                                                      HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -139,14 +134,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventoryId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Group> FindOnlyRootFromInventory(ulong inventoryId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+                                                                              HttpQuery? query = null)
         {
             var path = $"{Resources.Inventory.PATH}{inventoryId}/root_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -160,14 +153,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="inventorySourceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Group> FindFromInventorySource(ulong inventorySourceId,
-                                                                            NameValueCollection? query = null,
-                                                                            bool getAll = false)
+                                                                            HttpQuery? query = null)
         {
             var path = $"{InventorySource.PATH}{inventorySourceId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -181,14 +172,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Group> FindAllFromHost(ulong hostId,
-                                                                    NameValueCollection? query = null,
-                                                                    bool getAll = false)
+                                                                    HttpQuery? query = null)
         {
             var path = $"{Host.PATH}{hostId}/all_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -202,14 +191,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Group> FindFromHost(ulong hostId,
-                                                                 NameValueCollection? query = null,
-                                                                 bool getAll = false)
+                                                                 HttpQuery? query = null)
         {
             var path = $"{Host.PATH}{hostId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
             {
                 foreach (var group in result.Contents.Results)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class ProjectUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -17,14 +15,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectUpdateJobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ProjectUpdateJobEvent> FindFromProjectUpdateJob(ulong projectUpdateJobId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
+                                                                                             HttpQuery? query = null)
         {
             var path = $"{ProjectUpdateJobBase.PATH}{projectUpdateJobId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJobEvent>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJobEvent>(path, query))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {

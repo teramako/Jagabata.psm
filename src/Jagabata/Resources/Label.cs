@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface ILabel
@@ -36,11 +34,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/labels/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Label> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Label> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Label>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Label>(PATH, query))
             {
                 foreach (var label in result.Contents.Results)
                 {

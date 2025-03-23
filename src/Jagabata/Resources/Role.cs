@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public class Role(ulong id, ResourceType type, string url, RelatedDictionary related, Role.Summary summaryFields,
@@ -23,11 +21,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/roles/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Role> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Role> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Role>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Role>(PATH, query))
             {
                 foreach (var role in result.Contents.Results)
                 {

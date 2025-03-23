@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -79,11 +78,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/workflow_job_templates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<WorkflowJobTemplate> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<WorkflowJobTemplate> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(PATH, query))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -97,14 +95,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<WorkflowJobTemplate> FindFromOrganization(ulong organizationId,
-                                                                                       NameValueCollection? query = null,
-                                                                                       bool getAll = false)
+                                                                                       HttpQuery? query = null)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/workflow_job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(path, query))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public abstract class WorkflowApprovalBase : UnifiedJob
@@ -53,11 +51,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/workflow_approvals/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<WorkflowApproval> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<WorkflowApproval> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowApproval>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowApproval>(PATH, query))
             {
                 foreach (var workflowJob in result.Contents.Results)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface ISystemJob : IUnifiedJob
@@ -100,11 +98,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/system_job_templates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<SystemJob> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<SystemJob> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJob>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJob>(PATH, query))
             {
                 foreach (var systemJob in result.Contents.Results)
                 {

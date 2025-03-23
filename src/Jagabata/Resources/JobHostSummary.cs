@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -28,14 +27,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobHostSummary> FindFromGroup(ulong groupId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+                                                                           HttpQuery? query = null)
         {
             var path = $"{Group.PATH}{groupId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
             {
                 foreach (var jobHostSummary in result.Contents.Results)
                 {
@@ -49,14 +46,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="hostId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobHostSummary> FindFromHost(ulong hostId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
+                                                                          HttpQuery? query = null)
         {
             var path = $"{Resources.Host.PATH}{hostId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
             {
                 foreach (var jobHostSummary in result.Contents.Results)
                 {
@@ -70,14 +65,12 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="jobId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<JobHostSummary> FindFromJob(ulong jobId,
-                                                                         NameValueCollection? query = null,
-                                                                         bool getAll = false)
+                                                                         HttpQuery? query = null)
         {
             var path = $"{JobTemplateJobBase.PATH}{jobId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
             {
                 foreach (var jobHostSummary in result.Contents.Results)
                 {

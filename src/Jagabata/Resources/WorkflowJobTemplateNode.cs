@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace Jagabata.Resources
 {
     public interface IWorkflowJobTemplateNode
@@ -57,11 +55,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/workflow_job_templates_nodes/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<WorkflowJobTemplateNode> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<WorkflowJobTemplateNode> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplateNode>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplateNode>(PATH, query))
             {
                 foreach (var jobTemplateNode in result.Contents.Results)
                 {
