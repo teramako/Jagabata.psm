@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets;
 
@@ -9,7 +7,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     public virtual ulong[] Id { get; set; } = [];
 
     protected HashSet<ulong> IdSet { get; } = [];
-    protected NameValueCollection Query { get; } = HttpUtility.ParseQueryString("");
+    protected HttpQuery Query { get; } = [];
 
     private string? _apiPath;
     protected virtual string ApiPath
@@ -49,9 +47,13 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
         }
         else
         {
-            Query.Add("id__in", string.Join(',', IdSet));
-            Query.Add("page_size", $"{IdSet.Count}");
-            foreach (var resultSet in GetResultSet<TResource>(ApiPath, Query, true))
+            var query = new HttpQuery(string.Empty, QueryCount.Infinity)
+            {
+                Query,
+                { "id__in", string.Join(',', IdSet) },
+                { "page_size", $"{IdSet.Count}" }
+            };
+            foreach (var resultSet in GetResultSet<TResource>(ApiPath, query))
             {
                 foreach (var res in resultSet.Results)
                 {

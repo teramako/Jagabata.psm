@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
-using System.Collections.Specialized;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -33,11 +32,10 @@ namespace Jagabata.Cmdlets
                            "modified_by", "credentials", "instance_group", "labels")]
         public override string[] OrderBy { get; set; } = ["!id"];
 
-        private IEnumerable<ResultSet> GetResultSet(string path,
-                                                    NameValueCollection? query = null,
-                                                    bool getAll = false)
+        private IEnumerable<ResultSet> GetResultSet(string path, HttpQuery query)
         {
-            var nextPathAndQuery = path + (query is null ? "" : $"?{query}");
+            var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
+            var count = 0;
             do
             {
                 WriteVerboseRequest(nextPathAndQuery, Method.GET);
@@ -67,19 +65,20 @@ namespace Jagabata.Cmdlets
 
                 yield return resultSet;
 
-                nextPathAndQuery = string.IsNullOrEmpty(resultSet?.Next) ? string.Empty : resultSet.Next;
-            } while (getAll && !string.IsNullOrEmpty(nextPathAndQuery));
+                nextPathAndQuery = resultSet.Next ?? string.Empty;
+            } while ((query.IsInfinity || ++count < query.QueryCount)
+                     && !string.IsNullOrEmpty(nextPathAndQuery));
         }
         private void WriteResultSet(string path)
         {
-            foreach (var resultSet in GetResultSet(path, Query, All))
+            foreach (var resultSet in GetResultSet(path, Query.Build()))
             {
                 WriteObject(resultSet.Results, true);
             }
         }
         private void WriteResultSet<T>(string path) where T : class
         {
-            foreach (var resultSet in GetResultSet<T>(path, Query, All))
+            foreach (var resultSet in GetResultSet<T>(path, Query.Build()))
             {
                 WriteObject(resultSet.Results, true);
             }

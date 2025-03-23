@@ -63,8 +63,8 @@ namespace Jagabata.Cmdlets
         /// <param name="id"></param>
         private void GetJobsFromWorkflowJob(ulong id)
         {
-            var query = HttpUtility.ParseQueryString("do_not_run=false&order_by=modified&page_size=20");
-            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJobBase.PATH}{id}/workflow_nodes/?{query}", true))
+            var query = new HttpQuery("do_not_run=false&order_by=modified&page_size=200", QueryCount.Infinity);
+            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJobBase.PATH}{id}/workflow_nodes/", query))
             {
                 foreach (var node in resultSet.Results)
                 {

@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Management.Automation;
-using System.Web;
 using Jagabata.Cmdlets.ArgumentTransformation;
 
 namespace Jagabata.Cmdlets;
@@ -99,12 +98,13 @@ public abstract class FindCommandBase : APICmdletBase
              .SetSearchWords(Search)
              .SetOrderBy([.. OrderBy.Select(static item => item.StartsWith('!') ? $"-{item[1..]}" : item)])
              .SetPageSize(Count)
-             .SetStartPage(Page);
+             .SetStartPage(Page)
+             .SetQueryCount(All ? QueryCount.Infinity : QueryCount.Default);
     }
 
     protected virtual void Find<T>(string path) where T : class
     {
-        foreach (var resultSet in GetResultSet<T>(path, Query.Build(), All))
+        foreach (var resultSet in GetResultSet<T>(path, Query.Build()))
         {
             WriteObject(resultSet.Results, true);
         }

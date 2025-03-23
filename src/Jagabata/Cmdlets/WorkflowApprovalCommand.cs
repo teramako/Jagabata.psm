@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets
 {
@@ -94,10 +93,12 @@ namespace Jagabata.Cmdlets
                 return;
             }
 
-            var query = HttpUtility.ParseQueryString("");
-            query.Add("id__in", string.Join(',', treatedIds));
-            query.Add("page_size", $"{treatedIds.Count}");
-            foreach (var resultSet in GetResultSet<WorkflowApproval>(WorkflowApproval.PATH, query, false))
+            var query = new HttpQuery()
+            {
+                { "id__in", string.Join(',', treatedIds) },
+                { "page_size", $"{treatedIds.Count}" },
+            };
+            foreach (var resultSet in GetResultSet<WorkflowApproval>(WorkflowApprovalBase.PATH, query))
             {
                 WriteObject(resultSet.Results, true);
             }

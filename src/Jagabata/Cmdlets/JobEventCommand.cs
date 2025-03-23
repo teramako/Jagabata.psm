@@ -48,7 +48,7 @@ namespace Jagabata.Cmdlets
                     {
                         if (OrderBy.Length == 1 && OrderBy[0] == "counter")
                         {
-                            Query.Set("order_by", "-job,counter");
+                            Query.SetOrderBy("-job", "counter");
                         }
                         Find<JobEvent>($"{Host.PATH}{Resource.Id}/job_events/");
                     }
@@ -56,7 +56,7 @@ namespace Jagabata.Cmdlets
                 case ResourceType.Group:
                     if (OrderBy.Length == 1 && OrderBy[0] == "counter")
                     {
-                        Query.Set("order_by", "-job,counter");
+                        Query.SetOrderBy("-job", "counter");
                     }
                     Find<JobEvent>($"{Group.PATH}{Resource.Id}/job_events/");
                     break;

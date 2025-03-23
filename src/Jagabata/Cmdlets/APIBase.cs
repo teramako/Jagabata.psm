@@ -1,6 +1,5 @@
 using Jagabata.Resources;
 using System.Collections.Frozen;
-using System.Collections.Specialized;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets;
@@ -80,29 +79,20 @@ public abstract class APICmdletBase : Cmdlet
             }
         }
     }
-    protected IEnumerable<ResultSet<TValue>> GetResultSet<TValue>(string path,
-                                                                  NameValueCollection? query = null,
-                                                                  bool getAll = false)
-        where TValue : class
-    {
-        var pathAndQuery = path + (query is null ? "" : $"?{query}");
-        foreach (var resultSet in GetResultSet<TValue>(pathAndQuery, getAll))
-        {
-            yield return resultSet;
-        }
-    }
     /// <summary>
     /// Send requests to retrieve resource list.
     /// (HTTP method: <c>GET</c>)
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    /// <param name="pathAndQuery"></param>
-    /// <param name="getAll"></param>
+    /// <param name="path"></param>
+    /// <param name="query"></param>
     /// <returns>Returns successed responses</returns>
-    protected IEnumerable<ResultSet<TValue>> GetResultSet<TValue>(string pathAndQuery, bool getAll = false)
+    protected IEnumerable<ResultSet<TValue>> GetResultSet<TValue>(string path, HttpQuery? query = null)
         where TValue : class
     {
-        string nextPathAndQuery = pathAndQuery;
+        query ??= [];
+        var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
+        var count = 0;
         do
         {
             WriteVerboseRequest(nextPathAndQuery, Method.GET);
@@ -139,8 +129,10 @@ public abstract class APICmdletBase : Cmdlet
 
             yield return resultSet;
 
-            nextPathAndQuery = string.IsNullOrEmpty(resultSet?.Next) ? string.Empty : resultSet.Next;
-        } while (getAll && !string.IsNullOrEmpty(nextPathAndQuery));
+            nextPathAndQuery = resultSet.Next;
+        }
+        while ((query.IsInfinity || ++count < query.QueryCount)
+               && !string.IsNullOrEmpty(nextPathAndQuery));
     }
     /// <summary>
     /// Send a request to create the resource.

@@ -14,7 +14,8 @@ namespace Jagabata.Cmdlets
     {
         protected override void EndProcessing()
         {
-            foreach (var resultSet in GetResultSet<User>("/api/v2/me/", true))
+            var query = new HttpQuery(QueryCount.Infinity);
+            foreach (var resultSet in GetResultSet<User>("/api/v2/me/", query))
             {
                 WriteObject(resultSet.Results, true);
             }

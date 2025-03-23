@@ -45,11 +45,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Organization > 0 ? $"{Resources.Organization.PATH}{Organization}/notification_templates/" : NotificationTemplate.PATH;
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(Organization > 0
+                                       ? $"{Resources.Organization.PATH}{Organization}/notification_templates/"
+                                       : NotificationTemplate.PATH);
         }
     }
 

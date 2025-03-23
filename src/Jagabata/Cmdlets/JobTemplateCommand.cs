@@ -7,7 +7,6 @@ using System.Management.Automation;
 using System.Security;
 using System.Text;
 using System.Text.Json;
-using System.Web;
 
 namespace Jagabata.Cmdlets
 {
@@ -360,10 +359,12 @@ namespace Jagabata.Cmdlets
                 if (credentialIds.Length == 0)
                     return false;
 
-                var query = HttpUtility.ParseQueryString("");
-                query.Set("id__in", string.Join(',', credentialIds));
-                query.Set("page_size", $"{credentialIds.Length}");
-                foreach (var resultSet in GetResultSet<Credential>(Credential.PATH, query, true))
+                var query = new HttpQuery
+                {
+                    { "id__in", string.Join(',', credentialIds) },
+                    { "page_size", $"{credentialIds.Length}" }
+                };
+                foreach (var resultSet in GetResultSet<Credential>(Credential.PATH, query))
                 {
                     foreach (var cred in resultSet.Results)
                     {
