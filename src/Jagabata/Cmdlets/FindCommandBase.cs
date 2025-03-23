@@ -38,7 +38,7 @@ public abstract class FindCommandBase : APICmdletBase
     /// <seealso cref="FilterArgumentTransformationAttribute"/>
     [Parameter()]
     [FilterArgumentTransformation]
-    public NameValueCollection? Filter { get; set; }
+    public HttpQuery? Filter { get; set; }
 
     /// <summary>
     /// <c>"order_by"</c> query parameter for API.
@@ -81,7 +81,7 @@ public abstract class FindCommandBase : APICmdletBase
     [Parameter()]
     public SwitchParameter All { get; set; }
 
-    protected readonly NameValueCollection Query = HttpUtility.ParseQueryString("");
+    protected QueryBuilder Query { get; } = new();
 
     /// <summary>
     /// Add query parameters to <see cref="Query">Query</see>
@@ -95,26 +95,16 @@ public abstract class FindCommandBase : APICmdletBase
     /// </summary>
     protected virtual void SetupCommonQuery()
     {
-        if (Search is not null)
-        {
-            Query.Add("search", string.Join(',', Search));
-        }
-        if (OrderBy is not null)
-        {
-            Query.Add("order_by",
-                      string.Join(',', OrderBy.Select(static item => item.StartsWith('!') ? $"-{item[1..]}" : item)));
-        }
-        Query.Add("page_size", $"{Count}");
-        Query.Add("page", $"{Page}");
-        if (Filter is not null)
-        {
-            Query.Add(Filter);
-        }
+        Query.Add(Filter)
+             .SetSearchWords(Search)
+             .SetOrderBy([.. OrderBy.Select(static item => item.StartsWith('!') ? $"-{item[1..]}" : item)])
+             .SetPageSize(Count)
+             .SetStartPage(Page);
     }
 
     protected virtual void Find<T>(string path) where T : class
     {
-        foreach (var resultSet in GetResultSet<T>($"{path}?{Query}", All))
+        foreach (var resultSet in GetResultSet<T>(path, Query.Build(), All))
         {
             WriteObject(resultSet.Results, true);
         }
