@@ -200,18 +200,18 @@ namespace Jagabata
         public const string HtmlContentType = "text/html";
         public const string TextContentType = "text/plain";
 
-        public static async IAsyncEnumerable<RestAPIResult<ResultSet>> GetResultSetAsync(string path,
-                                                                                         NameValueCollection? query,
-                                                                                         bool all = false)
+        public static async IAsyncEnumerable<RestAPIResult<ResultSet>> GetResultSetAsync(string path, HttpQuery? query)
         {
-            string nextPathAndQuery = query is null || query.Count == 0 ? path : $"{path}?{query}";
-            RestAPIResult<ResultSet> apiResult;
+            query ??= [];
+            var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
+            var count = 0;
             do
             {
-                apiResult = await GetAsync<ResultSet>(nextPathAndQuery);
+                var apiResult = await GetAsync<ResultSet>(nextPathAndQuery);
                 yield return apiResult;
                 nextPathAndQuery = apiResult.Contents.Next ?? string.Empty;
-            } while (all && !string.IsNullOrEmpty(nextPathAndQuery));
+            } while ((query.IsInfinity || ++count < query.QueryCount)
+                     && !string.IsNullOrEmpty(nextPathAndQuery));
         }
         /// <summary>
         /// Request <see cref="HttpMethod.Get">GET</see> to AWX

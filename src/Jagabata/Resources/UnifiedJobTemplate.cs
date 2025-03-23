@@ -149,11 +149,10 @@ namespace Jagabata.Resources
         /// API Path: <c>/api/v2/unified_job_templates/</c>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<IUnifiedJobTemplate> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<IUnifiedJobTemplate> Find(HttpQuery? query = null)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query))
             {
                 foreach (var obj in result.Contents.Results)
                 {
