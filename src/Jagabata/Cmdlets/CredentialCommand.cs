@@ -71,11 +71,11 @@ namespace Jagabata.Cmdlets
         {
             if (CredentialTypeKind is not null)
             {
-                Query.Add("credential_type__kind__in", string.Join(',', CredentialTypeKind));
+                Query.Add("credential_type__kind", CredentialTypeKind);
             }
             if (CredentialTypeNamespace is not null)
             {
-                Query.Add("credential_type__namespace__in", string.Join(',', CredentialTypeNamespace));
+                Query.Add("credential_type__namespace", CredentialTypeNamespace);
             }
             SetupCommonQuery();
         }
