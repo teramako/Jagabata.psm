@@ -180,7 +180,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<InventorySource> Get(ulong id)
+        public static new async Task<InventorySource> Get(ulong id)
         {
             var apiResult = await RestAPI.GetAsync<InventorySource>($"{PATH}{id}/");
             return apiResult.Contents;

@@ -107,7 +107,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<Project> Get(ulong id)
+        public static new async Task<Project> Get(ulong id)
         {
             var apiResult = await RestAPI.GetAsync<Project>($"{PATH}{id}/");
             return apiResult.Contents;

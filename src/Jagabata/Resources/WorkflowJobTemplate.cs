@@ -68,7 +68,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<WorkflowJobTemplate> Get(ulong id)
+        public static new async Task<WorkflowJobTemplate> Get(ulong id)
         {
             var apiResult = await RestAPI.GetAsync<WorkflowJobTemplate>($"{PATH}{id}/");
             return apiResult.Contents;
