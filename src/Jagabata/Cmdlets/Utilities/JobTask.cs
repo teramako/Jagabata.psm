@@ -1,6 +1,5 @@
 using Jagabata.Resources;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets.Utilities
 {
@@ -151,8 +150,7 @@ namespace Jagabata.Cmdlets.Utilities
                 case ResourceType.WorkflowApproval:
                     return null;
                 default:
-                    var query = HttpUtility.ParseQueryString("format=json");
-                    query.Add("start_line", $"{JobLogStartNext}");
+                    var query = new HttpQuery($"format=json&start_line={JobLogStartNext}");
                     var apiResult = await RestAPI.GetAsync<JobLog>($"{Job.Url}stdout/?{query}");
                     var log = apiResult.Contents;
                     JobLogStartNext = log.Range.End;

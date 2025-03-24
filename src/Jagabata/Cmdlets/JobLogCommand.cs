@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Management.Automation;
 using System.Reflection;
@@ -48,7 +47,7 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         public SwitchParameter Dark { get; set; }
 
-        private readonly NameValueCollection Query = HttpUtility.ParseQueryString(string.Empty);
+        private readonly HttpQuery Query = [];
         /// <summary>
         /// HashSet to avoid duplicate retrieval of the same job
         /// </summary>

@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Text.Json.Serialization;
-using System.Web;
 
 namespace Jagabata.Resources
 {
@@ -127,9 +125,9 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<IUnifiedJobTemplate> Get(long id)
+        public static async Task<IUnifiedJobTemplate> Get(ulong id)
         {
-            var query = HttpUtility.ParseQueryString($"id={id}&page_size=1");
+            var query = new HttpQuery($"id={id}&page_size=1");
             var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
             return apiResult.Contents.Results.OfType<IUnifiedJobTemplate>().Single();
         }
@@ -139,7 +137,7 @@ namespace Jagabata.Resources
             {
                 throw new ArgumentException($"too many items: {nameof(idList)} Length must be less than or equal to 200.");
             }
-            var query = HttpUtility.ParseQueryString($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
+            var query = new HttpQuery($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
             var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
             return [.. apiResult.Contents.Results.OfType<IUnifiedJobTemplate>()];
         }

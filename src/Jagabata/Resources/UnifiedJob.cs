@@ -1,6 +1,3 @@
-using System.Collections.Specialized;
-using System.Web;
-
 namespace Jagabata.Resources
 {
     public interface IUnifiedJobSummary : IResource
@@ -100,7 +97,7 @@ namespace Jagabata.Resources
         /// <returns></returns>
         public static async Task<IUnifiedJob> Get(ulong id)
         {
-            var query = HttpUtility.ParseQueryString($"id={id}&page_size=1");
+            var query = new HttpQuery($"id={id}&page_size=1");
             var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
             return apiResult.Contents.Results.OfType<IUnifiedJob>().Single();
         }
@@ -110,7 +107,7 @@ namespace Jagabata.Resources
             {
                 throw new ArgumentException($"too many items: {nameof(idList)} Length must be less than or equal to 200.");
             }
-            var query = HttpUtility.ParseQueryString($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
+            var query = new HttpQuery($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
             var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
             return [.. apiResult.Contents.Results.OfType<IUnifiedJob>()];
         }
