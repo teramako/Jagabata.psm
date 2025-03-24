@@ -325,8 +325,9 @@ namespace Jagabata.Resources
         /// <param name="count">Number of jobs to retrieve</param>
         public InventoryUpdateJob[] GetRecentJobs(int count = 20)
         {
-            var path = $"{PATH}{Id}/inventory_updates/?order_by=-id&page_size={count}";
-            return [.. RestAPI.GetResultSet<InventoryUpdateJob>(path)];
+            return [.. RestAPI.GetResultSet<InventoryUpdateJob>($"{PATH}{Id}/inventory_updates/",
+                                                                new HttpQuery($"order_by=-id&page_size={count}"))
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
         }
 
         /// <summary>

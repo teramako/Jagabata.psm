@@ -313,14 +313,13 @@ namespace Jagabata
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
         /// <seealso cref="GetResultSetAsync{T}(string, HttpQuery)"/>
-        public static IEnumerable<T> GetResultSet<T>(string path, HttpQuery? query = null) where T : class
+        public static IEnumerable<RestAPIResult<ResultSet<T>>> GetResultSet<T>(string path,
+                                                                               HttpQuery? query = null)
+            where T : class
         {
-            foreach (var resultSet in GetResultSetAsync<T>(path, query).ToBlockingEnumerable())
+            foreach (var apiResult in GetResultSetAsync<T>(path, query).ToBlockingEnumerable())
             {
-                foreach (T result in resultSet.Contents.Results)
-                {
-                    yield return result;
-                }
+                yield return apiResult;
             }
         }
 

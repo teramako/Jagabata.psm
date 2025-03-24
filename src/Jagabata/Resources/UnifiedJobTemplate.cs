@@ -101,7 +101,8 @@ namespace Jagabata.Resources
                     query.Add("not__next_run__isnull", "true");
                 }
                 query.Add("page_size", $"{count}");
-                return RestAPI.GetResultSet<Schedule>(path, query);
+                return RestAPI.GetResultSet<Schedule>(path, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results);
             }
             return [];
         }

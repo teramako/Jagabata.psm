@@ -44,8 +44,9 @@ namespace Jagabata.Resources
         /// <param name="count">Number of jobs to retrieve</param>
         public WorkflowApproval[] GetRecentJobs(int count = 20)
         {
-            var path = $"{PATH}{Id}/approvals/?order_by=-id&page_size={count}";
-            return [.. RestAPI.GetResultSet<WorkflowApproval>(path)];
+            return [.. RestAPI.GetResultSet<WorkflowApproval>($"{PATH}{Id}/approvals/",
+                                                              new HttpQuery($"order_by=-id&page_size={count}"))
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
         }
 
         protected override CacheItem GetCacheItem()

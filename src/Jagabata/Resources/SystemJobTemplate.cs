@@ -60,8 +60,9 @@ namespace Jagabata.Resources
         /// <param name="count">Number of jobs to retrieve</param>
         public SystemJob[] GetRecentJobs(int count = 20)
         {
-            var path = $"{PATH}{Id}/jobs/?order_by=-id&page_size={count}";
-            return [.. RestAPI.GetResultSet<SystemJob>(path)];
+            return [.. RestAPI.GetResultSet<SystemJob>($"{PATH}{Id}/jobs/",
+                                                       new HttpQuery($"order_by=-id&page_size={count}"))
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
         }
 
         protected override CacheItem GetCacheItem()

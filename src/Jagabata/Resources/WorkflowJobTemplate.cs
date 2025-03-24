@@ -166,15 +166,9 @@ namespace Jagabata.Resources
         /// <param name="count">Number of jobs to retrieve</param>
         public WorkflowJob[] GetRecentJobs(int count = 20)
         {
-            // don't GET request when the recent jobs is empty
-            if (!SummaryFields.TryGetValue<RecentJobSummary[]>("RecentJobs", out var recentJobs)
-                || recentJobs.Length == 0)
-            {
-                return [];
-            }
-
-            var path = $"{PATH}{Id}/workflow_jobs/?order_by=-id&page_size={count}";
-            return [.. RestAPI.GetResultSet<WorkflowJob>(path)];
+            return [.. RestAPI.GetResultSet<WorkflowJob>($"{PATH}{Id}/workflow_jobs/",
+                                                         new HttpQuery($"order_by=-id&page_size={count}"))
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
         }
 
         /// <summary>

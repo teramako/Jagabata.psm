@@ -70,11 +70,13 @@ namespace Jagabata.Resources
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">thrown when this resource has no <paramref name="relatedKey"/> data</exception>
         protected IEnumerable<TResource> GetEvents<TResource>(string relatedKey = "events")
-            where TResource : class
+            where TResource : JobEventBase
         {
             return Related.TryGetPath(relatedKey, out var path)
-                ? RestAPI.GetResultSet<TResource>(path, new HttpQuery("order_by=counter&page_size=200", QueryCount.Infinity))
-                : throw new InvalidOperationException($"Has no events: {Type}:{Id}");
+                ? RestAPI.GetResultSet<TResource>(path,
+                                                  new HttpQuery("order_by=counter&page_size=200", QueryCount.Infinity))
+                         .SelectMany(static apiResult => apiResult.Contents.Results)
+                : [];
         }
 
         public override string ToString()
