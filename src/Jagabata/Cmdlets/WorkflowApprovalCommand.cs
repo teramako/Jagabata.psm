@@ -46,7 +46,7 @@ namespace Jagabata.Cmdlets
         {
             if (Status is not null)
             {
-                Query.Add("status__in", string.Join(',', Status.Select(s => $"{s}".ToLowerInvariant())));
+                Query.Add("status__in", string.Join(',', Status.Select(static s => $"{s}".ToLowerInvariant())));
             }
             SetupCommonQuery();
         }
