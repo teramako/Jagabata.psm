@@ -93,15 +93,11 @@ namespace Jagabata.Cmdlets
                 return;
             }
 
-            var query = new HttpQuery()
-            {
-                { "id__in", string.Join(',', treatedIds) },
-                { "page_size", $"{treatedIds.Count}" },
-            };
-            foreach (var resultSet in GetResultSet<WorkflowApproval>(WorkflowApprovalBase.PATH, query))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            WriteObject(new QueryBuilder().SetOrderBy("id")
+                                          .BuildWithIdList(treatedIds.Order().ToArray())
+                                          .SelectMany(query => GetResultSet<WorkflowApproval>(WorkflowApprovalBase.PATH, query))
+                                          .SelectMany(resultSet => resultSet.Results),
+                        true);
         }
     }
 

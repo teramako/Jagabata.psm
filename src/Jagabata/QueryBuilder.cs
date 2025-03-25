@@ -315,6 +315,25 @@ public class QueryBuilder : ISpanParsable<QueryBuilder>
         return query;
     }
 
+    public IEnumerable<HttpQuery> BuildWithIdList<T>(T[] values)
+    {
+        int remaining = values.Length;
+        int start = 0;
+        do
+        {
+            var query = Build();
+
+            int length = remaining >= MAX_PAGE_SIZE ? MAX_PAGE_SIZE : remaining;
+            remaining -= MAX_PAGE_SIZE;
+            query.Set("id__in", string.Join(',', values[new Range(start, start + length)]));
+            query.Set("page_size", $"{length}");
+
+            yield return query;
+            start += length;
+        }
+        while (remaining > 0);
+    }
+
     public static QueryBuilder Parse(ReadOnlySpan<char> s, IFormatProvider? provider = null)
     {
         return new QueryBuilder(s);

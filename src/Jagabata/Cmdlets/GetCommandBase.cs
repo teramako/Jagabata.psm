@@ -34,34 +34,15 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     /// Retrieve and output the resource for the gathered ID.
     /// Primarily called from within the <see cref="Cmdlet.EndProcessing"/> method
     /// </summary>
-    protected IEnumerable<TResource> GetResultSet()
+    protected IEnumerable<TResource> GetResultSet() => IdSet.Count switch
     {
-        if (IdSet.Count == 0)
-        {
-            yield break;
-        }
-        else if (IdSet.Count == 1)
-        {
-            var res = GetResource<TResource>($"{ApiPath}{IdSet.First()}/");
-            yield return res;
-        }
-        else
-        {
-            var query = new HttpQuery(string.Empty, QueryCount.Infinity)
-            {
-                Query,
-                { "id__in", string.Join(',', IdSet) },
-                { "page_size", $"{IdSet.Count}" }
-            };
-            foreach (var resultSet in GetResultSet<TResource>(ApiPath, query))
-            {
-                foreach (var res in resultSet.Results)
-                {
-                    yield return res;
-                }
-            }
-        }
-    }
+        0 => [],
+        1 => [GetResource<TResource>($"{ApiPath}{IdSet.First()}/")],
+        _ => new QueryBuilder(Query).SetOrderBy("id")
+                                    .BuildWithIdList(IdSet.Order().ToArray())
+                                    .SelectMany(query => GetResultSet<TResource>(ApiPath, query))
+                                    .SelectMany(static resultSet => resultSet.Results)
+    };
 
     /// <summary>
     /// Get and output resources individually.
