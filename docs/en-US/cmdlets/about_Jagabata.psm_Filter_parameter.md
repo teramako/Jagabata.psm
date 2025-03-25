@@ -47,7 +47,7 @@ The specification is almost same as "Type string".
 
 ### Type "IDictionary"
 
-Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conversion from PowerShell to the following `Jagabata.Cmdlets.Filter` type.
+Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conversion from PowerShell to the following `Jagabata.Filter` type.
 
 #### For example:
 
@@ -55,17 +55,17 @@ Accepts `IDictionary` type like `Hashtable` or `OrderedDictionary` for easy conv
 - `@{ NAME = "FIELD"; VALUE = "XYZ" }` => `field=XYZ`; Dictionary Keys are case-insensitive, and `Name` property value is converted to lowercase.
 - `@{ name = "Field"; value = "xyz"; type = "Contains" }` => `field__contains=xyz`.
 - `@{ name = "field__contains"; value = "xyz" }` => `field__contains=xyz`; same as above.
-- `@{ name = "field"; value = "xyz"; or = $true }` => `or__field__contains=xyz`.
-- `@{ name = "or__field"; value = "xyz" }` => `or__field__contains=xyz`; same as above.
-- `@{ name = "field"; value = "xyz"; not = $true }` => `not__field__contains=xyz`.
-- `@{ name = "not__field"; value = "xyz"; not = $true }` => `not__field__contains=xyz`; same as above.
+- `@{ name = "field"; value = "xyz"; or = $true }` => `or__field=xyz`.
+- `@{ name = "or__field"; value = "xyz" }` => `or__field=xyz`; same as above.
+- `@{ name = "field"; value = "xyz"; not = $true }` => `not__field=xyz`.
+- `@{ name = "not__field"; value = "xyz"; not = $true }` => `not__field=xyz`; same as above.
 - `@{ name = "created"; value = Get-Date 2024-01-01; type = "gt" }` => `creeated__gt=2024-01-01T00:00:00.0000000{TimeZone}`; `DateTime` object is converted to ISO Date string.
 - `@{ name = "id__in"; value = 1,2,3 }` => `id__in=1,2,3`; `IList` object is converted to commas separeted string.
 
-### Type "Jagabata.Cmdlets.Filter"
+### Type "Jagabata.Filter"
 
 This is the most primitive object of this filtering mechanism.
-All of the above types, `string`, `NameValueCollection` and `IDictionary`, are converted once into this `Jagabata.Cmdlets.Filter` type.
+All of the above types, `string`, `NameValueCollection` and `IDictionary`, are converted once into this `Jagabata.Filter` type.
 
 This type has following properties:
 
@@ -93,11 +93,11 @@ This type has following properties:
 
 #### For example:
 
-- `[Jagabata.Cmdlets.Filter]::new("field", "xyz")` => `field=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains")` => `field_icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $true)` => `or__field__icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $true, $true)` => `or__not__field__icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("field", "xyz", "icontains", $false, $true)` => `not__field__icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("field__icontains", "xyz")` => `field__icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("or__field__icontains", "xyz")` => `or__field__icontains=xyz`.
-- `[Jagabata.Cmdlets.Filter]::new("or__not__field__icontains", "xyz")` => `or__not__field__icontains=xyz`.
+- `[Jagabata.Filter]::new("field", "xyz")` => `field=xyz`.
+- `[Jagabata.Filter]::new("field", "xyz", "icontains")` => `field_icontains=xyz`.
+- `[Jagabata.Filter]::new("field", "xyz", "icontains", $true)` => `or__field__icontains=xyz`.
+- `[Jagabata.Filter]::new("field", "xyz", "icontains", $true, $true)` => `or__not__field__icontains=xyz`.
+- `[Jagabata.Filter]::new("field", "xyz", "icontains", $false, $true)` => `not__field__icontains=xyz`.
+- `[Jagabata.Filter]::new("field__icontains", "xyz")` => `field__icontains=xyz`.
+- `[Jagabata.Filter]::new("or__field__icontains", "xyz")` => `or__field__icontains=xyz`.
+- `[Jagabata.Filter]::new("or__not__field__icontains", "xyz")` => `or__not__field__icontains=xyz`.
