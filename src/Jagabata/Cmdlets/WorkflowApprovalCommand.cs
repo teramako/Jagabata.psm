@@ -56,7 +56,7 @@ namespace Jagabata.Cmdlets
             var path = WorkflowApprovalTemplate switch
             {
                 > 0 => $"{Resources.WorkflowApprovalTemplate.PATH}{WorkflowApprovalTemplate}/approvals/",
-                _ => WorkflowApproval.PATH
+                _ => WorkflowApprovalBase.PATH
             };
             Find<WorkflowApproval>(path);
         }
@@ -80,7 +80,7 @@ namespace Jagabata.Cmdlets
                 return;
             }
 
-            var result = CreateResource<string>($"{WorkflowApproval.PATH}{Id}/{Command}/");
+            var result = CreateResource<string>($"{WorkflowApprovalBase.PATH}{Id}/{Command}/");
             if (result is null)
             {
                 return;

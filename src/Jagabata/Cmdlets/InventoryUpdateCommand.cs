@@ -48,9 +48,9 @@ namespace Jagabata.Cmdlets
         {
             var path = Resource?.Type switch
             {
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Resource.Id}/scm_inventory_updates/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{Resource.Id}/scm_inventory_updates/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/inventory_updates/",
-                _ => InventoryUpdateJob.PATH
+                _ => InventoryUpdateJobBase.PATH
             };
             Find<InventoryUpdateJob>(path);
         }

@@ -39,7 +39,7 @@ namespace Jagabata.Cmdlets
         {
             var path = Resource.Type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/job_host_summaries/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/job_host_summaries/",
                 ResourceType.Host => $"{Host.PATH}{Resource.Id}/job_host_summaries/",
                 ResourceType.Group => $"{Group.PATH}{Resource.Id}/job_host_summaries/",
                 _ => throw new ArgumentException()

@@ -37,7 +37,7 @@ namespace Jagabata.Cmdlets
             switch (Resource.Type)
             {
                 case ResourceType.Job:
-                    Find<JobEvent>($"{JobTemplateJob.PATH}{Resource.Id}/job_events/");
+                    Find<JobEvent>($"{JobTemplateJobBase.PATH}{Resource.Id}/job_events/");
                     break;
                 case ResourceType.Host:
                     if (AdHocCommandEvent)
@@ -61,16 +61,16 @@ namespace Jagabata.Cmdlets
                     Find<JobEvent>($"{Group.PATH}{Resource.Id}/job_events/");
                     break;
                 case ResourceType.ProjectUpdate:
-                    Find<ProjectUpdateJobEvent>($"{ProjectUpdateJob.PATH}{Resource.Id}/events/");
+                    Find<ProjectUpdateJobEvent>($"{ProjectUpdateJobBase.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.InventoryUpdate:
-                    Find<InventoryUpdateJobEvent>($"{InventoryUpdateJob.PATH}{Resource.Id}/events/");
+                    Find<InventoryUpdateJobEvent>($"{InventoryUpdateJobBase.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.SystemJob:
-                    Find<SystemJobEvent>($"{SystemJob.PATH}{Resource.Id}/events/");
+                    Find<SystemJobEvent>($"{SystemJobBase.PATH}{Resource.Id}/events/");
                     break;
                 case ResourceType.AdHocCommand:
-                    Find<AdHocCommandJobEvent>($"{AdHocCommand.PATH}{Resource.Id}/events/");
+                    Find<AdHocCommandJobEvent>($"{AdHocCommandBase.PATH}{Resource.Id}/events/");
                     break;
             }
         }

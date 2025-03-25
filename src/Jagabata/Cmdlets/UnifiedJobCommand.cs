@@ -105,7 +105,7 @@ namespace Jagabata.Cmdlets
                     WriteResultSet<InventoryUpdateJob>($"{InventorySource.PATH}{Resource.Id}/inventory_updates/");
                     break;
                 case ResourceType.SystemJobTemplate:
-                    WriteResultSet<SystemJob>($"{SystemJob.PATH}{Resource.Id}/jobs/");
+                    WriteResultSet<SystemJob>($"{SystemJobBase.PATH}{Resource.Id}/jobs/");
                     break;
                 case ResourceType.Inventory:
                     WriteResultSet<AdHocCommand>($"{Inventory.PATH}{Resource.Id}/ad_hoc_commands/");
