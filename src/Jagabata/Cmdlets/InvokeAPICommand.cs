@@ -1,7 +1,5 @@
-using System.Collections.Specialized;
 using System.Management.Automation;
 using System.Text.Json;
-using System.Web;
 using Jagabata.Cmdlets.Completer;
 
 namespace Jagabata.Cmdlets
@@ -29,25 +27,16 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
-            var query = HttpUtility.ParseQueryString(QueryString);
-            NameValueCollection? queryInPath = null;
+            var query = new HttpQuery(QueryString);
             if (Path.IndexOf('?') > 0)
             {
                 var buf = Path.Split('?', 2);
                 Path = buf[0];
-                queryInPath = HttpUtility.ParseQueryString(buf[1]);
-                queryInPath.Add(query);
+                var queryInPath = new HttpQuery(buf[1]) { query };
                 pathAndQuery = $"{Path}?{queryInPath}";
                 return;
             }
-            if (query.Count > 0)
-            {
-                pathAndQuery = $"{Path}?{query}";
-            }
-            else
-            {
-                pathAndQuery = Path;
-            }
+            pathAndQuery = query.Count > 0 ? $"{Path}?{query}" : Path;
         }
         private IRestAPIResult<string> InvokeAPI(string pathAndQuery)
         {
