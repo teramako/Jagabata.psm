@@ -13,7 +13,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
     {
         Dispose(false);
     }
-    protected readonly JobProgressManager JobProgressManager = [];
+    protected JobProgressManager JobProgressManager { get; } = [];
     private Sleep? _sleep;
     protected void Sleep(int milliseconds)
     {
@@ -124,7 +124,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
     }
 
     // Store SecureString gotten from Survey and Credential passwords.
-    protected List<SecureString> SecureStrings = [];
+    protected List<SecureString> SecureStrings { get; } = [];
 
     protected void ClearSecureStrings()
     {
