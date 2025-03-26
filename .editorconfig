@@ -23,6 +23,8 @@ dotnet_diagnostic.IDE0160.severity = none
 dotnet_diagnostic.IDE0008.severity = none
 # IDE0058: Expression value is never used
 dotnet_diagnostic.IDE0058.severity = none
+# IDE0072: Populate switch
+dotnet_diagnostic.IDE0072.severity = none
 
 
 [*.md]
