@@ -1,5 +1,5 @@
+using System.Globalization;
 using System.Net;
-using System.Web;
 
 namespace APITest
 {
@@ -205,7 +205,7 @@ namespace APITest
         [TestMethod]
         public async Task GetResultSet()
         {
-            await foreach (var apiResult in RestAPI.GetResultSetAsync<User>("/api/v2/me/", null, false))
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<User>("/api/v2/me/"))
             {
                 var resultSet = apiResult.Contents;
                 Assert.IsNotNull(resultSet);
@@ -249,8 +249,8 @@ namespace APITest
         {
             var expectCount = 2;
             var c = 0;
-            var query = HttpUtility.ParseQueryString($"page_size={expectCount}");
-            await foreach(var activity in ActivityStream.Find(query, false))
+            var query = new HttpQuery($"page_size={expectCount}");
+            await foreach (var activity in ActivityStream.Find(query))
             {
                 c++;
                 Assert.IsInstanceOfType<ActivityStream>(activity);
@@ -486,9 +486,9 @@ namespace APITest
         {
             var expectCount = 2;
             var c = 0;
-            var query = HttpUtility.ParseQueryString($"page_size={expectCount}");
+            var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var app in Application.Find(query, false))
+            await foreach (var app in Application.Find(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Application>(app);
@@ -638,9 +638,9 @@ namespace APITest
         {
             var expectCount = 2;
             var c = 0;
-            var query = HttpUtility.ParseQueryString($"page_size={expectCount}");
+            var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var instance in Instance.Find(query, false))
+            await foreach (var instance in Instance.Find(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Instance>(instance);
@@ -698,9 +698,9 @@ namespace APITest
         {
             var expectCount = 2;
             var c = 0;
-            var query = HttpUtility.ParseQueryString($"page_size={expectCount}");
+            var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var ig in InstanceGroup.Find(query, false))
+            await foreach (var ig in InstanceGroup.Find(query))
             {
                 c++;
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
@@ -803,9 +803,9 @@ namespace APITest
         {
             var expectCount = 2;
             var c = 0;
-            var query = HttpUtility.ParseQueryString($"page_size={expectCount}");
+            var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var org in Organization.Find(query, false))
+            await foreach (var org in Organization.Find(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Organization>(org);
@@ -918,8 +918,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=2");
-            await foreach(var user in User.Find(query, false))
+            var query = new HttpQuery("page_size=2");
+            await foreach (var user in User.Find(query))
             {
                 DumpResource(user);
             }
@@ -1015,8 +1015,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=2");
-            await foreach(var proj in Project.Find(query, false))
+            var query = new HttpQuery("page_size=2");
+            await foreach (var proj in Project.Find(query))
             {
                 DumpResource(proj);
             }
@@ -1096,8 +1096,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=2&order_by=-id");
-            await foreach(var job in ProjectUpdateJob.Find(query, false))
+            var query = new HttpQuery("page_size=2&order_by=-id");
+            await foreach (var job in ProjectUpdateJob.Find(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1149,8 +1149,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=2");
-            await foreach(var team in Team.Find(query, false))
+            var query = new HttpQuery("page_size=2");
+            await foreach (var team in Team.Find(query))
             {
                 DumpResource(team);
             }
@@ -1237,8 +1237,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
-            await foreach(var cred in Credential.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=id");
+            await foreach (var cred in Credential.Find(query))
             {
                 DumpResource(cred);
             }
@@ -1383,8 +1383,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
-            await foreach(var ct in CredentialType.Find(query, false))
+            var query = new HttpQuery("page_size=20&order_by=id");
+            await foreach (var ct in CredentialType.Find(query))
             {
                 DumpResource(ct);
             }
@@ -1418,8 +1418,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
-            await foreach(var inventory in Inventory.Find(query, false))
+            var query = new HttpQuery("page_size=20&order_by=id");
+            await foreach (var inventory in Inventory.Find(query))
             {
                 DumpResource(inventory);
             }
@@ -1504,7 +1504,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach(var res in InventorySource.Find(HttpUtility.ParseQueryString("order_by=id")))
+            await foreach (var res in InventorySource.Find(new HttpQuery("order_by=id")))
             {
                 DumpResource(res);
             }
@@ -1581,7 +1581,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach(var res in InventoryUpdateJob.Find(HttpUtility.ParseQueryString("order_by=id")))
+            await foreach (var res in InventoryUpdateJob.Find(new HttpQuery("order_by=id")))
             {
                 DumpResource(res);
             }
@@ -1635,8 +1635,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=20");
-            await foreach(var group in Group.Find(query, false))
+            var query = new HttpQuery("page_size=20");
+            await foreach (var group in Group.Find(query))
             {
                 DumpResource(group);
             }
@@ -1724,8 +1724,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=20");
-            await foreach(var host in Host.Find(query, false))
+            var query = new HttpQuery("page_size=20");
+            await foreach (var host in Host.Find(query))
             {
                 DumpResource(host);
             }
@@ -1803,8 +1803,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
-            await foreach(var jt in JobTemplate.Find(query, false))
+            var query = new HttpQuery("page_size=20&order_by=id");
+            await foreach (var jt in JobTemplate.Find(query))
             {
                 DumpResource(jt);
             }
@@ -1888,8 +1888,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=2&order_by=-id");
-            await foreach (var job in  JobTemplateJob.Find(query, false))
+            var query = new HttpQuery("page_size=2&order_by=-id");
+            await foreach (var job in JobTemplateJob.Find(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1961,8 +1961,8 @@ namespace APITest
         {
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=counter");
-            await foreach(var je in JobEvent.FindFromJob(job.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=counter");
+            await foreach (var je in JobEvent.FindFromJob(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"[{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -1977,8 +1977,8 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=job,counter");
-            await foreach(var je in JobEvent.FindFromGroup(group.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=job,counter");
+            await foreach (var je in JobEvent.FindFromGroup(group.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -1993,8 +1993,8 @@ namespace APITest
         {
             var host = await Host.Get(2);
             Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=job,counter");
-            await foreach(var je in JobEvent.FindFromHost(host.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=job,counter");
+            await foreach (var je in JobEvent.FindFromHost(host.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2009,8 +2009,8 @@ namespace APITest
         {
             var job = await ProjectUpdateJob.Get(76);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=counter");
-            await foreach(var je in ProjectUpdateJobEvent.FindFromProjectUpdateJob(job.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=counter");
+            await foreach (var je in ProjectUpdateJobEvent.FindFromProjectUpdateJob(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<ProjectUpdateJobEvent>(je);
@@ -2026,8 +2026,8 @@ namespace APITest
         {
             var job = await InventoryUpdateJob.Get(43);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=counter");
-            await foreach(var je in InventoryUpdateJobEvent.FindFromInventoryUpdateJob(job.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=counter");
+            await foreach (var je in InventoryUpdateJobEvent.FindFromInventoryUpdateJob(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<InventoryUpdateJobEvent>(je);
@@ -2043,8 +2043,8 @@ namespace APITest
         {
             var job = await SystemJob.Get(80);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = HttpUtility.ParseQueryString("order_by=counter");
-            await foreach(var je in SystemJobEvent.FindFromSystemJob(job.Id, eventQuery))
+            var eventQuery = new HttpQuery("order_by=counter");
+            await foreach (var je in SystemJobEvent.FindFromSystemJob(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<SystemJobEvent>(je);
@@ -2157,8 +2157,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=-id&page_size=2");
-            await foreach (var res in AdHocCommand.Find(query, false))
+            var query = new HttpQuery("order_by=-id&page_size=2");
+            await foreach (var res in AdHocCommand.Find(query))
             {
                 DumpResource(res);
             }
@@ -2218,8 +2218,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("");
-            await foreach (var res in SystemJobTemplate.Find(query, false))
+            var query = new HttpQuery("");
+            await foreach (var res in SystemJobTemplate.Find(query))
             {
                 DumpResource(res);
             }
@@ -2268,8 +2268,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=id");
-            await foreach(var res in SystemJob.Find(query, false))
+            var query = new HttpQuery("order_by=id");
+            await foreach (var res in SystemJob.Find(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2300,8 +2300,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=id");
-            await foreach(var res in Schedule.Find(query))
+            var query = new HttpQuery("order_by=id");
+            await foreach (var res in Schedule.Find(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2324,7 +2324,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=id");
+            var query = new HttpQuery("order_by=id");
             await foreach (var res in Role.Find(query))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
@@ -2359,7 +2359,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=id");
+            var query = new HttpQuery("order_by=id");
             await foreach (var res in NotificationTemplate.Find(query))
             {
                 DumpResource(res);
@@ -2393,8 +2393,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("order_by=id");
-            await foreach(var res in Notification.Find(query))
+            var query = new HttpQuery("order_by=id");
+            await foreach (var res in Notification.Find(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2482,8 +2482,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListJobTemplate()
         {
-            var query = HttpUtility.ParseQueryString("type=job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query, false))
+            var query = new HttpQuery("type=job_template&order_by=-id&page_size=2");
+            await foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<JobTemplate>(res);
@@ -2492,8 +2492,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListProject()
         {
-            var query = HttpUtility.ParseQueryString("type=project&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query, false))
+            var query = new HttpQuery("type=project&order_by=-id&page_size=2");
+            await foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<Project>(res);
@@ -2502,8 +2502,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListInventorySource()
         {
-            var query = HttpUtility.ParseQueryString("type=inventory_source&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query, false))
+            var query = new HttpQuery("type=inventory_source&order_by=-id&page_size=2");
+            await foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<InventorySource>(res);
@@ -2512,8 +2512,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListSystemJobTemplate()
         {
-            var query = HttpUtility.ParseQueryString("type=system_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query, false))
+            var query = new HttpQuery("type=system_job_template&order_by=-id&page_size=2");
+            await foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<SystemJobTemplate>(res);
@@ -2522,8 +2522,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListWorkflowJobTemplate()
         {
-            var query = HttpUtility.ParseQueryString("type=workflow_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query, false))
+            var query = new HttpQuery("type=workflow_job_template&order_by=-id&page_size=2");
+            await foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
@@ -2551,8 +2551,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
             }
@@ -2560,8 +2560,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03JobTemplateJob()
         {
-            var query = HttpUtility.ParseQueryString("type=job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("type=job&page_size=2&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<JobTemplateJob>(job);
@@ -2570,8 +2570,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ProjectUpdateJob()
         {
-            var query = HttpUtility.ParseQueryString("type=project_update&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("type=project_update&page_size=2&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
@@ -2580,8 +2580,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05InventoryUpdate()
         {
-            var query = HttpUtility.ParseQueryString("type=inventory_update&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("type=inventory_update&page_size=2&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<InventoryUpdateJob>(job);
@@ -2590,8 +2590,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06WorkflobJob()
         {
-            var query = HttpUtility.ParseQueryString("type=workflow_job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("type=workflow_job&page_size=2&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<WorkflowJob>(job);
@@ -2600,8 +2600,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07SystemJob()
         {
-            var query = HttpUtility.ParseQueryString("type=system_job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query, false))
+            var query = new HttpQuery("type=system_job&page_size=2&order_by=-id");
+            await foreach (var job in UnifiedJob.Find(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<SystemJob>(job);
@@ -2629,8 +2629,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplate.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=-id");
+            await foreach (var res in WorkflowJobTemplate.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
                 DumpResource(res);
@@ -2670,8 +2670,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJob.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=-id");
+            await foreach (var res in WorkflowJob.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(res);
                 DumpResource(res);
@@ -2714,8 +2714,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplateNode.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=-id");
+            await foreach (var res in WorkflowJobTemplateNode.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
                 DumpResource(res);
@@ -2746,8 +2746,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobNode.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=-id");
+            await foreach (var res in WorkflowJobNode.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobNode>(res);
                 DumpResource(res);
@@ -2777,8 +2777,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
-            await foreach (var res in CredentialInputSource.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=id");
+            await foreach (var res in CredentialInputSource.Find(query))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(res);
                 DumpResource(res);
@@ -2819,8 +2819,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
-            await foreach (var res in ExecutionEnvironment.Find(query, false))
+            var query = new HttpQuery("page_size=10&order_by=id");
+            await foreach (var res in ExecutionEnvironment.Find(query))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(res);
                 DumpResource(res);
@@ -2866,7 +2866,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            await foreach(var approval in WorkflowApproval.Find(HttpUtility.ParseQueryString("order_by=-id&page_size=1"), false))
+            await foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
             {
                 Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
                 Assert.IsNotNull(approval.UnifiedJobTemplate);
@@ -2889,8 +2889,8 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var query = HttpUtility.ParseQueryString("order_by=-id&page_size=1");
-            await foreach(var res in WorkflowApproval.Find(query, false))
+            var query = new HttpQuery("order_by=-id&page_size=1");
+            await foreach (var res in WorkflowApproval.Find(query))
             {
                 var detail = await WorkflowApproval.Get(res.Id);
                 Assert.IsInstanceOfType<WorkflowApproval.Detail>(detail);
@@ -2901,8 +2901,8 @@ namespace APITest
         [TestMethod]
         public async Task Get02Find()
         {
-            var query = HttpUtility.ParseQueryString("order_by=-id&page_size=2");
-            await foreach(var res in WorkflowApproval.Find(query, false))
+            var query = new HttpQuery("order_by=-id&page_size=2");
+            await foreach (var res in WorkflowApproval.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowApproval>(res);
                 DumpResource(res);
