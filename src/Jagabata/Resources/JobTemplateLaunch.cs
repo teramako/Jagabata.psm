@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace Jagabata.Resources
@@ -69,7 +70,7 @@ namespace Jagabata.Resources
             var sb = new StringBuilder();
             if (Id is not null)
             {
-                sb.Append($"[{Id}]");
+                sb.Append(CultureInfo.InvariantCulture, $"[{Id}]");
             }
             if (!string.IsNullOrEmpty(Name))
             {
@@ -84,7 +85,7 @@ namespace Jagabata.Resources
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append($"[{Id}]");
+            sb.Append(CultureInfo.InvariantCulture, $"[{Id}]");
             if (!string.IsNullOrEmpty(Name))
             {
                 sb.Append(' ');

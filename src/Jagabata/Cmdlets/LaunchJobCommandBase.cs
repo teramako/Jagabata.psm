@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Management.Automation;
 using System.Security;
 using System.Text;
@@ -109,15 +110,15 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
         var sb = new StringBuilder();
         if (notSpecified)
         {
-            sb.Append($"Not specified {label}. Will be used default");
+            sb.Append(CultureInfo.InvariantCulture, $"Not specified {label}. Will be used default");
         }
         else
         {
-            sb.Append($"Accepted {label}");
+            sb.Append(CultureInfo.InvariantCulture, $"Accepted {label}");
         }
         if (!string.IsNullOrEmpty(resultValue))
         {
-            sb.Append($": {resultValue}");
+            sb.Append(CultureInfo.InvariantCulture, $": {resultValue}");
         }
         WriteHost(sb.ToString());
         ui.WriteLine("\n");
