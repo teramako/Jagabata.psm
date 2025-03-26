@@ -1,7 +1,7 @@
 using System.Net;
 using System.Web;
 
-namespace API_Test
+namespace APITest
 {
     public class Util
     {
@@ -43,7 +43,7 @@ namespace API_Test
     public class ConfigTest
     {
         [TestMethod]
-        public void Test_1_DefaultFile()
+        public void Test01DefaultFile()
         {
             var path = ApiConfig.DefaultConfigPath;
             Console.WriteLine(path);
@@ -51,7 +51,7 @@ namespace API_Test
             Assert.IsTrue(File.Exists(path));
         }
         [TestMethod]
-        public void Test_2_DefaultConfig()
+        public void Test02DefaultConfig()
         {
             var config = ApiConfig.Instance;
             Assert.IsNotNull(config);
@@ -68,7 +68,7 @@ namespace API_Test
         }
         public static readonly DirectoryInfo? projectDirectory = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent;
         [TestMethod]
-        public void Test_3_LoadConfig()
+        public void Test03LoadConfig()
         {
             var file = Path.Join(projectDirectory?.ToString(), ".ansible_psm_config.json");
             Console.WriteLine(file);
@@ -79,15 +79,15 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_ApiClient
+    public class TestApiClient
     {
-        public Test_ApiClient()
+        public TestApiClient()
         {
             var configFile = Path.Join(ConfigTest.projectDirectory?.ToString(), ".ansible_psm_config.json");
             RestAPI.SetClient(ApiConfig.Load(new FileInfo(configFile)));
         }
         [TestMethod]
-        public async Task Error404_1_AsJsonResponse()
+        public async Task Error404AsJsonResponse1()
         {
             var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.GetAsync<User>("/api/v2/users/0/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
@@ -106,7 +106,7 @@ namespace API_Test
             */
         }
         [TestMethod]
-        public async Task Error404_2_AsHtmlResponse()
+        public async Task Error404AsHtmlResponse2()
         {
             var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.GetAsync<User>("/404NotFound/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
@@ -216,7 +216,7 @@ namespace API_Test
 
     }
     [TestClass]
-    public class Test_ActivityStream
+    public class TestActivityStream
     {
         static void DumpResource(ActivityStream a)
         {
@@ -232,7 +232,7 @@ namespace API_Test
                 Util.DumpObject(summary.ExtensionData);
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var activity = await ActivityStream.Get(1);
             Assert.IsNotNull(activity);
@@ -244,7 +244,7 @@ namespace API_Test
             DumpSummary(activity.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var expectCount = 2;
             var c = 0;
@@ -259,7 +259,7 @@ namespace API_Test
             Assert.AreEqual(expectCount, c);
         }
         [TestMethod]
-        public async Task Get_3_ListFromApplication()
+        public async Task Get03ListFromApplication()
         {
             var app = await Application.Get(1);
             Console.WriteLine($"ActivityStream for ([{app.Id}][{app.Type}] {app.Name})");
@@ -270,7 +270,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromToken()
+        public async Task Get04ListFromToken()
         {
             var token = await OAuth2AccessToken.Get(1);
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
@@ -281,7 +281,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromOrganization()
+        public async Task Get05ListFromOrganization()
         {
             var org = await Organization.Get(1);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
@@ -292,7 +292,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListFromUser()
+        public async Task Get06ListFromUser()
         {
             var user = await User.Get(1);
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
@@ -303,7 +303,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_ListFromProject()
+        public async Task Get07ListFromProject()
         {
             var proj = await Project.Get(8);
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
@@ -314,7 +314,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_8_ListFromTeam()
+        public async Task Get08ListFromTeam()
         {
             var team = await Team.Get(1);
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
@@ -325,7 +325,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_9_ListFromCredential()
+        public async Task Get09ListFromCredential()
         {
             var cred = await Credential.Get(1);
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
@@ -336,7 +336,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_10_ListFromCredentialType()
+        public async Task Get10ListFromCredentialType()
         {
             var credType = await CredentialType.Get(29);
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
@@ -347,7 +347,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_11_ListFromInventory()
+        public async Task Get11ListFromInventory()
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
@@ -358,7 +358,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_12_ListFromInventorySource()
+        public async Task Get12ListFromInventorySource()
         {
             var inventorySource = await InventorySource.Get(11);
             Console.WriteLine($"ActivityStream for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
@@ -369,7 +369,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_13_ListFromGroup()
+        public async Task Get13ListFromGroup()
         {
             var group = await Group.Get(1);
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
@@ -380,7 +380,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_14_ListFromHost()
+        public async Task Get14ListFromHost()
         {
             var host = await Host.Get(2);
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
@@ -391,7 +391,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_15_ListFromJobTemplate()
+        public async Task Get15ListFromJobTemplate()
         {
             var jt = await JobTemplate.Get(9);
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
@@ -402,7 +402,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_16_ListFromJobTemplateJob()
+        public async Task Get16ListFromJobTemplateJob()
         {
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
@@ -413,7 +413,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_17_ListFromAdHoCommand()
+        public async Task Get17ListFromAdHoCommand()
         {
             var cmd = await AdHocCommand.Get(69);
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
@@ -424,7 +424,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_18_ListFromWorkflowJobTemplate()
+        public async Task Get18ListFromWorkflowJobTemplate()
         {
             var wjt = await WorkflowJobTemplate.Get(13);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
@@ -435,7 +435,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_19_ListFromWorkflowJob()
+        public async Task Get19ListFromWorkflowJob()
         {
             var wjt = await WorkflowJob.Get(51);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
@@ -446,7 +446,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_20_ListFromExecutionEnvironment()
+        public async Task Get20ListFromExecutionEnvironment()
         {
             var ee = await ExecutionEnvironment.Get(1);
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
@@ -458,7 +458,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Application
+    public class TestApplication
     {
         private static void DumpSummary(Application.Summary summary)
         {
@@ -474,7 +474,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var app = await Application.Get(1);
             Assert.IsInstanceOfType<Application>(app);
@@ -494,7 +494,7 @@ namespace API_Test
             DumpSummary(app.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var expectCount = 2;
             var c = 0;
@@ -511,7 +511,7 @@ namespace API_Test
             Assert.AreEqual(expectCount, c);
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             await foreach(Application app in Application.FindFromOrganization(2))
             {
@@ -520,7 +520,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromUser()
+        public async Task Get04ListFromUser()
         {
             await foreach(var app in Application.FindFromUser(1, null))
             {
@@ -532,7 +532,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_OAuth2AccessToken
+    public class TestOAuth2AccessToken
     {
         private static void DumpSummary(OAuth2AccessToken.Summary summary)
         {
@@ -550,7 +550,7 @@ namespace API_Test
             Console.WriteLine($"Modified    : {token.Modified?.ToString() ?? "(null)"}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var token = await OAuth2AccessToken.Get(1);
             Assert.IsInstanceOfType<OAuth2AccessToken>(token);
@@ -558,7 +558,7 @@ namespace API_Test
             DumpSummary(token.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             await foreach(var token in OAuth2AccessToken.Find(null))
             {
@@ -568,7 +568,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromApplication()
+        public async Task Get03ListFromApplication()
         {
             await foreach(var token in OAuth2AccessToken.FindFromApplication(1))
             {
@@ -578,7 +578,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromUser()
+        public async Task Get04ListFromUser()
         {
             await foreach(var token in OAuth2AccessToken.FindFromUser(1))
             {
@@ -588,7 +588,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListPersonalTokensFromUser()
+        public async Task Get05ListPersonalTokensFromUser()
         {
             await foreach(var token in OAuth2AccessToken.FindPersonalTokensFromUser(1))
             {
@@ -598,7 +598,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListAuthorizedTokensFromUser()
+        public async Task Get06ListAuthorizedTokensFromUser()
         {
             await foreach(var token in OAuth2AccessToken.FindAuthorizedTokensFromUser(1))
             {
@@ -610,7 +610,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Instance
+    public class TestInstance
     {
         private static void DumpSummary(Instance.Summary summary)
         {
@@ -649,7 +649,7 @@ namespace API_Test
             Console.WriteLine($"Listener Port     : {instance.ListenerPort}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var instance = await Instance.Get(1);
             Assert.IsInstanceOfType<Instance>(instance);
@@ -657,7 +657,7 @@ namespace API_Test
             DumpSummary(instance.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var expectCount = 2;
             var c = 0;
@@ -674,7 +674,7 @@ namespace API_Test
             Assert.IsTrue(c <= expectCount);
         }
         [TestMethod]
-        public async Task Get_3_ListFromInstanceGroup()
+        public async Task Get03ListFromInstanceGroup()
         {
             await foreach(var inst in Instance.FindFromInstanceGroup(1))
             {
@@ -684,7 +684,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_InstanceGroup
+    public class TestInstanceGroup
     {
         private static void DumpSummary(InstanceGroup.Summary summary)
         {
@@ -719,7 +719,7 @@ namespace API_Test
             Console.WriteLine($"PodSpecOverride   : {ig.PodSpecOverride}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var ig = await InstanceGroup.Get(1);
             Assert.IsInstanceOfType<InstanceGroup>(ig);
@@ -727,7 +727,7 @@ namespace API_Test
             DumpSummary(ig.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var expectCount = 2;
             var c = 0;
@@ -744,7 +744,7 @@ namespace API_Test
             Assert.IsTrue(c <= expectCount);
         }
         [TestMethod]
-        public async Task Get_3_ListFromInstance()
+        public async Task Get03ListFromInstance()
         {
             await foreach (var ig in InstanceGroup.FindFromInstance(1))
             {
@@ -754,7 +754,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_4_ListFromOranization()
+        public async Task Get04ListFromOranization()
         {
             await foreach (var ig in InstanceGroup.FindFromOrganization(2))
             {
@@ -764,7 +764,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_5_ListFromInventory()
+        public async Task Get05ListFromInventory()
         {
             await foreach (var ig in InstanceGroup.FindFromInventory(2))
             {
@@ -773,7 +773,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListFromJobTemplate()
+        public async Task Get06ListFromJobTemplate()
         {
             await foreach (var ig in InstanceGroup.FindFromJobTemplate(7))
             {
@@ -782,7 +782,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_ListFromSchedule()
+        public async Task Get07ListFromSchedule()
         {
             await foreach (var ig in InstanceGroup.FindFromSchedule(8))
             {
@@ -791,7 +791,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_8_ListFromWorkflowJobTemplateNode()
+        public async Task Get08ListFromWorkflowJobTemplateNode()
         {
             await foreach (var ig in InstanceGroup.FindFromWorkflowJobTemplateNode(4))
             {
@@ -800,7 +800,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_9_ListFromWorkflowJobNode()
+        public async Task Get09ListFromWorkflowJobNode()
         {
             await foreach (var ig in InstanceGroup.FindFromWorkflowJobNode(7))
             {
@@ -810,7 +810,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Organization
+    public class TestOrganization
     {
         private static void DumpSummary(Organization.Summary summary)
         {
@@ -840,7 +840,7 @@ namespace API_Test
             Console.WriteLine($"DefaultEnvironment: {org.DefaultEnvironment?.ToString() ?? "(null)"}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var org = await Organization.Get(1);
             Assert.IsInstanceOfType<Organization>(org);
@@ -849,7 +849,7 @@ namespace API_Test
             // Util.DumpObject(org);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var expectCount = 2;
             var c = 0;
@@ -865,7 +865,7 @@ namespace API_Test
             Assert.IsTrue(c <= expectCount);
         }
         [TestMethod]
-        public async Task Get_3_ListAdministeredFromUser()
+        public async Task Get03ListAdministeredFromUser()
         {
             await foreach (var org in Organization.FindAdministeredByUser(8))
             {
@@ -874,7 +874,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromUser()
+        public async Task Get04ListFromUser()
         {
             await foreach (var org in Organization.FindFromUser(8))
             {
@@ -885,10 +885,10 @@ namespace API_Test
 
     }
     [TestClass]
-    public class Test_User
+    public class TestUser
     {
         [TestMethod("既存ユーザーの作成を試行")]
-        public async Task User_CreateError_1()
+        public async Task UserCreateError1()
         {
             var user = new UserData()
             {
@@ -908,7 +908,7 @@ namespace API_Test
             Assert.IsTrue(res.Exception.Message.IndexOf("{\"username\":") > 0);
             */
         }
-        public async Task User_CreateAndDelete()
+        public async Task UserCreateAndDelete()
         {
             var user = new UserData()
             {
@@ -965,14 +965,14 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var user = await User.Get(2);
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=2");
             await foreach(var user in User.Find(query, false))
@@ -981,14 +981,14 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_Me()
+        public async Task Get03Me()
         {
             var user = await User.GetMe();
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get_4_ListFromOrganization()
+        public async Task Get04ListFromOrganization()
         {
             await foreach(var user in User.FindFromOrganization(2))
             {
@@ -997,7 +997,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromTeam()
+        public async Task Get05ListFromTeam()
         {
             await foreach(var user in User.FindFromTeam(1))
             {
@@ -1006,7 +1006,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListOwnersFromCredential()
+        public async Task Get6ListOwnersFromCredential()
         {
             await foreach(var user in User.FindOwnerFromCredential(1))
             {
@@ -1015,7 +1015,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_ListFromRole()
+        public async Task Get07ListFromRole()
         {
             await foreach(var user in User.FindFromRole(1))
             {
@@ -1025,7 +1025,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Project
+    public class TestProject
     {
         private static void DumpResource(Project proj)
         {
@@ -1079,14 +1079,14 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var proj = await Project.Get(8);
             Assert.IsInstanceOfType<Project>(proj);
             DumpResource(proj);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=2");
             await foreach(var proj in Project.Find(query, false))
@@ -1095,7 +1095,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             await foreach(var proj in Project.FindFromOrganization(1))
             {
@@ -1104,7 +1104,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromUser()
+        public async Task Get04ListFromUser()
         {
             await foreach(var proj in Project.FindFromUser(1))
             {
@@ -1114,7 +1114,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_5_ListFromTeam()
+        public async Task Get05ListFromTeam()
         {
             await foreach(var proj in Project.FindFromTeam(1))
             {
@@ -1123,7 +1123,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_GetInventoryFiles()
+        public async Task Get06GetInventoryFiles()
         {
             var files = await Project.GetInventoryFiles(8);
             Console.WriteLine(string.Join('\n', files));
@@ -1131,7 +1131,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_ProjectUpdate
+    public class TestProjectUpdate
     {
         private static void DumpResource(IProjectUpdateJob job)
         {
@@ -1163,7 +1163,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var job = await ProjectUpdateJob.Get(5);
             Assert.IsInstanceOfType<ProjectUpdateJob.Detail>(job);
@@ -1178,7 +1178,7 @@ namespace API_Test
             DumpSummary(job.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=2&order_by=-id");
             await foreach(var job in ProjectUpdateJob.Find(query, false))
@@ -1188,7 +1188,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromProject()
+        public async Task Get03ListFromProject()
         {
             await foreach(var job in ProjectUpdateJob.FindFromProject(8))
             {
@@ -1199,7 +1199,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Team
+    public class TestTeam
     {
         private static void DumpResource(Team team)
         {
@@ -1228,14 +1228,14 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var team = await Team.Get(1);
             Assert.IsInstanceOfType<Team>(team);
             DumpResource(team);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=2");
             await foreach(var team in Team.Find(query, false))
@@ -1244,7 +1244,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             await foreach(var team in Team.FindFromOrganization(2))
             {
@@ -1257,7 +1257,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromUser()
+        public async Task Get04ListFromUser()
         {
             await foreach(var team in Team.FindFromUser(2))
             {
@@ -1270,7 +1270,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromProject()
+        public async Task Get05ListFromProject()
         {
             await foreach(var team in Team.FindFromProject(8))
             {
@@ -1283,7 +1283,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_FindOwnerFromCredential()
+        public async Task Get06FindOwnerFromCredential()
         {
             await foreach(var team in Team.FindOwnerFromCredential(4))
             {
@@ -1296,7 +1296,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_FindFromRole()
+        public async Task Get07FindFromRole()
         {
             await foreach(var team in Team.FindFromRole(73))
             {
@@ -1311,7 +1311,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Credential
+    public class TestCredential
     {
         private static void DumpResource(Credential cred)
         {
@@ -1352,14 +1352,14 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_01_Single()
+        public async Task Get01Single()
         {
             var cred = await Credential.Get(2);
             Assert.IsInstanceOfType<Credential>(cred);
             DumpResource(cred);
         }
         [TestMethod]
-        public async Task Get_02_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
             await foreach(var cred in Credential.Find(query, false))
@@ -1368,7 +1368,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_03_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             await foreach(var cred in Credential.FindFromOrganization(2))
             {
@@ -1377,7 +1377,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_04_ListGalaxyFromOrganization()
+        public async Task Get04ListGalaxyFromOrganization()
         {
             await foreach(var cred in Credential.FindGalaxyFromOrganization(1))
             {
@@ -1386,7 +1386,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_05_ListFromUser()
+        public async Task Get05ListFromUser()
         {
             await foreach(var cred in Credential.FindFromUser(1))
             {
@@ -1395,7 +1395,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_06_ListFromTeam()
+        public async Task Get06ListFromTeam()
         {
             await foreach(var cred in Credential.FindFromTeam(1))
             {
@@ -1404,7 +1404,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_07_ListFromCredentialType()
+        public async Task Get07ListFromCredentialType()
         {
             await foreach(var cred in Credential.FindFromCredentialType(1))
             {
@@ -1413,7 +1413,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_08_ListFromInventorySource()
+        public async Task Get08ListFromInventorySource()
         {
             await foreach(var cred in Credential.FindFromInventorySource(17))
             {
@@ -1422,7 +1422,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_09_ListFromInventoryUpdate()
+        public async Task Get09ListFromInventoryUpdate()
         {
             await foreach(var cred in Credential.FindFromInventoryUpdateJob(75))
             {
@@ -1431,7 +1431,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_10_ListFromJobTemplate()
+        public async Task Get10ListFromJobTemplate()
         {
             await foreach(var cred in Credential.FindFromJobTemplate(7))
             {
@@ -1440,7 +1440,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_11_ListFromJob()
+        public async Task Get11ListFromJob()
         {
             await foreach(var cred in Credential.FindFromJobTemplateJob(4))
             {
@@ -1449,7 +1449,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_12_ListFromSchedule()
+        public async Task Get12ListFromSchedule()
         {
             await foreach(var cred in Credential.FindFromSchedule(6))
             {
@@ -1458,7 +1458,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_13_ListFromWorkflowJobTemplateNode()
+        public async Task Get13ListFromWorkflowJobTemplateNode()
         {
             await foreach(var cred in Credential.FindFromWorkflowJobTemplateNode(1))
             {
@@ -1467,7 +1467,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_14_ListFromWorkflowJobNode()
+        public async Task Get14ListFromWorkflowJobNode()
         {
             await foreach(var cred in Credential.FindFromWorkflowJobNode(8))
             {
@@ -1477,7 +1477,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_CredentialType
+    public class TestCredentialType
     {
         private static void DumpResource(CredentialType ct)
         {
@@ -1505,14 +1505,14 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var ct = await CredentialType.Get(1);
             Assert.IsInstanceOfType<CredentialType>(ct);
             DumpResource(ct);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
             await foreach(var ct in CredentialType.Find(query, false))
@@ -1523,7 +1523,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Inventory
+    public class TestInventory
     {
         private static void DumpResource(Inventory inventory)
         {
@@ -1559,14 +1559,14 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var inventory = await Inventory.Get(1);
             Assert.IsInstanceOfType<Inventory>(inventory);
             DumpResource(inventory);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
             await foreach(var inventory in Inventory.Find(query, false))
@@ -1575,7 +1575,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             await foreach(var inventory in Inventory.FindFromOrganization(2))
             {
@@ -1584,7 +1584,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListInputInventires()
+        public async Task Get04ListInputInventires()
         {
             Console.WriteLine("Inventory [4]'s Inpput Inventories:");
             await foreach(var inventory in Inventory.FindInputInventoires(4))
@@ -1595,7 +1595,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_ConstructedInventory
+    public class TestConstructedInventory
     {
         private static void DumpResource(ConstructedInventory inventory)
         {
@@ -1630,7 +1630,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var inventory = await ConstructedInventory.Get(4);
             Assert.IsInstanceOfType<ConstructedInventory>(inventory);
@@ -1638,7 +1638,7 @@ namespace API_Test
             DumpResource(inventory);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             await foreach(var inventory in ConstructedInventory.Find(null))
             {
@@ -1648,7 +1648,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_InventorySource
+    public class TestInventorySource
     {
         private static void DumpResource(InventorySource res)
         {
@@ -1683,14 +1683,14 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await InventorySource.Get(11);
             Assert.IsInstanceOfType<InventorySource>(res);
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             await foreach(var res in InventorySource.Find(HttpUtility.ParseQueryString("order_by=id")))
             {
@@ -1698,7 +1698,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromProject()
+        public async Task Get03ListFromProject()
         {
             var proj = await Project.Get(8);
             Console.WriteLine($"Scm InventorySources for ([{proj.Type}][{proj.Id}] {proj.Name})");
@@ -1709,7 +1709,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromInventory()
+        public async Task Get04ListFromInventory()
         {
             var inventory = await Inventory.Get(4);
             Console.WriteLine($"InventorySources for ([{inventory.Type}][{inventory.Id}] {inventory.Name})");
@@ -1720,7 +1720,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromGroup()
+        public async Task Get05ListFromGroup()
         {
             var group = await Group.Get(4);
             Console.WriteLine($"InventorySources for ([{group.Type}][{group.Id}] {group.Name})");
@@ -1731,7 +1731,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListFromHost()
+        public async Task Get06ListFromHost()
         {
             var host = await Host.Get(3);
             Console.WriteLine($"InventorySources for ([{host.Type}][{host.Id}] {host.Name})");
@@ -1743,7 +1743,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_InventoryUpdate
+    public class TestInventoryUpdate
     {
         private static void DumpResource(InventoryUpdateJob res)
         {
@@ -1777,7 +1777,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await InventoryUpdateJob.Get(46);
             Assert.IsInstanceOfType<InventoryUpdateJob.Detail>(res);
@@ -1785,7 +1785,7 @@ namespace API_Test
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             await foreach(var res in InventoryUpdateJob.Find(HttpUtility.ParseQueryString("order_by=id")))
             {
@@ -1793,7 +1793,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromProjectUpdate()
+        public async Task Get03ListFromProjectUpdate()
         {
             var projectUpdateJob = await ProjectUpdateJob.Get(76);
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
@@ -1804,7 +1804,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromInventorySource()
+        public async Task Get04ListFromInventorySource()
         {
             var inventorySource = await InventorySource.Get(11);
             Console.WriteLine($"InventoryUpdateJobs for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
@@ -1817,7 +1817,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Group
+    public class TestGroup
     {
         private static void DumpResource(Group group)
         {
@@ -1841,14 +1841,14 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var group = await Group.Get(1);
             Assert.IsInstanceOfType<Group>(group);
             DumpResource(group);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=20");
             await foreach(var group in Group.Find(query, false))
@@ -1857,7 +1857,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromInventory()
+        public async Task Get03ListFromInventory()
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
@@ -1868,7 +1868,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListOnlyRootFromInventory()
+        public async Task Get04ListOnlyRootFromInventory()
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
@@ -1879,7 +1879,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromInventorySource()
+        public async Task Get05ListFromInventorySource()
         {
             var inventorySOurce = await InventorySource.Get(11);
             Console.WriteLine($"Groups in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
@@ -1890,7 +1890,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListAllFromHost()
+        public async Task Get06ListAllFromHost()
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
@@ -1901,7 +1901,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_ListFromHost()
+        public async Task Get07ListFromHost()
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
@@ -1913,7 +1913,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Host
+    public class TestHost
     {
         private static void DumpResource(Host host)
         {
@@ -1951,14 +1951,14 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var host = await Host.Get(1);
             Assert.IsInstanceOfType<Host>(host);
             DumpResource(host);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=20");
             await foreach(var host in Host.Find(query, false))
@@ -1967,7 +1967,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromInventory()
+        public async Task Get03ListFromInventory()
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
@@ -1978,7 +1978,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromInventorySource()
+        public async Task Get04ListFromInventorySource()
         {
             var inventorySOurce = await InventorySource.Get(11);
             Console.WriteLine($"Hosts in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
@@ -1989,7 +1989,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListAllFromHost()
+        public async Task Get05ListAllFromHost()
         {
             var group = await Group.Get(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
@@ -2000,7 +2000,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_ListFromHost()
+        public async Task Get06ListFromHost()
         {
             var group = await Group.Get(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
@@ -2012,7 +2012,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_JobTemplate
+    public class TestJobTemplate
     {
         private static void DumpResource(JobTemplate jt)
         {
@@ -2054,7 +2054,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var jt = await JobTemplate.Get(9);
             Assert.IsInstanceOfType<JobTemplate>(jt);
@@ -2062,7 +2062,7 @@ namespace API_Test
             DumpResource(jt);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=20&order_by=id");
             await foreach(var jt in JobTemplate.Find(query, false))
@@ -2071,7 +2071,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"JobTemplates in ({org.Type})[{org.Id}] {org.Name}");
@@ -2082,7 +2082,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_listFromInventory()
+        public async Task Get04listFromInventory()
         {
             var inv = await Inventory.Get(2);
             Console.WriteLine($"JobTemplates in ({inv.Type})[{inv.Id}] {inv.Name}");
@@ -2094,7 +2094,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Job
+    public class TestJob
     {
         const ulong jobId = 4;
 
@@ -2151,7 +2151,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var job = await JobTemplateJob.Get(jobId);
             Assert.IsInstanceOfType<JobTemplateJob.Detail>(job);
@@ -2162,7 +2162,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=2&order_by=-id");
             await foreach (var job in  JobTemplateJob.Find(query, false))
@@ -2172,7 +2172,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromJobtemplate()
+        public async Task Get03ListFromJobtemplate()
         {
             var jt = await JobTemplate.Get(9);
             Console.WriteLine($"Jobs in ({jt.Type})[{jt.Id}] {jt.Name}");
@@ -2184,7 +2184,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task JobLogTest_Text()
+        public async Task JobLogTestText()
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/", AcceptType.Text);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
@@ -2194,7 +2194,7 @@ namespace API_Test
             Console.WriteLine(jobLog);
         }
         [TestMethod]
-        public async Task JobLogTest_Ansi()
+        public async Task JobLogTestAnsi()
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=ansi", AcceptType.Text);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
@@ -2205,7 +2205,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task JobLogTest_Html()
+        public async Task JobLogTestHtml()
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=html", AcceptType.Html);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
@@ -2215,7 +2215,7 @@ namespace API_Test
             Console.WriteLine(jobLog);
         }
         [TestMethod]
-        public async Task JobLogTest_Json()
+        public async Task JobLogTestJson()
         {
             var apiResult = await RestAPI.GetAsync<JobLog>($"/api/v2/jobs/{jobId}/stdout/?format=json");
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
@@ -2230,7 +2230,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_JobEvent
+    public class TestJobEvent
     {
         private static void DumpResource(JobEvent e)
         {
@@ -2253,7 +2253,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_1_FindFromJob()
+        public async Task Get01FindFromJob()
         {
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
@@ -2269,7 +2269,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_2_FindFromGroup()
+        public async Task Get02FindFromGroup()
         {
             var group = await Group.Get(1);
             Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
@@ -2285,7 +2285,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_FindFromHost()
+        public async Task Get03FindFromHost()
         {
             var host = await Host.Get(2);
             Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
@@ -2301,7 +2301,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ProjectUpdate()
+        public async Task Get04ProjectUpdate()
         {
             var job = await ProjectUpdateJob.Get(76);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
@@ -2318,7 +2318,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_InventoryUpdate()
+        public async Task Get05InventoryUpdate()
         {
             var job = await InventoryUpdateJob.Get(43);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
@@ -2335,7 +2335,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_SystemJob()
+        public async Task Get06SystemJob()
         {
             var job = await SystemJob.Get(80);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
@@ -2352,7 +2352,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_AdHocCommandEvent()
+        public async Task Get07AdHocCommandEvent()
         {
             var cmd = await AdHocCommand.Get(69);
             Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
@@ -2370,7 +2370,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_JobHostSummary
+    public class TestJobHostSummary
     {
         private static void DumpResource(JobHostSummary res)
         {
@@ -2391,7 +2391,7 @@ namespace API_Test
             Console.WriteLine($"Host        : [{summary.Host?.Id}] {summary.Host?.Name}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await JobHostSummary.Get(1);
             Assert.IsInstanceOfType<JobHostSummary>(res);
@@ -2399,7 +2399,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_ListFromGroup()
+        public async Task Get02ListFromGroup()
         {
             var group = await Group.Get(1);
             Console.WriteLine($"JobHostSummaries in ({group.Type})[{group.Id}] {group.Name}");
@@ -2412,7 +2412,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromHost()
+        public async Task Get03ListFromHost()
         {
             var host = await Host.Get(2);
             Console.WriteLine($"JobHostSummaries in ({host.Type})[{host.Id}] {host.Name}");
@@ -2425,7 +2425,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromJob()
+        public async Task Get04ListFromJob()
         {
             var job = await JobTemplateJob.Get(4);
             Console.WriteLine($"JobHostSummaries in ({job.Type})[{job.Id}] {job.Name}");
@@ -2440,7 +2440,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_AdHocCommand
+    public class TestAdHocCommand
     {
         private static void DumpResource(AdHocCommand res)
         {
@@ -2461,7 +2461,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await AdHocCommand.Get(69);
             Assert.IsInstanceOfType<AdHocCommand>(res);
@@ -2469,7 +2469,7 @@ namespace API_Test
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=-id&page_size=2");
             await foreach (var res in AdHocCommand.Find(query, false))
@@ -2478,7 +2478,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromInventory()
+        public async Task Get03ListFromInventory()
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
@@ -2489,7 +2489,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ListFromFroup()
+        public async Task Get04ListFromFroup()
         {
             var group = await Group.Get(5);
             Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
@@ -2500,7 +2500,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_ListFromHost()
+        public async Task Get05ListFromHost()
         {
             var host = await Host.Get(3);
             Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
@@ -2513,7 +2513,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_SystemJobTemplate
+    public class TestSystemJobTemplate
     {
         private static void DumpResource(SystemJobTemplate res)
         {
@@ -2532,14 +2532,14 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await SystemJobTemplate.Get(1);
             Assert.IsInstanceOfType<SystemJobTemplate>(res);
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("");
             await foreach (var res in SystemJobTemplate.Find(query, false))
@@ -2550,7 +2550,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_SystemJob
+    public class TestSystemJob
     {
         private static void DumpResource(ISystemJob res)
         {
@@ -2583,7 +2583,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await SystemJob.Get(1);
             Assert.IsInstanceOfType<SystemJob.Detail>(res);
@@ -2599,7 +2599,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=id");
             await foreach(var res in SystemJob.Find(query, false))
@@ -2611,7 +2611,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Schedule
+    public class TestSchedule
     {
         static void DumpResource(Schedule res)
         {
@@ -2633,7 +2633,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await Schedule.Get(1);
             Assert.IsInstanceOfType<Schedule>(res);
@@ -2641,7 +2641,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=id");
             await foreach(var res in Schedule.Find(query))
@@ -2653,10 +2653,10 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Role
+    public class TestRole
     {
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await Role.Get(1);
             Assert.IsInstanceOfType<Role>(res);
@@ -2665,7 +2665,7 @@ namespace API_Test
             Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=id");
             await foreach (var res in Role.Find(query))
@@ -2678,7 +2678,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_NotificationTemplate
+    public class TestNotificationTemplate
     {
         static void DumpResource(NotificationTemplate res)
         {
@@ -2706,7 +2706,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await NotificationTemplate.Get(1);
             Assert.IsInstanceOfType<NotificationTemplate>(res);
@@ -2714,7 +2714,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=id");
             await foreach (var res in NotificationTemplate.Find(query))
@@ -2725,7 +2725,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_Notification
+    public class TestNotification
     {
         static void DumpResource(Notification res)
         {
@@ -2746,7 +2746,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await Notification.Get(1);
             Assert.IsInstanceOfType<Notification>(res);
@@ -2754,7 +2754,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("order_by=id");
             await foreach(var res in Notification.Find(query))
@@ -2766,7 +2766,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Label
+    public class TestLabel
     {
         static void DumpResource(Label res)
         {
@@ -2783,7 +2783,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await Label.Get(1);
             Assert.IsInstanceOfType<Label>(res);
@@ -2791,7 +2791,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             await foreach(var res in Label.Find(null))
             {
@@ -2802,7 +2802,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_UnifiedJobTemplate
+    public class TestUnifiedJobTemplate
     {
         static void DumpResource(IUnifiedJobTemplate jt)
         {
@@ -2811,7 +2811,7 @@ namespace API_Test
             Console.WriteLine($"  Status: {jt.Status}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await UnifiedJobTemplate.Get(1);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
@@ -2819,7 +2819,7 @@ namespace API_Test
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var ujtList = await UnifiedJobTemplate.Get(1, 6, 9, 11, 13);
             foreach (var res in ujtList)
@@ -2851,7 +2851,7 @@ namespace API_Test
         }
 
         [TestMethod]
-        public async Task Get_3_List_JobTemplate()
+        public async Task Get03ListJobTemplate()
         {
             var query = HttpUtility.ParseQueryString("type=job_template&order_by=-id&page_size=2");
             await foreach (var res in UnifiedJobTemplate.Find(query, false))
@@ -2861,7 +2861,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_List_Project()
+        public async Task Get04ListProject()
         {
             var query = HttpUtility.ParseQueryString("type=project&order_by=-id&page_size=2");
             await foreach (var res in UnifiedJobTemplate.Find(query, false))
@@ -2871,7 +2871,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_List_InventorySource()
+        public async Task Get05ListInventorySource()
         {
             var query = HttpUtility.ParseQueryString("type=inventory_source&order_by=-id&page_size=2");
             await foreach (var res in UnifiedJobTemplate.Find(query, false))
@@ -2881,7 +2881,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_List_SystemJobTemplate()
+        public async Task Get06ListSystemJobTemplate()
         {
             var query = HttpUtility.ParseQueryString("type=system_job_template&order_by=-id&page_size=2");
             await foreach (var res in UnifiedJobTemplate.Find(query, false))
@@ -2891,7 +2891,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_List_WorkflowJobTemplate()
+        public async Task Get07ListWorkflowJobTemplate()
         {
             var query = HttpUtility.ParseQueryString("type=workflow_job_template&order_by=-id&page_size=2");
             await foreach (var res in UnifiedJobTemplate.Find(query, false))
@@ -2904,7 +2904,7 @@ namespace API_Test
 
 
     [TestClass]
-    public class Test_UnifiedJob
+    public class TestUnifiedJob
     {
         static void DumpResource(IUnifiedJob job)
         {
@@ -2914,13 +2914,13 @@ namespace API_Test
             Console.WriteLine($"  Status: {job.Status}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var job = await UnifiedJob.Get(20);
             Console.WriteLine($"{job.Id} {job.Type} {job.Name}");
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2929,7 +2929,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_JobTemplateJob()
+        public async Task Get03JobTemplateJob()
         {
             var query = HttpUtility.ParseQueryString("type=job&page_size=2&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2939,7 +2939,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_4_ProjectUpdateJob()
+        public async Task Get04ProjectUpdateJob()
         {
             var query = HttpUtility.ParseQueryString("type=project_update&page_size=2&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2949,7 +2949,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_5_InventoryUpdate()
+        public async Task Get05InventoryUpdate()
         {
             var query = HttpUtility.ParseQueryString("type=inventory_update&page_size=2&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2959,7 +2959,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_6_WorkflobJob()
+        public async Task Get06WorkflobJob()
         {
             var query = HttpUtility.ParseQueryString("type=workflow_job&page_size=2&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2969,7 +2969,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_7_SystemJob()
+        public async Task Get07SystemJob()
         {
             var query = HttpUtility.ParseQueryString("type=system_job&page_size=2&order_by=-id");
             await foreach (var job in UnifiedJob.Find(query, false))
@@ -2981,7 +2981,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_WorkflowJobTemplate
+    public class TestWorkflowJobTemplate
     {
         static void DumpResource(WorkflowJobTemplate res)
         {
@@ -3005,7 +3005,7 @@ namespace API_Test
 
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await WorkflowJobTemplate.Get(13);
             Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
@@ -3013,7 +3013,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
             await foreach (var res in WorkflowJobTemplate.Find(query, false))
@@ -3024,7 +3024,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"WorkflowJobTemplate in ({org.Type})[{org.Id}]{org.Name}");
@@ -3037,7 +3037,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_WofkflowJob
+    public class TestWofkflowJob
     {
         static void DumpResource(WorkflowJob res)
         {
@@ -3056,7 +3056,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await WorkflowJob.Get(51);
             Assert.IsInstanceOfType<WorkflowJob>(res);
@@ -3064,7 +3064,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
             await foreach (var res in WorkflowJob.Find(query, false))
@@ -3075,7 +3075,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromWorkflowJobTemplate()
+        public async Task Get03ListFromWorkflowJobTemplate()
         {
             var wjt = await WorkflowJobTemplate.Get(13);
             Console.WriteLine($"WorkflowJobTemplate in ({wjt.Type})[{wjt.Id}]{wjt.Name}");
@@ -3088,7 +3088,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_WorkflowJobTemplateNode
+    public class TestWorkflowJobTemplateNode
     {
         static void DumpResource(WorkflowJobTemplateNode res)
         {
@@ -3107,7 +3107,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await WorkflowJobTemplateNode.Get(1);
             Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
@@ -3115,7 +3115,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
             await foreach (var res in WorkflowJobTemplateNode.Find(query, false))
@@ -3127,7 +3127,7 @@ namespace API_Test
         }
     }
     [TestClass]
-    public class Test_WorkflowJobNode
+    public class TestWorkflowJobNode
     {
         static void DumpResource(WorkflowJobNode res)
         {
@@ -3147,7 +3147,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await WorkflowJobNode.Get(1);
             Assert.IsInstanceOfType<WorkflowJobNode>(res);
@@ -3155,7 +3155,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=-id");
             await foreach (var res in WorkflowJobNode.Find(query, false))
@@ -3168,7 +3168,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_CredentialInputSource
+    public class TestCredentialInputSource
     {
         static void DumpResource(CredentialInputSource res)
         {
@@ -3187,7 +3187,7 @@ namespace API_Test
             Console.WriteLine($"Caps            : {summary.UserCapabilities}");
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await CredentialInputSource.Get(1);
             Assert.IsInstanceOfType<CredentialInputSource>(res);
@@ -3195,7 +3195,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
             await foreach (var res in CredentialInputSource.Find(query, false))
@@ -3206,7 +3206,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromCredential()
+        public async Task Get03ListFromCredential()
         {
             var cred = await Credential.Get(7);
             Console.WriteLine($"Credential for ([{cred.Id}][{cred.Type}] {cred.Name})");
@@ -3220,7 +3220,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_ExecutionEnvironment
+    public class TestExecutionEnvironment
     {
         static void DumpResource(ExecutionEnvironment res)
         {
@@ -3235,7 +3235,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var res = await ExecutionEnvironment.Get(1);
             Assert.IsInstanceOfType<ExecutionEnvironment>(res);
@@ -3243,7 +3243,7 @@ namespace API_Test
             DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get_2_List()
+        public async Task Get02List()
         {
             var query = HttpUtility.ParseQueryString("page_size=10&order_by=id");
             await foreach (var res in ExecutionEnvironment.Find(query, false))
@@ -3254,7 +3254,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_3_ListFromOrganization()
+        public async Task Get03ListFromOrganization()
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
@@ -3267,10 +3267,10 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Metrics
+    public class TestMetrics
     {
         [TestMethod]
-        public async Task Get_Metrics()
+        public async Task GetMetrics()
         {
             var apiResult = await RestAPI.GetAsync<Metrics>(Metrics.PATH);
             foreach (var (key, value) in apiResult.Contents)
@@ -3282,7 +3282,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_WorkflowApprovalTemplate
+    public class TestWorkflowApprovalTemplate
     {
         static void DumpResource(WorkflowApprovalTemplate res)
         {
@@ -3296,7 +3296,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             await foreach(var approval in WorkflowApproval.Find(HttpUtility.ParseQueryString("order_by=-id&page_size=1"), false))
             {
@@ -3312,7 +3312,7 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_WorkflowApproval
+    public class TestWorkflowApproval
     {
         static void DumpResource(WorkflowApproval res)
         {
@@ -3329,7 +3329,7 @@ namespace API_Test
             Console.WriteLine();
         }
         [TestMethod]
-        public async Task Get_1_Single()
+        public async Task Get01Single()
         {
             var query = HttpUtility.ParseQueryString("order_by=-id&page_size=1");
             await foreach(var res in WorkflowApproval.Find(query, false))
@@ -3341,7 +3341,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Get_2_Find()
+        public async Task Get02Find()
         {
             var query = HttpUtility.ParseQueryString("order_by=-id&page_size=2");
             await foreach(var res in WorkflowApproval.Find(query, false))
@@ -3354,10 +3354,10 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Config
+    public class TestConfig
     {
         [TestMethod]
-        public async Task Config_Get()
+        public async Task ConfigGet()
         {
             var apiResult = await RestAPI.GetAsync<Config>("/api/v2/config/");
             Assert.IsNotNull(apiResult);
@@ -3374,10 +3374,10 @@ namespace API_Test
     }
 
     [TestClass]
-    public class Test_Settings
+    public class TestSettings
     {
         [TestMethod]
-        public async Task Settings_Get()
+        public async Task SettingsGet()
         {
             var apiResult = await RestAPI.GetAsync<ResultSet<Setting>>("/api/v2/settings/");
             Assert.IsNotNull(apiResult);
@@ -3394,7 +3394,7 @@ namespace API_Test
             }
         }
         [TestMethod]
-        public async Task Settings_Get_Github()
+        public async Task SettingsGetGithub()
         {
             var apiResult = await RestAPI.GetAsync<object>("/api/v2/settings/github/");
             Assert.IsNotNull(apiResult);
