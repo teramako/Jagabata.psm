@@ -42,7 +42,6 @@ public static partial class Yaml
         public bool Accepts(Type type)
         {
             var result = typeof(PSObject).IsAssignableFrom(type);
-            Console.WriteLine($"Accepts: {type} => {result}");
             return result;
         }
 
@@ -58,7 +57,6 @@ public static partial class Yaml
 
         public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
         {
-            Console.WriteLine($"WriteYaml: value type = {value?.GetType()}");
             if (value is not PSObject obj)
             {
                 EmitNull(emitter);
