@@ -1366,8 +1366,8 @@ namespace APITest
             Console.WriteLine($"Kind        : {ct.Kind}");
             Console.WriteLine($"Namespace   : {ct.Namespace}");
             Console.WriteLine($"Managed     : {ct.Managed}");
-            Console.WriteLine($"==== Inputs ({ct.Inputs.Fields.Length})======");
-            if (ct.Inputs.Fields.Length > 0)
+            Console.WriteLine($"==== Inputs ({ct.Inputs.Count})======");
+            if (ct.Inputs.Count > 0)
                 Util.DumpObject(ct.Inputs);
             Console.WriteLine($"==== Injectors ({ct.Injectors})===");
             Util.DumpObject(ct.Injectors);
