@@ -97,12 +97,12 @@ namespace APITest
         [TestMethod]
         public async Task Error404AsJsonResponse1()
         {
-            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.GetAsync<User>("/api/v2/users/0/"));
+            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/api/v2/users/0/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
             Console.WriteLine(ex.ToString());
             Console.WriteLine("====================");
             Assert.IsNull(ex.InnerException);
-            Assert.IsTrue(ex.Message.IndexOf("{\"detail\":") > 0);
+            Assert.IsTrue(ex.Message.IndexOf("{\"detail\":", StringComparison.Ordinal) > 0);
             /*
             var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.GetAsync<User>("/api/v2/users/0/"));
             var apiResponse = await RestAPI.GetAsync<User>("/api/v2/users/0/");
@@ -116,12 +116,12 @@ namespace APITest
         [TestMethod]
         public async Task Error404AsHtmlResponse2()
         {
-            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.GetAsync<User>("/404NotFound/"));
+            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/404NotFound/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
             Console.WriteLine(ex.ToString());
             Console.WriteLine("====================");
             Assert.IsNull(ex.InnerException);
-            Assert.IsTrue(ex.Message.IndexOf("text/html") > 0);
+            Assert.IsTrue(ex.Message.IndexOf("text/html", StringComparison.Ordinal) > 0);
             /*
             var apiResponse = await RestAPI.GetAsync<User>("/404NotFound/");
             Assert.IsFalse(apiResponse.IsSuccess);
@@ -226,7 +226,7 @@ namespace APITest
     [TestClass]
     public class TestActivityStream
     {
-        static void DumpResource(ActivityStream a)
+        private static void DumpResource(ActivityStream a)
         {
             Console.WriteLine($"{a.Id} {a.Type} {a.Timestamp}");
             Console.WriteLine($"Operation: {a.Operation}");
@@ -264,7 +264,7 @@ namespace APITest
         {
             var app = await Application.Get(1);
             Console.WriteLine($"ActivityStream for ([{app.Id}][{app.Type}] {app.Name})");
-            await foreach(var activity in ActivityStream.FindFromApplication(app.Id))
+            await foreach (var activity in ActivityStream.FindFromApplication(app.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -275,7 +275,7 @@ namespace APITest
         {
             var token = await OAuth2AccessToken.Get(1);
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
-            await foreach(var activity in ActivityStream.FindFromToken(token.Id))
+            await foreach (var activity in ActivityStream.FindFromToken(token.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -286,7 +286,7 @@ namespace APITest
         {
             var org = await Organization.Get(1);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach(var activity in ActivityStream.FindFromOrganization(org.Id))
+            await foreach (var activity in ActivityStream.FindFromOrganization(org.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -297,7 +297,7 @@ namespace APITest
         {
             var user = await User.Get(1);
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
-            await foreach(var activity in ActivityStream.FindFromUser(user.Id))
+            await foreach (var activity in ActivityStream.FindFromUser(user.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -308,7 +308,7 @@ namespace APITest
         {
             var proj = await Project.Get(8);
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
-            await foreach(var activity in ActivityStream.FindFromProject(proj.Id))
+            await foreach (var activity in ActivityStream.FindFromProject(proj.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -319,7 +319,7 @@ namespace APITest
         {
             var team = await Team.Get(1);
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
-            await foreach(var activity in ActivityStream.FindFromTeam(team.Id))
+            await foreach (var activity in ActivityStream.FindFromTeam(team.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -330,7 +330,7 @@ namespace APITest
         {
             var cred = await Credential.Get(1);
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach(var activity in ActivityStream.FindFromCredential(cred.Id))
+            await foreach (var activity in ActivityStream.FindFromCredential(cred.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -341,7 +341,7 @@ namespace APITest
         {
             var credType = await CredentialType.Get(29);
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
-            await foreach(var activity in ActivityStream.FindFromCredentialType(credType.Id))
+            await foreach (var activity in ActivityStream.FindFromCredentialType(credType.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -352,7 +352,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
-            await foreach(var activity in ActivityStream.FindFromInventory(inventory.Id))
+            await foreach (var activity in ActivityStream.FindFromInventory(inventory.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -363,7 +363,7 @@ namespace APITest
         {
             var inventorySource = await InventorySource.Get(11);
             Console.WriteLine($"ActivityStream for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach(var activity in ActivityStream.FindFromInventorySource(inventorySource.Id))
+            await foreach (var activity in ActivityStream.FindFromInventorySource(inventorySource.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -374,7 +374,7 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
-            await foreach(var activity in ActivityStream.FindFromGroup(group.Id))
+            await foreach (var activity in ActivityStream.FindFromGroup(group.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -385,7 +385,7 @@ namespace APITest
         {
             var host = await Host.Get(2);
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
-            await foreach(var activity in ActivityStream.FindFromHost(host.Id))
+            await foreach (var activity in ActivityStream.FindFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -396,7 +396,7 @@ namespace APITest
         {
             var jt = await JobTemplate.Get(9);
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
-            await foreach(var activity in ActivityStream.FindFromJobTemplate(jt.Id))
+            await foreach (var activity in ActivityStream.FindFromJobTemplate(jt.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -407,7 +407,7 @@ namespace APITest
         {
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
-            await foreach(var activity in ActivityStream.FindFromJob(job.Id))
+            await foreach (var activity in ActivityStream.FindFromJob(job.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -418,7 +418,7 @@ namespace APITest
         {
             var cmd = await AdHocCommand.Get(69);
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
-            await foreach(var activity in ActivityStream.FindFromAdHocCommand(cmd.Id))
+            await foreach (var activity in ActivityStream.FindFromAdHocCommand(cmd.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -429,7 +429,7 @@ namespace APITest
         {
             var wjt = await WorkflowJobTemplate.Get(13);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach(var activity in ActivityStream.FindFromWorkflowJobTemplate(wjt.Id))
+            await foreach (var activity in ActivityStream.FindFromWorkflowJobTemplate(wjt.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -440,7 +440,7 @@ namespace APITest
         {
             var wjt = await WorkflowJob.Get(51);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach(var activity in ActivityStream.FindFromWorkflowJob(wjt.Id))
+            await foreach (var activity in ActivityStream.FindFromWorkflowJob(wjt.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -451,7 +451,7 @@ namespace APITest
         {
             var ee = await ExecutionEnvironment.Get(1);
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
-            await foreach(var activity in ActivityStream.FindFromExecutionEnvironment(ee.Id))
+            await foreach (var activity in ActivityStream.FindFromExecutionEnvironment(ee.Id))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -501,7 +501,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach(Application app in Application.FindFromOrganization(2))
+            await foreach (Application app in Application.FindFromOrganization(2))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
@@ -510,7 +510,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach(var app in Application.FindFromUser(1, null))
+            await foreach (var app in Application.FindFromUser(1, null))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
@@ -529,7 +529,7 @@ namespace APITest
             Console.WriteLine($"Socpe       : {token.Scope}");
             Console.WriteLine($"Expires     : {token.Expires}");
             Console.WriteLine($"Created     : {token.Created}");
-            Console.WriteLine($"Modified    : {token.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {token.Modified?.ToString("o") ?? "(null)"}");
         }
         [TestMethod]
         public async Task Get01Single()
@@ -542,7 +542,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach(var token in OAuth2AccessToken.Find(null))
+            await foreach (var token in OAuth2AccessToken.Find(null))
             {
                 DumpToken(token);
                 Util.DumpSummary(token.SummaryFields);
@@ -552,7 +552,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromApplication()
         {
-            await foreach(var token in OAuth2AccessToken.FindFromApplication(1))
+            await foreach (var token in OAuth2AccessToken.FindFromApplication(1))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
@@ -562,7 +562,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach(var token in OAuth2AccessToken.FindFromUser(1))
+            await foreach (var token in OAuth2AccessToken.FindFromUser(1))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
@@ -572,7 +572,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListPersonalTokensFromUser()
         {
-            await foreach(var token in OAuth2AccessToken.FindPersonalTokensFromUser(1))
+            await foreach (var token in OAuth2AccessToken.FindPersonalTokensFromUser(1))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
@@ -582,7 +582,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListAuthorizedTokensFromUser()
         {
-            await foreach(var token in OAuth2AccessToken.FindAuthorizedTokensFromUser(1))
+            await foreach (var token in OAuth2AccessToken.FindAuthorizedTokensFromUser(1))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
@@ -601,11 +601,11 @@ namespace APITest
             Console.WriteLine($"Hostname          : {instance.Hostname}");
             Console.WriteLine($"UUID              : {instance.Uuid}");
             Console.WriteLine($"Created           : {instance.Created}");
-            Console.WriteLine($"Modified          : {instance.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified          : {instance.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"LastSeen          : {instance.LastSeen}");
-            Console.WriteLine($"HelthCheckStarted : {instance.HealthCheckStarted?.ToString() ?? "(null)"}");
+            Console.WriteLine($"HelthCheckStarted : {instance.HealthCheckStarted?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"HelthCheckPending : {instance.HealthCheckPending}");
-            Console.WriteLine($"LastHealthCheck   : {instance.LastHealthCheck?.ToString() ?? "(null)"}");
+            Console.WriteLine($"LastHealthCheck   : {instance.LastHealthCheck?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Errors            : {instance.Errors}");
             Console.WriteLine($"CapacityAdjustment: {instance.CapacityAdjustment}");
             Console.WriteLine($"Version           : {instance.Version}");
@@ -653,7 +653,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInstanceGroup()
         {
-            await foreach(var inst in Instance.FindFromInstanceGroup(1))
+            await foreach (var inst in Instance.FindFromInstanceGroup(1))
             {
                 Assert.IsInstanceOfType<Instance>(inst);
                 Console.WriteLine($"[{inst.Id}] {inst.Hostname} {inst.NodeType} {inst.NodeState}");
@@ -679,7 +679,7 @@ namespace APITest
             Console.WriteLine($"JobsTotal         : {ig.JobsTotal}");
             Console.WriteLine($"Instances         : {ig.Instances}");
             Console.WriteLine($"IsContainerGroup  : {ig.IsContainerGroup}");
-            Console.WriteLine($"Credential        : {ig.Credential?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Credential        : {ig.Credential?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Console.WriteLine($"PolicyInstancePercentage: {ig.PolicyInstancePercentage}");
             Console.WriteLine($"PolicyInstanceMinimum   : {ig.PolicyInstanceMinimum}");
             Console.WriteLine($"PolicyInstanceList      : {ig.PolicyInstanceList}");
@@ -784,11 +784,11 @@ namespace APITest
             Console.WriteLine($"Id                : {org.Id}");
             Console.WriteLine($"Type              : {org.Type}");
             Console.WriteLine($"Created           : {org.Created}");
-            Console.WriteLine($"Modified          : {org.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified          : {org.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name              : {org.Name}");
             Console.WriteLine($"Description       : {org.Description}");
             Console.WriteLine($"MaxHosts          : {org.MaxHosts}");
-            Console.WriteLine($"DefaultEnvironment: {org.DefaultEnvironment?.ToString() ?? "(null)"}");
+            Console.WriteLine($"DefaultEnvironment: {org.DefaultEnvironment?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
         }
         [TestMethod]
         public async Task Get01Single()
@@ -899,7 +899,7 @@ namespace APITest
             Console.WriteLine($"FirstName: {user.FirstName}");
             Console.WriteLine($"LastName : {user.LastName}");
             Console.WriteLine($"Email    : {user.Email}");
-            Console.WriteLine($"LastLogin: {user.LastLogin?.ToString() ?? "(null)"}");
+            Console.WriteLine($"LastLogin: {user.LastLogin?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Auth     : {user.Auth}");
             Console.WriteLine($"Password : {user.Password}");
             Console.WriteLine($"LdapDn   : {user.LdapDn}");
@@ -934,7 +934,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromOrganization()
         {
-            await foreach(var user in User.FindFromOrganization(2))
+            await foreach (var user in User.FindFromOrganization(2))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
@@ -943,7 +943,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromTeam()
         {
-            await foreach(var user in User.FindFromTeam(1))
+            await foreach (var user in User.FindFromTeam(1))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
@@ -952,7 +952,7 @@ namespace APITest
         [TestMethod]
         public async Task Get6ListOwnersFromCredential()
         {
-            await foreach(var user in User.FindOwnerFromCredential(1))
+            await foreach (var user in User.FindOwnerFromCredential(1))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
@@ -961,7 +961,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromRole()
         {
-            await foreach(var user in User.FindFromRole(1))
+            await foreach (var user in User.FindFromRole(1))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
@@ -976,7 +976,7 @@ namespace APITest
             Console.WriteLine($"Id                   : {proj.Id}");
             Console.WriteLine($"Type                 : {proj.Type}");
             Console.WriteLine($"Created              : {proj.Created}");
-            Console.WriteLine($"Modified             : {proj.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified             : {proj.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name                 : {proj.Name}");
             Console.WriteLine($"Description          : {proj.Description}");
             Console.WriteLine($"LocalPath            : {proj.LocalPath}");
@@ -987,22 +987,22 @@ namespace APITest
             Console.WriteLine($"ScmClean             : {proj.ScmClean}");
             Console.WriteLine($"ScmTrackSubmodules   : {proj.ScmTrackSubmodules}");
             Console.WriteLine($"ScmDeleteOnUpdate    : {proj.ScmDeleteOnUpdate}");
-            Console.WriteLine($"Credential           : {proj.Credential?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Credential           : {proj.Credential?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Console.WriteLine($"Timeout              : {proj.Timeout}");
             Console.WriteLine($"ScmRevision          : {proj.ScmRevision}");
-            Console.WriteLine($"LastJobRun           : {proj.LastJobRun?.ToString() ?? "(null)"}");
+            Console.WriteLine($"LastJobRun           : {proj.LastJobRun?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"LastJobFailed        : {proj.LastJobFailed}");
-            Console.WriteLine($"NextJobFun           : {proj.NextJobRun?.ToString() ?? "(null)"}");
+            Console.WriteLine($"NextJobFun           : {proj.NextJobRun?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Status               : {proj.Status}");
             Console.WriteLine($"Organization         : {proj.Organization}");
             Console.WriteLine($"ScmUpdateOnLaunch    : {proj.ScmUpdateOnLaunch}");
             Console.WriteLine($"ScmUpdateCacheTimeout: {proj.ScmUpdateCacheTimeout}");
             Console.WriteLine($"AllowOverride        : {proj.AllowOverride}");
-            Console.WriteLine($"CustomVirtualenv     : {proj.CustomVirtualenv??"(null)"}");
-            Console.WriteLine($"DefaultEnvironment   : {proj.DefaultEnvironment?.ToString()??"(null)"}");
+            Console.WriteLine($"CustomVirtualenv     : {proj.CustomVirtualenv ?? "(null)"}");
+            Console.WriteLine($"DefaultEnvironment   : {proj.DefaultEnvironment?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Console.WriteLine($"LastUpdateFailed     : {proj.LastUpdateFailed}");
-            Console.WriteLine($"LastUpdated          : {proj.LastUpdated?.ToString()??"(null)"}");
-            Console.WriteLine($"SignatureValidateionCredential: {proj.SignatureValidationCredential?.ToString()??"(null)"}");
+            Console.WriteLine($"LastUpdated          : {proj.LastUpdated?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"SignatureValidateionCredential: {proj.SignatureValidationCredential?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Util.DumpSummary(proj.SummaryFields);
         }
         [TestMethod]
@@ -1024,7 +1024,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach(var proj in Project.FindFromOrganization(1))
+            await foreach (var proj in Project.FindFromOrganization(1))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1033,7 +1033,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach(var proj in Project.FindFromUser(1))
+            await foreach (var proj in Project.FindFromUser(1))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1043,7 +1043,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromTeam()
         {
-            await foreach(var proj in Project.FindFromTeam(1))
+            await foreach (var proj in Project.FindFromTeam(1))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1073,7 +1073,7 @@ namespace APITest
             Console.WriteLine($"ScmClean   : {job.ScmClean}");
             Console.WriteLine($"ScmTrackSubmodules: {job.ScmTrackSubmodules}");
             Console.WriteLine($"ScmDeleteOnUpdate : {job.ScmDeleteOnUpdate}");
-            Console.WriteLine($"Credential : {job.Credential?.ToString()??"(null)"}");
+            Console.WriteLine($"Credential : {job.Credential?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Console.WriteLine($"Timeout    : {job.Timeout}");
             Console.WriteLine($"Project    : {job.Project}");
         }
@@ -1087,7 +1087,7 @@ namespace APITest
             Console.WriteLine($"JobArgs    : {job.JobArgs}");
             Console.WriteLine($"JobCwd     : {job.JobCwd}");
             Console.WriteLine($"JobEnv     : {job.JobEnv.Count}");
-            foreach (var (k,v) in job.JobEnv)
+            foreach (var (k, v) in job.JobEnv)
             {
                 Console.WriteLine($"   {k}: {v}");
             }
@@ -1106,7 +1106,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProject()
         {
-            await foreach(var job in ProjectUpdateJob.FindFromProject(8))
+            await foreach (var job in ProjectUpdateJob.FindFromProject(8))
             {
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} {job.Finished}");
@@ -1122,7 +1122,7 @@ namespace APITest
             Console.WriteLine($"Id          : {team.Id}");
             Console.WriteLine($"Type        : {team.Type}");
             Console.WriteLine($"Created     : {team.Created}");
-            Console.WriteLine($"Modified    : {team.Modified?.ToString()??"(null)"}");
+            Console.WriteLine($"Modified    : {team.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {team.Name}");
             Console.WriteLine($"Description : {team.Description}");
             Console.WriteLine($"Organization: {team.Organization}");
@@ -1158,7 +1158,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach(var team in Team.FindFromOrganization(2))
+            await foreach (var team in Team.FindFromOrganization(2))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1168,7 +1168,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach(var team in Team.FindFromUser(2))
+            await foreach (var team in Team.FindFromUser(2))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1178,7 +1178,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromProject()
         {
-            await foreach(var team in Team.FindFromProject(8))
+            await foreach (var team in Team.FindFromProject(8))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1188,7 +1188,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06FindOwnerFromCredential()
         {
-            await foreach(var team in Team.FindOwnerFromCredential(4))
+            await foreach (var team in Team.FindOwnerFromCredential(4))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1198,7 +1198,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07FindFromRole()
         {
-            await foreach(var team in Team.FindFromRole(73))
+            await foreach (var team in Team.FindFromRole(73))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1218,7 +1218,7 @@ namespace APITest
             Console.WriteLine($"Modified      : {cred.Modified}");
             Console.WriteLine($"Name          : {cred.Name}");
             Console.WriteLine($"Description   : {cred.Description}");
-            Console.WriteLine($"Organization  : {cred.Organization?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Organization  : {cred.Organization?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Console.WriteLine($"CredentialType: {cred.CredentialType}");
             Console.WriteLine($"Managed       : {cred.Managed}");
             Console.WriteLine($"Kind          : {cred.Kind}");
@@ -1246,7 +1246,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach(var cred in Credential.FindFromOrganization(2))
+            await foreach (var cred in Credential.FindFromOrganization(2))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1255,7 +1255,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListGalaxyFromOrganization()
         {
-            await foreach(var cred in Credential.FindGalaxyFromOrganization(1))
+            await foreach (var cred in Credential.FindGalaxyFromOrganization(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1264,7 +1264,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromUser()
         {
-            await foreach(var cred in Credential.FindFromUser(1))
+            await foreach (var cred in Credential.FindFromUser(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1273,7 +1273,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromTeam()
         {
-            await foreach(var cred in Credential.FindFromTeam(1))
+            await foreach (var cred in Credential.FindFromTeam(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1282,7 +1282,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromCredentialType()
         {
-            await foreach(var cred in Credential.FindFromCredentialType(1))
+            await foreach (var cred in Credential.FindFromCredentialType(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1291,7 +1291,7 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromInventorySource()
         {
-            await foreach(var cred in Credential.FindFromInventorySource(17))
+            await foreach (var cred in Credential.FindFromInventorySource(17))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1300,7 +1300,7 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromInventoryUpdate()
         {
-            await foreach(var cred in Credential.FindFromInventoryUpdateJob(75))
+            await foreach (var cred in Credential.FindFromInventoryUpdateJob(75))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1309,7 +1309,7 @@ namespace APITest
         [TestMethod]
         public async Task Get10ListFromJobTemplate()
         {
-            await foreach(var cred in Credential.FindFromJobTemplate(7))
+            await foreach (var cred in Credential.FindFromJobTemplate(7))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1318,7 +1318,7 @@ namespace APITest
         [TestMethod]
         public async Task Get11ListFromJob()
         {
-            await foreach(var cred in Credential.FindFromJobTemplateJob(4))
+            await foreach (var cred in Credential.FindFromJobTemplateJob(4))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1327,7 +1327,7 @@ namespace APITest
         [TestMethod]
         public async Task Get12ListFromSchedule()
         {
-            await foreach(var cred in Credential.FindFromSchedule(6))
+            await foreach (var cred in Credential.FindFromSchedule(6))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1336,7 +1336,7 @@ namespace APITest
         [TestMethod]
         public async Task Get13ListFromWorkflowJobTemplateNode()
         {
-            await foreach(var cred in Credential.FindFromWorkflowJobTemplateNode(1))
+            await foreach (var cred in Credential.FindFromWorkflowJobTemplateNode(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1345,7 +1345,7 @@ namespace APITest
         [TestMethod]
         public async Task Get14ListFromWorkflowJobNode()
         {
-            await foreach(var cred in Credential.FindFromWorkflowJobNode(8))
+            await foreach (var cred in Credential.FindFromWorkflowJobNode(8))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1360,7 +1360,7 @@ namespace APITest
             Console.WriteLine($"Id          : {ct.Id}");
             Console.WriteLine($"Type        : {ct.Type}");
             Console.WriteLine($"Created     : {ct.Created}");
-            Console.WriteLine($"Modified    : {ct.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {ct.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {ct.Name}");
             Console.WriteLine($"Description : {ct.Description}");
             Console.WriteLine($"Kind        : {ct.Kind}");
@@ -1399,7 +1399,7 @@ namespace APITest
             Console.WriteLine($"Id          : {inventory.Id}");
             Console.WriteLine($"Type        : {inventory.Type}");
             Console.WriteLine($"Created     : {inventory.Created}");
-            Console.WriteLine($"Modified    : {inventory.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {inventory.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {inventory.Name}");
             Console.WriteLine($"Description : {inventory.Description}");
             Console.WriteLine($"Kind        : {inventory.Kind}");
@@ -1427,7 +1427,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach(var inventory in Inventory.FindFromOrganization(2))
+            await foreach (var inventory in Inventory.FindFromOrganization(2))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1437,7 +1437,7 @@ namespace APITest
         public async Task Get04ListInputInventires()
         {
             Console.WriteLine("Inventory [4]'s Inpput Inventories:");
-            await foreach(var inventory in Inventory.FindInputInventoires(4))
+            await foreach (var inventory in Inventory.FindInputInventoires(4))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1452,7 +1452,7 @@ namespace APITest
             Console.WriteLine($"Id          : {inventory.Id}");
             Console.WriteLine($"Type        : {inventory.Type}");
             Console.WriteLine($"Created     : {inventory.Created}");
-            Console.WriteLine($"Modified    : {inventory.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {inventory.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {inventory.Name}");
             Console.WriteLine($"Description : {inventory.Description}");
             Console.WriteLine($"Kind        : {inventory.Kind}");
@@ -1471,7 +1471,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach(var inventory in ConstructedInventory.Find(null))
+            await foreach (var inventory in ConstructedInventory.Find(null))
             {
                 Assert.AreEqual("constructed", inventory.Kind);
                 DumpResource(inventory);
@@ -1514,7 +1514,7 @@ namespace APITest
         {
             var proj = await Project.Get(8);
             Console.WriteLine($"Scm InventorySources for ([{proj.Type}][{proj.Id}] {proj.Name})");
-            await foreach(var res in InventorySource.FindFromProject(8))
+            await foreach (var res in InventorySource.FindFromProject(8))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1525,7 +1525,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(4);
             Console.WriteLine($"InventorySources for ([{inventory.Type}][{inventory.Id}] {inventory.Name})");
-            await foreach(var res in InventorySource.FindFromInventory(4))
+            await foreach (var res in InventorySource.FindFromInventory(4))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1536,7 +1536,7 @@ namespace APITest
         {
             var group = await Group.Get(4);
             Console.WriteLine($"InventorySources for ([{group.Type}][{group.Id}] {group.Name})");
-            await foreach(var res in InventorySource.FindFromGroup(4))
+            await foreach (var res in InventorySource.FindFromGroup(4))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1547,7 +1547,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"InventorySources for ([{host.Type}][{host.Id}] {host.Name})");
-            await foreach(var res in InventorySource.FindFromHost(host.Id))
+            await foreach (var res in InventorySource.FindFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1591,7 +1591,7 @@ namespace APITest
         {
             var projectUpdateJob = await ProjectUpdateJob.Get(76);
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
-            await foreach(var res in InventoryUpdateJob.FindFromProjectUpdate(projectUpdateJob.Id))
+            await foreach (var res in InventoryUpdateJob.FindFromProjectUpdate(projectUpdateJob.Id))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -1602,7 +1602,7 @@ namespace APITest
         {
             var inventorySource = await InventorySource.Get(11);
             Console.WriteLine($"InventoryUpdateJobs for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach(var res in InventoryUpdateJob.FindFromInventorySource(inventorySource.Id))
+            await foreach (var res in InventoryUpdateJob.FindFromInventorySource(inventorySource.Id))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -1618,7 +1618,7 @@ namespace APITest
             Console.WriteLine($"Id          : {group.Id}");
             Console.WriteLine($"Type        : {group.Type}");
             Console.WriteLine($"Created     : {group.Created}");
-            Console.WriteLine($"Modified    : {group.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {group.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {group.Name}");
             Console.WriteLine($"Description : {group.Description}");
             Console.WriteLine($"Inventory   : {group.Inventory}");
@@ -1646,7 +1646,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach(var group in Group.FindFromInventory(inventory.Id))
+            await foreach (var group in Group.FindFromInventory(inventory.Id))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1657,7 +1657,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach(var group in Group.FindOnlyRootFromInventory(inventory.Id))
+            await foreach (var group in Group.FindOnlyRootFromInventory(inventory.Id))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1668,7 +1668,7 @@ namespace APITest
         {
             var inventorySOurce = await InventorySource.Get(11);
             Console.WriteLine($"Groups in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach(var group in Group.FindFromInventorySource(inventorySOurce.Id))
+            await foreach (var group in Group.FindFromInventorySource(inventorySOurce.Id))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1679,7 +1679,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach(var group in Group.FindAllFromHost(host.Id))
+            await foreach (var group in Group.FindAllFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1690,7 +1690,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach(var group in Group.FindFromHost(host.Id))
+            await foreach (var group in Group.FindFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1705,7 +1705,7 @@ namespace APITest
             Console.WriteLine($"Id          : {host.Id}");
             Console.WriteLine($"Type        : {host.Type}");
             Console.WriteLine($"Created     : {host.Created}");
-            Console.WriteLine($"Modified    : {host.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {host.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {host.Name}");
             Console.WriteLine($"Description : {host.Description}");
             Console.WriteLine($"Inventory   : {host.Inventory}");
@@ -1735,7 +1735,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach(var host in Host.FindFromInventory(inventory.Id))
+            await foreach (var host in Host.FindFromInventory(inventory.Id))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1746,7 +1746,7 @@ namespace APITest
         {
             var inventorySOurce = await InventorySource.Get(11);
             Console.WriteLine($"Hosts in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach(var host in Host.FindFromInventorySource(inventorySOurce.Id))
+            await foreach (var host in Host.FindFromInventorySource(inventorySOurce.Id))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1757,7 +1757,7 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach(var host in Host.FindAllFromGroup(group.Id))
+            await foreach (var host in Host.FindAllFromGroup(group.Id))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1768,7 +1768,7 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach(var host in Host.FindFromGroup(group.Id))
+            await foreach (var host in Host.FindFromGroup(group.Id))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1783,7 +1783,7 @@ namespace APITest
             Console.WriteLine($"Id          : {jt.Id}");
             Console.WriteLine($"Type        : {jt.Type}");
             Console.WriteLine($"Created     : {jt.Created}");
-            Console.WriteLine($"Modified    : {jt.Modified?.ToString() ?? "(null)"}");
+            Console.WriteLine($"Modified    : {jt.Modified?.ToString("o") ?? "(null)"}");
             Console.WriteLine($"Name        : {jt.Name}");
             Console.WriteLine($"Description : {jt.Description}");
             Console.WriteLine($"Inventory   : {jt.Inventory}");
@@ -1835,7 +1835,7 @@ namespace APITest
     [TestClass]
     public class TestJob
     {
-        const ulong jobId = 4;
+        private const ulong jobId = 4;
 
         private static void DumpResource(JobTemplateJob.Detail job)
         {
@@ -2060,7 +2060,7 @@ namespace APITest
         {
             var cmd = await AdHocCommand.Get(69);
             Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
-            await foreach(var je in AdHocCommandJobEvent.FindFromAdHocCommand(cmd.Id))
+            await foreach (var je in AdHocCommandJobEvent.FindFromAdHocCommand(cmd.Id))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<AdHocCommandJobEvent>(je);
@@ -2100,7 +2100,7 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"JobHostSummaries in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach(var summary in JobHostSummary.FindFromGroup(group.Id))
+            await foreach (var summary in JobHostSummary.FindFromGroup(group.Id))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2113,7 +2113,7 @@ namespace APITest
         {
             var host = await Host.Get(2);
             Console.WriteLine($"JobHostSummaries in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach(var summary in JobHostSummary.FindFromHost(host.Id))
+            await foreach (var summary in JobHostSummary.FindFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2126,7 +2126,7 @@ namespace APITest
         {
             var job = await JobTemplateJob.Get(4);
             Console.WriteLine($"JobHostSummaries in ({job.Type})[{job.Id}] {job.Name}");
-            await foreach(var summary in JobHostSummary.FindFromJob(job.Id))
+            await foreach (var summary in JobHostSummary.FindFromJob(job.Id))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2168,7 +2168,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
-            await foreach(var cmd in AdHocCommand.FindFromInventory(inventory.Id))
+            await foreach (var cmd in AdHocCommand.FindFromInventory(inventory.Id))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2179,7 +2179,7 @@ namespace APITest
         {
             var group = await Group.Get(5);
             Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach(var cmd in AdHocCommand.FindFromGroup(group.Id))
+            await foreach (var cmd in AdHocCommand.FindFromGroup(group.Id))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2190,7 +2190,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach(var cmd in AdHocCommand.FindFromHost(host.Id))
+            await foreach (var cmd in AdHocCommand.FindFromHost(host.Id))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2259,7 +2259,7 @@ namespace APITest
             Console.WriteLine($"JobArgs   : {res.JobArgs}");
             Console.WriteLine($"JobCwd    : {res.JobCwd}");
             Console.WriteLine($"JobEnv    : ({res.JobEnv.Count})");
-            foreach (var (k,v) in res.JobEnv)
+            foreach (var (k, v) in res.JobEnv)
             {
                 Console.WriteLine($"  {k}: {v}");
             }
@@ -2280,7 +2280,7 @@ namespace APITest
     [TestClass]
     public class TestSchedule
     {
-        static void DumpResource(Schedule res)
+        private static void DumpResource(Schedule res)
         {
             Console.WriteLine($"{res.Id} [{res.Type}] {res.Name} - {res.Description}");
             Console.WriteLine($"RRule   : {res.Rrule}");
@@ -2337,7 +2337,7 @@ namespace APITest
     [TestClass]
     public class TestNotificationTemplate
     {
-        static void DumpResource(NotificationTemplate res)
+        private static void DumpResource(NotificationTemplate res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"Origanization    : {res.Organization}");
@@ -2370,7 +2370,7 @@ namespace APITest
     [TestClass]
     public class TestNotification
     {
-        static void DumpResource(Notification res)
+        private static void DumpResource(Notification res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.NotificationType}");
             Console.WriteLine($"{res.Created} {res.Modified}");
@@ -2380,7 +2380,7 @@ namespace APITest
             Console.WriteLine($"NotificationSent     : {res.NotificationsSent}");
             Console.WriteLine($"Recipients           : {res.Recipients}");
             Console.WriteLine($"Subject              : {res.Subject}");
-            Console.WriteLine($"Body                 : {(res.Body ?? "(null)")}");
+            Console.WriteLine($"Body                 : {res.Body ?? "(null)"}");
         }
         [TestMethod]
         public async Task Get01Single()
@@ -2405,7 +2405,7 @@ namespace APITest
     [TestClass]
     public class TestLabel
     {
-        static void DumpResource(Label res)
+        private static void DumpResource(Label res)
         {
             Console.WriteLine($"{res.Id} {res.Name} {res.Url}");
             Console.WriteLine($"Organization: {res.Organization}");
@@ -2422,7 +2422,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach(var res in Label.Find(null))
+            await foreach (var res in Label.Find(null))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2433,7 +2433,7 @@ namespace APITest
     [TestClass]
     public class TestUnifiedJobTemplate
     {
-        static void DumpResource(IUnifiedJobTemplate jt)
+        private static void DumpResource(IUnifiedJobTemplate jt)
         {
             Console.WriteLine($"---- Type: {jt.GetType().Name} ----");
             Console.WriteLine($"{jt.Id} [{jt.Type}] {jt.Name}");
@@ -2535,7 +2535,7 @@ namespace APITest
     [TestClass]
     public class TestUnifiedJob
     {
-        static void DumpResource(IUnifiedJob job)
+        private static void DumpResource(IUnifiedJob job)
         {
             Console.WriteLine($"---- Type: {job.GetType().Name} ----");
             Console.WriteLine($"{job.Id} [{job.Type}] {job.Name}");
@@ -2612,7 +2612,7 @@ namespace APITest
     [TestClass]
     public class TestWorkflowJobTemplate
     {
-        static void DumpResource(WorkflowJobTemplate res)
+        private static void DumpResource(WorkflowJobTemplate res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
             Console.WriteLine($"Description : {res.Description}");
@@ -2642,7 +2642,7 @@ namespace APITest
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"WorkflowJobTemplate in ({org.Type})[{org.Id}]{org.Name}");
-            await foreach(var wjt in WorkflowJobTemplate.FindFromOrganization(org.Id))
+            await foreach (var wjt in WorkflowJobTemplate.FindFromOrganization(org.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(wjt);
                 Console.WriteLine($"[{wjt.Id}] {wjt.Name} [{wjt.Status}]");
@@ -2653,7 +2653,7 @@ namespace APITest
     [TestClass]
     public class TestWofkflowJob
     {
-        static void DumpResource(WorkflowJob res)
+        private static void DumpResource(WorkflowJob res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
             Console.WriteLine($"Description : {res.Description}");
@@ -2683,7 +2683,7 @@ namespace APITest
         {
             var wjt = await WorkflowJobTemplate.Get(13);
             Console.WriteLine($"WorkflowJobTemplate in ({wjt.Type})[{wjt.Id}]{wjt.Name}");
-            await foreach(var job in WorkflowJob.FindFromWorkflowJobTemplate(wjt.Id))
+            await foreach (var job in WorkflowJob.FindFromWorkflowJobTemplate(wjt.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} [{job.Status}] [{job.Finished}]");
@@ -2694,7 +2694,7 @@ namespace APITest
     [TestClass]
     public class TestWorkflowJobTemplateNode
     {
-        static void DumpResource(WorkflowJobTemplateNode res)
+        private static void DumpResource(WorkflowJobTemplateNode res)
         {
             Console.WriteLine($"{res.Id} {res.Type}");
             Console.WriteLine($"WorkflowJobTemplate : {res.WorkflowJobTemplate}");
@@ -2726,7 +2726,7 @@ namespace APITest
     [TestClass]
     public class TestWorkflowJobNode
     {
-        static void DumpResource(WorkflowJobNode res)
+        private static void DumpResource(WorkflowJobNode res)
         {
             Console.WriteLine($"{res.Id} {res.Type}");
             Console.WriteLine($"Job                 : {res.Job}");
@@ -2759,7 +2759,7 @@ namespace APITest
     [TestClass]
     public class TestCredentialInputSource
     {
-        static void DumpResource(CredentialInputSource res)
+        private static void DumpResource(CredentialInputSource res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Description}");
             Console.WriteLine($"  InputFieldName  : {res.InputFieldName}");
@@ -2802,7 +2802,7 @@ namespace APITest
     [TestClass]
     public class TestExecutionEnvironment
     {
-        static void DumpResource(ExecutionEnvironment res)
+        private static void DumpResource(ExecutionEnvironment res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"Image   : {res.Image}");
@@ -2858,7 +2858,7 @@ namespace APITest
     [TestClass]
     public class TestWorkflowApprovalTemplate
     {
-        static void DumpResource(WorkflowApprovalTemplate res)
+        private static void DumpResource(WorkflowApprovalTemplate res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"Timeout: {res.Timeout}");
@@ -2881,7 +2881,7 @@ namespace APITest
     [TestClass]
     public class TestWorkflowApproval
     {
-        static void DumpResource(WorkflowApproval res)
+        private static void DumpResource(WorkflowApprovalBase res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"  {res.Status} {res.Finished}");
