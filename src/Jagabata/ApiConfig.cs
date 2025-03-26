@@ -101,7 +101,7 @@ namespace Jagabata
             }
             using var fs = fileInfo.OpenRead();
             var config = JsonSerializer.Deserialize<ApiConfig>(fs, Json.DeserializeOptions)
-                ?? throw new Exception($"Could not load config.");
+                ?? throw new InvalidDataException($"Could not load config.");
             config.File = fileInfo;
             return Load(config);
         }

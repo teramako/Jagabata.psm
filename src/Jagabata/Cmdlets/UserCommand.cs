@@ -193,7 +193,7 @@ namespace Jagabata.Cmdlets
                 else
                 {
                     if (CommandRuntime.Host is null)
-                        throw new NullReferenceException();
+                        throw new NotSupportedException("Could not display prompt for inputting password.");
 
                     _passwordInputedFromPrompt = true;
                     var prompt = new AskPrompt(CommandRuntime.Host);

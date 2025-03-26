@@ -61,7 +61,7 @@ namespace Jagabata.Cmdlets
                         task.Wait();
                         return task.Result;
                     }
-                    throw new ArgumentNullException(nameof(SenData));
+                    throw new InvalidDataException($"Should specify {nameof(SenData)}");
                 case Method.PATCH:
                     if (SenData is not null)
                     {
@@ -69,7 +69,7 @@ namespace Jagabata.Cmdlets
                         task.Wait();
                         return task.Result;
                     }
-                    throw new ArgumentNullException(nameof(SenData));
+                    throw new InvalidDataException($"Should specify {nameof(SenData)}");
                 case Method.DELETE:
                     {
                         var task = RestAPI.DeleteAsync(pathAndQuery);
