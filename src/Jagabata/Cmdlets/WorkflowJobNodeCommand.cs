@@ -56,7 +56,7 @@ namespace Jagabata.Cmdlets
             var path = WorkflowJobNode.PATH;
             if (Job > 0)
             {
-                path = $"{WorkflowJob.PATH}{Job}/workflow_nodes/";
+                path = $"{WorkflowJobBase.PATH}{Job}/workflow_nodes/";
             }
             else if (Node > 0)
             {

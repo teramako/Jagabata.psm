@@ -56,10 +56,10 @@ namespace Jagabata.Cmdlets
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/labels/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/labels/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/labels/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/labels/",
                 ResourceType.Schedule => $"{Resources.Schedule.PATH}{Resource.Id}/labels/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/labels/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Resource.Id}/labels/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{Resource.Id}/labels/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Resource.Id}/labels/",
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Resource.Id}/labels/",
                 _ => Label.PATH

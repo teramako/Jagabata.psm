@@ -53,7 +53,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = SystemJobTemplate > 0 ? $"{Resources.SystemJobTemplate.PATH}{SystemJobTemplate}/jobs/" : SystemJob.PATH;
+            var path = SystemJobTemplate > 0
+                ? $"{Resources.SystemJobTemplate.PATH}{SystemJobTemplate}/jobs/"
+                : SystemJobBase.PATH;
             Find<SystemJob>(path);
         }
     }

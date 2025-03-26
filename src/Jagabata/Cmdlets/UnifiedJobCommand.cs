@@ -207,12 +207,12 @@ namespace Jagabata.Cmdlets
 
             var path = Type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/cancel/",
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Id}/cancel/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/cancel/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{Id}/cancel/",
-                ResourceType.SystemJob => $"{SystemJob.PATH}{Id}/cancel/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Id}/cancel/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Id}/cancel/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{Id}/cancel/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{Id}/cancel/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{Id}/cancel/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{Id}/cancel/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{Id}/cancel/",
                 _ => throw new NotImplementedException()
             };
             var psobject = new PSObject();

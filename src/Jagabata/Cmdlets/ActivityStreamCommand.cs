@@ -71,10 +71,10 @@ namespace Jagabata.Cmdlets
                 ResourceType.Group => $"{Group.PATH}{Resource.Id}/activity_stream/",
                 ResourceType.Host => $"{Host.PATH}{Resource.Id}/activity_stream/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/activity_stream/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/activity_stream/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{Resource.Id}/activity_stream/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/activity_stream/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{Resource.Id}/activity_stream/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/activity_stream/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Resource.Id}/activity_stream/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{Resource.Id}/activity_stream/",
                 ResourceType.ExecutionEnvironment => $"{ExecutionEnvironment.PATH}{Resource.Id}/activity_stream/",
                 _ => ActivityStream.PATH
             };

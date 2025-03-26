@@ -53,7 +53,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/ad_hoc_commands/",
                 ResourceType.Host => $"{Host.PATH}{Resource.Id}/ad_hoc_commands/",
                 ResourceType.Group => $"{Group.PATH}{Resource.Id}/ad_hoc_commands/",
-                _ => AdHocCommand.PATH
+                _ => AdHocCommandBase.PATH
             };
             Find<AdHocCommand>(path);
         }

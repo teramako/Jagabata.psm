@@ -60,7 +60,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void EndProcessing()
         {
-            var path = Project > 0 ? $"{Resources.Project.PATH}{Project}/project_updates/" : ProjectUpdateJob.PATH;
+            var path = Project > 0
+                ? $"{Resources.Project.PATH}{Project}/project_updates/"
+                : ProjectUpdateJobBase.PATH;
             Find<ProjectUpdateJob>(path);
         }
     }

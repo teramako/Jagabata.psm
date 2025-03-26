@@ -73,7 +73,7 @@ namespace Jagabata.Cmdlets
             {
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/slice_workflow_jobs/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{Resource.Id}/workflow_jobs/",
-                _ => WorkflowJob.PATH
+                _ => WorkflowJobBase.PATH
             };
             Find<WorkflowJob>(path);
         }
