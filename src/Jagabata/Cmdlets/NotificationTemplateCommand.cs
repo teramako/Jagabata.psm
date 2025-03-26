@@ -362,8 +362,9 @@ namespace Jagabata.Cmdlets
             };
             foreach (var timing in On)
             {
-                if (timing == "Approval" && (For.Type != ResourceType.Organization
-                                             && For.Type != ResourceType.WorkflowJobTemplate))
+                if (timing == "Approval"
+                    && For.Type != ResourceType.Organization
+                    && For.Type != ResourceType.WorkflowJobTemplate)
                 {
                     WriteWarning($"{For.Type} has no \"{timing}\" notifications.");
                     continue;

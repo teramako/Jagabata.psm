@@ -39,7 +39,7 @@ namespace Jagabata.Cmdlets
                          |___/                             |_|
 
             """;
-        private ApiConfig? config = null;
+        private ApiConfig? config;
         private SecureString? GetToken()
         {
             var fd = new FieldDescription("Personal Token");

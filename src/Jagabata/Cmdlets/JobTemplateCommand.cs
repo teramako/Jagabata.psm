@@ -511,12 +511,12 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.Inventory.Id,
-                                           helpMessage: "Input an Inventory ID."
-                                                        + (requirements.InventoryNeededToStart ? " (Required)" : ""),
-                                           required: requirements.InventoryNeededToStart,
-                                           out var inventoryAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.Inventory.Id,
+                                    helpMessage: "Input an Inventory ID."
+                                                 + (requirements.InventoryNeededToStart ? " (Required)" : ""),
+                                    required: requirements.InventoryNeededToStart,
+                                    out var inventoryAnswer))
                 {
                     if (!inventoryAnswer.IsEmpty && inventoryAnswer.Input > 0)
                     {
@@ -578,11 +578,11 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.ExecutionEnvironment.Id,
-                                           helpMessage: "Enter the Execution Environment ID.",
-                                           required: false,
-                                           out var eeAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.ExecutionEnvironment.Id,
+                                    helpMessage: "Enter the Execution Environment ID.",
+                                    required: false,
+                                    out var eeAnswer))
                 {
                     if (!eeAnswer.IsEmpty)
                     {
@@ -746,10 +746,10 @@ namespace Jagabata.Cmdlets
                     var v = (JobVerbosity)(int)(value ?? 0);
                     WriteHost(string.Format(culture, skipFormat, label, $"{v:d} ({v:g})"), dontshow: true);
                 }
-                else if (prompt.AskEnum<JobVerbosity>(label,
-                                                      defaultValue: requirements.Defaults.Verbosity,
-                                                      helpMessage: "Choose the job log verbosity level.",
-                                                      out var verbosityAnswer))
+                else if (prompt.AskEnum(label,
+                                        defaultValue: requirements.Defaults.Verbosity,
+                                        helpMessage: "Choose the job log verbosity level.",
+                                        out var verbosityAnswer))
                 {
                     if (!verbosityAnswer.IsEmpty)
                     {

@@ -192,7 +192,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         return false;
                     case SurveySpecType.Integer:
                         int? intDefault = string.IsNullOrEmpty(spec.Default as string) ? null : (int)spec.Default;
-                        if (prompt.Ask<int>(label, key, (int?)spec.Default, description, spec.Required, out var intAnswer))
+                        if (prompt.Ask(label, key, (int?)spec.Default, description, spec.Required, out var intAnswer))
                         {
                             extraVars[varName] = intAnswer.Input;
                             PrintPromptResult(varName, $"{intAnswer.Input}", intAnswer.IsEmpty);
@@ -201,7 +201,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         return false;
                     case SurveySpecType.Float:
                         float? floatDefault = string.IsNullOrEmpty(spec.Default as string) ? null : (float)spec.Default;
-                        if (prompt.Ask<float>(label, key, floatDefault, description, spec.Required, out var floatAnswer))
+                        if (prompt.Ask(label, key, floatDefault, description, spec.Required, out var floatAnswer))
                         {
                             extraVars[varName] = floatAnswer.Input;
                             PrintPromptResult(varName, $"{floatAnswer.Input}", floatAnswer.IsEmpty);

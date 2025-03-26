@@ -260,11 +260,11 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.Inventory.Id,
-                                           helpMessage: "Input an Inventory ID.",
-                                           required: false,
-                                           out var inventoryAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.Inventory.Id,
+                                    helpMessage: "Input an Inventory ID.",
+                                    required: false,
+                                    out var inventoryAnswer))
                 {
                     if (!inventoryAnswer.IsEmpty && inventoryAnswer.Input > 0)
                     {
