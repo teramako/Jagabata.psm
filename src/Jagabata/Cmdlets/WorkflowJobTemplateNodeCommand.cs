@@ -191,7 +191,7 @@ namespace Jagabata.Cmdlets
             result = apiResponse.Contents;
             return apiResponse.Response.IsSuccessStatusCode;
         }
-        private bool TryAddNode(WorkflowJobTemplateNode node, WorkflowApprovalTemplate template)
+        private bool TryAddNode(WorkflowApprovalTemplate template)
         {
             if (ParentNode is null)
                 return true;
@@ -219,7 +219,7 @@ namespace Jagabata.Cmdlets
             {
                 if (TryCreateNode(out var node) &&
                     TryCreateApprovalTemplate(node, sendData, out var template) &&
-                    TryAddNode(node, template))
+                    TryAddNode(template))
                 {
                     WriteObject(node, false);
                 }
