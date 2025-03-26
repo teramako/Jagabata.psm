@@ -34,15 +34,18 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     /// Retrieve and output the resource for the gathered ID.
     /// Primarily called from within the <see cref="Cmdlet.EndProcessing"/> method
     /// </summary>
-    protected IEnumerable<TResource> GetResultSet() => IdSet.Count switch
+    protected IEnumerable<TResource> GetResultSet()
     {
-        0 => [],
-        1 => [GetResource<TResource>($"{ApiPath}{IdSet.First()}/")],
-        _ => new QueryBuilder(Query).SetOrderBy("id")
-                                    .BuildWithIdList(IdSet.Order().ToArray())
-                                    .SelectMany(query => GetResultSet<TResource>(ApiPath, query))
-                                    .SelectMany(static resultSet => resultSet.Results)
-    };
+        return IdSet.Count switch
+        {
+            0 => [],
+            1 => [GetResource<TResource>($"{ApiPath}{IdSet.First()}/")],
+            _ => new QueryBuilder(Query).SetOrderBy("id")
+                                        .BuildWithIdList(IdSet.Order().ToArray())
+                                        .SelectMany(query => GetResultSet<TResource>(ApiPath, query))
+                                        .SelectMany(static resultSet => resultSet.Results)
+        };
+    }
 
     /// <summary>
     /// Get and output resources individually.
