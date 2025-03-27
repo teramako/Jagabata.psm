@@ -165,9 +165,21 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public IEnumerable<ActivityStream> GetRecentActivityStream(ushort pageSize = 20)
+        public ActivityStream[] GetRecentActivityStream(ushort pageSize = 20)
         {
-            return GetResultsByRelatedKey<ActivityStream>("activity_stream", string.Empty, "-timestamp", pageSize);
+            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", string.Empty, "-timestamp", pageSize)];
+        }
+
+        /// <summary>
+        /// Get the recent activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         protected override CacheItem GetCacheItem()
