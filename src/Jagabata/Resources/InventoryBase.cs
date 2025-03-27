@@ -153,6 +153,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
     }
 
+    /// <summary>
+    /// Get a list of groups associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <param name="orderBy">Name(s) of sort key</param>
+    /// <param name="pageSize">Max number of groups to retrieve</param>
+    public Group[] GetChildGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<Group>("groups", queryString, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get a list of groups associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+    public Group[] GetChildGroups(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<Group>("groups", query)];
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";

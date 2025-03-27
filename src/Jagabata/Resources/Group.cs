@@ -71,6 +71,32 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get a list of groups associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/children/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Group[] GetChildGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Group>("children", queryString, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of groups associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/children/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Group[] GetChildGroups(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Group>("children", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
