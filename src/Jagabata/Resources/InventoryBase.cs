@@ -179,6 +179,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return [.. GetResultsByRelatedKey<Group>("groups", query)];
     }
 
+    /// <summary>
+    /// Get a list of hosts associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/hosts/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <param name="orderBy">Name(s) of sort key</param>
+    /// <param name="pageSize">Max number of groups to retrieve</param>
+    public Host[] GetChildHosts(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<Host>("hosts", queryString, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get a list of hosts associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/hosts/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+    public Host[] GetChildHosts(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<Host>("hosts", query)];
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
