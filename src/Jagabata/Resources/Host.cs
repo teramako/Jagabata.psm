@@ -203,6 +203,32 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the groups that are direct parent of this hosts
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Group[] GetParentGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Group>("groups", queryString, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the groups that are direct parent of this hosts
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Group[] GetParentGroups(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Group>("groups", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
