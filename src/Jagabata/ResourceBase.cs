@@ -66,6 +66,15 @@ namespace Jagabata
         /// </summary>
         public abstract SummaryFieldsDictionary SummaryFields { get; }
 
+        protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey, HttpQuery? query = null)
+            where T : class
+        {
+            return Related.TryGetPath(relatedKey, out var path)
+                ? RestAPI.GetResultSet<T>(path, query)
+                         .SelectMany(static apiResult => apiResult.Contents.Results)
+                : [];
+        }
+
         protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey,
                                                            string queryString,
                                                            string orderBy = "",
@@ -73,16 +82,11 @@ namespace Jagabata
                                                            uint page = 1)
             where T : class
         {
-            if (Related.TryGetPath(relatedKey, out var path))
-            {
-                var query = QueryBuilder.Parse(queryString, null)
-                                        .SetOrderBy(orderBy)
-                                        .SetPageSize(pageSize)
-                                        .SetStartPage(page)
-                                        .Build();
-                return RestAPI.GetResultSet<T>(path, query);
-            }
-            return [];
+            return GetResultsByRelatedKey<T>(relatedKey, QueryBuilder.Parse(queryString, null)
+                                                                     .SetOrderBy(orderBy)
+                                                                     .SetPageSize(pageSize)
+                                                                     .SetStartPage(page)
+                                                                     .Build());
         }
 
         protected abstract CacheItem GetCacheItem();
