@@ -102,10 +102,11 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/organizations/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
+        /// <param name="searchWords"></param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(ushort pageSize = 20)
+        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", string.Empty, "-timestamp", pageSize)];
+            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
         }
 
         /// <summary>
