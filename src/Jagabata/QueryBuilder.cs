@@ -193,13 +193,35 @@ public class QueryBuilder : ISpanParsable<QueryBuilder>
     }
 
     /// <summary>
-    /// For <c>search</c> parameter
+    /// Set <c>search</c> parameter
+    /// <list type="bullet">
+    ///     <item><paramref name="words"/> will be stored split by ','.</item>
+    ///     <item>Only empty or non-blank word is valid.</item>
+    /// </list>
+    /// </summary>
+    /// <param name="words"></param>
+    /// <returns>this instance</returns>
+    public QueryBuilder SetSearchWords(string? words)
+    {
+        SearchWords = string.IsNullOrEmpty(words)
+            ? []
+            : words.Split(',', StringSplitOptions.RemoveEmptyEntries
+                               | StringSplitOptions.TrimEntries);
+        return this;
+    }
+    /// <summary>
+    /// Set <c>search</c> parameter
+    /// <list type="bullet">
+    ///     <item>Empty or space-only words will be excluded</item>
+    /// </list>
     /// </summary>
     /// <param name="words"></param>
     /// <returns>this instance</returns>
     public QueryBuilder SetSearchWords(params string[]? words)
     {
-        SearchWords = words ?? [];
+        SearchWords = words is null
+            ? []
+            : [.. words.Where(static word => !string.IsNullOrWhiteSpace(word))];
         return this;
     }
 
