@@ -123,6 +123,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Host>("hosts", query)];
         }
 
+        /// <summary>
+        /// Get a list of all hosts directly or indirectly belonging to this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/all_hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of hosts to retrieve</param>
+        public Host[] GetAllDescendantHosts(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Host>("all_hosts", queryString, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of all hosts directly or indirectly belonging to this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/all_hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Host[] GetAllDescendantHosts(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Host>("all_hosts", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
