@@ -159,12 +159,12 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// Implement API: <c>/api/v2/inventories/{id}/groups/</c>
     /// </para>
     /// </summary>
-    /// <param name="queryString"></param>
+    /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Group[] GetChildGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    public Group[] GetChildGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Group>("groups", queryString, orderBy, pageSize)];
+        return [.. GetResultsByRelatedKey<Group>("groups", searchWords, orderBy, pageSize)];
     }
 
     /// <summary>
@@ -185,12 +185,12 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// Implement API: <c>/api/v2/inventories/{id}/hosts/</c>
     /// </para>
     /// </summary>
-    /// <param name="queryString"></param>
+    /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Host[] GetChildHosts(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    public Host[] GetChildHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Host>("hosts", queryString, orderBy, pageSize)];
+        return [.. GetResultsByRelatedKey<Host>("hosts", searchWords, orderBy, pageSize)];
     }
 
     /// <summary>
@@ -211,12 +211,12 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
     /// </para>
     /// </summary>
-    /// <param name="queryString"></param>
+    /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Group[] GetRootGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    public Group[] GetRootGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Group>("root_groups", queryString, orderBy, pageSize)];
+        return [.. GetResultsByRelatedKey<Group>("root_groups", searchWords, orderBy, pageSize)];
     }
 
     /// <summary>

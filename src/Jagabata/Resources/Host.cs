@@ -209,12 +209,12 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/hosts/{id}/groups/</c>
         /// </para>
         /// </summary>
-        /// <param name="queryString"></param>
+        /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public Group[] GetParentGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        public Group[] GetParentGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Group>("groups", queryString, orderBy, pageSize)];
+            return [.. GetResultsByRelatedKey<Group>("groups", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>
@@ -235,12 +235,12 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/hosts/{id}/all_groups/</c>
         /// </para>
         /// </summary>
-        /// <param name="queryString"></param>
+        /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of hosts to retrieve</param>
-        public Group[] GetAllAncestorGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        public Group[] GetAllAncestorGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Group>("all_groups", queryString, orderBy, pageSize)];
+            return [.. GetResultsByRelatedKey<Group>("all_groups", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>

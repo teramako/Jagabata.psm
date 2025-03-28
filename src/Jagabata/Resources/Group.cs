@@ -77,12 +77,12 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/groups/{id}/children/</c>
         /// </para>
         /// </summary>
-        /// <param name="queryString"></param>
+        /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public Group[] GetChildGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        public Group[] GetChildGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Group>("children", queryString, orderBy, pageSize)];
+            return [.. GetResultsByRelatedKey<Group>("children", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>
@@ -103,12 +103,12 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/groups/{id}/hosts/</c>
         /// </para>
         /// </summary>
-        /// <param name="queryString"></param>
+        /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of hosts to retrieve</param>
-        public Host[] GetChildHosts(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        public Host[] GetChildHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Host>("hosts", queryString, orderBy, pageSize)];
+            return [.. GetResultsByRelatedKey<Host>("hosts", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>
@@ -129,12 +129,12 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/groups/{id}/all_hosts/</c>
         /// </para>
         /// </summary>
-        /// <param name="queryString"></param>
+        /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of hosts to retrieve</param>
-        public Host[] GetAllDescendantHosts(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        public Host[] GetAllDescendantHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Host>("all_hosts", queryString, orderBy, pageSize)];
+            return [.. GetResultsByRelatedKey<Host>("all_hosts", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>

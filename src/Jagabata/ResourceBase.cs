@@ -76,17 +76,17 @@ namespace Jagabata
         }
 
         protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey,
-                                                           string queryString,
+                                                           string? searchWords,
                                                            string orderBy = "",
                                                            ushort pageSize = 20,
                                                            uint page = 1)
             where T : class
         {
-            return GetResultsByRelatedKey<T>(relatedKey, QueryBuilder.Parse(queryString, null)
-                                                                     .SetOrderBy(orderBy)
-                                                                     .SetPageSize(pageSize)
-                                                                     .SetStartPage(page)
-                                                                     .Build());
+            return GetResultsByRelatedKey<T>(relatedKey, new QueryBuilder().SetSearchWords(searchWords)
+                                                                           .SetOrderBy(orderBy)
+                                                                           .SetPageSize(pageSize)
+                                                                           .SetStartPage(page)
+                                                                           .Build());
         }
 
         protected abstract CacheItem GetCacheItem();
