@@ -229,6 +229,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Group>("groups", query)];
         }
 
+        /// <summary>
+        /// Get a list of all groups directly or indirectly this host belonging to
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/all_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of hosts to retrieve</param>
+        public Group[] GetAllAncestorGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Group>("all_groups", queryString, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of all groups directly or indirectly this host belonging to
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/all_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Group[] GetAllAncestorGroups(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Group>("all_groups", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
