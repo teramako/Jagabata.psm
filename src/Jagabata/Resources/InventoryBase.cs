@@ -205,6 +205,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return [.. GetResultsByRelatedKey<Host>("hosts", query)];
     }
 
+    /// <summary>
+    /// Get a list of root (top-level) groups associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <param name="orderBy">Name(s) of sort key</param>
+    /// <param name="pageSize">Max number of groups to retrieve</param>
+    public Group[] GetRootGroups(string queryString = "", string orderBy = "name", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<Group>("root_groups", queryString, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get a list of root (top-level) groups associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+    public Group[] GetRootGroups(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<Group>("root_groups", query)];
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
