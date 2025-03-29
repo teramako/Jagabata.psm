@@ -178,6 +178,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Project>("projects", query)];
         }
 
+        /// <summary>
+        /// Get the inventories related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Inventory[] GetInventories(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Inventory>("inventories", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the inventories related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Inventory[] GetInventories(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Inventory>("inventories", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
