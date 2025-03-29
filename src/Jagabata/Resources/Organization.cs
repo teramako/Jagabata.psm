@@ -204,6 +204,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Inventory>("inventories", query)];
         }
 
+        /// <summary>
+        /// Get the job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public JobTemplate[] GetJobTemplates(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public JobTemplate[] GetJobTemplates(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
