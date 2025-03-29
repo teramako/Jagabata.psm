@@ -131,9 +131,15 @@ public class QueryBuilder : ISpanParsable<QueryBuilder>
             ? this
             : Add(Filter.Parse(dict));
     }
+    public QueryBuilder Add(string key, string? value)
+    {
+        return value is null
+            ? this
+            : Add(new Filter(key, value));
+    }
     public QueryBuilder Add(string key,
                             string? value,
-                            FilterLookupType lookupType = FilterLookupType.Exact,
+                            FilterLookupType lookupType,
                             bool isOr = false,
                             bool isNot = false)
     {
