@@ -230,6 +230,37 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", query)];
         }
 
+        /// <summary>
+        /// Get the workflow job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/workflow_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJobTemplate[] GetWorkflowJobTemplates(string? searchWords = null,
+                                                             string orderBy = "name",
+                                                             ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates",
+                                                                   searchWords,
+                                                                   orderBy,
+                                                                   pageSize)];
+        }
+
+        /// <summary>
+        /// Get the workflow job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/workflow_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public WorkflowJobTemplate[] GetWorkflowJobTemplates(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
