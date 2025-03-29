@@ -152,6 +152,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ExecutionEnvironment>("execution_environments", query)];
         }
 
+        /// <summary>
+        /// Get the projects related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Project[] GetProjects(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the projects related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Project[] GetProjects(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
