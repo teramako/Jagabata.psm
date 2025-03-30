@@ -311,6 +311,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
+    /// Get the instance groups related to this organization
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="searchWords"></param>
+    /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+    /// <param name="pageSize">Max number to retrieve</param>.
+    public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get the instance groups related to this organization
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+    public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+    }
+
+    /// <summary>
     /// Get a list of root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
