@@ -419,6 +419,16 @@ public abstract class InventoryBase : ResourceBase, IInventory
         return [.. GetResultsByRelatedKey<Group>("root_groups", query)];
     }
 
+    /// <summary>
+    /// Get the organization related this inventory.
+    /// </summary>
+    public Organization? GetOrganization()
+    {
+        return Related.TryGetPath("organization", out var path)
+            ? RestAPI.Get<Organization>(path)
+            : null;
+    }
+
     public override string ToString()
     {
         return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
