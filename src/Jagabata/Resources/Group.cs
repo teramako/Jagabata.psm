@@ -176,6 +176,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<JobEvent>("job_events", query)];
         }
 
+        /// <summary>
+        /// Get a list of job host summaries associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/job_host_summaries/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobHostSummary[] GetJobHostSummaries(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of job host summaries associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/job_host_summaries/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobHostSummary[] GetJobHostSummaries(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
