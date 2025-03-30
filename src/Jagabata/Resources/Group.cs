@@ -150,6 +150,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Host>("all_hosts", query)];
         }
 
+        /// <summary>
+        /// Get a list of job events associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobEvent[] GetJobEvents(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<JobEvent>("job_events", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of job events associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobEvent[] GetJobEvents(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<JobEvent>("job_events", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
