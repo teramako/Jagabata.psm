@@ -443,6 +443,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<User>("access_list", query)];
         }
 
+        /// <summary>
+        /// Get the instance groups related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the instance groups related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
