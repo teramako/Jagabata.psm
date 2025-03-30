@@ -259,6 +259,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
+    /// Get the access list related to this organization
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="searchWords"></param>
+    /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+    /// <param name="pageSize">Max number to retrieve</param>.
+    public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get the access list related to this organization
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+    public User[] GetAccessList(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<User>("access_list", query)];
+    }
+
+    /// <summary>
     /// Get a list of root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
