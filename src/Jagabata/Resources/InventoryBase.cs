@@ -363,6 +363,37 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
+    /// Get a list of inventory sources associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/inventory_sources/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="searchWords"></param>
+    /// <param name="orderBy">Name(s) of sort key</param>
+    /// <param name="pageSize">Max number of groups to retrieve</param>
+    public InventorySource[] GetInventorySources(string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
+    }
+
+    /// <summary>
+    /// Get a list of inventory sources associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/inventory_sources/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+    public InventorySource[] GetInventorySources(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
+    }
+
+    /// <summary>
     /// Get a list of root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
