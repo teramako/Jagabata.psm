@@ -202,6 +202,37 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", query)];
         }
 
+        /// <summary>
+        /// Get a list of inventory sources associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/inventory_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public InventorySource[] GetInventorySources(string? searchWords = null,
+                                                     string orderBy = "name",
+                                                     ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of inventory sources associated with this group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/{id}/inventory_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public InventorySource[] GetInventorySources(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
