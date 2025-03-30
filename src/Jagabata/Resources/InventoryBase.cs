@@ -207,6 +207,32 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
+    /// Get a list of job templates associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/job_templates/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="searchWords"></param>
+    /// <param name="orderBy">Name(s) of sort key</param>
+    /// <param name="pageSize">Max number of groups to retrieve</param>
+    public JobTemplate[] GetJobTemplates(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    {
+        return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", searchWords, orderBy, pageSize)];
+    }
+
+    /// <summary>
+    /// Get a list of job templates associated with this inventory
+    /// <para>
+    /// Implement API: <c>/api/v2/inventories/{id}/job_templates/</c>
+    /// </para>
+    /// </summary>
+    /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+    public JobTemplate[] GetJobTemplates(HttpQuery query)
+    {
+        return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", query)];
+    }
+
+    /// <summary>
     /// Get a list of root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
