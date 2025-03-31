@@ -259,7 +259,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the access list related to this organization
+    /// Get the access list related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
     /// </para>
@@ -273,7 +273,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the access list related to this organization
+    /// Get the access list related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
     /// </para>
@@ -299,7 +299,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the instance groups related to this organization
+    /// Get the instance groups related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
     /// </para>
@@ -313,7 +313,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the instance groups related to this organization
+    /// Get the instance groups related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
     /// </para>
