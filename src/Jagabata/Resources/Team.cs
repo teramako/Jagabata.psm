@@ -287,6 +287,20 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Role>("roles", query)];
         }
 
+        /// <summary>
+        /// Get the object roles of this team
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
