@@ -391,6 +391,19 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<AdHocCommandJobEvent>("ad_hoc_command_events", query)];
         }
 
+        /// <summary>
+        /// Get the facts data of this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ansible_facts/</c>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, object?>? GetFactCache()
+        {
+            return Related.TryGetPath("ansible_facts", out var path)
+                ? RestAPI.Get<Dictionary<string, object?>>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
