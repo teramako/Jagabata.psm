@@ -327,6 +327,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<User>("access_list", query)];
         }
 
+        /// <summary>
+        /// Get the organization related this team
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
