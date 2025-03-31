@@ -339,6 +339,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
         }
 
+        /// <summary>
+        /// Get a list of ad hoc commands associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of hosts to retrieve</param>
+        public AdHocCommand[] GetAdHocCommandJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of ad hoc commands associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public AdHocCommand[] GetAdHocCommandJobs(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
