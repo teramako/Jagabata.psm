@@ -209,6 +209,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Project>("projects", query)];
         }
 
+        /// <summary>
+        /// Get the users related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("users", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the users related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetUsers(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("users", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
