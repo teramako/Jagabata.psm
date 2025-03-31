@@ -256,6 +256,185 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Group>("all_groups", query)];
         }
 
+        /// <summary>
+        /// Get a list of job events associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobEvent[] GetJobEvents(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<JobEvent>("job_events", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of job events associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobEvent[] GetJobEvents(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<JobEvent>("job_events", query)];
+        }
+
+        /// <summary>
+        /// Get a list of job host summaries associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/job_host_summaries/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobHostSummary[] GetJobHostSummaries(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of job host summaries associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/job_host_summaries/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobHostSummary[] GetJobHostSummaries(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", query)];
+        }
+
+        /// <summary>
+        /// Get a list of inventory sources associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/inventory_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public InventorySource[] GetInventorySources(string? searchWords = null,
+                                                     string orderBy = "name",
+                                                     ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of inventory sources associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/inventory_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public InventorySource[] GetInventorySources(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
+        }
+
+        /// <summary>
+        /// Get a list of ad hoc commands associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of hosts to retrieve</param>
+        public AdHocCommand[] GetAdHocCommandJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of ad hoc commands associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public AdHocCommand[] GetAdHocCommandJobs(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
+        }
+
+        /// <summary>
+        /// Get a list of ad hoc command events associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_command_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public AdHocCommandJobEvent[] GetAdHocCommandEvents(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommandJobEvent>("ad_hoc_command_events", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of ad hoc command events associated with this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ad_hoc_command_events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public AdHocCommandJobEvent[] GetAdHocCommandEvents(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<AdHocCommandJobEvent>("ad_hoc_command_events", query)];
+        }
+
+        /// <summary>
+        /// Get the facts data of this host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/{id}/ansible_facts/</c>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, object?>? GetFactCache()
+        {
+            return Related.TryGetPath("ansible_facts", out var path)
+                ? RestAPI.Get<Dictionary<string, object?>>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the job template jobs related to this host
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/?hosts={id}</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobTemplateJob[] GetJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return GetJobs(new QueryBuilder().SetSearchWords(searchWords)
+                                             .SetOrderBy(orderBy)
+                                             .SetPageSize(pageSize)
+                                             .Build());
+        }
+
+        /// <summary>
+        /// Get the job template jobs related to this host
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/?hosts={id}</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobTemplateJob[] GetJobs(HttpQuery query)
+        {
+            query.Set("hosts", $"{Id}");
+            return [.. RestAPI.GetResultSet<JobTemplateJob>(JobTemplateJobBase.PATH, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
