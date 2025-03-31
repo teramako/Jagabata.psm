@@ -404,6 +404,37 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the job template jobs related to this host
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/?hosts={id}</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number to retrieve</param>
+        public JobTemplateJob[] GetJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return GetJobs(new QueryBuilder().SetSearchWords(searchWords)
+                                             .SetOrderBy(orderBy)
+                                             .SetPageSize(pageSize)
+                                             .Build());
+        }
+
+        /// <summary>
+        /// Get the job template jobs related to this host
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/?hosts={id}</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public JobTemplateJob[] GetJobs(HttpQuery query)
+        {
+            query.Set("hosts", $"{Id}");
+            return [.. RestAPI.GetResultSet<JobTemplateJob>(JobTemplateJobBase.PATH, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
