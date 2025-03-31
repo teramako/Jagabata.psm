@@ -393,28 +393,16 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Get the object roles related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/object_roles/</c>
-        /// </para>
         /// </summary>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
-        /// <param name="pageSize">Max number to retrieve</param>.
-        public Role[] GetObjectRoles(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public OrganizationObjectRoleSummary[] GetObjectRoles()
         {
-            return [.. GetResultsByRelatedKey<Role>("object_roles", searchWords, orderBy, pageSize)];
-        }
-
-        /// <summary>
-        /// Get the object roles related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/object_roles/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Role[] GetObjectRoles(HttpQuery query)
-        {
-            return [.. GetResultsByRelatedKey<Role>("object_roles", query)];
+            return SummaryFields.TryGetValue<Dictionary<string, OrganizationObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
         }
 
         /// <summary>
