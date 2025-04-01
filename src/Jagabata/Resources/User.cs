@@ -373,6 +373,84 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<User>("access_list", query)];
         }
 
+        /// <summary>
+        /// Get the tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
+        }
+
+        /// <summary>
+        /// Get the authorized tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/authorized_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetAuthorizedTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("authorized_tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the authorized tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/authorized_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetAuthorizedTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("authorized_tokens", query)];
+        }
+
+        /// <summary>
+        /// Get the personal tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/personal_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetPersonalTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("personal_tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the personal tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/personal_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetPersonalTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("personal_tokens", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
