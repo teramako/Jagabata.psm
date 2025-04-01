@@ -183,6 +183,160 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the projects related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Project[] GetProjects(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the projects related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Project[] GetProjects(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", query)];
+        }
+
+        /// <summary>
+        /// Get the users related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("users", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the users related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetUsers(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("users", query)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] GetCredentials(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        /// <summary>
+        /// Get the roles related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Role[] GetRoles(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the roles related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Role[] GetRoles(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles of this team
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the access list related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// fet the access list related to this team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the organization related this team
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
