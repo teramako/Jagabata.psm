@@ -321,6 +321,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
         }
 
+        /// <summary>
+        /// Get the roles related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Role[] GetRoles(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the roles related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Role[] GetRoles(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
