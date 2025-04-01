@@ -217,6 +217,58 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Team>("teams", query)];
         }
 
+        /// <summary>
+        /// Get the organizations related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Organization[] GetOrganizations(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("organizations", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the organizations related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Organization[] GetOrganizations(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("organizations", query)];
+        }
+
+        /// <summary>
+        /// Get the organizations for which this user is an administrator.
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/admin_of_organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Organization[] GetAdminOfOrganizations(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("admin_of_organizations", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the organizations for which this user is an administrator.
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/admin_of_organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Organization[] GetAdminOfOrganizations(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("admin_of_organizations", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
