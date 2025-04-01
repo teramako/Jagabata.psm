@@ -347,6 +347,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Role>("roles", query)];
         }
 
+        /// <summary>
+        /// Get the access list related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
