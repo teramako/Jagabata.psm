@@ -520,6 +520,16 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the source project related to this inventory source
+        /// </summary>
+        public Project? GetSourceProject()
+        {
+            return Related.TryGetPath("source_project", out var path)
+                ? RestAPI.Get<Project>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
