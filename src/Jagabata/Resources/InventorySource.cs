@@ -355,6 +355,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the execution environment related to this inventory source
+        /// </summary>
+        public ExecutionEnvironment? GetExecutionEnvironment()
+        {
+            return Related.TryGetPath("execution_environment", out var path)
+                ? RestAPI.Get<ExecutionEnvironment>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
