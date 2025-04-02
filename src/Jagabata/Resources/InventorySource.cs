@@ -510,6 +510,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
         }
 
+        /// <summary>
+        /// Get the inventory related to this inventory source
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path)
+                ? RestAPI.Get<Inventory>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
