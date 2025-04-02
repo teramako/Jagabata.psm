@@ -292,6 +292,175 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the teams related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] GetTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Team>("teams", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the teams related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] GetTeams(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Team>("teams", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles related to this project
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the organization related this project
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
