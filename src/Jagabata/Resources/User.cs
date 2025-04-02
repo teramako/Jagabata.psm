@@ -191,6 +191,266 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the teams related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] GetTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Team>("teams", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the teams related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] GetTeams(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Team>("teams", query)];
+        }
+
+        /// <summary>
+        /// Get the organizations related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Organization[] GetOrganizations(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("organizations", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the organizations related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Organization[] GetOrganizations(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("organizations", query)];
+        }
+
+        /// <summary>
+        /// Get the organizations for which this user is an administrator.
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/admin_of_organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Organization[] GetAdminOfOrganizations(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("admin_of_organizations", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the organizations for which this user is an administrator.
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/admin_of_organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Organization[] GetAdminOfOrganizations(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Organization>("admin_of_organizations", query)];
+        }
+
+        /// <summary>
+        /// Get the projects related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Project[] GetProjects(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the projects related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Project[] GetProjects(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Project>("projects", query)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] GetCredentials(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        /// <summary>
+        /// Get the roles related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Role[] GetRoles(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the roles related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Role[] GetRoles(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Role>("roles", query)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
+        }
+
+        /// <summary>
+        /// Get the authorized tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/authorized_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetAuthorizedTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("authorized_tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the authorized tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/authorized_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetAuthorizedTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("authorized_tokens", query)];
+        }
+
+        /// <summary>
+        /// Get the personal tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/personal_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] GetPersonalTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("personal_tokens", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the personal tokens related to this user
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{id}/personal_tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] GetPersonalTokens(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("personal_tokens", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Username, string.Empty);
