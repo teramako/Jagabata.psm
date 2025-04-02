@@ -451,6 +451,16 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Get the organization related this project
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
