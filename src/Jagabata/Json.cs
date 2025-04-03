@@ -756,6 +756,8 @@ namespace Jagabata
                         return Deserialize<UnifiedJobTemplateSummary>(ref reader, options, isArray);
                     case "UserCapabilities":
                         return Deserialize<Capability>(ref reader, options, isArray);
+                    case "WebhookCredential":
+                        return Deserialize<WebhookCredentialSummary>(ref reader, options, isArray);
                     case "WorkflowApprovalTemplate":
                         return Deserialize<WorkflowApprovalTemplateSummary>(ref reader, options, isArray);
                     case "WorkflowJob":

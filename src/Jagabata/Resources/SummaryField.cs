@@ -403,6 +403,34 @@ namespace Jagabata.Resources
         ];
     }
 
+    // WebhookCredential in JobTemplate
+    public sealed class WebhookCredentialSummary(ulong id, string name, string description, string kind,
+                                                 bool cloud = false, ulong? credentialTypeId = null)
+        : NameAndDescriptionResourceSummary
+    {
+        [JsonIgnore]
+        public override ResourceType Type => ResourceType.Credential;
+        public override ulong Id => id;
+        public override string Name => name;
+        public override string Description => description;
+        public string Kind => kind;
+        public bool Cloud => cloud;
+        public ulong? CredentialTypeId => credentialTypeId;
+        protected override CacheItem GetCacheItem()
+        {
+            var item = base.GetCacheItem();
+            item.Metadata.Add("Kind", Kind);
+            return item;
+        }
+        protected override string[] DisplayProperties =>
+        [
+            .. base.DisplayProperties,
+            nameof(Kind),
+            nameof(Cloud),
+            nameof(CredentialTypeId)
+        ];
+    }
+
     // Credentials in JobTemplate, Job
     public sealed class JobTemplateCredentialSummary(ulong id, string name, string description, string kind, bool cloud)
         : NameAndDescriptionResourceSummary
