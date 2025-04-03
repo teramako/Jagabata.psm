@@ -357,6 +357,14 @@ namespace Jagabata.Resources
             return Related.TryGetPath("project", out var path) ? RestAPI.Get<Project>(path) : null;
         }
 
+        /// <summary>
+        /// Get the organization related to this job template
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
