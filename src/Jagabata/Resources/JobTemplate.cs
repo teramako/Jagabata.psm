@@ -560,6 +560,19 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", query)];
         }
 
+        /// <summary>
+        /// Get the webhook key for this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/webhook_key/</c>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, string>? GetWebhookKey()
+        {
+            return !string.IsNullOrEmpty(WebhookService) && Related.TryGetPath("webhook_key", out var path)
+                ? RestAPI.Get<Dictionary<string, string>>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
