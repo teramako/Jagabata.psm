@@ -310,7 +310,7 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAccessList(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
         {
             return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
         }
