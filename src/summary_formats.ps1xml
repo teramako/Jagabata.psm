@@ -96,5 +96,85 @@
         </TableRowEntries>
       </TableControl>
     </View>
+    <View>
+      <Name>CredentialSummary</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.CredentialSummary</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><!-- Type -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Id -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Name -->
+          <TableColumnHeader/><!-- Description -->
+          <TableColumnHeader/><!-- Kind -->
+          <TableColumnHeader><!-- Cloud -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Kubernetes -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- CredentialTypeId -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><PropertyName>Type</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Id</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Name</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Description</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Kind</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Cloud</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Kubernetes</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>CredentialTypeId</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>WebhookCredentialSummary</Name>
+      <ViewSelectedBy>
+        <TypeName>Jagabata.Resources.WebhookCredentialSummary</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><!-- Type -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- Id -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader/><!-- Name -->
+          <TableColumnHeader/><!-- Description -->
+          <TableColumnHeader/><!-- Kind -->
+          <TableColumnHeader><!-- Cloud -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader><!-- CredentialTypeId -->
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><PropertyName>Type</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Id</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Name</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Description</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Kind</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Cloud</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>CredentialTypeId</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>
