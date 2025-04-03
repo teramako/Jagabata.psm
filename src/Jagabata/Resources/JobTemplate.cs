@@ -273,6 +273,12 @@ namespace Jagabata.Resources
         public ulong? WebhookCredential { get; } = webhookCredential;
         public bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
 
+        [JsonIgnore]
+        public LabelSummary[] Labels =>
+            SummaryFields.TryGetValue<ListSummary<LabelSummary>>("Labels", out var labels)
+            ? labels.Results
+            : [];
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);

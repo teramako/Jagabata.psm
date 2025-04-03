@@ -1006,10 +1006,6 @@
         <GetScriptBlock>[OutputType([Jagabata.Resources.JobTemplateCredentialSummary[]])]param() $this.SummaryFields.Credentials</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
-        <Name>Labels</Name>
-        <GetScriptBlock>[OutputType([Jagabata.Resources.LabelSummary[]])]param() $this.SummaryFields.Labels.Results</GetScriptBlock>
-      </ScriptProperty>
-      <ScriptProperty>
         <Name>LastJob</Name>
         <GetScriptBlock>[OutputType([Jagabata.Resources.LastJobSummary])]param() $this.SummaryFields.LastJob</GetScriptBlock>
       </ScriptProperty>
