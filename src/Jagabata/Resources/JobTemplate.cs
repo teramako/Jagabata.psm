@@ -484,6 +484,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<User>("access_list", query)];
         }
 
+        /// <summary>
+        /// Get the survey spec for this job template
+        /// </summary>
+        public Survey? GetSurveySpec()
+        {
+            return SurveyEnabled && Related.TryGetPath("survey_spec", out var path)
+                ? RestAPI.Get<Survey>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
