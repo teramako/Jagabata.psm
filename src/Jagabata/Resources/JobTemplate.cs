@@ -534,6 +534,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
         }
 
+        /// <summary>
+        /// Get the slice workflow jobs related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJob[] GetSliceWorkflowJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the slice workflow jobs related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public WorkflowJob[] GetSliceWorkflowJobs(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
