@@ -495,7 +495,7 @@ namespace Jagabata.Resources
         /// </summary>
         public Survey? GetSurveySpec()
         {
-            return SurveyEnabled && Related.TryGetPath("survey_spec", out var path)
+            return SummaryFields.ContainsKey("Survey") && Related.TryGetPath("survey_spec", out var path)
                 ? RestAPI.Get<Survey>(path)
                 : null;
         }
