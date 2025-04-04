@@ -209,6 +209,32 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the workflow nodes related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/workflow_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJobTemplateNode[] GetWorkflowNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("workflow_nodes", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the workflow nodes related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/workflow_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public WorkflowJobTemplateNode[] GetWorkflowNodes(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("workflow_nodes", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
