@@ -355,6 +355,207 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the execution environment related to this inventory source
+        /// </summary>
+        public ExecutionEnvironment? GetExecutionEnvironment()
+        {
+            return Related.TryGetPath("execution_environment", out var path)
+                ? RestAPI.Get<ExecutionEnvironment>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the hosts related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Host[] GetHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Host>("hosts", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the hosts related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Host[] GetHosts(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Host>("hosts", query)];
+        }
+
+        /// <summary>
+        /// Get the groups related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Group[] GetGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Group>("groups", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the groups related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Group[] GetGroups(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Group>("groups", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Get the inventory related to this inventory source
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path)
+                ? RestAPI.Get<Inventory>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the source project related to this inventory source
+        /// </summary>
+        public Project? GetSourceProject()
+        {
+            return Related.TryGetPath("source_project", out var path)
+                ? RestAPI.Get<Project>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the credentials related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] GetCredentials(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
