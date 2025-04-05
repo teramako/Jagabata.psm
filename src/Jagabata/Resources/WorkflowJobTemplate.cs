@@ -399,6 +399,16 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Get the survey spec for this workflow job template
+        /// </summary>
+        public Survey? GetSurveySpec()
+        {
+            return SummaryFields.ContainsKey("Survey") && Related.TryGetPath("survey_spec", out var path)
+                ? RestAPI.Get<Survey>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
