@@ -101,6 +101,19 @@ namespace Jagabata.Resources
         public int Ignored { get; } = ignored;
         public int Rescued { get; } = rescued;
 
+        /// <summary>
+        /// Get the job detail related to this job host summary
+        /// <para>
+        /// Implement: <c>/api/v2/jobs/{id}/</c>
+        /// </para>
+        /// </summary>
+        public JobTemplateJob.Detail? GetJobDetail()
+        {
+            return Related.TryGetPath("job", out var path)
+                ? RestAPI.Get<JobTemplateJob.Detail>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, HostName, string.Empty);
