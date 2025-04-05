@@ -101,6 +101,46 @@ namespace Jagabata.Resources
         public int Ignored { get; } = ignored;
         public int Rescued { get; } = rescued;
 
+        /// <summary>
+        /// Get the job detail related to this job host summary
+        /// <para>
+        /// Implement: <c>/api/v2/jobs/{id}/</c>
+        /// </para>
+        /// </summary>
+        public JobTemplateJob.Detail? GetJobDetail()
+        {
+            return Related.TryGetPath("job", out var path)
+                ? RestAPI.Get<JobTemplateJob.Detail>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the host related to this job host summary
+        /// <para>
+        /// Implement: <c>/api/v2/hosts/{id}/</c>
+        /// </para>
+        /// </summary>
+        public Host? GetHost()
+        {
+            return Related.TryGetPath("host", out var path)
+                ? RestAPI.Get<Host>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get job events for this job host summary's job
+        /// <para>
+        /// Implement: <c>/api/v2/jobs/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        public JobEvent[] GetEvents()
+        {
+            var path = $"{JobTemplateJobBase.PATH}{Job}/job_events/";
+            var query = new HttpQuery("order_by=counter&page_size=200", QueryCount.Infinity);
+            return [.. RestAPI.GetResultSet<JobEvent>(path, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, HostName, string.Empty);
