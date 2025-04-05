@@ -154,6 +154,12 @@ namespace Jagabata.Resources
                        (!string.IsNullOrEmpty(WebhookService) ? JobTemplateOptions.Webhook : 0) |
                        (AllowSimultaneous ? JobTemplateOptions.Simultaneous : 0);
 
+        [JsonIgnore]
+        public LabelSummary[] Labels =>
+            SummaryFields.TryGetValue<ListSummary<LabelSummary>>("Labels", out var labels)
+            ? labels.Results
+            : [];
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);
@@ -194,6 +200,235 @@ namespace Jagabata.Resources
         public ActivityStream[] GetRecentActivityStream(HttpQuery query)
         {
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Get the webhook key for this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/webhook_key/</c>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, string>? GetWebhookKey()
+        {
+            return !string.IsNullOrEmpty(WebhookService) && Related.TryGetPath("webhook_key", out var path)
+                ? RestAPI.Get<Dictionary<string, string>>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the workflow nodes related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/workflow_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJobTemplateNode[] GetWorkflowNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("workflow_nodes", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the workflow nodes related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/workflow_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public WorkflowJobTemplateNode[] GetWorkflowNodes(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("workflow_nodes", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have approvals notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have approvals notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals", query)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this workflow job template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles related to this workflow job template
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the survey spec for this workflow job template
+        /// </summary>
+        public Survey? GetSurveySpec()
+        {
+            return SummaryFields.ContainsKey("Survey") && Related.TryGetPath("survey_spec", out var path)
+                ? RestAPI.Get<Survey>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the organization related to this workflow job template
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
+        }
+
+        /// <summary>
+        /// Get the inventory related to this workflow job template
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
         }
 
         protected override CacheItem GetCacheItem()
