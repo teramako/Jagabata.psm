@@ -129,9 +129,9 @@ namespace Jagabata.Resources
         /// <summary>
         /// Get inventory update events for this job
         /// </summary>
-        public IEnumerable<InventoryUpdateJobEvent> GetEvents()
+        public InventoryUpdateJobEvent[] GetEvents()
         {
-            return GetEvents<InventoryUpdateJobEvent>();
+            return [.. GetEvents<InventoryUpdateJobEvent>()];
         }
 
         public InventorySource? GetTemplate()

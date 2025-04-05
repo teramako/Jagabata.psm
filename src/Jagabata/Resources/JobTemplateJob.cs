@@ -91,9 +91,9 @@ namespace Jagabata.Resources
         /// <summary>
         /// Get job events for this job
         /// </summary>
-        public IEnumerable<JobEvent> GetEvents()
+        public JobEvent[] GetEvents()
         {
-            return GetEvents<JobEvent>("job_events");
+            return [.. GetEvents<JobEvent>("job_events")];
         }
 
         public Dictionary<string, object?> GetExtraVars()

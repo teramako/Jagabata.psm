@@ -50,9 +50,9 @@ namespace Jagabata.Resources
         /// <summary>
         /// Get system job events for this job
         /// </summary>
-        public IEnumerable<SystemJobEvent> GetEvents()
+        public SystemJobEvent[] GetEvents()
         {
-            return GetEvents<SystemJobEvent>();
+            return [.. GetEvents<SystemJobEvent>()];
         }
 
         public Dictionary<string, object?> GetExtraVars()

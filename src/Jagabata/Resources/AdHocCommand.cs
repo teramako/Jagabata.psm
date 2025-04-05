@@ -47,9 +47,9 @@ namespace Jagabata.Resources
         /// <summary>
         /// Get adhoc command events for this job
         /// </summary>
-        public IEnumerable<AdHocCommandJobEvent> GetEvents()
+        public AdHocCommandJobEvent[] GetEvents()
         {
-            return GetEvents<AdHocCommandJobEvent>();
+            return [.. GetEvents<AdHocCommandJobEvent>()];
         }
 
         /// <summary>

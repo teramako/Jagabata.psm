@@ -66,9 +66,9 @@ namespace Jagabata.Resources
         /// <summary>
         /// Get project update events for this job
         /// </summary>
-        public IEnumerable<ProjectUpdateJobEvent> GetEvents()
+        public ProjectUpdateJobEvent[] GetEvents()
         {
-            return GetEvents<ProjectUpdateJobEvent>();
+            return [.. GetEvents<ProjectUpdateJobEvent>()];
         }
     }
 
