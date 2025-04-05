@@ -114,6 +114,19 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the host related to this job host summary
+        /// <para>
+        /// Implement: <c>/api/v2/hosts/{id}/</c>
+        /// </para>
+        /// </summary>
+        public Host? GetHost()
+        {
+            return Related.TryGetPath("host", out var path)
+                ? RestAPI.Get<Host>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, HostName, string.Empty);
