@@ -112,6 +112,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Notification>("notifications", query)];
         }
 
+        /// <summary>
+        /// Get the organization related this notification template
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
