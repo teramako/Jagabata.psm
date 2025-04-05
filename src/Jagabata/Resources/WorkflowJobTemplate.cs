@@ -154,6 +154,12 @@ namespace Jagabata.Resources
                        (!string.IsNullOrEmpty(WebhookService) ? JobTemplateOptions.Webhook : 0) |
                        (AllowSimultaneous ? JobTemplateOptions.Simultaneous : 0);
 
+        [JsonIgnore]
+        public LabelSummary[] Labels =>
+            SummaryFields.TryGetValue<ListSummary<LabelSummary>>("Labels", out var labels)
+            ? labels.Results
+            : [];
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);
