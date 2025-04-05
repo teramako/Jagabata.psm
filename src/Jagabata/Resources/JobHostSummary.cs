@@ -127,6 +127,20 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get job events for this job host summary's job
+        /// <para>
+        /// Implement: <c>/api/v2/jobs/{id}/job_events/</c>
+        /// </para>
+        /// </summary>
+        public JobEvent[] GetEvents()
+        {
+            var path = $"{JobTemplateJobBase.PATH}{Job}/job_events/";
+            var query = new HttpQuery("order_by=counter&page_size=200", QueryCount.Infinity);
+            return [.. RestAPI.GetResultSet<JobEvent>(path, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, HostName, string.Empty);
