@@ -86,6 +86,32 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
 
+        /// <summary>
+        /// Get the notifications related to this notification template
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/{id}/notifications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Notification[] GetNotifications(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Notification>("notifications", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notifications related to this notification template
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/{id}/notifications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Notification[] GetNotifications(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Notification>("notifications", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
