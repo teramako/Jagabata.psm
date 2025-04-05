@@ -47,6 +47,38 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public string Description { get; } = description;
 
+        /// <summary>
+        /// Get the users related to this role
+        /// <para>
+        /// Implement API: <c>/api/v2/roles/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return GetUsers(new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .Build());
+        }
+
+        /// <summary>
+        /// Get the users related to this role
+        /// <para>
+        /// Implement API: <c>/api/v2/roles/{id}/users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetUsers(HttpQuery query)
+        {
+            return Related.TryGetPath("users", out var path)
+                ? [.. RestAPI.GetResultSet<User>(path, query)
+                             .SelectMany(static apiResult => apiResult.Contents.Results)]
+                : [];
+        }
+
         CacheItem ICacheableResource.GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
