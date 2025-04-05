@@ -235,6 +235,130 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("workflow_nodes", query)];
         }
 
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have start notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have success notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have error notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have approvals notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(string? searchWords = null,
+                                                                        string orderBy = "name",
+                                                                        ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals",
+                                                                    searchWords,
+                                                                    orderBy,
+                                                                    pageSize)];
+        }
+
+        /// <summary>
+        /// Get the notification templates that have approvals notification enabled for this workflow job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/notification_templates_approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
