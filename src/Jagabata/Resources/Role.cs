@@ -79,6 +79,38 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Get the teams related to this role
+        /// <para>
+        /// Implement API: <c>/api/v2/roles/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] GetTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return GetTeams(new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .Build());
+        }
+
+        /// <summary>
+        /// Get the teams related to this role
+        /// <para>
+        /// Implement API: <c>/api/v2/roles/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] GetTeams(HttpQuery query)
+        {
+            return Related.TryGetPath("teams", out var path)
+                ? [.. RestAPI.GetResultSet<Team>(path, query)
+                             .SelectMany(static apiResult => apiResult.Contents.Results)]
+                : [];
+        }
+
         CacheItem ICacheableResource.GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
