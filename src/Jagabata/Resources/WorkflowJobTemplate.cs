@@ -417,6 +417,14 @@ namespace Jagabata.Resources
             return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
         }
 
+        /// <summary>
+        /// Get the inventory related to this workflow job template
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
