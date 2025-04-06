@@ -68,6 +68,16 @@ namespace Jagabata.Resources
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
 
+        /// <summary>
+        /// Get the notification template related to this notification.
+        /// </summary>
+        public NotificationTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("notification_template", out var path)
+                ? RestAPI.Get<NotificationTemplate>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty)
