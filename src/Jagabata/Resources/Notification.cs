@@ -78,6 +78,19 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the job related to this notification.
+        /// </summary>
+        public IUnifiedJob? GetJob()
+        {
+            var query = new QueryBuilder().Add("notifications", $"{Id}").SetPageSize(1).Build();
+            return RestAPI.GetResultSetAsync(UnifiedJob.PATH, query)
+                          .ToBlockingEnumerable()
+                          .SelectMany(static apiResult => apiResult.Contents.Results)
+                          .OfType<IUnifiedJob>()
+                          .FirstOrDefault();
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty)
