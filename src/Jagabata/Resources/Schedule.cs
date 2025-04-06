@@ -117,6 +117,37 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Find labels associated with this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Label[] FindLabels(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
+        }
+
+        /// <summary>
+        /// Find labels associated with this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Label[] FindLabels(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
