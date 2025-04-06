@@ -148,6 +148,32 @@ namespace Jagabata.Resources
             return [.. FindResultsByRelatedKey<Label>("labels", query)];
         }
 
+        /// <summary>
+        /// Find credentials related to this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] FindCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] FindCredentials(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
