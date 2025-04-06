@@ -98,6 +98,25 @@ namespace Jagabata.Resources
         public string TimeZone { get; } = timezone;
         public string Until { get; } = until;
 
+        /// <summary>
+        /// Get the most recently jobs executed by this schedule.
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="count">Number of jobs to retrieve</param>
+        public UnifiedJob[] GetRecentJobs(ushort count = 20)
+        {
+            return Related.TryGetPath("unified_jobs", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, new QueryBuilder().SetOrderBy("-id")
+                                                                        .SetPageSize(count)
+                                                                        .Build())
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJob>()]
+                : [];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
