@@ -201,6 +201,14 @@ namespace Jagabata.Resources
             return Related.TryGetPath("project", out var path) ? RestAPI.Get<Project>(path) : null;
         }
 
+        /// <summary>
+        /// Get the inventory related to this schedule
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
