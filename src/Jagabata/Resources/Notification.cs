@@ -68,6 +68,29 @@ namespace Jagabata.Resources
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
 
+        /// <summary>
+        /// Get the notification template related to this notification.
+        /// </summary>
+        public NotificationTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("notification_template", out var path)
+                ? RestAPI.Get<NotificationTemplate>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the job related to this notification.
+        /// </summary>
+        public IUnifiedJob? GetJob()
+        {
+            var query = new QueryBuilder().Add("notifications", $"{Id}").SetPageSize(1).Build();
+            return RestAPI.GetResultSetAsync(UnifiedJob.PATH, query)
+                          .ToBlockingEnumerable()
+                          .SelectMany(static apiResult => apiResult.Contents.Results)
+                          .OfType<IUnifiedJob>()
+                          .FirstOrDefault();
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty)
