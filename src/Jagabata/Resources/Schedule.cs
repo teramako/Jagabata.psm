@@ -193,6 +193,14 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the project related to this schedule
+        /// </summary>
+        public Project? GetProject()
+        {
+            return Related.TryGetPath("project", out var path) ? RestAPI.Get<Project>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
