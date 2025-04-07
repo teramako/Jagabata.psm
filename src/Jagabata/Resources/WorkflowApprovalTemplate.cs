@@ -5,9 +5,9 @@ namespace Jagabata.Resources
                                           DateTime? modified, string name, string description, DateTime? lastJobRun,
                                           bool lastJobFailed, DateTime? nextJobRun, JobTemplateStatus status,
                                           ulong? executionEnvironment, int timeout)
-        : ResourceBase
+        : UnifiedJobTemplate
     {
-        public const string PATH = "/api/v2/workflow_approval_templates/";
+        public new const string PATH = "/api/v2/workflow_approval_templates/";
 
         /// <summary>
         /// Retrieve a Workflow Approval Template.<br/>
@@ -15,7 +15,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<WorkflowApprovalTemplate> Get(ulong id)
+        public static new async Task<WorkflowApprovalTemplate> Get(ulong id)
         {
             var apiResult = await RestAPI.GetAsync<WorkflowApprovalTemplate>($"{PATH}{id}/");
             return apiResult.Contents;
@@ -26,14 +26,14 @@ namespace Jagabata.Resources
         public override string Url { get; } = url;
         public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public DateTime? LastJobRun { get; } = lastJobRun;
-        public bool LastJobFailed { get; } = lastJobFailed;
-        public DateTime? NextJobRun { get; } = nextJobRun;
-        public JobTemplateStatus Status { get; } = status;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public int Timeout { get; } = timeout;
 
