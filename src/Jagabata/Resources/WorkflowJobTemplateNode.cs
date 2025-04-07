@@ -183,6 +183,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", query)];
         }
 
+        /// <summary>
+        /// Get a list of failure nodes associated with this workflow job template node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/failure_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public WorkflowJobTemplateNode[] GetFailureNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of failure nodes associated with this workflow job template node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/failure_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public WorkflowJobTemplateNode[] GetFailureNodes(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
