@@ -235,6 +235,19 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("always_nodes", query)];
         }
 
+        /// <summary>
+        /// Get the parent workflow job template of this node.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/{id}/</c>
+        /// </para>
+        /// </summary>
+        public WorkflowJobTemplate? GetWorkflowJobTemplate()
+        {
+            return Related.TryGetPath("workflow_job_template", out var path)
+                ? RestAPI.Get<WorkflowJobTemplate>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
