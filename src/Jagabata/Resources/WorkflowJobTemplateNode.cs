@@ -95,6 +95,16 @@ namespace Jagabata.Resources
         public bool AllParentsMustConverge { get; } = allParentsMustConverge;
         public string Identifier { get; } = identifier;
 
+        /// <summary>
+        /// Get the inventory related to this workflow job template node.
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path)
+                ? RestAPI.Get<Inventory>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
