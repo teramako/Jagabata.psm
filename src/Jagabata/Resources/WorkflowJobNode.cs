@@ -113,6 +113,32 @@ namespace Jagabata.Resources
         public bool DoNotRun { get; } = doNotRun;
         public string Identifier { get; } = identifier;
 
+        /// <summary>
+        /// Get a list of success nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/success_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public WorkflowJobTemplateNode[] GetSuccessNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of success nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/success_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public WorkflowJobNode[] GetSuccessNodes(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<WorkflowJobNode>("success_nodes", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
