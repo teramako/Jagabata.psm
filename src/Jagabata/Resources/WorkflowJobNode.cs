@@ -223,6 +223,32 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get a list of labels associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Label[] GetLabels(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Label>("labels", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of labels associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Label[] GetLabels(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Label>("labels", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
