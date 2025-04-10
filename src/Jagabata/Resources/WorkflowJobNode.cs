@@ -249,6 +249,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Label>("labels", query)];
         }
 
+        /// <summary>
+        /// Get the credentials related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the credentials related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] GetCredentials(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
