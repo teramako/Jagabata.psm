@@ -126,6 +126,47 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get the unified job templates related to this execution environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public UnifiedJobTemplate[] GetUnifiedJobTemplates(string? searchWords = null,
+                                                           string orderBy = "name",
+                                                           ushort pageSize = 20)
+        {
+            return Related.TryGetPath("unified_job_templates", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, new QueryBuilder().SetSearchWords(searchWords)
+                                                                        .SetOrderBy(orderBy)
+                                                                        .SetPageSize(pageSize)
+                                                                        .Build())
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJobTemplate>()]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the unified job templates related to this execution environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public UnifiedJobTemplate[] GetUnifiedJobTemplates(HttpQuery query)
+        {
+            return Related.TryGetPath("unified_job_templates", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, query)
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJobTemplate>()]
+                : [];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
