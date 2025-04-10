@@ -191,6 +191,19 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<WorkflowJobNode>("always_nodes", query)];
         }
 
+        /// <summary>
+        /// Get the parent workflow job of this node.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_jobs/{id}/</c>
+        /// </para>
+        /// </summary>
+        public WorkflowJob? GetWorkflowJob()
+        {
+            return Related.TryGetPath("workflow_job", out var path)
+                ? RestAPI.Get<WorkflowJob>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
