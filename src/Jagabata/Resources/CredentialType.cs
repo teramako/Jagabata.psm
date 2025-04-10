@@ -147,6 +147,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
+        /// <summary>
+        /// Get a list of credentials related to this credential type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of credential_types to retrieve</param>
+        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get a list of credentials related to this credential type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Credential[] GetCredentials(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
