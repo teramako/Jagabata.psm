@@ -204,6 +204,25 @@ namespace Jagabata.Resources
                 : null;
         }
 
+        /// <summary>
+        /// Get the template applied to this node.
+        /// </summary>
+        public UnifiedJobTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("unified_job_template", out var path)
+                   && SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template)
+                ? template.Type switch
+                {
+                    ResourceType.InventorySource => RestAPI.Get<InventorySource>(path),
+                    ResourceType.JobTemplate => RestAPI.Get<JobTemplate>(path),
+                    ResourceType.Project => RestAPI.Get<Project>(path),
+                    ResourceType.WorkflowJobTemplate => RestAPI.Get<WorkflowJobTemplate>(path),
+                    ResourceType.WorkflowApprovalTemplate => RestAPI.Get<WorkflowApprovalTemplate>(path),
+                    _ => throw new NotSupportedException($"Not supported type: {template.Type}")
+                }
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
