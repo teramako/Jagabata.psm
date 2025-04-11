@@ -316,7 +316,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// fet the access list related to this team
+        /// Get the access list related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/access_list/</c>
         /// </para>
