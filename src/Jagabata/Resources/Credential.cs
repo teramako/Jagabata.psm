@@ -449,6 +449,16 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
         }
 
+        /// <summary>
+        /// Get the credential type related this credential
+        /// </summary>
+        public CredentialType? GetCredentialType()
+        {
+            return Related.TryGetPath("credential_type", out var path)
+                ? RestAPI.Get<CredentialType>(path)
+                : null;
+        }
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
