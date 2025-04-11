@@ -371,6 +371,32 @@ namespace Jagabata.Resources
                 : [];
         }
 
+        /// <summary>
+        /// Get the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetOwnerUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("owner_users", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetOwnerUsers(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("owner_users", query)];
+        }
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
