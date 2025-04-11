@@ -423,6 +423,32 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<Team>("owner_teams", query)];
         }
 
+        /// <summary>
+        /// Get the input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public CredentialInputSource[] GetInputSources(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public CredentialInputSource[] GetInputSources(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
+        }
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
