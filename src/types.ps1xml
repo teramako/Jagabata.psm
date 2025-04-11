@@ -547,6 +547,7 @@
               <Name>Inputs</Name>
               <Name>Cloud</Name>
               <Name>Kubernetes</Name>
+              <Name>Owners</Name>
             </ReferencedProperties>
           </PropertySet>
         </Members>
@@ -2596,6 +2597,34 @@
       <ScriptProperty>
         <Name>Description</Name>
         <GetScriptBlock>"{0} {1}" -f $this.FirstName, $this.LastName</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Jagabata.Resources.OwnerSummary</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>Type</Name>
+              <Name>Id</Name>
+              <Name>Name</Name>
+              <Name>Description</Name>
+              <Name>Url</Name>
+            </ReferencedProperties>
+          </PropertySet>
+          <NoteProperty>
+            <Name>DefaultDisplayProperty</Name>
+            <Value>__DisplayName__</Value>
+          </NoteProperty>
+        </Members>
+      </MemberSet>
+      <ScriptProperty IsHidden="true">
+        <Name>__DisplayName__</Name>
+        <GetScriptBlock>[OutputType("string")]param() "{0}:{1}:{2}" -f $this.Type, $this.Id, $this.Name</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Jagabata.Resources
 {
     public interface ICredential
@@ -305,6 +307,10 @@ namespace Jagabata.Resources
         public string Kind { get; } = kind;
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
+
+        [JsonIgnore]
+        public OwnerSummary[] Owners =>
+            SummaryFields.TryGetValue<OwnerSummary[]>("Owners", out var owners) ? owners : [];
 
         /// <summary>
         /// Get the recent activity stream for this resource
