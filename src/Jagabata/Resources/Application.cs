@@ -194,6 +194,14 @@ namespace Jagabata.Resources
             return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
         }
 
+        /// <summary>
+        /// Get the organization related to this application
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
