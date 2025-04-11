@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Jagabata.Resources
 {
     public interface ICredential
@@ -306,6 +308,10 @@ namespace Jagabata.Resources
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
 
+        [JsonIgnore]
+        public OwnerSummary[] Owners =>
+            SummaryFields.TryGetValue<OwnerSummary[]>("Owners", out var owners) ? owners : [];
+
         /// <summary>
         /// Get the recent activity stream for this resource
         /// <para>
@@ -329,6 +335,134 @@ namespace Jagabata.Resources
         public ActivityStream[] GetRecentActivityStream(HttpQuery query)
         {
             return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the access list related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetAccessList(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles related to this credential
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] GetOwnerUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<User>("owner_users", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] GetOwnerUsers(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<User>("owner_users", query)];
+        }
+
+        /// <summary>
+        /// Get the owner teams related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] GetOwnerTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<Team>("owner_teams", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the owner teams related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] GetOwnerTeams(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<Team>("owner_teams", query)];
+        }
+
+        /// <summary>
+        /// Get the input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public CredentialInputSource[] GetInputSources(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        {
+            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Get the input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public CredentialInputSource[] GetInputSources(HttpQuery query)
+        {
+            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
+        }
+
+        /// <summary>
+        /// Get the credential type related this credential
+        /// </summary>
+        public CredentialType? GetCredentialType()
+        {
+            return Related.TryGetPath("credential_type", out var path)
+                ? RestAPI.Get<CredentialType>(path)
+                : null;
         }
 
         public override string ToString()
