@@ -66,7 +66,7 @@ namespace Jagabata
         /// </summary>
         public abstract SummaryFieldsDictionary SummaryFields { get; }
 
-        protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey, HttpQuery? query = null)
+        protected IEnumerable<T> FindResultsByRelatedKey<T>(string relatedKey, HttpQuery? query = null)
             where T : class
         {
             return Related.TryGetPath(relatedKey, out var path)
@@ -75,18 +75,18 @@ namespace Jagabata
                 : [];
         }
 
-        protected IEnumerable<T> GetResultsByRelatedKey<T>(string relatedKey,
-                                                           string? searchWords,
-                                                           string orderBy = "",
-                                                           ushort pageSize = 20,
-                                                           uint page = 1)
+        protected IEnumerable<T> FindResultsByRelatedKey<T>(string relatedKey,
+                                                            string? searchWords,
+                                                            string orderBy = "",
+                                                            ushort pageSize = 20,
+                                                            uint page = 1)
             where T : class
         {
-            return GetResultsByRelatedKey<T>(relatedKey, new QueryBuilder().SetSearchWords(searchWords)
-                                                                           .SetOrderBy(orderBy)
-                                                                           .SetPageSize(pageSize)
-                                                                           .SetStartPage(page)
-                                                                           .Build());
+            return FindResultsByRelatedKey<T>(relatedKey, new QueryBuilder().SetSearchWords(searchWords)
+                                                                            .SetOrderBy(orderBy)
+                                                                            .SetPageSize(pageSize)
+                                                                            .SetStartPage(page)
+                                                                            .Build());
         }
 
         protected abstract CacheItem GetCacheItem();

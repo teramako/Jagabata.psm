@@ -38,28 +38,34 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
@@ -73,7 +79,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get a list of groups associated with this group
+        /// Find groups associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/children/</c>
         /// </para>
@@ -81,25 +87,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public Group[] GetChildGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Group[] FindChildGroups(string? searchWords = null,
+                                       string orderBy = "name",
+                                       ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Group>("children", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Group>("children",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
         }
 
         /// <summary>
-        /// Get a list of groups associated with this group
+        /// Find groups associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/children/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public Group[] GetChildGroups(HttpQuery query)
+        public Group[] FindChildGroups(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Group>("children", query)];
+            return [.. FindResultsByRelatedKey<Group>("children", query)];
         }
 
         /// <summary>
-        /// Get the hosts that are direct children of this group
+        /// Find hosts that are direct children of this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/hosts/</c>
         /// </para>
@@ -107,25 +118,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of hosts to retrieve</param>
-        public Host[] GetChildHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Host[] FindChildHosts(string? searchWords = null,
+                                     string orderBy = "name",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Host>("hosts", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Host>("hosts",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the hosts that are direct children of this group
+        /// Find hosts that are direct children of this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/hosts/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public Host[] GetChildHosts(HttpQuery query)
+        public Host[] FindChildHosts(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Host>("hosts", query)];
+            return [.. FindResultsByRelatedKey<Host>("hosts", query)];
         }
 
         /// <summary>
-        /// Get a list of all hosts directly or indirectly belonging to this group
+        /// Find all hosts directly or indirectly belonging to this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/all_hosts/</c>
         /// </para>
@@ -133,25 +149,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of hosts to retrieve</param>
-        public Host[] GetAllDescendantHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Host[] FindAllDescendantHosts(string? searchWords = null,
+                                             string orderBy = "name",
+                                             ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Host>("all_hosts", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Host>("all_hosts",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get a list of all hosts directly or indirectly belonging to this group
+        /// Find all hosts directly or indirectly belonging to this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/all_hosts/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public Host[] GetAllDescendantHosts(HttpQuery query)
+        public Host[] FindAllDescendantHosts(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Host>("all_hosts", query)];
+            return [.. FindResultsByRelatedKey<Host>("all_hosts", query)];
         }
 
         /// <summary>
-        /// Get a list of job events associated with this group
+        /// Find job events associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/job_events/</c>
         /// </para>
@@ -159,25 +180,25 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number to retrieve</param>
-        public JobEvent[] GetJobEvents(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        public JobEvent[] FindJobEvents(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<JobEvent>("job_events", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<JobEvent>("job_events", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>
-        /// Get a list of job events associated with this group
+        /// Find job events associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/job_events/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public JobEvent[] GetJobEvents(HttpQuery query)
+        public JobEvent[] FindJobEvents(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<JobEvent>("job_events", query)];
+            return [.. FindResultsByRelatedKey<JobEvent>("job_events", query)];
         }
 
         /// <summary>
-        /// Get a list of job host summaries associated with this group
+        /// Get job host summaries associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/job_host_summaries/</c>
         /// </para>
@@ -185,25 +206,25 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number to retrieve</param>
-        public JobHostSummary[] GetJobHostSummaries(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        public JobHostSummary[] FindJobHostSummaries(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<JobHostSummary>("job_host_summaries", searchWords, orderBy, pageSize)];
         }
 
         /// <summary>
-        /// Get a list of job host summaries associated with this group
+        /// Find job host summaries associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/job_host_summaries/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public JobHostSummary[] GetJobHostSummaries(HttpQuery query)
+        public JobHostSummary[] FindJobHostSummaries(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<JobHostSummary>("job_host_summaries", query)];
+            return [.. FindResultsByRelatedKey<JobHostSummary>("job_host_summaries", query)];
         }
 
         /// <summary>
-        /// Get a list of inventory sources associated with this group
+        /// Find inventory sources associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/inventory_sources/</c>
         /// </para>
@@ -211,30 +232,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number to retrieve</param>
-        public InventorySource[] GetInventorySources(string? searchWords = null,
-                                                     string orderBy = "name",
-                                                     ushort pageSize = 20)
+        public InventorySource[] FindInventorySources(string? searchWords = null,
+                                                      string orderBy = "name",
+                                                      ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources",
-                                                               searchWords,
-                                                               orderBy,
-                                                               pageSize)];
+            return [.. FindResultsByRelatedKey<InventorySource>("inventory_sources",
+                                                                searchWords,
+                                                                orderBy,
+                                                                pageSize)];
         }
 
         /// <summary>
-        /// Get a list of inventory sources associated with this group
+        /// Find inventory sources associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/inventory_sources/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public InventorySource[] GetInventorySources(HttpQuery query)
+        public InventorySource[] FindInventorySources(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
+            return [.. FindResultsByRelatedKey<InventorySource>("inventory_sources", query)];
         }
 
         /// <summary>
-        /// Get a list of ad hoc commands associated with this group
+        /// Find ad hoc commands associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/ad_hoc_commands/</c>
         /// </para>
@@ -242,21 +263,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public AdHocCommand[] GetAdHocCommandJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        public AdHocCommand[] FindAdHocCommandJobs(string? searchWords = null,
+                                                   string orderBy = "-id",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<AdHocCommand>("ad_hoc_commands",
+                                                             searchWords,
+                                                             orderBy,
+                                                             pageSize)];
         }
 
         /// <summary>
-        /// Get a list of ad hoc commands associated with this group
+        /// Find ad hoc commands associated with this group
         /// <para>
         /// Implement API: <c>/api/v2/groups/{id}/ad_hoc_commands/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public AdHocCommand[] GetAdHocCommandJobs(HttpQuery query)
+        public AdHocCommand[] FindAdHocCommandJobs(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
+            return [.. FindResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
         }
 
         protected override CacheItem GetCacheItem()

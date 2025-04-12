@@ -97,32 +97,38 @@ namespace Jagabata.Resources
         public int? DefaultEnvironment { get; } = defaultEnvironment;
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
-        /// Get the execution environments related to this organization
+        /// Find execution environments related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/execution_environments/</c>
         /// </para>
@@ -130,139 +136,154 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public ExecutionEnvironment[] GetExecutionEnvironments(string? searchWords = null,
-                                                               string orderBy = "name",
-                                                               ushort pageSize = 20)
+        public ExecutionEnvironment[] FindExecutionEnvironments(string? searchWords = null,
+                                                                string orderBy = "name",
+                                                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ExecutionEnvironment>("execution_environments",
+            return [.. FindResultsByRelatedKey<ExecutionEnvironment>("execution_environments",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find execution environments related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ExecutionEnvironment[] FindExecutionEnvironments(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ExecutionEnvironment>("execution_environments", query)];
+        }
+
+        /// <summary>
+        /// Find projects related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Project[] FindProjects(string? searchWords = null,
+                                      string orderBy = "name",
+                                      ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Project>("projects",
+                                                        searchWords,
+                                                        orderBy,
+                                                        pageSize)];
+        }
+
+        /// <summary>
+        /// Find projects related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Project[] FindProjects(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Project>("projects", query)];
+        }
+
+        /// <summary>
+        /// Find inventories related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Inventory[] FindInventories(string? searchWords = null,
+                                           string orderBy = "name",
+                                           ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Inventory>("inventories",
+                                                          searchWords,
+                                                          orderBy,
+                                                          pageSize)];
+        }
+
+        /// <summary>
+        /// Find inventories related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Inventory[] FindInventories(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Inventory>("inventories", query)];
+        }
+
+        /// <summary>
+        /// Find job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public JobTemplate[] FindJobTemplates(string? searchWords = null,
+                                              string orderBy = "name",
+                                              ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<JobTemplate>("job_templates",
+                                                            searchWords,
+                                                            orderBy,
+                                                            pageSize)];
+        }
+
+        /// <summary>
+        /// Find job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public JobTemplate[] FindJobTemplates(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<JobTemplate>("job_templates", query)];
+        }
+
+        /// <summary>
+        /// Find workflow job templates related to this organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/{id}/workflow_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJobTemplate[] FindWorkflowJobTemplates(string? searchWords = null,
+                                                              string orderBy = "name",
+                                                              ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates",
                                                                     searchWords,
                                                                     orderBy,
                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the execution environments related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/execution_environments/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ExecutionEnvironment[] GetExecutionEnvironments(HttpQuery query)
-        {
-            return [.. GetResultsByRelatedKey<ExecutionEnvironment>("execution_environments", query)];
-        }
-
-        /// <summary>
-        /// Get the projects related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
-        /// <param name="pageSize">Max number to retrieve</param>.
-        public Project[] GetProjects(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
-        {
-            return [.. GetResultsByRelatedKey<Project>("projects", searchWords, orderBy, pageSize)];
-        }
-
-        /// <summary>
-        /// Get the projects related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/projects/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Project[] GetProjects(HttpQuery query)
-        {
-            return [.. GetResultsByRelatedKey<Project>("projects", query)];
-        }
-
-        /// <summary>
-        /// Get the inventories related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
-        /// <param name="pageSize">Max number to retrieve</param>.
-        public Inventory[] GetInventories(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
-        {
-            return [.. GetResultsByRelatedKey<Inventory>("inventories", searchWords, orderBy, pageSize)];
-        }
-
-        /// <summary>
-        /// Get the inventories related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/inventories/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Inventory[] GetInventories(HttpQuery query)
-        {
-            return [.. GetResultsByRelatedKey<Inventory>("inventories", query)];
-        }
-
-        /// <summary>
-        /// Get the job templates related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
-        /// <param name="pageSize">Max number to retrieve</param>.
-        public JobTemplate[] GetJobTemplates(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
-        {
-            return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", searchWords, orderBy, pageSize)];
-        }
-
-        /// <summary>
-        /// Get the job templates related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/job_templates/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public JobTemplate[] GetJobTemplates(HttpQuery query)
-        {
-            return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", query)];
-        }
-
-        /// <summary>
-        /// Get the workflow job templates related to this organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/{id}/workflow_job_templates/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
-        /// <param name="pageSize">Max number to retrieve</param>.
-        public WorkflowJobTemplate[] GetWorkflowJobTemplates(string? searchWords = null,
-                                                             string orderBy = "name",
-                                                             ushort pageSize = 20)
-        {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates",
-                                                                   searchWords,
-                                                                   orderBy,
-                                                                   pageSize)];
-        }
-
-        /// <summary>
-        /// Get the workflow job templates related to this organization
+        /// Find workflow job templates related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/workflow_job_templates/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public WorkflowJobTemplate[] GetWorkflowJobTemplates(HttpQuery query)
+        public WorkflowJobTemplate[] FindWorkflowJobTemplates(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplate>("workflow_job_templates", query)];
         }
 
         /// <summary>
-        /// Get the users related to this organization
+        /// Find users related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/users/</c>
         /// </para>
@@ -270,25 +291,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindUsers(string? searchWords = null,
+                                string orderBy = "username",
+                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("users", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("users",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the users related to this organization
+        /// Find users related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/users/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetUsers(HttpQuery query)
+        public User[] FindUsers(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("users", query)];
+            return [.. FindResultsByRelatedKey<User>("users", query)];
         }
 
         /// <summary>
-        /// Get the admin users related to this organization
+        /// Find admin users related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/admins/</c>
         /// </para>
@@ -296,25 +322,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAdmins(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindAdmins(string? searchWords = null,
+                                 string orderBy = "username",
+                                 ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("admins", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("admins",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the admin users related to this organization
+        /// Find admin users related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/admins/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetAdmins(HttpQuery query)
+        public User[] FindAdmins(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("admins", query)];
+            return [.. FindResultsByRelatedKey<User>("admins", query)];
         }
 
         /// <summary>
-        /// Get the teams related to this organization
+        /// Find teams related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/teams/</c>
         /// </para>
@@ -322,25 +353,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Team[] GetTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Team[] FindTeams(string? searchWords = null,
+                                string orderBy = "name",
+                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Team>("teams", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Team>("teams",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the teams related to this organization
+        /// Find teams related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/teams/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Team[] GetTeams(HttpQuery query)
+        public Team[] FindTeams(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Team>("teams", query)];
+            return [.. FindResultsByRelatedKey<Team>("teams", query)];
         }
 
         /// <summary>
-        /// Get the credentials related to this organization
+        /// Find credentials related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/credentials/</c>
         /// </para>
@@ -348,25 +384,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
         }
 
         /// <summary>
-        /// Get the credentials related to this organization
+        /// Find credentials related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/credentials/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Credential[] GetCredentials(HttpQuery query)
+        public Credential[] FindCredentials(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
         }
 
         /// <summary>
-        /// Get the applications related to this organization
+        /// Find applications related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/applications/</c>
         /// </para>
@@ -374,21 +415,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Application[] GetApplications(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Application[] FindApplications(string? searchWords = null,
+                                              string orderBy = "name",
+                                              ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Application>("applications", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Application>("applications",
+                                                            searchWords,
+                                                            orderBy,
+                                                            pageSize)];
         }
 
         /// <summary>
-        /// Get the applications related to this organization
+        /// Find applications related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/applications/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Application[] GetApplications(HttpQuery query)
+        public Application[] FindApplications(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Application>("applications", query)];
+            return [.. FindResultsByRelatedKey<Application>("applications", query)];
         }
 
         /// <summary>
@@ -406,7 +452,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the access list related to this organization
+        /// Find the access list related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/access_list/</c>
         /// </para>
@@ -414,25 +460,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the access list related to this organization
+        /// Find the access list related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/access_list/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetAccessList(HttpQuery query)
+        public User[] FindAccessList(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
         }
 
         /// <summary>
-        /// Get the instance groups related to this organization
+        /// Find instance groups related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/instance_groups/</c>
         /// </para>
@@ -440,25 +491,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                              searchWords,
+                                                              orderBy,
+                                                              pageSize)];
         }
 
         /// <summary>
-        /// Get the instance groups related to this organization
+        /// Find instance groups related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/instance_groups/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+        public InstanceGroup[] FindInstanceGroups(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
         }
 
         /// <summary>
-        /// Get the notification templates related to this organization
+        /// Find notification templates related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates/</c>
         /// </para>
@@ -466,30 +522,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplates(string? searchWords = null,
-                                                               string orderBy = "name",
-                                                               ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplates(string? searchWords = null,
+                                                                string orderBy = "name",
+                                                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates related to this organization
+        /// Find notification templates related to this organization
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplates(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplates(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have start notification enabled for this organization.
+        /// Find notification templates that have start notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_started/</c>
         /// </para>
@@ -497,30 +553,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have start notification enabled for this organization.
+        /// Find notification templates that have start notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_started/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have success notification enabled for this organization.
+        /// Find notification templates that have success notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_success/</c>
         /// </para>
@@ -528,30 +584,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have success notification enabled for this organization.
+        /// Find notification templates that have success notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_success/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have error notification enabled for this organization.
+        /// Find notification templates that have error notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_error/</c>
         /// </para>
@@ -559,30 +615,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnError(string? searchWords = null,
+                                                                       string orderBy = "name",
+                                                                       ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have error notification enabled for this organization.
+        /// Find notification templates that have error notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_error/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnError(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have approvals notification enabled for this organization.
+        /// Find notification templates that have approvals notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_approvals/</c>
         /// </para>
@@ -590,26 +646,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnApprovals(string? searchWords = null,
+                                                                           string orderBy = "name",
+                                                                           ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have approvals notification enabled for this organization.
+        /// Find notification templates that have approvals notification enabled for this organization.
         /// <para>
         /// Implement API: <c>/api/v2/organizations/{id}/notification_templates_approvals/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnApprovals(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnApprovals(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_approvals", query)];
         }
 
         protected override CacheItem GetCacheItem()

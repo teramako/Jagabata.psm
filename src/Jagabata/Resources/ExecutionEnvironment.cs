@@ -102,32 +102,38 @@ namespace Jagabata.Resources
         public string Pull { get; } = pull;
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/execution_environments/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/execution_environments/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
-        /// Get the unified job templates related to this execution environment
+        /// Find unified job templates related to this execution environment
         /// <para>
         /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
         /// </para>
@@ -135,9 +141,9 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public UnifiedJobTemplate[] GetUnifiedJobTemplates(string? searchWords = null,
-                                                           string orderBy = "name",
-                                                           ushort pageSize = 20)
+        public UnifiedJobTemplate[] FindUnifiedJobTemplates(string? searchWords = null,
+                                                            string orderBy = "name",
+                                                            ushort pageSize = 20)
         {
             return Related.TryGetPath("unified_job_templates", out var path)
                 ? [.. RestAPI.GetResultSetAsync(path, new QueryBuilder().SetSearchWords(searchWords)
@@ -151,13 +157,13 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the unified job templates related to this execution environment
+        /// Find unified job templates related to this execution environment
         /// <para>
         /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public UnifiedJobTemplate[] GetUnifiedJobTemplates(HttpQuery query)
+        public UnifiedJobTemplate[] FindUnifiedJobTemplates(HttpQuery query)
         {
             return Related.TryGetPath("unified_job_templates", out var path)
                 ? [.. RestAPI.GetResultSetAsync(path, query)

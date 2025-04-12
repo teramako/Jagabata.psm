@@ -130,32 +130,38 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the recent activity stream for this resource
+    /// Find the activity stream for this resource
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/activity_stream/</c>
     /// </para>
     /// </summary>
     /// <param name="searchWords"></param>
+    /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
     /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-    public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+    public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                               string orderBy = "-timestamp",
+                                               ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+        return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
     }
 
     /// <summary>
-    /// Get the recent activity stream for this resource
+    /// Find the activity stream for this resource
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/activity_stream/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-    public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+    public ActivityStream[] FindActivityStream(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
     }
 
     /// <summary>
-    /// Get a list of groups associated with this inventory
+    /// Find groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/groups/</c>
     /// </para>
@@ -163,25 +169,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Group[] GetChildGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public Group[] FindChildGroups(string? searchWords = null,
+                                   string orderBy = "name",
+                                   ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Group>("groups", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<Group>("groups",
+                                                  searchWords,
+                                                  orderBy,
+                                                  pageSize)];
     }
 
     /// <summary>
-    /// Get a list of groups associated with this inventory
+    /// Find groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/groups/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public Group[] GetChildGroups(HttpQuery query)
+    public Group[] FindChildGroups(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<Group>("groups", query)];
+        return [.. FindResultsByRelatedKey<Group>("groups", query)];
     }
 
     /// <summary>
-    /// Get a list of hosts associated with this inventory
+    /// Find hosts associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/hosts/</c>
     /// </para>
@@ -189,25 +200,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Host[] GetChildHosts(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public Host[] FindChildHosts(string? searchWords = null,
+                                 string orderBy = "name",
+                                 ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Host>("hosts", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<Host>("hosts",
+                                                 searchWords,
+                                                 orderBy,
+                                                 pageSize)];
     }
 
     /// <summary>
-    /// Get a list of hosts associated with this inventory
+    /// Find hosts associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/hosts/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public Host[] GetChildHosts(HttpQuery query)
+    public Host[] FindChildHosts(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<Host>("hosts", query)];
+        return [.. FindResultsByRelatedKey<Host>("hosts", query)];
     }
 
     /// <summary>
-    /// Get a list of job templates associated with this inventory
+    /// Find job templates associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/job_templates/</c>
     /// </para>
@@ -215,25 +231,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public JobTemplate[] GetJobTemplates(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public JobTemplate[] FindJobTemplates(string? searchWords = null,
+                                          string orderBy = "name",
+                                          ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<JobTemplate>("job_templates",
+                                                        searchWords,
+                                                        orderBy,
+                                                        pageSize)];
     }
 
     /// <summary>
-    /// Get a list of job templates associated with this inventory
+    /// Find job templates associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/job_templates/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public JobTemplate[] GetJobTemplates(HttpQuery query)
+    public JobTemplate[] FindJobTemplates(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<JobTemplate>("job_templates", query)];
+        return [.. FindResultsByRelatedKey<JobTemplate>("job_templates", query)];
     }
 
     /// <summary>
-    /// Get a list of ad hoc commands associated with this inventory
+    /// Find ad hoc commands associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/ad_hoc_commands/</c>
     /// </para>
@@ -241,25 +262,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public AdHocCommand[] GetAdHocCommandJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+    public AdHocCommand[] FindAdHocCommandJobs(string? searchWords = null,
+                                               string orderBy = "-id",
+                                               ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<AdHocCommand>("ad_hoc_commands",
+                                                         searchWords,
+                                                         orderBy,
+                                                         pageSize)];
     }
 
     /// <summary>
-    /// Get a list of ad hoc commands associated with this inventory
+    /// Find ad hoc commands associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/ad_hoc_commands/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public AdHocCommand[] GetAdHocCommandJobs(HttpQuery query)
+    public AdHocCommand[] FindAdHocCommandJobs(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
+        return [.. FindResultsByRelatedKey<AdHocCommand>("ad_hoc_commands", query)];
     }
 
     /// <summary>
-    /// Get the access list related to this inventory
+    /// Find the access list related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
     /// </para>
@@ -267,21 +293,26 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
     /// <param name="pageSize">Max number to retrieve</param>.
-    public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+    public User[] FindAccessList(string? searchWords = null,
+                                 string orderBy = "username",
+                                 ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<User>("access_list",
+                                                 searchWords,
+                                                 orderBy,
+                                                 pageSize)];
     }
 
     /// <summary>
-    /// Get the access list related to this inventory
+    /// Find the access list related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/access_list/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-    public User[] GetAccessList(HttpQuery query)
+    public User[] FindAccessList(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<User>("access_list", query)];
+        return [.. FindResultsByRelatedKey<User>("access_list", query)];
     }
 
     /// <summary>
@@ -299,7 +330,7 @@ public abstract class InventoryBase : ResourceBase, IInventory
     }
 
     /// <summary>
-    /// Get the instance groups related to this inventory
+    /// Find instance groups related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
     /// </para>
@@ -307,25 +338,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
     /// <param name="pageSize">Max number to retrieve</param>.
-    public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                              string orderBy = "name",
+                                              ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                          searchWords,
+                                                          orderBy,
+                                                          pageSize)];
     }
 
     /// <summary>
-    /// Get the instance groups related to this inventory
+    /// Find instance groups related to this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/instance_groups/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-    public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+    public InstanceGroup[] FindInstanceGroups(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+        return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
     }
 
     /// <summary>
-    /// Get a list of labels associated with this inventory
+    /// Find labels associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/labels/</c>
     /// </para>
@@ -333,25 +369,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Label[] GetLabels(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public Label[] FindLabels(string? searchWords = null,
+                              string orderBy = "name",
+                              ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Label>("labels", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<Label>("labels",
+                                                  searchWords,
+                                                  orderBy,
+                                                  pageSize)];
     }
 
     /// <summary>
-    /// Get a list of labels associated with this inventory
+    /// Find labels associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/labels/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public Label[] GetLabels(HttpQuery query)
+    public Label[] FindLabels(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<Label>("labels", query)];
+        return [.. FindResultsByRelatedKey<Label>("labels", query)];
     }
 
     /// <summary>
-    /// Get a list of inventory sources associated with this inventory
+    /// Find inventory sources associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/inventory_sources/</c>
     /// </para>
@@ -359,30 +400,30 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public InventorySource[] GetInventorySources(string? searchWords = null,
-                                                 string orderBy = "name",
-                                                 ushort pageSize = 20)
+    public InventorySource[] FindInventorySources(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources",
-                                                           searchWords,
-                                                           orderBy,
-                                                           pageSize)];
+        return [.. FindResultsByRelatedKey<InventorySource>("inventory_sources",
+                                                            searchWords,
+                                                            orderBy,
+                                                            pageSize)];
     }
 
     /// <summary>
-    /// Get a list of inventory sources associated with this inventory
+    /// Find inventory sources associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/inventory_sources/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public InventorySource[] GetInventorySources(HttpQuery query)
+    public InventorySource[] FindInventorySources(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<InventorySource>("inventory_sources", query)];
+        return [.. FindResultsByRelatedKey<InventorySource>("inventory_sources", query)];
     }
 
     /// <summary>
-    /// Get a list of root (top-level) groups associated with this inventory
+    /// Find root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
     /// </para>
@@ -390,21 +431,26 @@ public abstract class InventoryBase : ResourceBase, IInventory
     /// <param name="searchWords"></param>
     /// <param name="orderBy">Name(s) of sort key</param>
     /// <param name="pageSize">Max number of groups to retrieve</param>
-    public Group[] GetRootGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+    public Group[] FindRootGroups(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
     {
-        return [.. GetResultsByRelatedKey<Group>("root_groups", searchWords, orderBy, pageSize)];
+        return [.. FindResultsByRelatedKey<Group>("root_groups",
+                                                  searchWords,
+                                                  orderBy,
+                                                  pageSize)];
     }
 
     /// <summary>
-    /// Get a list of root (top-level) groups associated with this inventory
+    /// Find root (top-level) groups associated with this inventory
     /// <para>
     /// Implement API: <c>/api/v2/inventories/{id}/root_groups/</c>
     /// </para>
     /// </summary>
     /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-    public Group[] GetRootGroups(HttpQuery query)
+    public Group[] FindRootGroups(HttpQuery query)
     {
-        return [.. GetResultsByRelatedKey<Group>("root_groups", query)];
+        return [.. FindResultsByRelatedKey<Group>("root_groups", query)];
     }
 
     /// <summary>

@@ -144,32 +144,38 @@ namespace Jagabata.Resources
         public ulong Organization { get; } = organization;
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/applications/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/applications/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
-        /// Get the tokens related to this application
+        /// Find tokens related to this application
         /// <para>
         /// Implement API: <c>/api/v2/applications/{id}/tokens/</c>
         /// </para>
@@ -177,21 +183,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public OAuth2AccessToken[] GetTokens(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public OAuth2AccessToken[] FindTokens(string? searchWords = null,
+                                              string orderBy = "id",
+                                              ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<OAuth2AccessToken>("tokens",
+                                                                  searchWords,
+                                                                  orderBy,
+                                                                  pageSize)];
         }
 
         /// <summary>
-        /// Get the tokens related to this application
+        /// Find tokens related to this application
         /// <para>
         /// Implement API: <c>/api/v2/applications/{id}/tokens/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public OAuth2AccessToken[] GetTokens(HttpQuery query)
+        public OAuth2AccessToken[] FindTokens(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
+            return [.. FindResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
         }
 
         /// <summary>

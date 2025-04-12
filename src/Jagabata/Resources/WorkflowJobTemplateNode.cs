@@ -106,7 +106,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get a list of labels associated with this workflow job template node
+        /// Find labels associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/labels/</c>
         /// </para>
@@ -114,25 +114,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public Label[] GetLabels(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Label[] FindLabels(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Label>("labels", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Label>("labels",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
         }
 
         /// <summary>
-        /// Get a list of labels associated with this workflow job template node
+        /// Find labels associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/labels/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public Label[] GetLabels(HttpQuery query)
+        public Label[] FindLabels(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Label>("labels", query)];
+            return [.. FindResultsByRelatedKey<Label>("labels", query)];
         }
 
         /// <summary>
-        /// Get the credentials related to this workflow job template node
+        /// Find credentials related to this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/credentials/</c>
         /// </para>
@@ -140,25 +145,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
         }
 
         /// <summary>
-        /// Get the credentials related to this workflow job template node
+        /// Find credentials related to this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/credentials/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Credential[] GetCredentials(HttpQuery query)
+        public Credential[] FindCredentials(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
         }
 
         /// <summary>
-        /// Get a list of success nodes associated with this workflow job template node
+        /// Find success nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/success_nodes/</c>
         /// </para>
@@ -166,25 +176,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobTemplateNode[] GetSuccessNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobTemplateNode[] FindSuccessNodes(string? searchWords = null,
+                                                          string orderBy = "id",
+                                                          ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes",
+                                                                        searchWords,
+                                                                        orderBy,
+                                                                        pageSize)];
         }
 
         /// <summary>
-        /// Get a list of success nodes associated with this workflow job template node
+        /// Find success nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/success_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobTemplateNode[] GetSuccessNodes(HttpQuery query)
+        public WorkflowJobTemplateNode[] FindSuccessNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", query)];
         }
 
         /// <summary>
-        /// Get a list of failure nodes associated with this workflow job template node
+        /// Find failure nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/failure_nodes/</c>
         /// </para>
@@ -192,25 +207,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobTemplateNode[] GetFailureNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobTemplateNode[] FindFailureNodes(string? searchWords = null,
+                                                          string orderBy = "id",
+                                                          ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes",
+                                                                        searchWords,
+                                                                        orderBy,
+                                                                        pageSize)];
         }
 
         /// <summary>
-        /// Get a list of failure nodes associated with this workflow job template node
+        /// Find failure nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/failure_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobTemplateNode[] GetFailureNodes(HttpQuery query)
+        public WorkflowJobTemplateNode[] FindFailureNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("failure_nodes", query)];
         }
 
         /// <summary>
-        /// Get a list of always nodes associated with this workflow job template node
+        /// Find always nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/always_nodes/</c>
         /// </para>
@@ -218,21 +238,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobTemplateNode[] GetAlwaysNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobTemplateNode[] FindAlwaysNodes(string? searchWords = null,
+                                                         string orderBy = "id",
+                                                         ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("always_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("always_nodes",
+                                                                        searchWords,
+                                                                        orderBy,
+                                                                        pageSize)];
         }
 
         /// <summary>
-        /// Get a list of always nodes associated with this workflow job template node
+        /// Find always nodes associated with this workflow job template node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/always_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobTemplateNode[] GetAlwaysNodes(HttpQuery query)
+        public WorkflowJobTemplateNode[] FindAlwaysNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("always_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("always_nodes", query)];
         }
 
         /// <summary>

@@ -114,7 +114,7 @@ namespace Jagabata.Resources
         public string Identifier { get; } = identifier;
 
         /// <summary>
-        /// Get a list of success nodes associated with this workflow job node
+        /// Find success nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/success_nodes/</c>
         /// </para>
@@ -122,25 +122,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobTemplateNode[] GetSuccessNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobTemplateNode[] FindSuccessNodes(string? searchWords = null,
+                                                          string orderBy = "id",
+                                                          ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes",
+                                                                        searchWords,
+                                                                        orderBy,
+                                                                        pageSize)];
         }
 
         /// <summary>
-        /// Get a list of success nodes associated with this workflow job node
+        /// Find success nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/success_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobNode[] GetSuccessNodes(HttpQuery query)
+        public WorkflowJobNode[] FindSuccessNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobNode>("success_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("success_nodes", query)];
         }
 
         /// <summary>
-        /// Get a list of failure nodes associated with this workflow job node
+        /// Find failure nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/failure_nodes/</c>
         /// </para>
@@ -148,25 +153,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobNode[] GetFailureNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobNode[] FindFailureNodes(string? searchWords = null,
+                                                  string orderBy = "id",
+                                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobNode>("failure_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("failure_nodes",
+                                                                searchWords,
+                                                                orderBy,
+                                                                pageSize)];
         }
 
         /// <summary>
-        /// Get a list of failure nodes associated with this workflow job node
+        /// Find failure nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/failure_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobNode[] GetFailureNodes(HttpQuery query)
+        public WorkflowJobNode[] FindFailureNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobNode>("failure_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("failure_nodes", query)];
         }
 
         /// <summary>
-        /// Get a list of always nodes associated with this workflow job node
+        /// Find always nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/always_nodes/</c>
         /// </para>
@@ -174,21 +184,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public WorkflowJobNode[] GetAlwaysNodes(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public WorkflowJobNode[] FindAlwaysNodes(string? searchWords = null,
+                                                 string orderBy = "id",
+                                                 ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobNode>("always_nodes", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("always_nodes",
+                                                                searchWords,
+                                                                orderBy,
+                                                                pageSize)];
         }
 
         /// <summary>
-        /// Get a list of always nodes associated with this workflow job node
+        /// Find always nodes associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/always_nodes/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public WorkflowJobNode[] GetAlwaysNodes(HttpQuery query)
+        public WorkflowJobNode[] FindAlwaysNodes(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJobNode>("always_nodes", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("always_nodes", query)];
         }
 
         /// <summary>
@@ -224,7 +239,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get a list of labels associated with this workflow job node
+        /// Find labels associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
         /// </para>
@@ -232,25 +247,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Name(s) of sort key</param>
         /// <param name="pageSize">Max number of groups to retrieve</param>
-        public Label[] GetLabels(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Label[] FindLabels(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Label>("labels", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Label>("labels",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
         }
 
         /// <summary>
-        /// Get a list of labels associated with this workflow job node
+        /// Find labels associated with this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
-        public Label[] GetLabels(HttpQuery query)
+        public Label[] FindLabels(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Label>("labels", query)];
+            return [.. FindResultsByRelatedKey<Label>("labels", query)];
         }
 
         /// <summary>
-        /// Get the credentials related to this workflow job node
+        /// Find credentials related to this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
         /// </para>
@@ -258,25 +278,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
         }
 
         /// <summary>
-        /// Get the credentials related to this workflow job node
+        /// Find credentials related to this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Credential[] GetCredentials(HttpQuery query)
+        public Credential[] FindCredentials(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
         }
 
         /// <summary>
-        /// Get the instance groups related to this workflow job node
+        /// Find instance groups related to this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/instance_groups/</c>
         /// </para>
@@ -284,21 +309,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                              searchWords,
+                                                              orderBy,
+                                                              pageSize)];
         }
 
         /// <summary>
-        /// Get the instance groups related to this workflow job node
+        /// Find instance groups related to this workflow job node
         /// <para>
         /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/instance_groups/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+        public InstanceGroup[] FindInstanceGroups(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
         }
 
         protected override CacheItem GetCacheItem()

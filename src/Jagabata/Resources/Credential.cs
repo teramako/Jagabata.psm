@@ -313,32 +313,38 @@ namespace Jagabata.Resources
             SummaryFields.TryGetValue<OwnerSummary[]>("Owners", out var owners) ? owners : [];
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
-        /// Get the access list related to this credential
+        /// Find the access list related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
         /// </para>
@@ -346,21 +352,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the access list related to this credential
+        /// Find the access list related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetAccessList(HttpQuery query)
+        public User[] FindAccessList(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
         }
 
         /// <summary>
@@ -378,7 +389,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the owner users related to this credential
+        /// Find the owner users related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
         /// </para>
@@ -386,25 +397,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetOwnerUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindOwnerUsers(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("owner_users", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("owner_users",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the owner users related to this credential
+        /// Find the owner users related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetOwnerUsers(HttpQuery query)
+        public User[] FindOwnerUsers(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("owner_users", query)];
+            return [.. FindResultsByRelatedKey<User>("owner_users", query)];
         }
 
         /// <summary>
-        /// Get the owner teams related to this credential
+        /// Find the owner teams related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
         /// </para>
@@ -412,25 +428,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Team[] GetOwnerTeams(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Team[] FindOwnerTeams(string? searchWords = null,
+                                     string orderBy = "name",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Team>("owner_teams", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Team>("owner_teams",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the owner teams related to this credential
+        /// Find the owner teams related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Team[] GetOwnerTeams(HttpQuery query)
+        public Team[] FindOwnerTeams(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Team>("owner_teams", query)];
+            return [.. FindResultsByRelatedKey<Team>("owner_teams", query)];
         }
 
         /// <summary>
-        /// Get the input sources related to this credential
+        /// Find input sources related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
         /// </para>
@@ -438,21 +459,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public CredentialInputSource[] GetInputSources(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public CredentialInputSource[] FindInputSources(string? searchWords = null,
+                                                        string orderBy = "id",
+                                                        ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<CredentialInputSource>("input_sources",
+                                                                      searchWords,
+                                                                      orderBy,
+                                                                      pageSize)];
         }
 
         /// <summary>
-        /// Get the input sources related to this credential
+        /// Find input sources related to this credential
         /// <para>
         /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public CredentialInputSource[] GetInputSources(HttpQuery query)
+        public CredentialInputSource[] FindInputSources(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
+            return [.. FindResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
         }
 
         /// <summary>

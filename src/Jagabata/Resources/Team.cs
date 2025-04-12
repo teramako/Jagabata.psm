@@ -159,32 +159,38 @@ namespace Jagabata.Resources
         public ulong Organization { get; } = organization;
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
-        /// Get the projects related to this team
+        /// Find projects related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/projects/</c>
         /// </para>
@@ -192,25 +198,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Project[] GetProjects(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Project[] FindProjects(string? searchWords = null,
+                                      string orderBy = "name",
+                                      ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Project>("projects", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Project>("projects",
+                                                        searchWords,
+                                                        orderBy,
+                                                        pageSize)];
         }
 
         /// <summary>
-        /// Get the projects related to this team
+        /// Find projects related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/projects/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Project[] GetProjects(HttpQuery query)
+        public Project[] FindProjects(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Project>("projects", query)];
+            return [.. FindResultsByRelatedKey<Project>("projects", query)];
         }
 
         /// <summary>
-        /// Get the users related to this team
+        /// Find users related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/users/</c>
         /// </para>
@@ -218,25 +229,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetUsers(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindUsers(string? searchWords = null,
+                                string orderBy = "username",
+                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("users", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("users",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the users related to this team
+        /// Find users related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/users/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetUsers(HttpQuery query)
+        public User[] FindUsers(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("users", query)];
+            return [.. FindResultsByRelatedKey<User>("users", query)];
         }
 
         /// <summary>
-        /// Get the credentials related to this team
+        /// Find credentials related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/credentials/</c>
         /// </para>
@@ -244,25 +260,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Credential[] GetCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
         }
 
         /// <summary>
-        /// Get the credentials related to this team
+        /// Find credentials related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/credentials/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Credential[] GetCredentials(HttpQuery query)
+        public Credential[] FindCredentials(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Credential>("credentials", query)];
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
         }
 
         /// <summary>
-        /// Get the roles related to this team
+        /// Find roles related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/roles/</c>
         /// </para>
@@ -270,21 +291,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public Role[] GetRoles(string? searchWords = null, string orderBy = "id", ushort pageSize = 20)
+        public Role[] FindRoles(string? searchWords = null,
+                                string orderBy = "id",
+                                ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<Role>("roles", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<Role>("roles",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the roles related to this team
+        /// Find roles related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/roles/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public Role[] GetRoles(HttpQuery query)
+        public Role[] FindRoles(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<Role>("roles", query)];
+            return [.. FindResultsByRelatedKey<Role>("roles", query)];
         }
 
         /// <summary>
@@ -302,7 +328,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the access list related to this team
+        /// Find the access list related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/access_list/</c>
         /// </para>
@@ -310,21 +336,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the access list related to this team
+        /// Find the access list related to this team
         /// <para>
         /// Implement API: <c>/api/v2/teams/{id}/access_list/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetAccessList(HttpQuery query)
+        public User[] FindAccessList(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
         }
 
         /// <summary>

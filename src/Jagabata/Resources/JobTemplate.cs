@@ -315,36 +315,40 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/job_templates/{id}/jobs/</c>
         /// </summary>
         /// <param name="count">Number of jobs to retrieve</param>
-        public JobTemplateJob[] GetRecentJobs(int count = 20)
+        public JobTemplateJob[] GetRecentJobs(ushort count = 20)
         {
-            return [.. RestAPI.GetResultSet<JobTemplateJob>($"{PATH}{Id}/jobs/",
-                                                            new HttpQuery($"order_by=-id&page_size={count}"))
-                              .SelectMany(static apiResult => apiResult.Contents.Results)];
+            return [.. FindResultsByRelatedKey<JobTemplateJob>("jobs", null, "-id", count)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number of activity streams to retrieve</param>.
-        public ActivityStream[] GetRecentActivityStream(string? searchWords = null, ushort pageSize = 20)
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", searchWords, "-timestamp", pageSize)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
         }
 
         /// <summary>
-        /// Get the recent activity stream for this resource
+        /// Find the activity stream for this resource
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/activity_stream/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public ActivityStream[] GetRecentActivityStream(HttpQuery query)
+        public ActivityStream[] FindActivityStream(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
         }
 
         /// <summary>
@@ -372,7 +376,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the notification templates that have start notification enabled for this job template.
+        /// Find notification templates that have start notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_started/</c>
         /// </para>
@@ -380,30 +384,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnStarted(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have start notification enabled for this job template.
+        /// Find notification templates that have start notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_started/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnStarted(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have success notification enabled for this job template.
+        /// Find notification templates that have success notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_success/</c>
         /// </para>
@@ -411,30 +415,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have success notification enabled for this job template.
+        /// Find notification templates that have success notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_success/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnSuccess(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
         }
 
         /// <summary>
-        /// Get the notification templates that have error notification enabled for this job template.
+        /// Find notification templates that have error notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_error/</c>
         /// </para>
@@ -442,30 +446,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnError(string? searchWords = null,
-                                                                        string orderBy = "name",
-                                                                        ushort pageSize = 20)
+        public NotificationTemplate[] FindNotificationTemplatesOnError(string? searchWords = null,
+                                                                       string orderBy = "name",
+                                                                       ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
-                                                                    searchWords,
-                                                                    orderBy,
-                                                                    pageSize)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the notification templates that have error notification enabled for this job template.
+        /// Find notification templates that have error notification enabled for this job template.
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_error/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public NotificationTemplate[] GetNotificationTemplatesOnError(HttpQuery query)
+        public NotificationTemplate[] FindNotificationTemplatesOnError(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
         }
 
         /// <summary>
-        /// Get the access list related to this job template
+        /// Find the access list related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/access_list/</c>
         /// </para>
@@ -473,21 +477,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public User[] GetAccessList(string? searchWords = null, string orderBy = "username", ushort pageSize = 20)
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
         }
 
         /// <summary>
-        /// Get the access list related to this job template
+        /// Find the access list related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/access_list/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public User[] GetAccessList(HttpQuery query)
+        public User[] FindAccessList(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<User>("access_list", query)];
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
         }
 
         /// <summary>
@@ -515,7 +524,7 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Get the instance groups related to this job template
+        /// Find the instance groups related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/instance_groups/</c>
         /// </para>
@@ -523,25 +532,30 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public InstanceGroup[] GetInstanceGroups(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                              searchWords,
+                                                              orderBy,
+                                                              pageSize)];
         }
 
         /// <summary>
-        /// Get the instance groups related to this job template
+        /// Find instance groups related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/instance_groups/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public InstanceGroup[] GetInstanceGroups(HttpQuery query)
+        public InstanceGroup[] FindInstanceGroups(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
         }
 
         /// <summary>
-        /// Get the slice workflow jobs related to this job template
+        /// Find slice workflow jobs related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
         /// </para>
@@ -549,21 +563,26 @@ namespace Jagabata.Resources
         /// <param name="searchWords"></param>
         /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
         /// <param name="pageSize">Max number to retrieve</param>.
-        public WorkflowJob[] GetSliceWorkflowJobs(string? searchWords = null, string orderBy = "-id", ushort pageSize = 20)
+        public WorkflowJob[] FindSliceWorkflowJobs(string? searchWords = null,
+                                                   string orderBy = "-id",
+                                                   ushort pageSize = 20)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", searchWords, orderBy, pageSize)];
+            return [.. FindResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs",
+                                                            searchWords,
+                                                            orderBy,
+                                                            pageSize)];
         }
 
         /// <summary>
-        /// Get the slice workflow jobs related to this job template
+        /// Find slice workflow jobs related to this job template
         /// <para>
         /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
         /// </para>
         /// </summary>
         /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
-        public WorkflowJob[] GetSliceWorkflowJobs(HttpQuery query)
+        public WorkflowJob[] FindSliceWorkflowJobs(HttpQuery query)
         {
-            return [.. GetResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", query)];
+            return [.. FindResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", query)];
         }
 
         /// <summary>
