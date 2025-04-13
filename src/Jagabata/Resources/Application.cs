@@ -210,7 +210,9 @@ namespace Jagabata.Resources
         /// </summary>
         public Organization? GetOrganization()
         {
-            return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
         }
 
         protected override CacheItem GetCacheItem()
