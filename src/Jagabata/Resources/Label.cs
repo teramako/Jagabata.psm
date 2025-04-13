@@ -57,6 +57,16 @@ namespace Jagabata.Resources
         public string Name { get; } = name;
         public ulong Organization { get; } = organization;
 
+        /// <summary>
+        /// Get the organization related to this label
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, string.Empty);
