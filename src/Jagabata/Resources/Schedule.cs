@@ -98,6 +98,117 @@ namespace Jagabata.Resources
         public string TimeZone { get; } = timezone;
         public string Until { get; } = until;
 
+        /// <summary>
+        /// Get the most recently jobs executed by this schedule.
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="count">Number of jobs to retrieve</param>
+        public UnifiedJob[] GetRecentJobs(ushort count = 20)
+        {
+            return Related.TryGetPath("unified_jobs", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, new QueryBuilder().SetOrderBy("-id")
+                                                                        .SetPageSize(count)
+                                                                        .Build())
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJob>()]
+                : [];
+        }
+
+        /// <summary>
+        /// Find labels associated with this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Label[] FindLabels(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
+        }
+
+        /// <summary>
+        /// Find labels associated with this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Label[] FindLabels(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels", query)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] FindCredentials(string? searchWords = null, string orderBy = "name", ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", searchWords, orderBy, pageSize)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] FindCredentials(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        /// <summary>
+        /// Get the template applied to this schedule.
+        /// </summary>
+        public UnifiedJobTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("unified_job_template", out var path)
+                   && SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template)
+                ? template.Type switch
+                {
+                    ResourceType.InventorySource => RestAPI.Get<InventorySource>(path),
+                    ResourceType.JobTemplate => RestAPI.Get<JobTemplate>(path),
+                    ResourceType.Project => RestAPI.Get<Project>(path),
+                    ResourceType.SystemJobTemplate => RestAPI.Get<SystemJobTemplate>(path),
+                    ResourceType.WorkflowJobTemplate => RestAPI.Get<WorkflowJobTemplate>(path),
+                    _ => throw new NotSupportedException($"Not supported type: {template.Type}")
+                }
+                : null;
+        }
+
+        /// <summary>
+        /// Get the project related to this schedule
+        /// </summary>
+        public Project? GetProject()
+        {
+            return Related.TryGetPath("project", out var path) ? RestAPI.Get<Project>(path) : null;
+        }
+
+        /// <summary>
+        /// Get the inventory related to this schedule
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
