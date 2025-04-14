@@ -209,6 +209,25 @@ namespace Jagabata.Resources
             return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
         }
 
+        /// <summary>
+        /// Get future schedules based on this schedule's <seealso cref="Rrule"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/preview/</c>
+        /// </para>
+        /// </summary>
+        public DateTime[] Preview()
+        {
+            var data = new Dictionary<string, string>
+            {
+                ["rrule"] = Rrule
+            };
+            var task = RestAPI.PostJsonAsync<SchedulePreview>(SchedulePreview.PATH, data);
+            task.Wait();
+            return task.Result.Contents is not null
+                ? [.. task.Result.Contents.Local.Select(DateTime.Parse)]
+                : [];
+        }
+
         protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description);
