@@ -1,6 +1,7 @@
 using Jagabata.Resources;
 using System.Net;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 
@@ -199,14 +200,27 @@ namespace Jagabata
         public const string HtmlContentType = "text/html";
         public const string TextContentType = "text/plain";
 
-        public static async IAsyncEnumerable<RestAPIResult<ResultSet>> GetResultSetAsync(string path, HttpQuery? query)
+        /// <summary>
+        /// Request <see cref="HttpMethod.Get">GET</see> to AWX
+        /// and deserialize the contents json to inferred type.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="HttpRequestException"></exception>
+        /// <exception cref="RestAPIException"></exception>
+        public static async IAsyncEnumerable<RestAPIResult<ResultSet>> GetResultSetAsync(string path,
+                                                                                         HttpQuery? query,
+                                                                                         [EnumeratorCancellation]
+                                                                                         CancellationToken cancellationToken = default)
         {
             query ??= [];
             var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
             var count = 0;
             do
             {
-                var apiResult = await GetAsync<ResultSet>(nextPathAndQuery);
+                var apiResult = await GetAsync<ResultSet>(nextPathAndQuery, cancellationToken: cancellationToken);
                 yield return apiResult;
                 nextPathAndQuery = apiResult.Contents.Next ?? string.Empty;
             } while ((query.IsInfinity || ++count < query.QueryCount)
@@ -224,10 +238,13 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="pathAndQuery"></param>
         /// <param name="type"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns><typeparamref name="T"/> object of deserialized from JSON</returns>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIResult<T>> GetAsync<T>(string pathAndQuery, AcceptType type = AcceptType.Json)
+        public static async Task<RestAPIResult<T>> GetAsync<T>(string pathAndQuery,
+                                                               AcceptType type = AcceptType.Json,
+                                                               CancellationToken cancellationToken = default)
             where T : class
         {
             using HttpRequestMessage request = new(HttpMethod.Get, pathAndQuery);
@@ -243,12 +260,12 @@ namespace Jagabata
                     request.Headers.Add("Accept", TextContentType);
                     break;
             }
-            using HttpResponseMessage response = await Client.SendAsync(request);
+            using HttpResponseMessage response = await Client.SendAsync(request, cancellationToken);
             if (response.StatusCode == HttpStatusCode.Found)
             {
                 var location = response.Headers.Location;
                 return location is not null
-                    ? await GetAsync<T>(location.ToString(), type)
+                    ? await GetAsync<T>(location.ToString(), type, cancellationToken)
                     : throw new RestAPIException("Not found Location", response);
             }
             return await HandleResponse<T>(response);
@@ -279,11 +296,14 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="RestAPIException"></exception>
         public static async IAsyncEnumerable<RestAPIResult<ResultSet<T>>> GetResultSetAsync<T>(string path,
-                                                                                               HttpQuery? query = null)
+                                                                                               HttpQuery? query = null,
+                                                                                               [EnumeratorCancellation]
+                                                                                               CancellationToken cancellationToken = default)
             where T : class
         {
             query ??= [];
@@ -291,7 +311,7 @@ namespace Jagabata
             var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
             do
             {
-                var apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery);
+                var apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery, cancellationToken: cancellationToken);
                 yield return apiResult;
                 if (apiResult.Contents is null)
                 {
@@ -328,12 +348,15 @@ namespace Jagabata
         /// for getting API help document.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIResult<T>> OptionsJsonAsync<T>(string path) where T : class
+        public static async Task<RestAPIResult<T>> OptionsJsonAsync<T>(string path,
+                                                                       CancellationToken cancellationToken = default)
+            where T : class
         {
             using HttpRequestMessage request = new(HttpMethod.Options, path);
-            using HttpResponseMessage response = await Client.SendAsync(request);
+            using HttpResponseMessage response = await Client.SendAsync(request, cancellationToken);
             return await HandleResponse<T>(response);
         }
         /// <summary>
@@ -364,12 +387,16 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIPostResult<T>> PostJsonAsync<T>(string path, object? data) where T : class
+        public static async Task<RestAPIPostResult<T>> PostJsonAsync<T>(string path,
+                                                                        object? data,
+                                                                        CancellationToken cancellationToken = default)
+            where T : class
         {
             using var jsonContent = GetStringContent(data);
-            using HttpResponseMessage response = await Client.PostAsync(path, jsonContent);
+            using HttpResponseMessage response = await Client.PostAsync(path, jsonContent, cancellationToken);
             return await HandlePostResponse<T>(response);
         }
         /// <summary>
@@ -379,12 +406,16 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIResult<T>> PutJsonAsync<T>(string path, object? data) where T : class
+        public static async Task<RestAPIResult<T>> PutJsonAsync<T>(string path,
+                                                                   object? data,
+                                                                   CancellationToken cancellationToken = default)
+            where T : class
         {
             using var jsonContent = GetStringContent(data);
-            using HttpResponseMessage response = await Client.PutAsync(path, jsonContent);
+            using HttpResponseMessage response = await Client.PutAsync(path, jsonContent, cancellationToken);
             return await HandleResponse<T>(response);
         }
         /// <summary>
@@ -394,12 +425,16 @@ namespace Jagabata
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIResult<T>> PatchJsonAsync<T>(string path, object? data) where T : class
+        public static async Task<RestAPIResult<T>> PatchJsonAsync<T>(string path,
+                                                                     object? data,
+                                                                     CancellationToken cancellationToken = default)
+            where T : class
         {
             using var jsonContent = GetStringContent(data);
-            using HttpResponseMessage response = await Client.PatchAsync(path, jsonContent);
+            using HttpResponseMessage response = await Client.PatchAsync(path, jsonContent, cancellationToken);
             return await HandleResponse<T>(response);
         }
         /// <summary>
@@ -407,11 +442,13 @@ namespace Jagabata
         /// for deleting the resource.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="RestAPIException"></exception>
-        public static async Task<RestAPIResult<string>> DeleteAsync(string path)
+        public static async Task<RestAPIResult<string>> DeleteAsync(string path,
+                                                                    CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await Client.DeleteAsync(path);
+            using HttpResponseMessage response = await Client.DeleteAsync(path, cancellationToken);
             return await HandleResponse<string>(response);
         }
     }
