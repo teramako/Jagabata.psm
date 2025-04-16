@@ -218,8 +218,8 @@ namespace APITest
                 }
             }
         }
-
     }
+
     [TestClass]
     public class TestActivityStream
     {
@@ -232,7 +232,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var activity = await ActivityStream.Get(1);
+            var activity = await ActivityStream.GetAsync(1);
             Assert.IsNotNull(activity);
             Assert.AreEqual(ResourceType.ActivityStream, activity.Type);
             Assert.IsInstanceOfType<ActivityStreamOperation>(activity.Operation);
@@ -245,7 +245,7 @@ namespace APITest
             var expectCount = 2;
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
-            await foreach (var activity in ActivityStream.Find(query))
+            await foreach (var activity in ActivityStream.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<ActivityStream>(activity);
@@ -257,9 +257,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromApplication()
         {
-            var app = await Application.Get(1);
+            var app = await Application.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{app.Id}][{app.Type}] {app.Name})");
-            await foreach (var activity in ActivityStream.FindFromApplication(app.Id))
+            await foreach (var activity in ActivityStream.FindAsync(app))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -270,7 +270,7 @@ namespace APITest
         {
             var token = await OAuth2AccessToken.Get(1);
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
-            await foreach (var activity in ActivityStream.FindFromToken(token.Id))
+            await foreach (var activity in ActivityStream.FindAsync(token))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -281,7 +281,7 @@ namespace APITest
         {
             var org = await Organization.Get(1);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var activity in ActivityStream.FindFromOrganization(org.Id))
+            await foreach (var activity in ActivityStream.FindAsync(org))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -292,7 +292,7 @@ namespace APITest
         {
             var user = await User.Get(1);
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
-            await foreach (var activity in ActivityStream.FindFromUser(user.Id))
+            await foreach (var activity in ActivityStream.FindAsync(user))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -303,7 +303,7 @@ namespace APITest
         {
             var proj = await Project.Get(8);
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
-            await foreach (var activity in ActivityStream.FindFromProject(proj.Id))
+            await foreach (var activity in ActivityStream.FindAsync(proj))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -314,7 +314,7 @@ namespace APITest
         {
             var team = await Team.Get(1);
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
-            await foreach (var activity in ActivityStream.FindFromTeam(team.Id))
+            await foreach (var activity in ActivityStream.FindAsync(team))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -325,7 +325,7 @@ namespace APITest
         {
             var cred = await Credential.Get(1);
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var activity in ActivityStream.FindFromCredential(cred.Id))
+            await foreach (var activity in ActivityStream.FindAsync(cred))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -336,7 +336,7 @@ namespace APITest
         {
             var credType = await CredentialType.Get(29);
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
-            await foreach (var activity in ActivityStream.FindFromCredentialType(credType.Id))
+            await foreach (var activity in ActivityStream.FindAsync(credType))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -347,7 +347,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
-            await foreach (var activity in ActivityStream.FindFromInventory(inventory.Id))
+            await foreach (var activity in ActivityStream.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -358,7 +358,7 @@ namespace APITest
         {
             var inventorySource = await InventorySource.Get(11);
             Console.WriteLine($"ActivityStream for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var activity in ActivityStream.FindFromInventorySource(inventorySource.Id))
+            await foreach (var activity in ActivityStream.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -369,7 +369,7 @@ namespace APITest
         {
             var group = await Group.Get(1);
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
-            await foreach (var activity in ActivityStream.FindFromGroup(group.Id))
+            await foreach (var activity in ActivityStream.FindAsync(group))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -380,7 +380,7 @@ namespace APITest
         {
             var host = await Host.Get(2);
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
-            await foreach (var activity in ActivityStream.FindFromHost(host.Id))
+            await foreach (var activity in ActivityStream.FindAsync(host))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -391,7 +391,7 @@ namespace APITest
         {
             var jt = await JobTemplate.Get(9);
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
-            await foreach (var activity in ActivityStream.FindFromJobTemplate(jt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(jt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -402,7 +402,7 @@ namespace APITest
         {
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
-            await foreach (var activity in ActivityStream.FindFromJob(job.Id))
+            await foreach (var activity in ActivityStream.FindAsync(job))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -413,7 +413,7 @@ namespace APITest
         {
             var cmd = await AdHocCommand.Get(69);
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
-            await foreach (var activity in ActivityStream.FindFromAdHocCommand(cmd.Id))
+            await foreach (var activity in ActivityStream.FindAsync(cmd))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -424,7 +424,7 @@ namespace APITest
         {
             var wjt = await WorkflowJobTemplate.Get(13);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindFromWorkflowJobTemplate(wjt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -435,7 +435,7 @@ namespace APITest
         {
             var wjt = await WorkflowJob.Get(51);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindFromWorkflowJob(wjt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -446,13 +446,14 @@ namespace APITest
         {
             var ee = await ExecutionEnvironment.Get(1);
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
-            await foreach (var activity in ActivityStream.FindFromExecutionEnvironment(ee.Id))
+            await foreach (var activity in ActivityStream.FindAsync(ee))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
     }
+
     [TestClass]
     public class TestApplication
     {
