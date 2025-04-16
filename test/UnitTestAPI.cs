@@ -96,7 +96,7 @@ namespace APITest
         [TestMethod]
         public async Task Error404AsJsonResponse1()
         {
-            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/api/v2/users/0/"));
+            var ex = await Assert.ThrowsExactlyAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/api/v2/users/0/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
             Console.WriteLine(ex.ToString());
             Console.WriteLine("====================");
@@ -115,7 +115,7 @@ namespace APITest
         [TestMethod]
         public async Task Error404AsHtmlResponse2()
         {
-            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/404NotFound/"));
+            var ex = await Assert.ThrowsExactlyAsync<RestAPIException>(static () => RestAPI.GetAsync<User>("/404NotFound/"));
             Assert.AreEqual(HttpStatusCode.NotFound, ex.StatusCode);
             Console.WriteLine(ex.ToString());
             Console.WriteLine("====================");
@@ -841,7 +841,7 @@ namespace APITest
                 Email = "teramako@gmail.com",
                 Password = "P@ssw0rd"
             };
-            var ex = await Assert.ThrowsExceptionAsync<RestAPIException>(() => RestAPI.PostJsonAsync<User>("/api/v2/users/", user));
+            var ex = await Assert.ThrowsExactlyAsync<RestAPIException>(() => RestAPI.PostJsonAsync<User>("/api/v2/users/", user));
             Console.WriteLine(ex.ToString());
             Assert.AreEqual(HttpStatusCode.BadRequest, ex.StatusCode);
             /*
