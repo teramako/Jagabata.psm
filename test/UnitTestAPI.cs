@@ -67,7 +67,6 @@ namespace APITest
             Console.WriteLine(config.Origin);
             Assert.IsInstanceOfType<Uri>(config.Origin);
             Assert.IsNotNull(config.File);
-            Assert.IsNotNull(config.Origin);
             Assert.IsNotNull(config.Token);
 
             config.Save();
@@ -181,10 +180,9 @@ namespace APITest
         public async Task GetText()
         {
             var jobResult = await RestAPI.GetAsync<string>("/api/v2/jobs/4/stdout/?format=txt", AcceptType.Text);
-            Assert.IsNotNull(jobResult.Contents);
             Assert.IsTrue(jobResult.Response.IsSuccessStatusCode);
             Console.WriteLine(jobResult.Response.IsSuccessStatusCode);
-            Assert.IsTrue(RestAPI.TextContentType == jobResult.Response.ContentType);
+            Assert.AreEqual(RestAPI.TextContentType, jobResult.Response.ContentType);
             Assert.IsInstanceOfType<string>(jobResult.Contents);
             Util.DumpResponse(jobResult.Response);
             Console.WriteLine("----------------");
@@ -194,9 +192,8 @@ namespace APITest
         public async Task GetHtml()
         {
             var jobResult = await RestAPI.GetAsync<string>("/api/v2/jobs/4/stdout/?format=html", AcceptType.Html);
-            Assert.IsNotNull(jobResult.Contents);
             Assert.IsTrue(jobResult.Response.IsSuccessStatusCode);
-            Assert.IsTrue(RestAPI.HtmlContentType == jobResult.Response.ContentType);
+            Assert.AreEqual(RestAPI.HtmlContentType, jobResult.Response.ContentType);
             Assert.IsInstanceOfType<string>(jobResult.Contents);
             Util.DumpResponse(jobResult.Response);
             Console.WriteLine("----------------");
@@ -237,9 +234,7 @@ namespace APITest
         {
             var activity = await ActivityStream.Get(1);
             Assert.IsNotNull(activity);
-            Assert.IsNotNull(activity.Id);
             Assert.AreEqual(ResourceType.ActivityStream, activity.Type);
-            Assert.IsNotNull(activity.Timestamp);
             Assert.IsInstanceOfType<ActivityStreamOperation>(activity.Operation);
             DumpResource(activity);
             Util.DumpSummary(activity.SummaryFields);
@@ -875,14 +870,13 @@ namespace APITest
             Assert.IsNotNull(apiResult.Contents);
             var createdUser = apiResult.Contents;
             Assert.IsInstanceOfType<User>(createdUser);
-            Assert.IsNotNull(createdUser.Id);
             Util.DumpObject(createdUser);
             Util.DumpResponse(apiResult.Response);
 
             Console.WriteLine("================= Deleate =================");
             var id = createdUser.Id;
             var deleteResult = await RestAPI.DeleteAsync($"/api/v2/users/{id}/");
-            Assert.IsTrue(deleteResult.Response.ContentLength == 0);
+            Assert.AreEqual(0, deleteResult.Response.ContentLength);
             if (deleteResult.Contents is not null)
                 Util.DumpObject(deleteResult.Contents);
             else
@@ -1912,7 +1906,6 @@ namespace APITest
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/", AcceptType.Text);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsNotNull(apiResult.Contents);
             Assert.IsInstanceOfType<string>(apiResult.Contents);
             var jobLog = apiResult.Contents;
             Console.WriteLine(jobLog);
@@ -1922,7 +1915,6 @@ namespace APITest
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=ansi", AcceptType.Text);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsNotNull(apiResult.Contents);
             Assert.IsInstanceOfType<string>(apiResult.Contents);
             var jobLog = apiResult.Contents;
             Console.WriteLine(jobLog);
@@ -1933,7 +1925,6 @@ namespace APITest
         {
             var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=html", AcceptType.Html);
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsNotNull(apiResult.Contents);
             Assert.IsInstanceOfType<string>(apiResult.Contents);
             var jobLog = apiResult.Contents;
             Console.WriteLine(jobLog);
@@ -1943,7 +1934,6 @@ namespace APITest
         {
             var apiResult = await RestAPI.GetAsync<JobLog>($"/api/v2/jobs/{jobId}/stdout/?format=json");
             Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsNotNull(apiResult.Contents);
             Assert.IsInstanceOfType<JobLog>(apiResult.Contents);
             var jobLog = apiResult.Contents;
             Assert.IsInstanceOfType<JobLog.JobLogRange>(jobLog.Range);
