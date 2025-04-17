@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IAdHocCommand : IUnifiedJob
@@ -114,25 +116,49 @@ namespace Jagabata.Resources
         : AdHocCommandBase
     {
         /// <summary>
-        /// Retrieve an Ad Hoc Command.<br/>
-        /// API Path: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
+        /// Get an Ad Hoc Command
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <summary>
+        /// Get an AdhocCommand job
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new Detail Get(ulong id)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
-            return apiResult.Contents;
+            var task = GetAsync(id);
+            task.Wait();
+            return task.Result;
         }
+
         /// <summary>
-        /// List Ad Hoc Commands.<br/>
-        /// API Path: <c>/api/v2/ad_hoc_commands/</c>
+        /// Find AdHocCommand jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<AdHocCommand> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<AdHocCommand> FindAsync(HttpQuery? query = null,
+                                                                         [EnumeratorCancellation]
+                                                                         CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(PATH, query, ct))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -140,62 +166,112 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Ad Hoc Commands for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/ad_hoc_commands/</c>
+        /// Find AdHocCommand jobs associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/ad_hoc_commands/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Inventory</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="inventoryId"></param>
+        /// <param name="resource"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<AdHocCommand> FindFromInventory(ulong inventoryId,
-                                                                             HttpQuery? query = null)
+        public static async IAsyncEnumerable<AdHocCommand> FindAsync(IResource resource,
+                                                                     HttpQuery? query = null,
+                                                                     [EnumeratorCancellation]
+                                                                     CancellationToken ct = default)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
+            var path = resource.Type switch
             {
-                foreach (var job in result.Contents.Results)
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/ad_hoc_commands/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/ad_hoc_commands/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/ad_hoc_commands/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<AdHocCommand>(path, query, ct))
+            {
+                foreach (var activity in apiResult.Contents.Results)
                 {
-                    yield return job;
+                    yield return activity;
                 }
             }
         }
+
         /// <summary>
-        /// List Ad Hoc Commands for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/ad_hoc_commands/</c>
+        /// Find AdHocCommand jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/</c>
+        /// </para>
         /// </summary>
-        /// <param name="groupId"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<AdHocCommand> FindFromGroup(ulong groupId,
-                                                                         HttpQuery? query = null)
+        public static new AdHocCommand[] Find(HttpQuery query)
         {
-            var path = $"{Group.PATH}{groupId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
-            {
-                foreach (var job in result.Contents.Results)
-                {
-                    yield return job;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Ad Hoc Commands for a Host.
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/ad_hoc_commands/</c>
+        /// Find AdHocCommand jobs by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/</c>
+        /// </para>
         /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<AdHocCommand> FindFromHost(ulong hostId,
-                                                                        HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new AdHocCommand[] Find(string? searchWords = null,
+                                              string orderBy = "-id",
+                                              ushort pageSize = 20,
+                                              uint startPage = 1)
         {
-            var path = $"{Host.PATH}{hostId}/ad_hoc_commands/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommand>(path, query))
-            {
-                foreach (var job in result.Contents.Results)
-                {
-                    yield return job;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find AdHocCommand jobs associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="query"></param>
+        public static AdHocCommand[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find AdHocCommand jobs associated with <paramref name="resource"/> by basic parammeters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/ad_hoc_commands/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static AdHocCommand[] Find(IResource resource,
+                                          string? searchWords = null,
+                                          string orderBy = "-timestamp",
+                                          ushort pageSize = 20,
+                                          uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;

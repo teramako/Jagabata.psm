@@ -411,7 +411,7 @@ namespace APITest
         [TestMethod]
         public async Task Get17ListFromAdHoCommand()
         {
-            var cmd = await AdHocCommand.Get(69);
+            var cmd = await AdHocCommand.GetAsync(69);
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
             await foreach (var activity in ActivityStream.FindAsync(cmd))
             {
@@ -2049,7 +2049,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07AdHocCommandEvent()
         {
-            var cmd = await AdHocCommand.Get(69);
+            var cmd = await AdHocCommand.GetAsync(69);
             Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
             await foreach (var je in AdHocCommandJobEvent.FindFromAdHocCommand(cmd.Id))
             {
@@ -2140,7 +2140,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await AdHocCommand.Get(69);
+            var res = await AdHocCommand.GetAsync(69);
             Assert.IsInstanceOfType<AdHocCommand>(res);
             Assert.IsInstanceOfType<AdHocCommand.Detail>(res);
             DumpResource(res);
@@ -2149,7 +2149,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=-id&page_size=2");
-            await foreach (var res in AdHocCommand.Find(query))
+            await foreach (var res in AdHocCommand.FindAsync(query))
             {
                 DumpResource(res);
             }
@@ -2159,7 +2159,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(1);
             Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromInventory(inventory.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2170,7 +2170,7 @@ namespace APITest
         {
             var group = await Group.Get(5);
             Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromGroup(group.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(group))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2181,7 +2181,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromHost(host.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(host))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
