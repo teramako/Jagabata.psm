@@ -206,9 +206,8 @@ namespace Jagabata.Cmdlets
         }
         private IEnumerable<FileInfo> DownloadLogs(DirectoryInfo dir)
         {
-            var unifiedJobsTask = UnifiedJob.Get(_jobs.Select(static job => job.Id).ToArray());
-            unifiedJobsTask.Wait();
-            foreach (var unifiedJob in unifiedJobsTask.Result)
+            foreach (var unifiedJob in UnifiedJob.GetAsync([.. _jobs.Select(static job => job.Id)])
+                                                 .ToBlockingEnumerable())
             {
                 if (unifiedJob is ISystemJob systemJob)
                 {
