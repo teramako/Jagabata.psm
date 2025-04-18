@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class AdHocCommandJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -8,23 +10,67 @@ namespace Jagabata.Resources
         : JobEventBase
     {
         /// <summary>
-        /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
-        /// API Path: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// Find AdHocCommand Events for an Ad HocCommand
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// </para>
         /// </summary>
-        /// <param name="adHocCommandId"></param>
+        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<AdHocCommandJobEvent> FindFromAdHocCommand(ulong adHocCommandId,
-                                                                                        HttpQuery? query = null)
+        public static async IAsyncEnumerable<AdHocCommandJobEvent> FindAsync(ulong adHocCommandId,
+                                                                             HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
             var path = $"{AdHocCommandBase.PATH}{adHocCommandId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
                     yield return jobEvent;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find AdHocCommand Events for an Ad HocCommand
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(adHocCommandId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find AdHocCommand Events for an Ad HocCommand by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <returns></returns>
+        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId,
+                                                  string? searchWords = null,
+                                                  string orderBy = "counter",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(adHocCommandId, new QueryBuilder().SetSearchWords(searchWords)
+                                                          .SetOrderBy(orderBy)
+                                                          .SetPageSize(pageSize)
+                                                          .SetStartPage(startPage)
+                                                          .Build());
         }
 
         public override ulong Id { get; } = id;

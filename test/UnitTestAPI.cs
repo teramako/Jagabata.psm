@@ -2051,7 +2051,7 @@ namespace APITest
         {
             var cmd = await AdHocCommand.GetAsync(69);
             Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
-            await foreach (var je in AdHocCommandJobEvent.FindFromAdHocCommand(cmd.Id))
+            await foreach (var je in AdHocCommandJobEvent.FindAsync(cmd.Id))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<AdHocCommandJobEvent>(je);
