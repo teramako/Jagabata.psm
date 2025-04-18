@@ -460,7 +460,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var app = await Application.Get(1);
+            var app = await Application.GetAsync(1);
             Assert.IsInstanceOfType<Application>(app);
             Console.WriteLine($"Id           : {app.Id}");
             Console.WriteLine($"Name         : {app.Name}");
@@ -484,7 +484,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var app in Application.Find(query))
+            await foreach (var app in Application.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Application>(app);
@@ -497,7 +497,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (Application app in Application.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (Application app in Application.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
@@ -506,7 +507,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var app in Application.FindFromUser(1, null))
+            var resource = new Resource(ResourceType.User, 2);
+            await foreach (var app in Application.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
