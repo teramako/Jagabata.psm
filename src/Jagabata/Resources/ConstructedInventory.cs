@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class ConstructedInventory(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -13,31 +15,91 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/constructed_inventories/";
 
         /// <summary>
-        /// Retrieve a Constructed Inventory.<br/>
-        /// API Path: <c>/api/v2/constructed_inventories/<paramref name="id"/>/</c>
+        /// Get a Constructed Inventory
+        /// <para>
+        /// Implement API: <c>/api/v2/constructed_inventories/<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static async Task<ConstructedInventory> GetAsync(ulong id, CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<ConstructedInventory>($"{PATH}{id}/", cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <summary>
+        /// Get a Constructed Inventory
+        /// <para>
+        /// Implement API: <c>/api/v2/constructed_inventories/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<ConstructedInventory> Get(ulong id)
+        public static ConstructedInventory Get(ulong id)
         {
-            var apiResult = await RestAPI.GetAsync<ConstructedInventory>($"{PATH}{id}/");
-            return apiResult.Contents;
+            var task = GetAsync(id);
+            task.Wait();
+            return task.Result;
         }
+
         /// <summary>
-        /// List Constructed Inventories.<br/>
-        /// API Path: <c>/api/v2/constructed_inventories/</c>
+        /// Find Constructed Inventories
+        /// <para>
+        /// Implement API: <c>/api/v2/constructed_inventories/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ConstructedInventory> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<ConstructedInventory> FindAsync(HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ConstructedInventory>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ConstructedInventory>(PATH, query, ct))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
                     yield return inventory;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Constructed Inventories
+        /// <para>
+        /// Implement API: <c>/api/v2/constructed_inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static ConstructedInventory[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Constructed Inventories by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/constructed_inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <returns></returns>
+        public static ConstructedInventory[] Find(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;

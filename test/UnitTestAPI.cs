@@ -1460,7 +1460,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var inventory = await ConstructedInventory.Get(4);
+            var inventory = await ConstructedInventory.GetAsync(4);
             Assert.IsInstanceOfType<ConstructedInventory>(inventory);
             Assert.AreEqual("constructed", inventory.Kind);
             DumpResource(inventory);
@@ -1468,7 +1468,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var inventory in ConstructedInventory.Find(null))
+            await foreach (var inventory in ConstructedInventory.FindAsync())
             {
                 Assert.AreEqual("constructed", inventory.Kind);
                 DumpResource(inventory);
