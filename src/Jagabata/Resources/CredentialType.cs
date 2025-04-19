@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -80,31 +81,87 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/credential_types/";
 
         /// <summary>
-        /// Retrieve a Credential Type.<br/>
-        /// API Path: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
+        /// Get a Credential Type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<CredentialType> Get(ulong id)
+        public static async Task<CredentialType> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<CredentialType>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<CredentialType>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
         /// <summary>
-        /// List Credential Types.<br/>
-        /// API Path: <c>/api/v2/credential_types/</c>
+        /// Get a Credential Type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        public static CredentialType Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find CredentialTypes
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialType> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<CredentialType> FindAsync(HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query, ct))
             {
                 foreach (var credentialType in result.Contents.Results)
                 {
                     yield return credentialType;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find CredentialTypes
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static CredentialType[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find CredentialTypes by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static CredentialType[] Find(string? searchWords = null,
+                                            string orderBy = "id",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;

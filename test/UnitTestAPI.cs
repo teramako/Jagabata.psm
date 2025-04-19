@@ -334,7 +334,7 @@ namespace APITest
         [TestMethod]
         public async Task Get10ListFromCredentialType()
         {
-            var credType = await CredentialType.Get(29);
+            var credType = await CredentialType.GetAsync(29);
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
             await foreach (var activity in ActivityStream.FindAsync(credType))
             {
@@ -1384,7 +1384,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var ct = await CredentialType.Get(1);
+            var ct = await CredentialType.GetAsync(1);
             Assert.IsInstanceOfType<CredentialType>(ct);
             DumpResource(ct);
         }
@@ -1392,7 +1392,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var ct in CredentialType.Find(query))
+            await foreach (var ct in CredentialType.FindAsync(query))
             {
                 DumpResource(ct);
             }
