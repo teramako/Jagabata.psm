@@ -323,7 +323,7 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromCredential()
         {
-            var cred = await Credential.Get(1);
+            var cred = await Credential.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
             await foreach (var activity in ActivityStream.FindAsync(cred))
             {
@@ -1227,7 +1227,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var cred = await Credential.Get(2);
+            var cred = await Credential.GetAsync(2);
             Assert.IsInstanceOfType<Credential>(cred);
             DumpResource(cred);
         }
@@ -1235,7 +1235,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var cred in Credential.Find(query))
+            await foreach (var cred in Credential.FindAsync(query))
             {
                 DumpResource(cred);
             }
@@ -1243,7 +1243,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var cred in Credential.FindFromOrganization(2))
+            var res = new Resource(ResourceType.Organization, 2);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1252,7 +1253,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListGalaxyFromOrganization()
         {
-            await foreach (var cred in Credential.FindGalaxyFromOrganization(1))
+            await foreach (var cred in Credential.FindGalaxyAsync(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1261,7 +1262,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromUser()
         {
-            await foreach (var cred in Credential.FindFromUser(1))
+            var res = new Resource(ResourceType.User, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1270,7 +1272,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromTeam()
         {
-            await foreach (var cred in Credential.FindFromTeam(1))
+            var res = new Resource(ResourceType.Team, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1279,7 +1282,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromCredentialType()
         {
-            await foreach (var cred in Credential.FindFromCredentialType(1))
+            var res = new Resource(ResourceType.CredentialType, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1288,7 +1292,8 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromInventorySource()
         {
-            await foreach (var cred in Credential.FindFromInventorySource(17))
+            var res = new Resource(ResourceType.InventorySource, 17);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1297,7 +1302,8 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromInventoryUpdate()
         {
-            await foreach (var cred in Credential.FindFromInventoryUpdateJob(75))
+            var res = new Resource(ResourceType.InventoryUpdate, 526);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1306,7 +1312,8 @@ namespace APITest
         [TestMethod]
         public async Task Get10ListFromJobTemplate()
         {
-            await foreach (var cred in Credential.FindFromJobTemplate(7))
+            var res = new Resource(ResourceType.JobTemplate, 7);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1315,7 +1322,8 @@ namespace APITest
         [TestMethod]
         public async Task Get11ListFromJob()
         {
-            await foreach (var cred in Credential.FindFromJobTemplateJob(4))
+            var res = new Resource(ResourceType.Job, 565);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1324,7 +1332,8 @@ namespace APITest
         [TestMethod]
         public async Task Get12ListFromSchedule()
         {
-            await foreach (var cred in Credential.FindFromSchedule(6))
+            var res = new Resource(ResourceType.Schedule, 6);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1333,7 +1342,8 @@ namespace APITest
         [TestMethod]
         public async Task Get13ListFromWorkflowJobTemplateNode()
         {
-            await foreach (var cred in Credential.FindFromWorkflowJobTemplateNode(1))
+            var res = new Resource(ResourceType.WorkflowJobTemplateNode, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1342,7 +1352,8 @@ namespace APITest
         [TestMethod]
         public async Task Get14ListFromWorkflowJobNode()
         {
-            await foreach (var cred in Credential.FindFromWorkflowJobNode(8))
+            var res = new Resource(ResourceType.WorkflowJobNode, 131);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -2781,7 +2792,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromCredential()
         {
-            var cred = await Credential.Get(7);
+            var cred = await Credential.GetAsync(7);
             Console.WriteLine($"Credential for ([{cred.Id}][{cred.Type}] {cred.Name})");
             await foreach (var cis in CredentialInputSource.FindFromCredential(cred.Id))
             {
