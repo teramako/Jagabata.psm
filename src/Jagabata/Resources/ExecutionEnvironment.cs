@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IExecutionEnvironment
@@ -40,25 +42,46 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/execution_environments/";
 
         /// <summary>
-        /// Retrieve an Execution Environment.<br/>
-        /// API Path: <c>/api/v2/execution_environments/<paramref name="id"/>/</c>
+        /// Get an Execution Environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<ExecutionEnvironment> Get(ulong id)
+        public static async Task<ExecutionEnvironment> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<ExecutionEnvironment>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<ExecutionEnvironment>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
         /// <summary>
-        /// List Execution Environments.<br/>
-        /// API Path: <c>/api/v2/execution_environments/</c>
+        /// Get an Execution Environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        public static ExecutionEnvironment Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Execution Environments
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ExecutionEnvironment> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<ExecutionEnvironment> FindAsync(HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query, ct))
             {
                 foreach (var exeEnv in result.Contents.Results)
                 {
@@ -67,23 +90,101 @@ namespace Jagabata.Resources
             }
         }
         /// <summary>
-        /// List Execution Environments for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// Find Execution Environments for an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="organizationId">Organization ID</param>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ExecutionEnvironment> FindFromOrganization(ulong organizationId,
-                                                                                        HttpQuery? query = null)
+        public static async IAsyncEnumerable<ExecutionEnvironment> FindAsync(ulong organizationId,
+                                                                             HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/execution_environments/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query, ct))
             {
                 foreach (var exeEnv in result.Contents.Results)
                 {
                     yield return exeEnv;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Execution Environments
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        public static ExecutionEnvironment[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Execution Environments by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static ExecutionEnvironment[] Find(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find ExecutionEnvironments for an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="organizationId">Organization ID</param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static ExecutionEnvironment[] Find(ulong organizationId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(organizationId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find ExecutionEnvironments for an Organization by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="organizationId">Organization ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <returns></returns>
+        public static ExecutionEnvironment[] Find(ulong organizationId,
+                                                  string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(organizationId, new QueryBuilder().SetSearchWords(searchWords)
+                                                          .SetOrderBy(orderBy)
+                                                          .SetPageSize(pageSize)
+                                                          .SetStartPage(startPage)
+                                                          .Build());
         }
 
         public override ulong Id { get; } = id;

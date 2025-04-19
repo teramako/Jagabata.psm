@@ -444,7 +444,7 @@ namespace APITest
         [TestMethod]
         public async Task Get20ListFromExecutionEnvironment()
         {
-            var ee = await ExecutionEnvironment.Get(1);
+            var ee = await ExecutionEnvironment.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
             await foreach (var activity in ActivityStream.FindAsync(ee))
             {
@@ -2815,7 +2815,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await ExecutionEnvironment.Get(1);
+            var res = await ExecutionEnvironment.GetAsync(1);
             Assert.IsInstanceOfType<ExecutionEnvironment>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2824,7 +2824,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in ExecutionEnvironment.Find(query))
+            await foreach (var res in ExecutionEnvironment.FindAsync(query))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(res);
                 DumpResource(res);
@@ -2836,7 +2836,7 @@ namespace APITest
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var exeEnv in ExecutionEnvironment.FindFromOrganization(org.Id))
+            await foreach (var exeEnv in ExecutionEnvironment.FindAsync(org.Id))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(exeEnv);
                 Console.WriteLine($"[{exeEnv.Id}] {exeEnv.Name} {exeEnv.Image}");
