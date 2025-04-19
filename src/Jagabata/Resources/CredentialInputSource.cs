@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface ICredentialInputSource
@@ -18,25 +20,48 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/credential_input_sources/";
 
         /// <summary>
-        /// Retrieve a Credential Input Source.<br/>
-        /// API Path: <c>/api/v2/credential_input_sources/<paramref name="id"/>/</c>
+        /// Get a Credential Input Source
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_input_sources/<paramref name="id"/>/</c>
+        /// </par>
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<CredentialInputSource> Get(ulong id)
+        public static async Task<CredentialInputSource> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<CredentialInputSource>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<CredentialInputSource>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
         /// <summary>
-        /// List Credential Input Sources.<br/>
-        /// API Path: <c>api/v2/credential_input_sources/</c>
+        /// Get a Credential Input Source
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_input_sources/<paramref name="id"/>/</c>
+        /// </par>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static CredentialInputSource Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Credential Input Sources
+        /// <para>
+        /// Implement API: <c>api/v2/credential_input_sources/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialInputSource> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<CredentialInputSource> FindAsync(HttpQuery? query = null,
+                                                                              [EnumeratorCancellation]
+                                                                              CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(PATH, query, ct))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -45,23 +70,100 @@ namespace Jagabata.Resources
             }
         }
         /// <summary>
-        /// List Credential Input Sources for a Credential.<br/>
-        /// API Path: <c>/api/v2/credentials/<paramref name="credentialId"/>/input_sources/</c>
+        /// Find Credential Input Sources for a Credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/<paramref name="credentialId"/>/input_sources/</c>
+        /// </para>
         /// </summary>
-        /// <param name="credentialId"></param>
+        /// <param name="credentialId">Credential ID</param>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialInputSource> FindFromCredential(ulong credentialId,
-                                                                                       HttpQuery? query = null)
+        public static async IAsyncEnumerable<CredentialInputSource> FindAsync(ulong credentialId,
+                                                                              HttpQuery? query = null,
+                                                                              [EnumeratorCancellation] CancellationToken ct = default)
         {
             var path = $"{Credential.PATH}{credentialId}/input_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(path, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialInputSource>(path, query, ct))
             {
                 foreach (var credential in result.Contents.Results)
                 {
                     yield return credential;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find CredentialInputSources
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        public static CredentialInputSource[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find CredentialInputSources by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static CredentialInputSource[] Find(string? searchWords = null,
+                                                   string orderBy = "id",
+                                                   ushort pageSize = 20,
+                                                   uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find CredentianlInputSources for a Credential
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="credentialId"/>/events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="credentialId">Credential ID</param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static CredentialInputSource[] Find(ulong credentialId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(credentialId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find CredentianlInputSources for a Credential by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="credentialId"/>/events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="credentialId">Credential ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <returns></returns>
+        public static CredentialInputSource[] Find(ulong credentialId,
+                                                   string? searchWords = null,
+                                                   string orderBy = "id",
+                                                   ushort pageSize = 20,
+                                                   uint startPage = 1)
+        {
+            return Find(credentialId, new QueryBuilder().SetSearchWords(searchWords)
+                                                        .SetOrderBy(orderBy)
+                                                        .SetPageSize(pageSize)
+                                                        .SetStartPage(startPage)
+                                                        .Build());
         }
 
         public override ulong Id { get; } = id;

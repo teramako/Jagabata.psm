@@ -2773,7 +2773,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await CredentialInputSource.Get(1);
+            var res = await CredentialInputSource.GetAsync(1);
             Assert.IsInstanceOfType<CredentialInputSource>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2782,7 +2782,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in CredentialInputSource.Find(query))
+            await foreach (var res in CredentialInputSource.FindAsync(query))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(res);
                 DumpResource(res);
@@ -2794,7 +2794,7 @@ namespace APITest
         {
             var cred = await Credential.GetAsync(7);
             Console.WriteLine($"Credential for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var cis in CredentialInputSource.FindFromCredential(cred.Id))
+            await foreach (var cis in CredentialInputSource.FindAsync(cred.Id))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(cis);
                 Console.WriteLine($"[{cis.Id}] Source:{cis.SourceCredential} Target:{cis.TargetCredential}");
