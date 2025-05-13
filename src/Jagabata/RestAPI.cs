@@ -159,7 +159,9 @@ namespace Jagabata
         /// <param name="response"></param>
         /// <returns>The contents object or exception is wrapped <see cref="RestAPIResult{T}"/></returns>
         /// <exception cref="RestAPIException"></exception>"
-        private static async Task<RestAPIPostResult<T>> HandlePostResponse<T>(HttpResponseMessage response) where T : class
+        private static async Task<RestAPIPostResult<T>> HandlePostResponse<T>(HttpResponseMessage response,
+                                                                              CancellationToken cancellationToken = default)
+            where T : class
         {
             var contentType = response.Content.Headers.ContentType?.MediaType ?? string.Empty;
             if (response.IsSuccessStatusCode)
@@ -167,7 +169,9 @@ namespace Jagabata
                 long contentLength = response.Content.Headers.ContentLength ?? 0;
                 if (typeof(T) == typeof(string))
                 {
-                    string stringContents = contentLength == 0 ? string.Empty : await response.Content.ReadAsStringAsync();
+                    string stringContents = contentLength == 0
+                                            ? string.Empty
+                                            : await response.Content.ReadAsStringAsync(cancellationToken);
                     return new RestAPIPostResult<T>(response, stringContents as T);
                 }
                 else if (contentLength == 0 || response.StatusCode == HttpStatusCode.NoContent)
@@ -178,7 +182,7 @@ namespace Jagabata
                 {
                     try
                     {
-                        var obj = await response.Content.ReadFromJsonAsync<T>(Json.DeserializeOptions)
+                        var obj = await response.Content.ReadFromJsonAsync<T>(Json.DeserializeOptions, cancellationToken)
                             ?? throw new RestAPIException("Failed to read JSON. The result is null.", response);
                         return new RestAPIPostResult<T>(response, obj);
 
@@ -194,7 +198,9 @@ namespace Jagabata
                 }
             }
             // Error handling
-            throw CreateException(response, contentType == JsonContentType ? await response.Content.ReadAsStringAsync() : contentType);
+            throw CreateException(response, contentType == JsonContentType
+                                            ? await response.Content.ReadAsStringAsync(cancellationToken)
+                                            : contentType);
         }
         public const string JsonContentType = "application/json";
         public const string HtmlContentType = "text/html";
@@ -313,6 +319,10 @@ namespace Jagabata
             {
                 var apiResult = await GetAsync<ResultSet<T>>(nextPathAndQuery, cancellationToken: cancellationToken);
                 yield return apiResult;
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
                 if (apiResult.Contents is null)
                 {
                     break;
@@ -397,7 +407,7 @@ namespace Jagabata
         {
             using var jsonContent = GetStringContent(data);
             using HttpResponseMessage response = await Client.PostAsync(path, jsonContent, cancellationToken);
-            return await HandlePostResponse<T>(response);
+            return await HandlePostResponse<T>(response, cancellationToken);
         }
         /// <summary>
         /// Request <see cref="HttpMethod.Put">PUT</see> to AWX
