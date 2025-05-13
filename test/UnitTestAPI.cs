@@ -367,7 +367,7 @@ namespace APITest
         [TestMethod]
         public async Task Get13ListFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
             await foreach (var activity in ActivityStream.FindAsync(group))
             {
@@ -1542,7 +1542,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromGroup()
         {
-            var group = await Group.Get(4);
+            var group = await Group.GetAsync(4);
             Console.WriteLine($"InventorySources for ([{group.Type}][{group.Id}] {group.Name})");
             await foreach (var res in InventorySource.FindFromGroup(4))
             {
@@ -1636,7 +1636,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Assert.IsInstanceOfType<Group>(group);
             DumpResource(group);
         }
@@ -1644,7 +1644,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20");
-            await foreach (var group in Group.Find(query))
+            await foreach (var group in Group.FindAsync(query))
             {
                 DumpResource(group);
             }
@@ -1654,7 +1654,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var group in Group.FindFromInventory(inventory.Id))
+            await foreach (var group in Group.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1665,7 +1665,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var group in Group.FindOnlyRootFromInventory(inventory.Id))
+            await foreach (var group in Group.FindAsync(inventory, all: false))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1674,9 +1674,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromInventorySource()
         {
-            var inventorySOurce = await InventorySource.Get(11);
-            Console.WriteLine($"Groups in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach (var group in Group.FindFromInventorySource(inventorySOurce.Id))
+            var inventorySource = await InventorySource.Get(11);
+            Console.WriteLine($"Groups in [{inventorySource.Type}][{inventorySource.Id}] {inventorySource.Name}");
+            await foreach (var group in Group.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1687,7 +1687,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach (var group in Group.FindAllFromHost(host.Id))
+            await foreach (var group in Group.FindAsync(host, all: true))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1698,7 +1698,7 @@ namespace APITest
         {
             var host = await Host.Get(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach (var group in Group.FindFromHost(host.Id))
+            await foreach (var group in Group.FindAsync(host, all: false))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1763,7 +1763,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListAllFromHost()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
             await foreach (var host in Host.FindAllFromGroup(group.Id))
             {
@@ -1774,7 +1774,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromHost()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
             await foreach (var host in Host.FindFromGroup(group.Id))
             {
@@ -1979,7 +1979,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02FindFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
             await foreach (var je in JobEvent.FindFromGroup(group.Id, eventQuery))
@@ -2102,7 +2102,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02ListFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"JobHostSummaries in ({group.Type})[{group.Id}] {group.Name}");
             await foreach (var summary in JobHostSummary.FindFromGroup(group.Id))
             {
@@ -2181,7 +2181,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromFroup()
         {
-            var group = await Group.Get(5);
+            var group = await Group.GetAsync(5);
             Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
             await foreach (var cmd in AdHocCommand.FindAsync(group))
             {
