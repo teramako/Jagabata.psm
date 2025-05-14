@@ -378,7 +378,7 @@ namespace APITest
         [TestMethod]
         public async Task Get14ListFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
             await foreach (var activity in ActivityStream.FindAsync(host))
             {
@@ -1553,7 +1553,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"InventorySources for ([{host.Type}][{host.Id}] {host.Name})");
             await foreach (var res in InventorySource.FindFromHost(host.Id))
             {
@@ -1685,7 +1685,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListAllFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
             await foreach (var group in Group.FindAsync(host, all: true))
             {
@@ -1696,7 +1696,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
             await foreach (var group in Group.FindAsync(host, all: false))
             {
@@ -1725,7 +1725,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var host = await Host.Get(1);
+            var host = await Host.GetAsync(1);
             Assert.IsInstanceOfType<Host>(host);
             DumpResource(host);
         }
@@ -1733,7 +1733,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20");
-            await foreach (var host in Host.Find(query))
+            await foreach (var host in Host.FindAsync(query))
             {
                 DumpResource(host);
             }
@@ -1743,7 +1743,7 @@ namespace APITest
         {
             var inventory = await Inventory.Get(2);
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var host in Host.FindFromInventory(inventory.Id))
+            await foreach (var host in Host.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1752,9 +1752,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromInventorySource()
         {
-            var inventorySOurce = await InventorySource.Get(11);
-            Console.WriteLine($"Hosts in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach (var host in Host.FindFromInventorySource(inventorySOurce.Id))
+            var inventorySource = await InventorySource.Get(11);
+            Console.WriteLine($"Hosts in [{inventorySource.Type}][{inventorySource.Id}] {inventorySource.Name}");
+            await foreach (var host in Host.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1765,7 +1765,7 @@ namespace APITest
         {
             var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindAllFromGroup(group.Id))
+            await foreach (var host in Host.FindAsync(group, all: true))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1776,7 +1776,7 @@ namespace APITest
         {
             var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindFromGroup(group.Id))
+            await foreach (var host in Host.FindAsync(group, all: false))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1995,7 +1995,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03FindFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
             await foreach (var je in JobEvent.FindFromHost(host.Id, eventQuery))
@@ -2115,7 +2115,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"JobHostSummaries in ({host.Type})[{host.Id}] {host.Name}");
             await foreach (var summary in JobHostSummary.FindFromHost(host.Id))
             {
@@ -2192,7 +2192,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
             await foreach (var cmd in AdHocCommand.FindAsync(host))
             {

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -38,25 +39,40 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/hosts/";
 
         /// <summary>
-        /// Retrieve a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="id"/>/</c>
+        /// Get a Host
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Host ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Host> Get(ulong id)
+        public static async Task<Host> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Host>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Host>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Host Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Hosts.<br/>
-        /// API Path: <c>/api/v2/hosts/</c>
+        /// Find Hosts
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Host> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Host> FindAsync(HttpQuery? query = null,
+                                                             [EnumeratorCancellation]
+                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(PATH, query, ct))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -64,18 +80,41 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Hosts for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/hosts/</c>
+        /// Find Hosts associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/{hosts | all_hosts}/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Inventory</item>
+        ///     <item>InventorySource</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="inventoryId"></param>
+        /// <param name="resource">Resource object associated with this group</param>
         /// <param name="query"></param>
+        /// <param name="all">
+        /// When <paramref name="resource"/> is <see cref="Group"/>:
+        /// <c>true</c> => all directly or indirectly hosts, <c>false</c> => only direct child hosts of ths Group.
+        /// </param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Host> FindFromInventory(ulong inventoryId,
-                                                                     HttpQuery? query = null)
+        public static async IAsyncEnumerable<Host> FindAsync(IResource resource,
+                                                             HttpQuery? query = null,
+                                                             bool all = true,
+                                                             [EnumeratorCancellation]
+                                                             CancellationToken ct = default)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/hosts/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{resource.Id}/hosts/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/{(all ? "all_hosts" : "hosts")}/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query, ct))
             {
                 foreach (var host in result.Contents.Results)
                 {
@@ -83,62 +122,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Hosts for an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventorySourceId"/>/hosts/</c>
-        /// </summary>
-        /// <param name="inventorySourceId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Host> FindFromInventorySource(ulong inventorySourceId,
-                                                                           HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Host[] Find(HttpQuery? query = null)
         {
-            var path = $"{InventorySource.PATH}{inventorySourceId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
-            {
-                foreach (var host in result.Contents.Results)
-                {
-                    yield return host;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List All Hosts for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/all_hosts/</c>
+        /// Find Hosts by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/hosts/</c>
+        /// </para>
         /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Host> FindAllFromGroup(ulong groupId,
-                                                                    HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Host[] Find(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
         {
-            var path = $"{Group.PATH}{groupId}/all_hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
-            {
-                foreach (var host in result.Contents.Results)
-                {
-                    yield return host;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
-        /// <summary>
-        /// List Hosts for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/hosts/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Host> FindFromGroup(ulong groupId,
-                                                                 HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        public static Host[] Find(IResource resource, HttpQuery? query = null, bool all = true)
         {
-            var path = $"{Group.PATH}{groupId}/hosts/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Host>(path, query))
-            {
-                foreach (var host in result.Contents.Results)
-                {
-                    yield return host;
-                }
-            }
+            return [.. FindAsync(resource, query, all).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;
