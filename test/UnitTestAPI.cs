@@ -1783,6 +1783,40 @@ namespace APITest
             }
         }
     }
+
+    [TestClass]
+    public class TestHostMetrics
+    {
+        private static void DumpResource(HostMetric metric)
+        {
+            Console.WriteLine($"Id              : {metric.Id}");
+            Console.WriteLine($"Type            : {metric.Type}");
+            Console.WriteLine($"Hostname        : {metric.Hostname}");
+            Console.WriteLine($"FirstAutomation : {metric.FirstAutomation?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"LastAutomation  : {metric.LastAutomation?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"LastDeleted     : {metric.LastDeleted?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"AutomatedCounter: {metric.AutomatedCounter}");
+            Console.WriteLine($"DeletedCounter  : {metric.DeletedCounter}");
+            Console.WriteLine($"Deleted         : {metric.Deleted}");
+        }
+        [TestMethod]
+        public async Task Get01Single()
+        {
+            var metric = await HostMetric.GetAsync(1);
+            Assert.IsInstanceOfType<HostMetric>(metric);
+        }
+        [TestMethod]
+        public async Task Get02List()
+        {
+            await foreach (var metric in HostMetric.FindAsync(new QueryBuilder().SetPageSize(1)
+                                                                                .SetOrderBy("id")
+                                                                                .Build()))
+            {
+                DumpResource(metric);
+            }
+        }
+    }
+
     [TestClass]
     public class TestJobTemplate
     {
