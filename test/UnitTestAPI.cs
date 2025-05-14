@@ -626,7 +626,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var instance = await Instance.Get(1);
+            var instance = await Instance.GetAsync(1);
             Assert.IsInstanceOfType<Instance>(instance);
             DumpInstance(instance);
             Util.DumpSummary(instance.SummaryFields);
@@ -638,7 +638,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var instance in Instance.Find(query))
+            await foreach (var instance in Instance.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Instance>(instance);
@@ -651,7 +651,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInstanceGroup()
         {
-            await foreach (var inst in Instance.FindFromInstanceGroup(1))
+            await foreach (var inst in Instance.FindAsync(1))
             {
                 Assert.IsInstanceOfType<Instance>(inst);
                 Console.WriteLine($"[{inst.Id}] {inst.Hostname} {inst.NodeType} {inst.NodeState}");
