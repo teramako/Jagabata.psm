@@ -345,7 +345,7 @@ namespace APITest
         [TestMethod]
         public async Task Get11ListFromInventory()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
             await foreach (var activity in ActivityStream.FindAsync(inventory))
             {
@@ -1426,7 +1426,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Assert.IsInstanceOfType<Inventory>(inventory);
             DumpResource(inventory);
         }
@@ -1434,7 +1434,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var inventory in Inventory.Find(query))
+            await foreach (var inventory in Inventory.FindAsync(query))
             {
                 DumpResource(inventory);
             }
@@ -1442,7 +1442,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var inventory in Inventory.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (var inventory in Inventory.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1452,7 +1453,8 @@ namespace APITest
         public async Task Get04ListInputInventires()
         {
             Console.WriteLine("Inventory [4]'s Inpput Inventories:");
-            await foreach (var inventory in Inventory.FindInputInventoires(4))
+            var resource = new Resource(ResourceType.Inventory, 4);
+            await foreach (var inventory in Inventory.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1538,7 +1540,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromInventory()
         {
-            var inventory = await Inventory.Get(4);
+            var inventory = await Inventory.GetAsync(4);
             Console.WriteLine($"InventorySources for ([{inventory.Type}][{inventory.Id}] {inventory.Name})");
             await foreach (var res in InventorySource.FindFromInventory(4))
             {
@@ -1659,7 +1661,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
             await foreach (var group in Group.FindAsync(inventory))
             {
@@ -1670,7 +1672,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListOnlyRootFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
             await foreach (var group in Group.FindAsync(inventory, all: false))
             {
@@ -1748,7 +1750,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
             await foreach (var host in Host.FindAsync(inventory))
             {
@@ -1872,7 +1874,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04listFromInventory()
         {
-            var inv = await Inventory.Get(2);
+            var inv = await Inventory.GetAsync(2);
             Console.WriteLine($"JobTemplates in ({inv.Type})[{inv.Id}] {inv.Name}");
             await foreach (var jt in JobTemplate.FindFromInventory(inv.Id))
             {
@@ -2211,7 +2213,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
             await foreach (var cmd in AdHocCommand.FindAsync(inventory))
             {
