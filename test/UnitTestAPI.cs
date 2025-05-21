@@ -686,7 +686,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var ig = await InstanceGroup.Get(1);
+            var ig = await InstanceGroup.GetAsync(1);
             Assert.IsInstanceOfType<InstanceGroup>(ig);
             DumpResource(ig);
             Util.DumpSummary(ig.SummaryFields);
@@ -698,7 +698,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var ig in InstanceGroup.Find(query))
+            await foreach (var ig in InstanceGroup.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
@@ -711,7 +711,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInstance()
         {
-            await foreach (var ig in InstanceGroup.FindFromInstance(1))
+            var resource = new Resource(ResourceType.Instance, 1);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -721,7 +722,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromOranization()
         {
-            await foreach (var ig in InstanceGroup.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -731,7 +733,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromInventory()
         {
-            await foreach (var ig in InstanceGroup.FindFromInventory(2))
+            var resource = new Resource(ResourceType.Inventory, 2);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -740,7 +743,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromJobTemplate()
         {
-            await foreach (var ig in InstanceGroup.FindFromJobTemplate(7))
+            var resource = new Resource(ResourceType.Inventory, 7);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -749,7 +753,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromSchedule()
         {
-            await foreach (var ig in InstanceGroup.FindFromSchedule(8))
+            var resource = new Resource(ResourceType.Schedule, 8);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -758,7 +763,8 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromWorkflowJobTemplateNode()
         {
-            await foreach (var ig in InstanceGroup.FindFromWorkflowJobTemplateNode(4))
+            var resource = new Resource(ResourceType.WorkflowJobTemplateNode, 4);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -767,7 +773,8 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromWorkflowJobNode()
         {
-            await foreach (var ig in InstanceGroup.FindFromWorkflowJobNode(7))
+            var resource = new Resource(ResourceType.WorkflowJobNode, 7);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
