@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -175,25 +176,39 @@ namespace Jagabata.Resources
         public new const string PATH = "/api/v2/inventory_sources/";
 
         /// <summary>
-        /// Retrieve an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/<paramref name="id"/>/</c>
+        /// Get an Inventory Source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">InventorySource ID</param>
         /// <returns></returns>
-        public static new async Task<InventorySource> Get(ulong id)
+        public static new async Task<InventorySource> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<InventorySource>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<InventorySource>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new InventorySource Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Inventory Sources.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/</c>
+        /// Find Inventory Sources
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<InventorySource> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<InventorySource> FindAsync(HttpQuery? query = null,
+                                                                            [EnumeratorCancellation]
+                                                                            CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, ct))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -201,18 +216,38 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Inventory Sources for a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="projectId"/>/scm_inventory_sources/</c>
+        /// Find Inventory Sources associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/inventory_sources/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Project</item>
+        ///     <item>Inventory</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="projectId"></param>
+        /// <param name="resource">Resource object</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromProject(ulong projectId,
-                                                                              HttpQuery? query = null)
+        public static async IAsyncEnumerable<InventorySource> FindAsync(IResource resource,
+                                                                        HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
         {
-            var path = $"{Project.PATH}{projectId}/scm_inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/scm_inventory_sources/",
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/inventory_sources/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/inventory_sources/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/inventory_sources/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, ct))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -220,62 +255,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Inventory Sources for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/inventory_sources/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromInventory(ulong inventoryId,
-                                                                                HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new InventorySource[] Find(HttpQuery query)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
-        /// <summary>
-        /// List Inventory Sources for an Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/inventory_sources/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromGroup(ulong groupId,
-                                                                            HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static InventorySource[] Find(IResource resource, HttpQuery? query = null)
         {
-            var path = $"{Group.PATH}{groupId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Inventory Sources for an Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/inventory_sources/</c>
+        /// Find Inventory Sources by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/</c>
+        /// </para>
         /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromHost(ulong hostId,
-                                                                           HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new InventorySource[] Find(string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20,
+                                                 uint startPage = 1)
         {
-            var path = $"{Host.PATH}{hostId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;
