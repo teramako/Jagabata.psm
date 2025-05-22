@@ -2489,7 +2489,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await UnifiedJobTemplate.Get(1);
+            var res = await UnifiedJobTemplate.GetAsync(1);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(res);
             DumpResource(res);
@@ -2497,8 +2497,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var ujtList = await UnifiedJobTemplate.Get(1, 6, 9, 11, 13);
-            foreach (var res in ujtList)
+            await foreach (var res in UnifiedJobTemplate.GetAsync([1, 6, 9, 11, 13]))
             {
                 DumpResource(res);
                 switch (res)
@@ -2523,14 +2522,13 @@ namespace APITest
                         break;
                 }
             }
-            Util.DumpObject(ujtList);
         }
 
         [TestMethod]
         public async Task Get03ListJobTemplate()
         {
             var query = new HttpQuery("type=job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<JobTemplate>(res);
@@ -2540,7 +2538,7 @@ namespace APITest
         public async Task Get04ListProject()
         {
             var query = new HttpQuery("type=project&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<Project>(res);
@@ -2550,7 +2548,7 @@ namespace APITest
         public async Task Get05ListInventorySource()
         {
             var query = new HttpQuery("type=inventory_source&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<InventorySource>(res);
@@ -2560,7 +2558,7 @@ namespace APITest
         public async Task Get06ListSystemJobTemplate()
         {
             var query = new HttpQuery("type=system_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<SystemJobTemplate>(res);
@@ -2570,7 +2568,7 @@ namespace APITest
         public async Task Get07ListWorkflowJobTemplate()
         {
             var query = new HttpQuery("type=workflow_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
