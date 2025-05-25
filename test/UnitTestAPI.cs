@@ -2137,7 +2137,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await JobHostSummary.Get(1);
+            var res = await JobHostSummary.GetAsync(1);
             Assert.IsInstanceOfType<JobHostSummary>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2147,7 +2147,7 @@ namespace APITest
         {
             var group = await Group.GetAsync(1);
             Console.WriteLine($"JobHostSummaries in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach (var summary in JobHostSummary.FindFromGroup(group.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(group))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2160,7 +2160,7 @@ namespace APITest
         {
             var host = await Host.GetAsync(2);
             Console.WriteLine($"JobHostSummaries in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach (var summary in JobHostSummary.FindFromHost(host.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(host))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2173,7 +2173,7 @@ namespace APITest
         {
             var job = await JobTemplateJob.Get(4);
             Console.WriteLine($"JobHostSummaries in ({job.Type})[{job.Id}] {job.Name}");
-            await foreach (var summary in JobHostSummary.FindFromJob(job.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(job))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
