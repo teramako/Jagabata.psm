@@ -1590,7 +1590,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await InventoryUpdateJob.Get(46);
+            var res = await InventoryUpdateJob.GetAsync(46);
             Assert.IsInstanceOfType<InventoryUpdateJob.Detail>(res);
             Assert.IsInstanceOfType<IUnifiedJob>(res);
             DumpResource(res);
@@ -1598,7 +1598,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var res in InventoryUpdateJob.Find(new HttpQuery("order_by=id")))
+            await foreach (var res in InventoryUpdateJob.FindAsync(new HttpQuery("order_by=id")))
             {
                 DumpResource(res);
             }
@@ -1608,7 +1608,7 @@ namespace APITest
         {
             var projectUpdateJob = await ProjectUpdateJob.Get(76);
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
-            await foreach (var res in InventoryUpdateJob.FindFromProjectUpdate(projectUpdateJob.Id))
+            await foreach (var res in InventoryUpdateJob.FindAsync(projectUpdateJob))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -1619,7 +1619,7 @@ namespace APITest
         {
             var inventorySource = await InventorySource.GetAsync(11);
             Console.WriteLine($"InventoryUpdateJobs for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var res in InventoryUpdateJob.FindFromInventorySource(inventorySource.Id))
+            await foreach (var res in InventoryUpdateJob.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -2071,7 +2071,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05InventoryUpdate()
         {
-            var job = await InventoryUpdateJob.Get(43);
+            var job = await InventoryUpdateJob.GetAsync(43);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
             await foreach (var je in InventoryUpdateJobEvent.FindFromInventoryUpdateJob(job.Id, eventQuery))
