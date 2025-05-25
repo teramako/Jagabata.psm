@@ -2461,7 +2461,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Label.Get(1);
+            var res = await Label.GetAsync(1);
             Assert.IsInstanceOfType<Label>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2469,7 +2469,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var res in Label.Find(null))
+            await foreach (var res in Label.FindAsync())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
