@@ -2074,7 +2074,7 @@ namespace APITest
             var job = await InventoryUpdateJob.GetAsync(43);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in InventoryUpdateJobEvent.FindFromInventoryUpdateJob(job.Id, eventQuery))
+            await foreach (var je in InventoryUpdateJobEvent.FindAsync(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<InventoryUpdateJobEvent>(je);
