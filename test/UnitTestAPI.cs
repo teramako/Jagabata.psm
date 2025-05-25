@@ -2009,7 +2009,7 @@ namespace APITest
             var job = await JobTemplateJob.Get(40);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in JobEvent.FindFromJob(job.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(job, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"[{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2025,7 +2025,7 @@ namespace APITest
             var group = await Group.GetAsync(1);
             Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindFromGroup(group.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(group, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2041,7 +2041,7 @@ namespace APITest
             var host = await Host.GetAsync(2);
             Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindFromHost(host.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(host, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");

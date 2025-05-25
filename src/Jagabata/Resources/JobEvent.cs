@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -133,17 +134,55 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/job_events/";
 
         /// <summary>
-        /// List Job Events for a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="jobId"/>/job_events/</c>
+        /// Get a Job Event
+        /// <para>
+        /// Implement API: <c>/api/v2/job_events/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
+        /// <param name="id">Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromJob(ulong jobId,
-                                                                   HttpQuery? query = null)
+        public static async Task<JobEvent> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var path = $"{JobTemplateJobBase.PATH}{jobId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
+            var apiResult = await RestAPI.GetAsync<JobEvent>($"{PATH}{id}/", cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static JobEvent Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Job Events associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/job_events/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Job</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<JobEvent> FindAsync(IResource resource,
+                                                                 HttpQuery? query = null,
+                                                                 [EnumeratorCancellation]
+                                                                 CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/job_events/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/job_events/",
+                ResourceType.Host => $"{Resources.Host.PATH}{resource.Id}/job_events/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
@@ -151,43 +190,29 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Job Events for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/job_events/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromGroup(ulong groupId,
-                                                                     HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobEvent[] Find(IResource resource, HttpQuery query)
         {
-            var path = $"{Group.PATH}{groupId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
-            {
-                foreach (var jobEvent in result.Contents.Results)
-                {
-                    yield return jobEvent;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
-        /// <summary>
-        /// List Job Events for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/job_events/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromHost(ulong hostId,
-                                                                    HttpQuery? query = null)
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobEvent[] Find(IResource resource,
+                                      string? searchWords = null,
+                                      string orderBy = "counter",
+                                      ushort pageSize = 20,
+                                      uint startPage = 1)
         {
-            var path = $"{Resources.Host.PATH}{hostId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query))
-            {
-                foreach (var jobEvent in result.Contents.Results)
-                {
-                    yield return jobEvent;
-                }
-            }
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;
