@@ -389,7 +389,7 @@ namespace APITest
         [TestMethod]
         public async Task Get15ListFromJobTemplate()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
             await foreach (var activity in ActivityStream.FindAsync(jt))
             {
@@ -1846,7 +1846,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Assert.IsInstanceOfType<JobTemplate>(jt);
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(jt);
             DumpResource(jt);
@@ -1855,7 +1855,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var jt in JobTemplate.Find(query))
+            await foreach (var jt in JobTemplate.FindAsync(query))
             {
                 DumpResource(jt);
             }
@@ -1865,7 +1865,7 @@ namespace APITest
         {
             var org = await Organization.Get(2);
             Console.WriteLine($"JobTemplates in ({org.Type})[{org.Id}] {org.Name}");
-            await foreach (var jt in JobTemplate.FindFromOrganization(org.Id))
+            await foreach (var jt in JobTemplate.FindAsync(org))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
@@ -1876,7 +1876,7 @@ namespace APITest
         {
             var inv = await Inventory.GetAsync(2);
             Console.WriteLine($"JobTemplates in ({inv.Type})[{inv.Id}] {inv.Name}");
-            await foreach (var jt in JobTemplate.FindFromInventory(inv.Id))
+            await foreach (var jt in JobTemplate.FindAsync(inv))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
@@ -1949,7 +1949,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromJobtemplate()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Console.WriteLine($"Jobs in ({jt.Type})[{jt.Id}] {jt.Name}");
             await foreach (var job in JobTemplateJob.FindFromJobTemplate(jt.Id))
             {
