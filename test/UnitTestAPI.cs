@@ -400,7 +400,7 @@ namespace APITest
         [TestMethod]
         public async Task Get16ListFromJobTemplateJob()
         {
-            var job = await JobTemplateJob.Get(40);
+            var job = await JobTemplateJob.GetAsync(40);
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
             await foreach (var activity in ActivityStream.FindAsync(job))
             {
@@ -1928,7 +1928,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var job = await JobTemplateJob.Get(jobId);
+            var job = await JobTemplateJob.GetAsync(jobId);
             Assert.IsInstanceOfType<JobTemplateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs   : {job.JobArgs}");
@@ -1940,7 +1940,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in JobTemplateJob.Find(query))
+            await foreach (var job in JobTemplateJob.FindAsync(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1951,7 +1951,7 @@ namespace APITest
         {
             var jt = await JobTemplate.GetAsync(9);
             Console.WriteLine($"Jobs in ({jt.Type})[{jt.Id}] {jt.Name}");
-            await foreach (var job in JobTemplateJob.FindFromJobTemplate(jt.Id))
+            await foreach (var job in JobTemplateJob.FindAsync(jt.Id))
             {
                 Assert.IsInstanceOfType<JobTemplateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Status} {job.Finished} {job.LaunchedBy}");
@@ -2006,7 +2006,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01FindFromJob()
         {
-            var job = await JobTemplateJob.Get(40);
+            var job = await JobTemplateJob.GetAsync(40);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
             await foreach (var je in JobEvent.FindAsync(job, eventQuery))
@@ -2171,7 +2171,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromJob()
         {
-            var job = await JobTemplateJob.Get(4);
+            var job = await JobTemplateJob.GetAsync(4);
             Console.WriteLine($"JobHostSummaries in ({job.Type})[{job.Id}] {job.Name}");
             await foreach (var summary in JobHostSummary.FindAsync(job))
             {
