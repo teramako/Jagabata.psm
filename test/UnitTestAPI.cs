@@ -279,7 +279,7 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromOrganization()
         {
-            var org = await Organization.Get(1);
+            var org = await Organization.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
             await foreach (var activity in ActivityStream.FindAsync(org))
             {
@@ -798,7 +798,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var org = await Organization.Get(1);
+            var org = await Organization.GetAsync(1);
             Assert.IsInstanceOfType<Organization>(org);
             DumpResource(org);
             Util.DumpSummary(org.SummaryFields);
@@ -810,7 +810,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var org in Organization.Find(query))
+            await foreach (var org in Organization.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Organization>(org);
@@ -822,7 +822,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListAdministeredFromUser()
         {
-            await foreach (var org in Organization.FindAdministeredByUser(8))
+            await foreach (var org in Organization.FindAsync(8, admin: true))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
@@ -831,7 +831,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var org in Organization.FindFromUser(8))
+            await foreach (var org in Organization.FindAsync(8, admin: false))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
@@ -1863,7 +1863,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
+            var org = await Organization.GetAsync(2);
             Console.WriteLine($"JobTemplates in ({org.Type})[{org.Id}] {org.Name}");
             await foreach (var jt in JobTemplate.FindAsync(org))
             {
@@ -2685,7 +2685,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
+            var org = await Organization.GetAsync(2);
             Console.WriteLine($"WorkflowJobTemplate in ({org.Type})[{org.Id}]{org.Name}");
             await foreach (var wjt in WorkflowJobTemplate.FindFromOrganization(org.Id))
             {
@@ -2875,7 +2875,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
+            var org = await Organization.GetAsync(2);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
             await foreach (var exeEnv in ExecutionEnvironment.FindAsync(org.Id))
             {
