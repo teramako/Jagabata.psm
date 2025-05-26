@@ -2432,7 +2432,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Notification.Get(1);
+            var res = await Notification.GetAsync(1);
             Assert.IsInstanceOfType<Notification>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2441,7 +2441,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Notification.Find(query))
+            await foreach (var res in Notification.FindAsync(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
