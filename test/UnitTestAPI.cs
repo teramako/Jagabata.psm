@@ -268,7 +268,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromToken()
         {
-            var token = await OAuth2AccessToken.Get(1);
+            var token = await OAuth2AccessToken.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
             await foreach (var activity in ActivityStream.FindAsync(token))
             {
@@ -532,7 +532,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var token = await OAuth2AccessToken.Get(1);
+            var token = await OAuth2AccessToken.GetAsync(1);
             Assert.IsInstanceOfType<OAuth2AccessToken>(token);
             DumpToken(token);
             Util.DumpSummary(token.SummaryFields);
@@ -540,7 +540,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var token in OAuth2AccessToken.Find(null))
+            await foreach (var token in OAuth2AccessToken.FindAsync())
             {
                 DumpToken(token);
                 Util.DumpSummary(token.SummaryFields);
