@@ -1088,7 +1088,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var job = await ProjectUpdateJob.Get(5);
+            var job = await ProjectUpdateJob.GetAsync(5);
             Assert.IsInstanceOfType<ProjectUpdateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs    : {job.JobArgs}");
@@ -1104,7 +1104,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in ProjectUpdateJob.Find(query))
+            await foreach (var job in ProjectUpdateJob.FindAsync(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1113,7 +1113,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProject()
         {
-            await foreach (var job in ProjectUpdateJob.FindFromProject(8))
+            await foreach (var job in ProjectUpdateJob.FindAsync(8))
             {
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} {job.Finished}");
@@ -1609,7 +1609,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProjectUpdate()
         {
-            var projectUpdateJob = await ProjectUpdateJob.Get(76);
+            var projectUpdateJob = await ProjectUpdateJob.GetAsync(76);
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
             await foreach (var res in InventoryUpdateJob.FindAsync(projectUpdateJob))
             {
@@ -2057,7 +2057,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ProjectUpdate()
         {
-            var job = await ProjectUpdateJob.Get(76);
+            var job = await ProjectUpdateJob.GetAsync(76);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
             await foreach (var je in ProjectUpdateJobEvent.FindFromProjectUpdateJob(job.Id, eventQuery))
