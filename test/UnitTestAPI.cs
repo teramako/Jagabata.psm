@@ -301,7 +301,7 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromProject()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
             await foreach (var activity in ActivityStream.FindAsync(proj))
             {
@@ -1012,7 +1012,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Assert.IsInstanceOfType<Project>(proj);
             DumpResource(proj);
         }
@@ -1020,7 +1020,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var proj in Project.Find(query))
+            await foreach (var proj in Project.FindAsync(query))
             {
                 DumpResource(proj);
             }
@@ -1028,7 +1028,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var proj in Project.FindFromOrganization(1))
+            var resource = new Resource(ResourceType.Organization, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1037,7 +1038,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var proj in Project.FindFromUser(1))
+            var resource = new Resource(ResourceType.User, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1047,7 +1049,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromTeam()
         {
-            await foreach (var proj in Project.FindFromTeam(1))
+            var resource = new Resource(ResourceType.Team, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1529,7 +1532,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProject()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Console.WriteLine($"Scm InventorySources for ([{proj.Type}][{proj.Id}] {proj.Name})");
             await foreach (var res in InventorySource.FindAsync(proj))
             {
