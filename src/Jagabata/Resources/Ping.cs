@@ -38,5 +38,23 @@ namespace Jagabata.Resources
                 return $"{{ Name = {Name}, Capacity = {Capacity}, Instances: [{string.Join(',', Instances)}] }}";
             }
         };
+
+        public const string PATH = "/api/v2/ping/";
+
+        /// <summary>
+        /// Get a some basic information about the AWX/AnsibleTower
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        public static async Task<Ping> GetAsync(CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<Ping>(PATH, cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <inheritdoc cref="GetAsync(CancellationToken)"/>
+        public static Ping Get()
+        {
+            return GetAsync().GetAwaiter().GetResult();
+        }
     }
 }
