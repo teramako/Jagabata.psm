@@ -2365,7 +2365,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Role.Get(1);
+            var res = await Role.GetAsync(1);
             Assert.IsInstanceOfType<Role>(res);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             var summary = res.SummaryFields;
@@ -2375,7 +2375,29 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Role.Find(query))
+            await foreach (var res in Role.FindAsync(query))
+            {
+                Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
+                var summary = res.SummaryFields;
+                Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
+            }
+        }
+        [TestMethod]
+        public async Task Get03ListUser()
+        {
+            var resource = new Resource(ResourceType.User, 1);
+            await foreach (var res in Role.FindAsync(resource))
+            {
+                Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
+                var summary = res.SummaryFields;
+                Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
+            }
+        }
+        [TestMethod]
+        public async Task Get03ListOrganizationObjectRoles()
+        {
+            var resource = new Resource(ResourceType.Organization, 1);
+            await foreach (var res in Role.FindObjectRolesAsync(resource))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
                 var summary = res.SummaryFields;
