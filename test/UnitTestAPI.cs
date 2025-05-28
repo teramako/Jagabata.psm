@@ -3014,29 +3014,19 @@ namespace APITest
     public class TestSettings
     {
         [TestMethod]
-        public async Task SettingsGet()
+        public void ListSlugs()
         {
-            var apiResult = await RestAPI.GetAsync<ResultSet<Setting>>("/api/v2/settings/");
-            Assert.IsNotNull(apiResult);
-            var resultSet = apiResult.Contents;
-            Assert.IsNotNull(resultSet);
-            Util.DumpObject(resultSet);
-            Util.DumpResponse(apiResult.Response);
-
-            Assert.IsTrue(resultSet.Results.Length > 0);
-            foreach (var setting in resultSet.Results)
-            {
-                Assert.IsInstanceOfType<Setting>(setting);
-                Console.WriteLine($"{setting.Name}: Slug: {setting.Slug} URL: {setting.Url}");
-            }
+            var slugs = Setting.ListSlugs();
+            Assert.IsInstanceOfType<Setting[]>(slugs);
+            Assert.IsTrue(slugs.Length > 0);
+            Util.DumpObject(slugs);
         }
         [TestMethod]
-        public async Task SettingsGetGithub()
+        public void GetGithub()
         {
-            var apiResult = await RestAPI.GetAsync<object>("/api/v2/settings/github/");
-            Assert.IsNotNull(apiResult);
-            var setting = apiResult.Contents;
-            Assert.IsNotNull(setting);
+            var setting = Setting.Get("github");
+            Assert.IsInstanceOfType<Dictionary<string, object?>>(setting);
+            Assert.IsTrue(setting.Count > 0);
             Util.DumpObject(setting);
         }
     }
