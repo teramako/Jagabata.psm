@@ -17,6 +17,34 @@ namespace Jagabata.Resources
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public SurveySpec[] Spec { get; set; } = [];
+
+        /// <summary>
+        /// Get a Survey spec associated with the JobTemplate or WorkflowJobTemplate
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{Id}/survey_spec/</c>
+        /// or <c>/api/v2/workflow_job_templates/{Id}/survey_spec/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="resource">Resource of JobTemplate or WorkflowJobTemplate</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns><see cref="Survey"/></returns>
+        public static async Task<Survey> GetAsync(IResource resource, CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/survey_spec/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{resource.Id}/survey_spec/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            var apiResult = await RestAPI.GetAsync<Survey>(path, cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <inheritdoc cref="GetAsync(IResource, CancellationToken)"/>
+        public static Survey Get(IResource resource)
+        {
+            return GetAsync(resource).GetAwaiter().GetResult();
+        }
     }
 
     public enum SurveySpecType
