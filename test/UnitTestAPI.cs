@@ -2342,7 +2342,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Schedule.Get(1);
+            var res = await Schedule.GetAsync(1);
             Assert.IsInstanceOfType<Schedule>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2351,12 +2351,21 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Schedule.Find(query))
+            await foreach (var res in Schedule.FindAsync(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
-
+        }
+        [TestMethod]
+        public async Task Get03ListSystemJobTemplate()
+        {
+            var resource = new Resource(ResourceType.SystemJobTemplate, 1);
+            await foreach (var res in Schedule.FindAsync(resource))
+            {
+                DumpResource(res);
+                Util.DumpSummary(res.SummaryFields);
+            }
         }
     }
     [TestClass]

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -35,32 +36,123 @@ namespace Jagabata.Resources
         : ResourceBase, ISchedule
     {
         public const string PATH = "/api/v2/schedules/";
+
         /// <summary>
-        /// Retrieve a Schedule.<br/>
-        /// API Path: <c>/api/v2/schedules/<paramref name="id"/>/</c>
+        /// Get a Schedule
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Schedule ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Schedule> Get(ulong id)
+        public static async Task<Schedule> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Schedule>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Schedule>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Schedule Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Schedules.<br/>
-        /// API Path: <c>/api/v2/schedules/</c>
+        /// Find Schedules
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Schedule> Find(HttpQuery? query)
+        public static async IAsyncEnumerable<Schedule> FindAsync(HttpQuery? query,
+                                                                 [EnumeratorCancellation]
+                                                                 CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Schedule>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Schedule>(PATH, query, ct))
             {
                 foreach (var schedule in result.Contents.Results)
                 {
                     yield return schedule;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Schedules associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/schedules/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Project</item>
+        ///     <item>InventorySource</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>SystemJobTemplate</item>
+        ///     <item>WorkflowJobTemplate</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Schedule> FindAsync(IResource resource,
+                                                                 HttpQuery? query = null,
+                                                                 [EnumeratorCancellation]
+                                                                 CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/schedules/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{resource.Id}/schedules/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/schedules/",
+                ResourceType.SystemJobTemplate => $"{SystemJobTemplate.PATH}{resource.Id}/schedules/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{resource.Id}/schedules/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Schedule>(path, query, ct))
+            {
+                foreach (var schedule in result.Contents.Results)
+                {
+                    yield return schedule;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Schedule[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Schedules by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/schedules/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Schedule[] Find(string? searchWords = null,
+                                      string orderBy = "id",
+                                      ushort pageSize = 20,
+                                      uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Schedule[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public string Rrule { get; } = rrule;
