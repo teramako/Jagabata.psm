@@ -2089,11 +2089,11 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get06SystemJob()
+        public void Get06SystemJob()
         {
             var job = new Resource(ResourceType.SystemJob, 80);
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in SystemJobEvent.FindFromSystemJob(job.Id, eventQuery))
+            foreach (var je in SystemJobEvent.Find(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<SystemJobEvent>(je);
