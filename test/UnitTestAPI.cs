@@ -2258,17 +2258,16 @@ namespace APITest
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await SystemJobTemplate.Get(1);
+            var res = SystemJobTemplate.Get(1);
             Assert.IsInstanceOfType<SystemJobTemplate>(res);
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
-            var query = new HttpQuery("");
-            await foreach (var res in SystemJobTemplate.Find(query))
+            foreach (var res in SystemJobTemplate.Find())
             {
                 DumpResource(res);
             }
