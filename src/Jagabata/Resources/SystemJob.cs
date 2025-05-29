@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface ISystemJob : IUnifiedJob
@@ -83,31 +85,105 @@ namespace Jagabata.Resources
         : SystemJobBase
     {
         /// <summary>
-        /// Retrieve a System Job Template.<br/>
-        /// API Path: <c>/api/v2/system_job_templates/<paramref name="id"/>/</c>
+        /// Get a System Job
+        /// <para>
+        /// Implement API: <c>/api/v2/system_jobs/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">System Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List System Job Templates.<br/>
-        /// API Path: <c>/api/v2/system_job_templates/</c>
+        /// Find System Jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/system_jobs/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<SystemJob> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<SystemJob> FindAsync(HttpQuery? query = null,
+                                                                      [EnumeratorCancellation]
+                                                                      CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJob>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJob>(PATH, query, ct))
             {
-                foreach (var systemJob in result.Contents.Results)
+                foreach (var job in result.Contents.Results)
                 {
-                    yield return systemJob;
+                    yield return job;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find System Jobs for a System Job Template.<br/>
+        /// <para>
+        /// Implement API: <c>/api/v2/system_job_templates/<paramref name="id"/>/jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id">System Job Template ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<SystemJob> FindAsync(ulong id,
+                                                                  HttpQuery? query = null,
+                                                                  [EnumeratorCancellation]
+                                                                  CancellationToken ct = default)
+        {
+            var path = $"{Resources.SystemJobTemplate.PATH}{id}/jobs/";
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJob>(path, query, ct))
+            {
+                foreach (var job in result.Contents.Results)
+                {
+                    yield return job;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find System Jobs by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/system_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new SystemJob[] Find(string? searchWords = null,
+                                                string orderBy = "name",
+                                                ushort pageSize = 20,
+                                                uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new SystemJob[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static SystemJob[] Find(ulong id, HttpQuery? query = null)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

@@ -2091,8 +2091,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06SystemJob()
         {
-            var job = await SystemJob.Get(80);
-            Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
+            var job = new Resource(ResourceType.SystemJob, 80);
             var eventQuery = new HttpQuery("order_by=counter");
             await foreach (var je in SystemJobEvent.FindFromSystemJob(job.Id, eventQuery))
             {
@@ -2300,9 +2299,11 @@ namespace APITest
             Console.WriteLine($"ResultStdout  : {res.ResultStdout}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await SystemJob.Get(1);
+            var job = SystemJob.Find(new QueryBuilder().SetOrderBy("id").SetPageSize(1).Build()).FirstOrDefault();
+            Assert.IsNotNull(job);
+            var res = SystemJob.Get(job.Id);
             Assert.IsInstanceOfType<SystemJob.Detail>(res);
             Assert.IsInstanceOfType<IUnifiedJob>(res);
             DumpResource(res);
@@ -2316,14 +2317,22 @@ namespace APITest
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in SystemJob.Find(query))
+            foreach (var res in SystemJob.Find(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
+        }
+        [TestMethod]
+        public void Get03ListSystemJobTemplate()
+        {
+            var resource = new Resource(ResourceType.SystemJobTemplate, 1);
+            var jobs = SystemJob.Find(resource.Id);
+            Assert.IsTrue(jobs.Length > 0);
+            Assert.IsInstanceOfType<SystemJob[]>(jobs);
         }
     }
 
