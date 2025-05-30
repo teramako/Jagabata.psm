@@ -2962,7 +2962,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            await foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
+            foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
             {
                 Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
                 Assert.IsNotNull(approval.UnifiedJobTemplate);
@@ -2983,22 +2983,24 @@ namespace APITest
             Console.WriteLine($"  {res.Status} {res.Finished}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
             var query = new HttpQuery("order_by=-id&page_size=1");
-            await foreach (var res in WorkflowApproval.Find(query))
+            foreach (var res in WorkflowApproval.Find(query))
             {
-                var detail = await WorkflowApproval.Get(res.Id);
+                var detail = WorkflowApproval.Get(res.Id);
                 Assert.IsInstanceOfType<WorkflowApproval.Detail>(detail);
                 DumpResource(detail);
                 Util.DumpSummary(detail.SummaryFields);
             }
         }
         [TestMethod]
-        public async Task Get02Find()
+        public void Get02FindFromWorkflowApprovalTemplate()
         {
+            var approval = WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            Assert.IsNotNull(approval.UnifiedJobTemplate);
             var query = new HttpQuery("order_by=-id&page_size=2");
-            await foreach (var res in WorkflowApproval.Find(query))
+            foreach (var res in WorkflowApproval.Find((ulong)approval.UnifiedJobTemplate, query))
             {
                 Assert.IsInstanceOfType<WorkflowApproval>(res);
                 DumpResource(res);

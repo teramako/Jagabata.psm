@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public abstract class WorkflowApprovalBase : UnifiedJob
@@ -36,31 +38,105 @@ namespace Jagabata.Resources
         : WorkflowApprovalBase
     {
         /// <summary>
-        /// Retrieve a Workflow Approval.<br/>
-        /// API Path: <c>/api/v2/workflow_approvals/<paramref name="id"/>/</c>
+        /// Get a Workflow Approval
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_approvals/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Workflow Approval ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Workflow Approvals.<br/>
-        /// API Path: <c>/api/v2/workflow_approvals/</c>
+        /// Find Workflow Approvals
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_approvals/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<WorkflowApproval> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<WorkflowApproval> FindAsync(HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowApproval>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowApproval>(PATH, query, ct))
             {
-                foreach (var workflowJob in result.Contents.Results)
+                foreach (var approval in result.Contents.Results)
                 {
-                    yield return workflowJob;
+                    yield return approval;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Workflow Approvals for a Workflow Approval Template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_approval_templates/<paramref name="id"/>/approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id">Workflow Approval Template ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<WorkflowApproval> FindAsync(ulong id,
+                                                                         HttpQuery? query = null,
+                                                                         [EnumeratorCancellation]
+                                                                         CancellationToken ct = default)
+        {
+            var path = $"{WorkflowApprovalTemplate.PATH}{id}/approvals/";
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowApproval>(path, query, ct))
+            {
+                foreach (var approval in result.Contents.Results)
+                {
+                    yield return approval;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new WorkflowApproval[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Approvals by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_approvals/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new WorkflowApproval[] Find(string? searchWords = null,
+                                                  string orderBy = "-id",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static WorkflowApproval[] Find(ulong id, HttpQuery? query = null)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;
