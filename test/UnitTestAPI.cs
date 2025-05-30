@@ -312,7 +312,7 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromTeam()
         {
-            var team = await Team.Get(1);
+            var team = await Team.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
             await foreach (var activity in ActivityStream.FindAsync(team))
             {
@@ -1147,25 +1147,26 @@ namespace APITest
         }
 
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var team = await Team.Get(1);
+            var team = Team.Get(1);
             Assert.IsInstanceOfType<Team>(team);
             DumpResource(team);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var team in Team.Find(query))
+            foreach (var team in Team.Find(query))
             {
                 DumpResource(team);
             }
         }
         [TestMethod]
-        public async Task Get03ListFromOrganization()
+        public void Get03ListFromOrganization()
         {
-            await foreach (var team in Team.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1173,9 +1174,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get04ListFromUser()
+        public void Get04ListFromUser()
         {
-            await foreach (var team in Team.FindFromUser(2))
+            var resource = new Resource(ResourceType.User, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1183,9 +1185,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get05ListFromProject()
+        public void Get05ListFromProject()
         {
-            await foreach (var team in Team.FindFromProject(8))
+            var resource = new Resource(ResourceType.Project, 8);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1193,9 +1196,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get06FindOwnerFromCredential()
+        public void Get06FindOwnerFromCredential()
         {
-            await foreach (var team in Team.FindOwnerFromCredential(4))
+            var resource = new Resource(ResourceType.Credential, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1203,9 +1207,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get07FindFromRole()
+        public void Get07FindFromRole()
         {
-            await foreach (var team in Team.FindFromRole(73))
+            var resource = new Resource(ResourceType.Role, 73);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
