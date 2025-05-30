@@ -290,7 +290,7 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromUser()
         {
-            var user = await User.Get(1);
+            var user = await User.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
             await foreach (var activity in ActivityStream.FindAsync(user))
             {
@@ -913,59 +913,63 @@ namespace APITest
             Util.DumpSummary(user.SummaryFields);
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var user = await User.Get(2);
+            var user = User.Get(2);
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var user in User.Find(query))
+            foreach (var user in User.Find(query))
             {
                 DumpResource(user);
             }
         }
         [TestMethod]
-        public async Task Get03Me()
+        public void Get03Me()
         {
-            var user = await User.GetMe();
+            var user = User.GetMe();
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get04ListFromOrganization()
+        public void Get04ListFromOrganization()
         {
-            await foreach (var user in User.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get05ListFromTeam()
+        public void Get05ListFromTeam()
         {
-            await foreach (var user in User.FindFromTeam(1))
+            var resource = new Resource(ResourceType.Team, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get6ListOwnersFromCredential()
+        public void Get6ListOwnersFromCredential()
         {
-            await foreach (var user in User.FindOwnerFromCredential(1))
+            var resource = new Resource(ResourceType.Credential, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get07ListFromRole()
+        public void Get07ListFromRole()
         {
-            await foreach (var user in User.FindFromRole(1))
+            var resource = new Resource(ResourceType.Role, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");

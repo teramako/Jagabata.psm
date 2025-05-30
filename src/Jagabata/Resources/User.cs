@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IUser
@@ -18,36 +20,62 @@ namespace Jagabata.Resources
         : ResourceBase, IUser
     {
         public const string PATH = "/api/v2/users/";
+
         /// <summary>
-        /// Retrieve information about the current User.<br/>
-        /// API Path: <c>/api/v2/me/</c>
+        /// Get a User
+        /// <para>
+        /// Implement API: <c>/api/v2/users/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
+        /// <param name="id">User ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<User> GetMe()
+        public static async Task<User> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<ResultSet<User>>("/api/v2/me/");
-            return apiResult.Contents.Results.Single();
-        }
-        /// <summary>
-        /// Retrieve a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="id"/>/</c>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static async Task<User> Get(ulong id)
-        {
-            var apiResult = await RestAPI.GetAsync<User>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<User>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static User Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Users.<br/>
-        /// API Path: <c>/api/v2/users/</c>
+        /// Get information about the current User
+        /// <para>
+        /// Implement API: <c>/api/v2/me/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async Task<User> GetMeAsync(CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<ResultSet<User>>("/api/v2/me/", cancellationToken: ct);
+            return apiResult.Contents.Results.Single();
+        }
+
+        /// <inheritdoc cref="GetMeAsync(CancellationToken)"/>
+        public static User GetMe()
+        {
+            return GetMeAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Users
+        /// <para>
+        /// Implement API: <c>/api/v2/users/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<User> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<User> FindAsync(HttpQuery? query = null,
+                                                             [EnumeratorCancellation]
+                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(PATH, query, ct))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -55,18 +83,42 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Users for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/users/</c>
+        /// Find Users associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/users/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Inventory</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Job</item>
+        ///     <item>Schedule</item>
+        ///     <item>WorkflowJobTemplate</item>
+        ///     <item>WorkflowJob</item>
+        ///     <item>WorkflowJobTemplateNode</item>
+        ///     <item>WorkflowJobNode</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<User> FindFromOrganization(ulong organizationId,
-                                                                        HttpQuery? query = null)
+        public static async IAsyncEnumerable<User> FindAsync(IResource resource,
+                                                              HttpQuery? query = null,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
         {
-            var path = $"{Organization.PATH}{organizationId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Organization.PATH}{resource.Id}/users/",
+                ResourceType.Team => $"{Team.PATH}{resource.Id}/users/",
+                ResourceType.Credential => $"{Credential.PATH}{resource.Id}/owner_users/",
+                ResourceType.Role => $"{Role.PATH}{resource.Id}/users/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query, ct))
             {
                 foreach (var user in result.Contents.Results)
                 {
@@ -74,62 +126,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Users for a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="teamId"/>/users/</c>
-        /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<User> FindFromTeam(ulong teamId,
-                                                                HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static User[] Find(HttpQuery query)
         {
-            var path = $"{Team.PATH}{teamId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
-            {
-                foreach (var user in result.Contents.Results)
-                {
-                    yield return user;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Users for a Credential.<br/>
-        /// API Path: <c>/api/v2/credentials/<paramref name="credentialId"/>/owner_users/</c>
+        /// Find Users by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/users/</c>
+        /// </para>
         /// </summary>
-        /// <param name="credentialId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<User> FindOwnerFromCredential(ulong credentialId,
-                                                                           HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static User[] Find(string? searchWords = null,
+                                  string orderBy = "username",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
         {
-            var path = $"{Credential.PATH}{credentialId}/owner_users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
-            {
-                foreach (var user in result.Contents.Results)
-                {
-                    yield return user;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
-        /// <summary>
-        /// List Users for a Role.<br/>
-        /// API Path: <c>/api/v2/roles/<paramref name="roleId"/>/users/</c>
-        /// </summary>
-        /// <param name="roleId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<User> FindFromRole(ulong roleId,
-                                                                HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static User[] Find(IResource resource, HttpQuery? query = null)
         {
-            var path = $"{Role.PATH}{roleId}/users/";
-            await foreach (var result in RestAPI.GetResultSetAsync<User>(path, query))
-            {
-                foreach (var user in result.Contents.Results)
-                {
-                    yield return user;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;
