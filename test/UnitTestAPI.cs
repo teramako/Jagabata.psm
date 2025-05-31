@@ -2798,22 +2798,31 @@ namespace APITest
             Console.WriteLine($"AlwaysNodes         : {string.Join(", ", res.AlwaysNodes)}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJobTemplateNode.Get(1);
+            var res = WorkflowJobTemplateNode.Get(1);
             Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplateNode.Find(query))
+            foreach (var res in WorkflowJobTemplateNode.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
+            }
+        }
+        [TestMethod]
+        public void Get03ListFromWorkflowJobTemplate()
+        {
+            var wjt = WorkflowJobTemplate.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            foreach (var node in WorkflowJobTemplateNode.Find(wjt.Id))
+            {
+                Assert.IsInstanceOfType<WorkflowJobTemplateNode>(node);
             }
         }
     }
