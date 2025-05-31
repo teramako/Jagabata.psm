@@ -2960,13 +2960,13 @@ namespace APITest
             Console.WriteLine($"Timeout: {res.Timeout}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
             foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
             {
                 Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
                 Assert.IsNotNull(approval.UnifiedJobTemplate);
-                var res = await WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
+                var res = WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
                 Assert.IsInstanceOfType<WorkflowApprovalTemplate>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
