@@ -422,7 +422,7 @@ namespace APITest
         [TestMethod]
         public async Task Get18ListFromWorkflowJobTemplate()
         {
-            var wjt = await WorkflowJobTemplate.Get(13);
+            var wjt = await WorkflowJobTemplate.GetAsync(13);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
             await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
@@ -2715,18 +2715,18 @@ namespace APITest
             Console.WriteLine($"Status      : {res.Status}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJobTemplate.Get(13);
+            var res = WorkflowJobTemplate.Get(13);
             Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplate.Find(query))
+            foreach (var res in WorkflowJobTemplate.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
                 DumpResource(res);
@@ -2734,11 +2734,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get03ListFromOrganization()
+        public void Get03ListFromOrganization()
         {
-            var org = await Organization.GetAsync(2);
-            Console.WriteLine($"WorkflowJobTemplate in ({org.Type})[{org.Id}]{org.Name}");
-            await foreach (var wjt in WorkflowJobTemplate.FindFromOrganization(org.Id))
+            var org = new Resource(ResourceType.Organization, 2);
+            foreach (var wjt in WorkflowJobTemplate.Find(org.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(wjt);
                 Console.WriteLine($"[{wjt.Id}] {wjt.Name} [{wjt.Status}]");

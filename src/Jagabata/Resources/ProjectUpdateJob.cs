@@ -135,6 +135,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="projectId">Project ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ProjectUpdateJob> FindAsync(ulong projectId,
                                                                          HttpQuery? query = null,
