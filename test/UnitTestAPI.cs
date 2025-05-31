@@ -433,7 +433,7 @@ namespace APITest
         [TestMethod]
         public async Task Get19ListFromWorkflowJob()
         {
-            var wjt = await WorkflowJob.Get(51);
+            var wjt = await WorkflowJob.GetAsync(51);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
             await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
@@ -2747,7 +2747,7 @@ namespace APITest
     }
 
     [TestClass]
-    public class TestWofkflowJob
+    public class TestWorkflowJob
     {
         private static void DumpResource(WorkflowJob res)
         {
@@ -2756,18 +2756,18 @@ namespace APITest
             Console.WriteLine($"Status      : {res.Status}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJob.Get(51);
-            Assert.IsInstanceOfType<WorkflowJob>(res);
-            DumpResource(res);
-            Util.DumpSummary(res.SummaryFields);
+            var job = WorkflowJob.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            var detail = WorkflowJob.Get(job.Id);
+            Assert.IsInstanceOfType<WorkflowJob.Detail>(detail);
+            Util.DumpSummary(detail.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJob.Find(query))
+            foreach (var res in WorkflowJob.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(res);
                 DumpResource(res);
@@ -2775,11 +2775,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get03ListFromWorkflowJobTemplate()
+        public void Get03ListFromWorkflowJobTemplate()
         {
-            var wjt = await WorkflowJobTemplate.Get(13);
-            Console.WriteLine($"WorkflowJobTemplate in ({wjt.Type})[{wjt.Id}]{wjt.Name}");
-            await foreach (var job in WorkflowJob.FindFromWorkflowJobTemplate(wjt.Id))
+            var wjt = new Resource(ResourceType.WorkflowJobTemplate, 13);
+            foreach (var job in WorkflowJob.Find(wjt.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} [{job.Status}] [{job.Finished}]");
