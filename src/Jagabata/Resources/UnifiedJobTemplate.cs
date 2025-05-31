@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -113,9 +114,10 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Retrieve a job template.
-        ///
-        /// The job template is one of:
+        /// Get an Unified Job Template
+        /// </summary>
+        /// <remarks>
+        /// The unified job template is one of:
         /// <list type="bullet">
         /// <item><term><see cref="JobTemplate"/></term><description>Type: <c>job_template</c></description></item>
         /// <item><term><see cref="WorkflowJobTemplate"/></term><description>Type: <c>workflow_job_template</c></description></item>
@@ -123,43 +125,88 @@ namespace Jagabata.Resources
         /// <item><term><see cref="InventorySource"/></term><description>Type: <c>inventory_source</c></description></item>
         /// <item><term><see cref="SystemJobTemplate"/></term><description>Type: <c>sytem_job_template</c></description></item>
         /// </list>
-        /// </summary>
-        /// <param name="id"></param>
+        /// </remarks>
+        /// <param name="id">UnifiedJobTemplate ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<IUnifiedJobTemplate> Get(ulong id)
+        public static async Task<IUnifiedJobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
             var query = new HttpQuery($"id={id}&page_size=1");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
+            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}", cancellationToken: ct);
             return apiResult.Contents.Results.OfType<IUnifiedJobTemplate>().Single();
         }
-        public static async Task<IUnifiedJobTemplate[]> Get(params ulong[] idList)
-        {
-            if (idList.Length > 200)
-            {
-                throw new ArgumentException($"too many items: {nameof(idList)} Length must be less than or equal to 200.");
-            }
-            var query = new HttpQuery($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
-            return [.. apiResult.Contents.Results.OfType<IUnifiedJobTemplate>()];
-        }
+
         /// <summary>
-        /// List Unified Job Templates.<br/>
-        /// API Path: <c>/api/v2/unified_job_templates/</c>
+        /// Get Unified Job Templates
+        /// </summary>
+        /// <param name="idList">ID list</param>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static async IAsyncEnumerable<IUnifiedJobTemplate> GetAsync(ulong[] idList,
+                                                                           [EnumeratorCancellation]
+                                                                           CancellationToken ct = default)
+        {
+            var qb = new QueryBuilder().SetOrderBy("id");
+            foreach (var query in qb.BuildWithIdList(idList.Order().ToArray()))
+            {
+                await foreach (var apiResult in RestAPI.GetResultSetAsync(PATH, query, ct))
+                {
+                    foreach (var unifiedJobTemplate in apiResult.Contents.Results.OfType<IUnifiedJobTemplate>())
+                        yield return unifiedJobTemplate;
+
+                    if (ct.IsCancellationRequested)
+                        yield break;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static IUnifiedJobTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Unified Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_job_templates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<IUnifiedJobTemplate> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<IUnifiedJobTemplate> FindAsync(HttpQuery? query = null,
+                                                                            [EnumeratorCancellation]
+                                                                            CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query, ct))
             {
-                foreach (var obj in result.Contents.Results)
+                foreach (var unifiedJobTemplate in result.Contents.Results.OfType<IUnifiedJobTemplate>())
                 {
-                    if (obj is IUnifiedJobTemplate jobTemplate)
-                    {
-                        yield return jobTemplate;
-                    }
+                    yield return unifiedJobTemplate;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static IUnifiedJobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="Find(HttpQuery?)"/>
+        public static IUnifiedJobTemplate[] Find(string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20,
+                                                 uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
     }
 }

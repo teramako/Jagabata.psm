@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -16,26 +17,41 @@ namespace Jagabata.Resources
         : ResourceBase, IOrganization
     {
         public const string PATH = "/api/v2/organizations/";
+
         /// <summary>
-        /// Retrieve an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="id"/>/</c>
+        /// Get an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Organization ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Organization> Get(ulong id)
+        public static async Task<Organization> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Organization>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Organization>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        public static Organization Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Organizations.<br/>
-        /// API Path: <c>/api/v2/organizations/</c>
+        /// Find Organizations
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Organization> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Organization> FindAsync(HttpQuery? query = null,
+                                                                     [EnumeratorCancellation]
+                                                                     CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(PATH, query, ct))
             {
                 foreach (var org in result.Contents.Results)
                 {
@@ -43,18 +59,27 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Organizations Administered by the User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/admin_of_organizations/</c>
+        /// Find Organizations associated with the User of <paramref name="userId"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/users/{userId}/organizations/</c>
+        /// and <c>/api/v2/users/{userId}/admin_of_organizations/</c>
+        /// </para>
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="userId">User ID</param>
         /// <param name="query"></param>
+        /// <param name="admin">true; Organizations Administered by the User of <paramref name="userId"/></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Organization> FindAdministeredByUser(ulong userId,
-                                                                                  HttpQuery? query = null)
+        public static async IAsyncEnumerable<Organization> FindAsync(ulong userId,
+                                                                     HttpQuery? query = null,
+                                                                     bool admin = false,
+                                                                     [EnumeratorCancellation]
+                                                                     CancellationToken ct = default)
         {
-            var path = $"{User.PATH}/{userId}/admin_of_organizations/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query))
+            var path = $"{User.PATH}{userId}/{(admin ? "admin_of_organizations" : "organizations")}/";
+            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query, ct))
             {
                 foreach (var org in result.Contents.Results)
                 {
@@ -62,24 +87,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Organizations for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/organizations/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Organization> FindFromUser(ulong userId,
-                                                                        HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Organization[] Find(HttpQuery query)
         {
-            var path = $"{User.PATH}/{userId}/organizations/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Organization>(path, query))
-            {
-                foreach (var org in result.Contents.Results)
-                {
-                    yield return org;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Organizations by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Organization[] Find(string? searchWords = null,
+                                          string orderBy = "name",
+                                          ushort pageSize = 20,
+                                          uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, bool, CancellationToken)"/>
+        public static Organization[] Find(ulong userId, HttpQuery? query = null, bool admin = false)
+        {
+            return [.. FindAsync(userId, query, admin).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

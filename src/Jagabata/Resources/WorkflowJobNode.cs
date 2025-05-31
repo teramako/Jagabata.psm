@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -53,32 +54,107 @@ namespace Jagabata.Resources
         : ResourceBase, IWorkflowJobNode
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
+
         /// <summary>
-        /// Retrieve a Workflow Job Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/<paramref name="id"/>/</c>
+        /// Get a Workflow Job Node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Workflow Job Node ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<WorkflowJobNode> Get(ulong id)
+        public static async Task<WorkflowJobNode> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<WorkflowJobNode>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<WorkflowJobNode>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static WorkflowJobNode Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Workflow Job Nodes.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/</c>
+        /// Find Workflow Job Nodes
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<WorkflowJobNode> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<WorkflowJobNode> FindAsync(HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query, ct))
             {
                 foreach (var jobNode in result.Contents.Results)
                 {
                     yield return jobNode;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Workflow Job Nodes for a Workflow Job
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_jobs/<paramref name="workflowJobId"/>/workflow_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="workflowJobId">Workflow Job ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<WorkflowJobNode> FindAsync(ulong workflowJobId,
+                                                                        HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
+        {
+            var path = $"{WorkflowJobBase.PATH}{workflowJobId}/workflow_nodes/";
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(path, query, ct))
+            {
+                foreach (var jobNode in result.Contents.Results)
+                {
+                    yield return jobNode;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static WorkflowJobNode[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Nodes by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static WorkflowJobNode[] Find(string? searchWords = null,
+                                             string orderBy = "-id",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static WorkflowJobNode[] Find(ulong workflowJobId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(workflowJobId, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

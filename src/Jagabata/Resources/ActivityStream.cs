@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -30,25 +31,49 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/activity_stream/";
 
         /// <summary>
-        /// Retrieve an Activity Stream.<br/>
-        /// API Path: <c>/api/v2/activity_stream/<paramref name="id"/>/</c>
+        /// Get an ActivityStream.
+        /// <para>
+        /// Implement API: <c>/api/v2/activity_stream/<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static async Task<ActivityStream> GetAsync(ulong id, CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<ActivityStream>($"{PATH}{id}/", cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        /// <summary>
+        /// Get an ActivityStream
+        /// <para>
+        /// Implement API: <c>/api/v2/activity_stream/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<ActivityStream> Get(ulong id)
+        public static ActivityStream Get(ulong id)
         {
-            var apiResult = await RestAPI.GetAsync<ActivityStream>($"{PATH}{id}/");
-            return apiResult.Contents;
+            var task = GetAsync(id);
+            task.Wait();
+            return task.Result;
         }
+
         /// <summary>
-        /// List Activity Sterams.<br/>
-        /// API Path: <c>/api/v2/activity_stream/</c>
+        /// Find ActivityStream
+        /// <para>
+        /// Implement API: <c>/api/v2/activity_stream/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> Find(HttpQuery? query)
+        public static async IAsyncEnumerable<ActivityStream> FindAsync(HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(PATH, query, ct))
             {
                 foreach (var activity in result.Contents.Results)
                 {
@@ -56,348 +81,141 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Activity Stream for an Application.<br/>
-        /// API Path: <c>/api/v2/applications/<paramref name="applicationId"/>/activity_stream/</c>
+        /// Find ActivityStream associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/activity_stream/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Application (OAuth2Application)</item>
+        ///     <item>Token (OAuth2AccessToken)</item>
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        ///     <item>Project</item>
+        ///     <item>Team</item>
+        ///     <item>Credential</item>
+        ///     <item>CredentialType</item>
+        ///     <item>Inventory</item>
+        ///     <item>InventorySource</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Job</item>
+        ///     <item>AdHocCommand</item>
+        ///     <item>WorkflowJobTemplate</item>
+        ///     <item>WorkflowJob</item>
+        ///     <item>ExecutionEnvironment</item>
+        /// </list>
         /// </summary>
-        /// <param name="applicationId"></param>
+        /// <param name="resource"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromApplication(ulong applicationId,
-                                                                                 HttpQuery? query = null)
+        public static async IAsyncEnumerable<ActivityStream> FindAsync(IResource resource,
+                                                                       HttpQuery? query = null,
+                                                                       [EnumeratorCancellation] CancellationToken ct = default)
         {
-            var path = $"{Application.PATH}{applicationId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
+            var path = resource.Type switch
             {
-                foreach (var activity in result.Contents.Results)
+                ResourceType.OAuth2Application => $"{Application.PATH}{resource.Id}/activity_stream/",
+                ResourceType.OAuth2AccessToken => $"{OAuth2AccessToken.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Organization => $"{Organization.PATH}{resource.Id}/activity_stream/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Team => $"{Team.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Credential => $"{Credential.PATH}{resource.Id}/activity_stream/",
+                ResourceType.CredentialType => $"{CredentialType.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Inventory => $"{Inventory.PATH}{resource.Id}/activity_stream/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/activity_stream/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/activity_stream/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/activity_stream/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{resource.Id}/activity_stream/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{resource.Id}/activity_stream/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{resource.Id}/activity_stream/",
+                ResourceType.ExecutionEnvironment => $"{ExecutionEnvironment.PATH}{resource.Id}/activity_stream/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<ActivityStream>(path, query, ct))
+            {
+                foreach (var activity in apiResult.Contents.Results)
                 {
                     yield return activity;
                 }
             }
         }
+
         /// <summary>
-        /// List Activity Stream for an Access Token.<br/>
-        /// API Path: <c>/api/v2/tokens/<paramref name="tokenId"/>/activity_stream/</c>
+        /// Find ActivityStream
+        /// <para>
+        /// Implement API: <c>/api/v2/activity_stream/</c>
+        /// </para>
         /// </summary>
-        /// <param name="tokenId"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromToken(ulong tokenId,
-                                                                           HttpQuery? query = null)
+        public static ActivityStream[] Find(HttpQuery query)
         {
-            var path = $"{OAuth2AccessToken.PATH}{tokenId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Activity Stream for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/activity_stream/</c>
+        /// Find ActivityStream by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/activity_stream/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromOrganization(ulong organizationId,
-                                                                                  HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static ActivityStream[] Find(string? searchWords = null,
+                                            string orderBy = "-timestamp",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
         {
-            var path = $"{Organization.PATH}{organizationId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
+
         /// <summary>
-        /// List Activity Stream for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/activity_stream/</c>
+        /// Find ActivityStream associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/activity_stream/</c>
+        /// </para>
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="resource"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromUser(ulong userId,
-                                                                          HttpQuery? query = null)
+        public static ActivityStream[] Find(IResource resource, HttpQuery query)
         {
-            var path = $"{User.PATH}{userId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Activity Stream for a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="projectId"/>/activity_stream/</c>
+        /// Find ActivityStream associated with <paramref name="resource"/> by basic parammeters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/activity_stream/</c>
+        /// </para>
         /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromProject(ulong projectId,
-                                                                             HttpQuery? query = null)
+        /// <param name="resource"></param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static ActivityStream[] Find(IResource resource,
+                                            string? searchWords = null,
+                                            string orderBy = "-timestamp",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
         {
-            var path = $"{Project.PATH}{projectId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="teamId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromTeam(ulong teamId,
-                                                                          HttpQuery? query = null)
-        {
-            var path = $"{Team.PATH}{teamId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Credential.<br/>
-        /// API Path: <c>/api/v2/credentials/<paramref name="credentialId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="credentialId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromCredential(ulong credentialId,
-                                                                                HttpQuery? query = null)
-        {
-            var path = $"{Credential.PATH}{credentialId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a CredentialType.<br/>
-        /// API Path: <c>/api/v2/credential_types/<paramref name="credentialTypeId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="credentialTypeId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromCredentialType(ulong credentialTypeId,
-                                                                                    HttpQuery? query = null)
-        {
-            var path = $"{CredentialType.PATH}{credentialTypeId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromInventory(ulong inventoryId,
-                                                                               HttpQuery? query = null)
-        {
-            var path = $"{Inventory.PATH}{inventoryId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/<paramref name="inventorySourceId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="inventorySourceId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromInventorySource(ulong inventorySourceId,
-                                                                                     HttpQuery? query = null)
-        {
-            var path = $"{InventorySource.PATH}{inventorySourceId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromGroup(ulong groupId,
-                                                                           HttpQuery? query = null)
-        {
-            var path = $"{Group.PATH}{groupId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromHost(ulong hostId,
-                                                                          HttpQuery? query = null)
-        {
-            var path = $"{Host.PATH}{hostId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="jobTemplateId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="jobTemplateId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                 HttpQuery? query = null)
-        {
-            var path = $"{JobTemplate.PATH}{jobTemplateId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="jobId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromJob(ulong jobId,
-                                                                         HttpQuery? query = null)
-        {
-            var path = $"{JobTemplateJobBase.PATH}{jobId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for an Ad Hoc Command.<br/>
-        /// API Path: <c>/api/v2/ad_hoc_commands/<paramref name="cmdId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="cmdId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromAdHocCommand(ulong cmdId,
-                                                                                  HttpQuery? query = null)
-        {
-            var path = $"{AdHocCommandBase.PATH}{cmdId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Workflow Job Template.<br/>
-        /// API Path: <c>/api/v2/workflow_job_templates/<paramref name="wjtId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="wjtId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromWorkflowJobTemplate(ulong wjtId,
-                                                                                         HttpQuery? query = null)
-        {
-            var path = $"{WorkflowJobTemplate.PATH}{wjtId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for a Workflow Job.<br/>
-        /// API Path: <c>/api/v2/workflow_jobs/<paramref name="jobId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromWorkflowJob(ulong jobId,
-                                                                                 HttpQuery? query = null)
-        {
-            var path = $"{WorkflowJobBase.PATH}{jobId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
-        }
-        /// <summary>
-        /// List Activity Stream for an Execution Environment.<br/>
-        /// API Path: <c>/api/v2/execution_environments/<paramref name="exeEnvId"/>/activity_stream/</c>
-        /// </summary>
-        /// <param name="exeEnvId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ActivityStream> FindFromExecutionEnvironment(ulong exeEnvId,
-                                                                                          HttpQuery? query = null)
-        {
-            var path = $"{ExecutionEnvironment.PATH}{exeEnvId}/activity_stream/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ActivityStream>(path, query))
-            {
-                foreach (var activity in result.Contents.Results)
-                {
-                    yield return activity;
-                }
-            }
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;

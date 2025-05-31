@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -62,51 +63,107 @@ namespace Jagabata.Resources
         : UnifiedJobTemplate, IWorkflowJobTemplate
     {
         public new const string PATH = "/api/v2/workflow_job_templates/";
+
         /// <summary>
-        /// Retrieve a Workflow Job Template.<br/>
-        /// API Path: <c>/api/v2/workflow_job_templates/<paramref name="id"/>/</c>
+        /// Get a Workflow Job Template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Workflow Job Template ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<WorkflowJobTemplate> Get(ulong id)
+        public static new async Task<WorkflowJobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<WorkflowJobTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<WorkflowJobTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new WorkflowJobTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Workflow Job Templates.<br/>
-        /// API Path: <c>/api/v2/workflow_job_templates/</c>
+        /// Find Workflow Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<WorkflowJobTemplate> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<WorkflowJobTemplate> FindAsync(HttpQuery? query = null,
+                                                                                [EnumeratorCancellation]
+                                                                                CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(PATH, query, ct))
             {
-                foreach (var jobTemplate in result.Contents.Results)
+                foreach (var wjt in result.Contents.Results)
                 {
-                    yield return jobTemplate;
+                    yield return wjt;
                 }
             }
         }
+
         /// <summary>
-        /// List Workflow Job Templates for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/workflow_job_templates/</c>
+        /// Find Workflow Job Templates for an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/workflow_job_templates/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="organizationId">Organization ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<WorkflowJobTemplate> FindFromOrganization(ulong organizationId,
-                                                                                       HttpQuery? query = null)
+        public static async IAsyncEnumerable<WorkflowJobTemplate> FindAsync(ulong organizationId,
+                                                                            HttpQuery? query = null,
+                                                                            [EnumeratorCancellation]
+                                                                            CancellationToken ct = default)
         {
             var path = $"{Resources.Organization.PATH}{organizationId}/workflow_job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(path, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplate>(path, query, ct))
             {
-                foreach (var jobTemplate in result.Contents.Results)
+                foreach (var wjt in result.Contents.Results)
                 {
-                    yield return jobTemplate;
+                    yield return wjt;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new WorkflowJobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Templates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new WorkflowJobTemplate[] Find(string? searchWords = null,
+                                                     string orderBy = "name",
+                                                     ushort pageSize = 20,
+                                                     uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static WorkflowJobTemplate[] Find(ulong organizationId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(organizationId, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

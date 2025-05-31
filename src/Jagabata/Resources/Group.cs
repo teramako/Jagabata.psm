@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IGroup
@@ -309,25 +311,40 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/groups/";
 
         /// <summary>
-        /// Retrieve a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="id"/>/</c>
+        /// Get a Group
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Group ID</param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<Group> Get(ulong id)
+        public static async Task<Group> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Group>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Group>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Group Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Groups.<br/>
-        /// API Path: <c>/api/v2/groups/</c>
+        /// Find Groups
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Group> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Group> FindAsync(HttpQuery? query = null,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(PATH, query, ct))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -335,18 +352,54 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Groups for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/groups/</c>
+        /// Find Groups associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/{groups | root_groups | all_groups}/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Inventory</item>
+        ///     <item>InventorySource</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="inventoryId"></param>
+        /// <param name="resource">Resource object associated with this group</param>
         /// <param name="query"></param>
+        /// <param name="all">
+        /// When <paramref name="resource"/> is:
+        /// <list type="table">
+        ///     <item>
+        ///         <term>Inventory</term>
+        ///         <description><c>true</c> => all groups, <c>false</c> => root (top-level) groups associated with the Inventory.</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Host</term>
+        ///         <description><c>true</c> => all directly or indirectly groups, <c>false</c> => only direct parent group of ths Host.</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>otherwise</term>
+        ///         <description>No affected</description>
+        ///     </item>
+        /// </list>
+        /// </param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Group> FindFromInventory(ulong inventoryId,
-                                                                      HttpQuery? query = null)
+        public static async IAsyncEnumerable<Group> FindAsync(IResource resource,
+                                                              HttpQuery? query = null,
+                                                              bool all = true,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/{(all ? "groups" : "root_groups")}/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{resource.Id}/groups/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/{(all ? "all_groups" : "groups")}/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query, ct))
             {
                 foreach (var group in result.Contents.Results)
                 {
@@ -354,81 +407,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Root Groups for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/root_groups/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Group> FindOnlyRootFromInventory(ulong inventoryId,
-                                                                              HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Group[] Find(HttpQuery? query = null)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/root_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
-            {
-                foreach (var group in result.Contents.Results)
-                {
-                    yield return group;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Groups for an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/<paramref name="inventorySourceId"/>/groups/</c>
+        /// Find Groups by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/groups/</c>
+        /// </para>
         /// </summary>
-        /// <param name="inventorySourceId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Group> FindFromInventorySource(ulong inventorySourceId,
-                                                                            HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Group[] Find(string? searchWords = null,
+                                   string orderBy = "name",
+                                   ushort pageSize = 20,
+                                   uint startPage = 1)
         {
-            var path = $"{InventorySource.PATH}{inventorySourceId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
-            {
-                foreach (var group in result.Contents.Results)
-                {
-                    yield return group;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
-        /// <summary>
-        /// List All Groups for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/all_hosts/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Group> FindAllFromHost(ulong hostId,
-                                                                    HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        public static Group[] Find(IResource resource, HttpQuery? query = null, bool all = true)
         {
-            var path = $"{Host.PATH}{hostId}/all_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
-            {
-                foreach (var group in result.Contents.Results)
-                {
-                    yield return group;
-                }
-            }
-        }
-        /// <summary>
-        /// List Groups for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/hosts/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Group> FindFromHost(ulong hostId,
-                                                                 HttpQuery? query = null)
-        {
-            var path = $"{Host.PATH}{hostId}/groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Group>(path, query))
-            {
-                foreach (var group in result.Contents.Results)
-                {
-                    yield return group;
-                }
-            }
+            return [.. FindAsync(resource, query, all).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

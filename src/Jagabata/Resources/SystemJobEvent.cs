@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class SystemJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -8,23 +10,52 @@ namespace Jagabata.Resources
         : JobEventBase
     {
         /// <summary>
-        /// List Sytem Job Events for a System Job.<br/>
-        /// API Path: <c>/api/v2/system_jobs/<paramref name="systemJobId"/>/events/</c>
+        /// Find System Job Events for a System Job
+        /// <para>
+        /// Implement API: <c>/api/v2/system_jobs/<paramref name="id"/>/events/</c>
+        /// </para>
         /// </summary>
-        /// <param name="systemJobId"></param>
+        /// <param name="id">System Job ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<SystemJobEvent> FindFromSystemJob(ulong systemJobId,
-                                                                               HttpQuery? query = null)
+        public static async IAsyncEnumerable<SystemJobEvent> FindAsync(ulong id,
+                                                                       HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
         {
-            var path = $"{SystemJobBase.PATH}{systemJobId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobEvent>(path, query))
+            var path = $"{SystemJobBase.PATH}{id}/events/";
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
                     yield return jobEvent;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static SystemJobEvent[] Find(ulong id, HttpQuery? query = null)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static SystemJobEvent[] Find(ulong id,
+                                            string? searchWords = null,
+                                            string orderBy = "counter",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
         }
 
         public override ulong Id { get; } = id;

@@ -218,8 +218,8 @@ namespace APITest
                 }
             }
         }
-
     }
+
     [TestClass]
     public class TestActivityStream
     {
@@ -232,7 +232,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var activity = await ActivityStream.Get(1);
+            var activity = await ActivityStream.GetAsync(1);
             Assert.IsNotNull(activity);
             Assert.AreEqual(ResourceType.ActivityStream, activity.Type);
             Assert.IsInstanceOfType<ActivityStreamOperation>(activity.Operation);
@@ -245,7 +245,7 @@ namespace APITest
             var expectCount = 2;
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
-            await foreach (var activity in ActivityStream.Find(query))
+            await foreach (var activity in ActivityStream.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<ActivityStream>(activity);
@@ -257,9 +257,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromApplication()
         {
-            var app = await Application.Get(1);
+            var app = await Application.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{app.Id}][{app.Type}] {app.Name})");
-            await foreach (var activity in ActivityStream.FindFromApplication(app.Id))
+            await foreach (var activity in ActivityStream.FindAsync(app))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -268,9 +268,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromToken()
         {
-            var token = await OAuth2AccessToken.Get(1);
+            var token = await OAuth2AccessToken.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
-            await foreach (var activity in ActivityStream.FindFromToken(token.Id))
+            await foreach (var activity in ActivityStream.FindAsync(token))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -279,9 +279,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromOrganization()
         {
-            var org = await Organization.Get(1);
+            var org = await Organization.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var activity in ActivityStream.FindFromOrganization(org.Id))
+            await foreach (var activity in ActivityStream.FindAsync(org))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -290,9 +290,9 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromUser()
         {
-            var user = await User.Get(1);
+            var user = await User.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
-            await foreach (var activity in ActivityStream.FindFromUser(user.Id))
+            await foreach (var activity in ActivityStream.FindAsync(user))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -301,9 +301,9 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromProject()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
-            await foreach (var activity in ActivityStream.FindFromProject(proj.Id))
+            await foreach (var activity in ActivityStream.FindAsync(proj))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -312,9 +312,9 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromTeam()
         {
-            var team = await Team.Get(1);
+            var team = await Team.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
-            await foreach (var activity in ActivityStream.FindFromTeam(team.Id))
+            await foreach (var activity in ActivityStream.FindAsync(team))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -323,9 +323,9 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromCredential()
         {
-            var cred = await Credential.Get(1);
+            var cred = await Credential.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var activity in ActivityStream.FindFromCredential(cred.Id))
+            await foreach (var activity in ActivityStream.FindAsync(cred))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -334,9 +334,9 @@ namespace APITest
         [TestMethod]
         public async Task Get10ListFromCredentialType()
         {
-            var credType = await CredentialType.Get(29);
+            var credType = await CredentialType.GetAsync(29);
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
-            await foreach (var activity in ActivityStream.FindFromCredentialType(credType.Id))
+            await foreach (var activity in ActivityStream.FindAsync(credType))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -345,9 +345,9 @@ namespace APITest
         [TestMethod]
         public async Task Get11ListFromInventory()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
-            await foreach (var activity in ActivityStream.FindFromInventory(inventory.Id))
+            await foreach (var activity in ActivityStream.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -356,9 +356,9 @@ namespace APITest
         [TestMethod]
         public async Task Get12ListFromInventorySource()
         {
-            var inventorySource = await InventorySource.Get(11);
+            var inventorySource = await InventorySource.GetAsync(11);
             Console.WriteLine($"ActivityStream for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var activity in ActivityStream.FindFromInventorySource(inventorySource.Id))
+            await foreach (var activity in ActivityStream.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -367,9 +367,9 @@ namespace APITest
         [TestMethod]
         public async Task Get13ListFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
-            await foreach (var activity in ActivityStream.FindFromGroup(group.Id))
+            await foreach (var activity in ActivityStream.FindAsync(group))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -378,9 +378,9 @@ namespace APITest
         [TestMethod]
         public async Task Get14ListFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
-            await foreach (var activity in ActivityStream.FindFromHost(host.Id))
+            await foreach (var activity in ActivityStream.FindAsync(host))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -389,9 +389,9 @@ namespace APITest
         [TestMethod]
         public async Task Get15ListFromJobTemplate()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
-            await foreach (var activity in ActivityStream.FindFromJobTemplate(jt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(jt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -400,9 +400,9 @@ namespace APITest
         [TestMethod]
         public async Task Get16ListFromJobTemplateJob()
         {
-            var job = await JobTemplateJob.Get(40);
+            var job = await JobTemplateJob.GetAsync(40);
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
-            await foreach (var activity in ActivityStream.FindFromJob(job.Id))
+            await foreach (var activity in ActivityStream.FindAsync(job))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -411,9 +411,9 @@ namespace APITest
         [TestMethod]
         public async Task Get17ListFromAdHoCommand()
         {
-            var cmd = await AdHocCommand.Get(69);
+            var cmd = await AdHocCommand.GetAsync(69);
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
-            await foreach (var activity in ActivityStream.FindFromAdHocCommand(cmd.Id))
+            await foreach (var activity in ActivityStream.FindAsync(cmd))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -422,9 +422,9 @@ namespace APITest
         [TestMethod]
         public async Task Get18ListFromWorkflowJobTemplate()
         {
-            var wjt = await WorkflowJobTemplate.Get(13);
+            var wjt = await WorkflowJobTemplate.GetAsync(13);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindFromWorkflowJobTemplate(wjt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -433,9 +433,9 @@ namespace APITest
         [TestMethod]
         public async Task Get19ListFromWorkflowJob()
         {
-            var wjt = await WorkflowJob.Get(51);
+            var wjt = await WorkflowJob.GetAsync(51);
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindFromWorkflowJob(wjt.Id))
+            await foreach (var activity in ActivityStream.FindAsync(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
@@ -444,22 +444,23 @@ namespace APITest
         [TestMethod]
         public async Task Get20ListFromExecutionEnvironment()
         {
-            var ee = await ExecutionEnvironment.Get(1);
+            var ee = await ExecutionEnvironment.GetAsync(1);
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
-            await foreach (var activity in ActivityStream.FindFromExecutionEnvironment(ee.Id))
+            await foreach (var activity in ActivityStream.FindAsync(ee))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
     }
+
     [TestClass]
     public class TestApplication
     {
         [TestMethod]
         public async Task Get01Single()
         {
-            var app = await Application.Get(1);
+            var app = await Application.GetAsync(1);
             Assert.IsInstanceOfType<Application>(app);
             Console.WriteLine($"Id           : {app.Id}");
             Console.WriteLine($"Name         : {app.Name}");
@@ -483,7 +484,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var app in Application.Find(query))
+            await foreach (var app in Application.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Application>(app);
@@ -496,7 +497,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (Application app in Application.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (Application app in Application.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
@@ -505,7 +507,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var app in Application.FindFromUser(1, null))
+            var resource = new Resource(ResourceType.User, 2);
+            await foreach (var app in Application.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
@@ -529,7 +532,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var token = await OAuth2AccessToken.Get(1);
+            var token = await OAuth2AccessToken.GetAsync(1);
             Assert.IsInstanceOfType<OAuth2AccessToken>(token);
             DumpToken(token);
             Util.DumpSummary(token.SummaryFields);
@@ -537,7 +540,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var token in OAuth2AccessToken.Find(null))
+            await foreach (var token in OAuth2AccessToken.FindAsync())
             {
                 DumpToken(token);
                 Util.DumpSummary(token.SummaryFields);
@@ -623,7 +626,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var instance = await Instance.Get(1);
+            var instance = await Instance.GetAsync(1);
             Assert.IsInstanceOfType<Instance>(instance);
             DumpInstance(instance);
             Util.DumpSummary(instance.SummaryFields);
@@ -635,7 +638,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var instance in Instance.Find(query))
+            await foreach (var instance in Instance.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Instance>(instance);
@@ -648,7 +651,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInstanceGroup()
         {
-            await foreach (var inst in Instance.FindFromInstanceGroup(1))
+            await foreach (var inst in Instance.FindAsync(1))
             {
                 Assert.IsInstanceOfType<Instance>(inst);
                 Console.WriteLine($"[{inst.Id}] {inst.Hostname} {inst.NodeType} {inst.NodeState}");
@@ -683,7 +686,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var ig = await InstanceGroup.Get(1);
+            var ig = await InstanceGroup.GetAsync(1);
             Assert.IsInstanceOfType<InstanceGroup>(ig);
             DumpResource(ig);
             Util.DumpSummary(ig.SummaryFields);
@@ -695,7 +698,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var ig in InstanceGroup.Find(query))
+            await foreach (var ig in InstanceGroup.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
@@ -708,7 +711,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInstance()
         {
-            await foreach (var ig in InstanceGroup.FindFromInstance(1))
+            var resource = new Resource(ResourceType.Instance, 1);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -718,7 +722,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromOranization()
         {
-            await foreach (var ig in InstanceGroup.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -728,7 +733,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromInventory()
         {
-            await foreach (var ig in InstanceGroup.FindFromInventory(2))
+            var resource = new Resource(ResourceType.Inventory, 2);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -737,7 +743,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromJobTemplate()
         {
-            await foreach (var ig in InstanceGroup.FindFromJobTemplate(7))
+            var resource = new Resource(ResourceType.Inventory, 7);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -746,7 +753,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromSchedule()
         {
-            await foreach (var ig in InstanceGroup.FindFromSchedule(8))
+            var resource = new Resource(ResourceType.Schedule, 8);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -755,7 +763,8 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromWorkflowJobTemplateNode()
         {
-            await foreach (var ig in InstanceGroup.FindFromWorkflowJobTemplateNode(4))
+            var resource = new Resource(ResourceType.WorkflowJobTemplateNode, 4);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -764,7 +773,8 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromWorkflowJobNode()
         {
-            await foreach (var ig in InstanceGroup.FindFromWorkflowJobNode(7))
+            var resource = new Resource(ResourceType.WorkflowJobNode, 7);
+            await foreach (var ig in InstanceGroup.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
@@ -788,7 +798,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var org = await Organization.Get(1);
+            var org = await Organization.GetAsync(1);
             Assert.IsInstanceOfType<Organization>(org);
             DumpResource(org);
             Util.DumpSummary(org.SummaryFields);
@@ -800,7 +810,7 @@ namespace APITest
             var c = 0;
             var query = new HttpQuery($"page_size={expectCount}");
 
-            await foreach (var org in Organization.Find(query))
+            await foreach (var org in Organization.FindAsync(query))
             {
                 c++;
                 Assert.IsInstanceOfType<Organization>(org);
@@ -812,7 +822,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListAdministeredFromUser()
         {
-            await foreach (var org in Organization.FindAdministeredByUser(8))
+            await foreach (var org in Organization.FindAsync(8, admin: true))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
@@ -821,7 +831,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var org in Organization.FindFromUser(8))
+            await foreach (var org in Organization.FindAsync(8, admin: false))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
@@ -903,59 +913,63 @@ namespace APITest
             Util.DumpSummary(user.SummaryFields);
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var user = await User.Get(2);
+            var user = User.Get(2);
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var user in User.Find(query))
+            foreach (var user in User.Find(query))
             {
                 DumpResource(user);
             }
         }
         [TestMethod]
-        public async Task Get03Me()
+        public void Get03Me()
         {
-            var user = await User.GetMe();
+            var user = User.GetMe();
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
         [TestMethod]
-        public async Task Get04ListFromOrganization()
+        public void Get04ListFromOrganization()
         {
-            await foreach (var user in User.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get05ListFromTeam()
+        public void Get05ListFromTeam()
         {
-            await foreach (var user in User.FindFromTeam(1))
+            var resource = new Resource(ResourceType.Team, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get6ListOwnersFromCredential()
+        public void Get6ListOwnersFromCredential()
         {
-            await foreach (var user in User.FindOwnerFromCredential(1))
+            var resource = new Resource(ResourceType.Credential, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
         [TestMethod]
-        public async Task Get07ListFromRole()
+        public void Get07ListFromRole()
         {
-            await foreach (var user in User.FindFromRole(1))
+            var resource = new Resource(ResourceType.Role, 1);
+            foreach (var user in User.Find(resource))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
@@ -1002,7 +1016,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Assert.IsInstanceOfType<Project>(proj);
             DumpResource(proj);
         }
@@ -1010,7 +1024,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var proj in Project.Find(query))
+            await foreach (var proj in Project.FindAsync(query))
             {
                 DumpResource(proj);
             }
@@ -1018,7 +1032,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var proj in Project.FindFromOrganization(1))
+            var resource = new Resource(ResourceType.Organization, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1027,7 +1042,8 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromUser()
         {
-            await foreach (var proj in Project.FindFromUser(1))
+            var resource = new Resource(ResourceType.User, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1037,7 +1053,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromTeam()
         {
-            await foreach (var proj in Project.FindFromTeam(1))
+            var resource = new Resource(ResourceType.Team, 1);
+            await foreach (var proj in Project.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
@@ -1075,7 +1092,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var job = await ProjectUpdateJob.Get(5);
+            var job = await ProjectUpdateJob.GetAsync(5);
             Assert.IsInstanceOfType<ProjectUpdateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs    : {job.JobArgs}");
@@ -1091,7 +1108,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in ProjectUpdateJob.Find(query))
+            await foreach (var job in ProjectUpdateJob.FindAsync(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1100,7 +1117,7 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProject()
         {
-            await foreach (var job in ProjectUpdateJob.FindFromProject(8))
+            await foreach (var job in ProjectUpdateJob.FindAsync(8))
             {
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} {job.Finished}");
@@ -1134,25 +1151,26 @@ namespace APITest
         }
 
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var team = await Team.Get(1);
+            var team = Team.Get(1);
             Assert.IsInstanceOfType<Team>(team);
             DumpResource(team);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=2");
-            await foreach (var team in Team.Find(query))
+            foreach (var team in Team.Find(query))
             {
                 DumpResource(team);
             }
         }
         [TestMethod]
-        public async Task Get03ListFromOrganization()
+        public void Get03ListFromOrganization()
         {
-            await foreach (var team in Team.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1160,9 +1178,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get04ListFromUser()
+        public void Get04ListFromUser()
         {
-            await foreach (var team in Team.FindFromUser(2))
+            var resource = new Resource(ResourceType.User, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1170,9 +1189,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get05ListFromProject()
+        public void Get05ListFromProject()
         {
-            await foreach (var team in Team.FindFromProject(8))
+            var resource = new Resource(ResourceType.Project, 8);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1180,9 +1200,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get06FindOwnerFromCredential()
+        public void Get06FindOwnerFromCredential()
         {
-            await foreach (var team in Team.FindOwnerFromCredential(4))
+            var resource = new Resource(ResourceType.Credential, 2);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1190,9 +1211,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get07FindFromRole()
+        public void Get07FindFromRole()
         {
-            await foreach (var team in Team.FindFromRole(73))
+            var resource = new Resource(ResourceType.Role, 73);
+            foreach (var team in Team.Find(resource))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1224,7 +1246,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var cred = await Credential.Get(2);
+            var cred = await Credential.GetAsync(2);
             Assert.IsInstanceOfType<Credential>(cred);
             DumpResource(cred);
         }
@@ -1232,7 +1254,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var cred in Credential.Find(query))
+            await foreach (var cred in Credential.FindAsync(query))
             {
                 DumpResource(cred);
             }
@@ -1240,7 +1262,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var cred in Credential.FindFromOrganization(2))
+            var res = new Resource(ResourceType.Organization, 2);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1249,7 +1272,7 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListGalaxyFromOrganization()
         {
-            await foreach (var cred in Credential.FindGalaxyFromOrganization(1))
+            await foreach (var cred in Credential.FindGalaxyAsync(1))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1258,7 +1281,8 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromUser()
         {
-            await foreach (var cred in Credential.FindFromUser(1))
+            var res = new Resource(ResourceType.User, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1267,7 +1291,8 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromTeam()
         {
-            await foreach (var cred in Credential.FindFromTeam(1))
+            var res = new Resource(ResourceType.Team, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1276,7 +1301,8 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromCredentialType()
         {
-            await foreach (var cred in Credential.FindFromCredentialType(1))
+            var res = new Resource(ResourceType.CredentialType, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1285,7 +1311,8 @@ namespace APITest
         [TestMethod]
         public async Task Get08ListFromInventorySource()
         {
-            await foreach (var cred in Credential.FindFromInventorySource(17))
+            var res = new Resource(ResourceType.InventorySource, 17);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1294,7 +1321,8 @@ namespace APITest
         [TestMethod]
         public async Task Get09ListFromInventoryUpdate()
         {
-            await foreach (var cred in Credential.FindFromInventoryUpdateJob(75))
+            var res = new Resource(ResourceType.InventoryUpdate, 526);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1303,7 +1331,8 @@ namespace APITest
         [TestMethod]
         public async Task Get10ListFromJobTemplate()
         {
-            await foreach (var cred in Credential.FindFromJobTemplate(7))
+            var res = new Resource(ResourceType.JobTemplate, 7);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1312,7 +1341,8 @@ namespace APITest
         [TestMethod]
         public async Task Get11ListFromJob()
         {
-            await foreach (var cred in Credential.FindFromJobTemplateJob(4))
+            var res = new Resource(ResourceType.Job, 565);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1321,7 +1351,8 @@ namespace APITest
         [TestMethod]
         public async Task Get12ListFromSchedule()
         {
-            await foreach (var cred in Credential.FindFromSchedule(6))
+            var res = new Resource(ResourceType.Schedule, 6);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1330,7 +1361,8 @@ namespace APITest
         [TestMethod]
         public async Task Get13ListFromWorkflowJobTemplateNode()
         {
-            await foreach (var cred in Credential.FindFromWorkflowJobTemplateNode(1))
+            var res = new Resource(ResourceType.WorkflowJobTemplateNode, 1);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1339,7 +1371,8 @@ namespace APITest
         [TestMethod]
         public async Task Get14ListFromWorkflowJobNode()
         {
-            await foreach (var cred in Credential.FindFromWorkflowJobNode(8))
+            var res = new Resource(ResourceType.WorkflowJobNode, 131);
+            await foreach (var cred in Credential.FindAsync(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
@@ -1370,7 +1403,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var ct = await CredentialType.Get(1);
+            var ct = await CredentialType.GetAsync(1);
             Assert.IsInstanceOfType<CredentialType>(ct);
             DumpResource(ct);
         }
@@ -1378,7 +1411,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var ct in CredentialType.Find(query))
+            await foreach (var ct in CredentialType.FindAsync(query))
             {
                 DumpResource(ct);
             }
@@ -1405,7 +1438,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Assert.IsInstanceOfType<Inventory>(inventory);
             DumpResource(inventory);
         }
@@ -1413,7 +1446,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var inventory in Inventory.Find(query))
+            await foreach (var inventory in Inventory.FindAsync(query))
             {
                 DumpResource(inventory);
             }
@@ -1421,7 +1454,8 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            await foreach (var inventory in Inventory.FindFromOrganization(2))
+            var resource = new Resource(ResourceType.Organization, 2);
+            await foreach (var inventory in Inventory.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1431,7 +1465,8 @@ namespace APITest
         public async Task Get04ListInputInventires()
         {
             Console.WriteLine("Inventory [4]'s Inpput Inventories:");
-            await foreach (var inventory in Inventory.FindInputInventoires(4))
+            var resource = new Resource(ResourceType.Inventory, 4);
+            await foreach (var inventory in Inventory.FindAsync(resource))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
@@ -1457,7 +1492,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var inventory = await ConstructedInventory.Get(4);
+            var inventory = await ConstructedInventory.GetAsync(4);
             Assert.IsInstanceOfType<ConstructedInventory>(inventory);
             Assert.AreEqual("constructed", inventory.Kind);
             DumpResource(inventory);
@@ -1465,7 +1500,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var inventory in ConstructedInventory.Find(null))
+            await foreach (var inventory in ConstructedInventory.FindAsync())
             {
                 Assert.AreEqual("constructed", inventory.Kind);
                 DumpResource(inventory);
@@ -1491,14 +1526,14 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await InventorySource.Get(11);
+            var res = await InventorySource.GetAsync(11);
             Assert.IsInstanceOfType<InventorySource>(res);
             DumpResource(res);
         }
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var res in InventorySource.Find(new HttpQuery("order_by=id")))
+            await foreach (var res in InventorySource.FindAsync(new HttpQuery("order_by=id")))
             {
                 DumpResource(res);
             }
@@ -1506,9 +1541,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProject()
         {
-            var proj = await Project.Get(8);
+            var proj = await Project.GetAsync(8);
             Console.WriteLine($"Scm InventorySources for ([{proj.Type}][{proj.Id}] {proj.Name})");
-            await foreach (var res in InventorySource.FindFromProject(8))
+            await foreach (var res in InventorySource.FindAsync(proj))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1517,9 +1552,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromInventory()
         {
-            var inventory = await Inventory.Get(4);
+            var inventory = await Inventory.GetAsync(4);
             Console.WriteLine($"InventorySources for ([{inventory.Type}][{inventory.Id}] {inventory.Name})");
-            await foreach (var res in InventorySource.FindFromInventory(4))
+            await foreach (var res in InventorySource.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1528,9 +1563,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromGroup()
         {
-            var group = await Group.Get(4);
+            var group = await Group.GetAsync(4);
             Console.WriteLine($"InventorySources for ([{group.Type}][{group.Id}] {group.Name})");
-            await foreach (var res in InventorySource.FindFromGroup(4))
+            await foreach (var res in InventorySource.FindAsync(group))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1539,9 +1574,9 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"InventorySources for ([{host.Type}][{host.Id}] {host.Name})");
-            await foreach (var res in InventorySource.FindFromHost(host.Id))
+            await foreach (var res in InventorySource.FindAsync(host))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
@@ -1567,7 +1602,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await InventoryUpdateJob.Get(46);
+            var res = await InventoryUpdateJob.GetAsync(46);
             Assert.IsInstanceOfType<InventoryUpdateJob.Detail>(res);
             Assert.IsInstanceOfType<IUnifiedJob>(res);
             DumpResource(res);
@@ -1575,7 +1610,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var res in InventoryUpdateJob.Find(new HttpQuery("order_by=id")))
+            await foreach (var res in InventoryUpdateJob.FindAsync(new HttpQuery("order_by=id")))
             {
                 DumpResource(res);
             }
@@ -1583,9 +1618,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromProjectUpdate()
         {
-            var projectUpdateJob = await ProjectUpdateJob.Get(76);
+            var projectUpdateJob = await ProjectUpdateJob.GetAsync(76);
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
-            await foreach (var res in InventoryUpdateJob.FindFromProjectUpdate(projectUpdateJob.Id))
+            await foreach (var res in InventoryUpdateJob.FindAsync(projectUpdateJob))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -1594,9 +1629,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromInventorySource()
         {
-            var inventorySource = await InventorySource.Get(11);
+            var inventorySource = await InventorySource.GetAsync(11);
             Console.WriteLine($"InventoryUpdateJobs for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var res in InventoryUpdateJob.FindFromInventorySource(inventorySource.Id))
+            await foreach (var res in InventoryUpdateJob.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
@@ -1622,7 +1657,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Assert.IsInstanceOfType<Group>(group);
             DumpResource(group);
         }
@@ -1630,7 +1665,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20");
-            await foreach (var group in Group.Find(query))
+            await foreach (var group in Group.FindAsync(query))
             {
                 DumpResource(group);
             }
@@ -1638,9 +1673,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var group in Group.FindFromInventory(inventory.Id))
+            await foreach (var group in Group.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1649,9 +1684,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListOnlyRootFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Groups in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var group in Group.FindOnlyRootFromInventory(inventory.Id))
+            await foreach (var group in Group.FindAsync(inventory, all: false))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1660,9 +1695,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromInventorySource()
         {
-            var inventorySOurce = await InventorySource.Get(11);
-            Console.WriteLine($"Groups in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach (var group in Group.FindFromInventorySource(inventorySOurce.Id))
+            var inventorySource = await InventorySource.GetAsync(11);
+            Console.WriteLine($"Groups in [{inventorySource.Type}][{inventorySource.Id}] {inventorySource.Name}");
+            await foreach (var group in Group.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1671,9 +1706,9 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListAllFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach (var group in Group.FindAllFromHost(host.Id))
+            await foreach (var group in Group.FindAsync(host, all: true))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1682,9 +1717,9 @@ namespace APITest
         [TestMethod]
         public async Task Get07ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"Groups in [{host.Type}][{host.Id}] {host.Name}");
-            await foreach (var group in Group.FindFromHost(host.Id))
+            await foreach (var group in Group.FindAsync(host, all: false))
             {
                 Assert.IsInstanceOfType<Group>(group);
                 Console.WriteLine($"[{group.Id}] {group.Name}");
@@ -1711,7 +1746,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var host = await Host.Get(1);
+            var host = await Host.GetAsync(1);
             Assert.IsInstanceOfType<Host>(host);
             DumpResource(host);
         }
@@ -1719,7 +1754,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20");
-            await foreach (var host in Host.Find(query))
+            await foreach (var host in Host.FindAsync(query))
             {
                 DumpResource(host);
             }
@@ -1727,9 +1762,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(2);
+            var inventory = await Inventory.GetAsync(2);
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var host in Host.FindFromInventory(inventory.Id))
+            await foreach (var host in Host.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1738,9 +1773,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromInventorySource()
         {
-            var inventorySOurce = await InventorySource.Get(11);
-            Console.WriteLine($"Hosts in [{inventorySOurce.Type}][{inventorySOurce.Id}] {inventorySOurce.Name}");
-            await foreach (var host in Host.FindFromInventorySource(inventorySOurce.Id))
+            var inventorySource = await InventorySource.GetAsync(11);
+            Console.WriteLine($"Hosts in [{inventorySource.Type}][{inventorySource.Id}] {inventorySource.Name}");
+            await foreach (var host in Host.FindAsync(inventorySource))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1749,9 +1784,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListAllFromHost()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindAllFromGroup(group.Id))
+            await foreach (var host in Host.FindAsync(group, all: true))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
@@ -1760,15 +1795,49 @@ namespace APITest
         [TestMethod]
         public async Task Get06ListFromHost()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindFromGroup(group.Id))
+            await foreach (var host in Host.FindAsync(group, all: false))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
             }
         }
     }
+
+    [TestClass]
+    public class TestHostMetrics
+    {
+        private static void DumpResource(HostMetric metric)
+        {
+            Console.WriteLine($"Id              : {metric.Id}");
+            Console.WriteLine($"Type            : {metric.Type}");
+            Console.WriteLine($"Hostname        : {metric.Hostname}");
+            Console.WriteLine($"FirstAutomation : {metric.FirstAutomation?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"LastAutomation  : {metric.LastAutomation?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"LastDeleted     : {metric.LastDeleted?.ToString("o") ?? "(null)"}");
+            Console.WriteLine($"AutomatedCounter: {metric.AutomatedCounter}");
+            Console.WriteLine($"DeletedCounter  : {metric.DeletedCounter}");
+            Console.WriteLine($"Deleted         : {metric.Deleted}");
+        }
+        [TestMethod]
+        public async Task Get01Single()
+        {
+            var metric = await HostMetric.GetAsync(1);
+            Assert.IsInstanceOfType<HostMetric>(metric);
+        }
+        [TestMethod]
+        public async Task Get02List()
+        {
+            await foreach (var metric in HostMetric.FindAsync(new QueryBuilder().SetPageSize(1)
+                                                                                .SetOrderBy("id")
+                                                                                .Build()))
+            {
+                DumpResource(metric);
+            }
+        }
+    }
+
     [TestClass]
     public class TestJobTemplate
     {
@@ -1789,7 +1858,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Assert.IsInstanceOfType<JobTemplate>(jt);
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(jt);
             DumpResource(jt);
@@ -1798,7 +1867,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var jt in JobTemplate.Find(query))
+            await foreach (var jt in JobTemplate.FindAsync(query))
             {
                 DumpResource(jt);
             }
@@ -1806,9 +1875,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
+            var org = await Organization.GetAsync(2);
             Console.WriteLine($"JobTemplates in ({org.Type})[{org.Id}] {org.Name}");
-            await foreach (var jt in JobTemplate.FindFromOrganization(org.Id))
+            await foreach (var jt in JobTemplate.FindAsync(org))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
@@ -1817,9 +1886,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04listFromInventory()
         {
-            var inv = await Inventory.Get(2);
+            var inv = await Inventory.GetAsync(2);
             Console.WriteLine($"JobTemplates in ({inv.Type})[{inv.Id}] {inv.Name}");
-            await foreach (var jt in JobTemplate.FindFromInventory(inv.Id))
+            await foreach (var jt in JobTemplate.FindAsync(inv))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
@@ -1871,7 +1940,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var job = await JobTemplateJob.Get(jobId);
+            var job = await JobTemplateJob.GetAsync(jobId);
             Assert.IsInstanceOfType<JobTemplateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs   : {job.JobArgs}");
@@ -1883,7 +1952,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in JobTemplateJob.Find(query))
+            await foreach (var job in JobTemplateJob.FindAsync(query))
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
@@ -1892,9 +1961,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromJobtemplate()
         {
-            var jt = await JobTemplate.Get(9);
+            var jt = await JobTemplate.GetAsync(9);
             Console.WriteLine($"Jobs in ({jt.Type})[{jt.Id}] {jt.Name}");
-            await foreach (var job in JobTemplateJob.FindFromJobTemplate(jt.Id))
+            await foreach (var job in JobTemplateJob.FindAsync(jt.Id))
             {
                 Assert.IsInstanceOfType<JobTemplateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Status} {job.Finished} {job.LaunchedBy}");
@@ -1949,10 +2018,10 @@ namespace APITest
         [TestMethod]
         public async Task Get01FindFromJob()
         {
-            var job = await JobTemplateJob.Get(40);
+            var job = await JobTemplateJob.GetAsync(40);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in JobEvent.FindFromJob(job.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(job, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"[{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -1965,10 +2034,10 @@ namespace APITest
         [TestMethod]
         public async Task Get02FindFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindFromGroup(group.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(group, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -1981,10 +2050,10 @@ namespace APITest
         [TestMethod]
         public async Task Get03FindFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
             var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindFromHost(host.Id, eventQuery))
+            await foreach (var je in JobEvent.FindAsync(host, eventQuery))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -1997,10 +2066,10 @@ namespace APITest
         [TestMethod]
         public async Task Get04ProjectUpdate()
         {
-            var job = await ProjectUpdateJob.Get(76);
+            var job = await ProjectUpdateJob.GetAsync(76);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in ProjectUpdateJobEvent.FindFromProjectUpdateJob(job.Id, eventQuery))
+            await foreach (var je in ProjectUpdateJobEvent.FindAsync(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<ProjectUpdateJobEvent>(je);
@@ -2014,10 +2083,10 @@ namespace APITest
         [TestMethod]
         public async Task Get05InventoryUpdate()
         {
-            var job = await InventoryUpdateJob.Get(43);
+            var job = await InventoryUpdateJob.GetAsync(43);
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in InventoryUpdateJobEvent.FindFromInventoryUpdateJob(job.Id, eventQuery))
+            await foreach (var je in InventoryUpdateJobEvent.FindAsync(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<InventoryUpdateJobEvent>(je);
@@ -2029,12 +2098,11 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get06SystemJob()
+        public void Get06SystemJob()
         {
-            var job = await SystemJob.Get(80);
-            Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
+            var job = new Resource(ResourceType.SystemJob, 80);
             var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in SystemJobEvent.FindFromSystemJob(job.Id, eventQuery))
+            foreach (var je in SystemJobEvent.Find(job.Id, eventQuery))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<SystemJobEvent>(je);
@@ -2048,9 +2116,9 @@ namespace APITest
         [TestMethod]
         public async Task Get07AdHocCommandEvent()
         {
-            var cmd = await AdHocCommand.Get(69);
+            var cmd = await AdHocCommand.GetAsync(69);
             Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
-            await foreach (var je in AdHocCommandJobEvent.FindFromAdHocCommand(cmd.Id))
+            await foreach (var je in AdHocCommandJobEvent.FindAsync(cmd.Id))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<AdHocCommandJobEvent>(je);
@@ -2080,7 +2148,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await JobHostSummary.Get(1);
+            var res = await JobHostSummary.GetAsync(1);
             Assert.IsInstanceOfType<JobHostSummary>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2088,9 +2156,9 @@ namespace APITest
         [TestMethod]
         public async Task Get02ListFromGroup()
         {
-            var group = await Group.Get(1);
+            var group = await Group.GetAsync(1);
             Console.WriteLine($"JobHostSummaries in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach (var summary in JobHostSummary.FindFromGroup(group.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(group))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2101,9 +2169,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromHost()
         {
-            var host = await Host.Get(2);
+            var host = await Host.GetAsync(2);
             Console.WriteLine($"JobHostSummaries in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach (var summary in JobHostSummary.FindFromHost(host.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(host))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2114,9 +2182,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromJob()
         {
-            var job = await JobTemplateJob.Get(4);
+            var job = await JobTemplateJob.GetAsync(4);
             Console.WriteLine($"JobHostSummaries in ({job.Type})[{job.Id}] {job.Name}");
-            await foreach (var summary in JobHostSummary.FindFromJob(job.Id))
+            await foreach (var summary in JobHostSummary.FindAsync(job))
             {
                 Assert.IsInstanceOfType<JobHostSummary>(summary);
                 Console.WriteLine($"{summary.Job} [{summary.Id}][{summary.Host}] {summary.HostName}");
@@ -2139,7 +2207,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await AdHocCommand.Get(69);
+            var res = await AdHocCommand.GetAsync(69);
             Assert.IsInstanceOfType<AdHocCommand>(res);
             Assert.IsInstanceOfType<AdHocCommand.Detail>(res);
             DumpResource(res);
@@ -2148,7 +2216,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=-id&page_size=2");
-            await foreach (var res in AdHocCommand.Find(query))
+            await foreach (var res in AdHocCommand.FindAsync(query))
             {
                 DumpResource(res);
             }
@@ -2156,9 +2224,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromInventory()
         {
-            var inventory = await Inventory.Get(1);
+            var inventory = await Inventory.GetAsync(1);
             Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromInventory(inventory.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(inventory))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2167,9 +2235,9 @@ namespace APITest
         [TestMethod]
         public async Task Get04ListFromFroup()
         {
-            var group = await Group.Get(5);
+            var group = await Group.GetAsync(5);
             Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromGroup(group.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(group))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2178,9 +2246,9 @@ namespace APITest
         [TestMethod]
         public async Task Get05ListFromHost()
         {
-            var host = await Host.Get(3);
+            var host = await Host.GetAsync(3);
             Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach (var cmd in AdHocCommand.FindFromHost(host.Id))
+            await foreach (var cmd in AdHocCommand.FindAsync(host))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
@@ -2199,17 +2267,16 @@ namespace APITest
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await SystemJobTemplate.Get(1);
+            var res = SystemJobTemplate.Get(1);
             Assert.IsInstanceOfType<SystemJobTemplate>(res);
             DumpResource(res);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
-            var query = new HttpQuery("");
-            await foreach (var res in SystemJobTemplate.Find(query))
+            foreach (var res in SystemJobTemplate.Find())
             {
                 DumpResource(res);
             }
@@ -2240,9 +2307,11 @@ namespace APITest
             Console.WriteLine($"ResultStdout  : {res.ResultStdout}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await SystemJob.Get(1);
+            var job = SystemJob.Find(new QueryBuilder().SetOrderBy("id").SetPageSize(1).Build()).FirstOrDefault();
+            Assert.IsNotNull(job);
+            var res = SystemJob.Get(job.Id);
             Assert.IsInstanceOfType<SystemJob.Detail>(res);
             Assert.IsInstanceOfType<IUnifiedJob>(res);
             DumpResource(res);
@@ -2256,14 +2325,22 @@ namespace APITest
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in SystemJob.Find(query))
+            foreach (var res in SystemJob.Find(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
+        }
+        [TestMethod]
+        public void Get03ListSystemJobTemplate()
+        {
+            var resource = new Resource(ResourceType.SystemJobTemplate, 1);
+            var jobs = SystemJob.Find(resource.Id);
+            Assert.IsTrue(jobs.Length > 0);
+            Assert.IsInstanceOfType<SystemJob[]>(jobs);
         }
     }
 
@@ -2282,7 +2359,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Schedule.Get(1);
+            var res = await Schedule.GetAsync(1);
             Assert.IsInstanceOfType<Schedule>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2291,12 +2368,21 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Schedule.Find(query))
+            await foreach (var res in Schedule.FindAsync(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
-
+        }
+        [TestMethod]
+        public async Task Get03ListSystemJobTemplate()
+        {
+            var resource = new Resource(ResourceType.SystemJobTemplate, 1);
+            await foreach (var res in Schedule.FindAsync(resource))
+            {
+                DumpResource(res);
+                Util.DumpSummary(res.SummaryFields);
+            }
         }
     }
     [TestClass]
@@ -2305,7 +2391,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Role.Get(1);
+            var res = await Role.GetAsync(1);
             Assert.IsInstanceOfType<Role>(res);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             var summary = res.SummaryFields;
@@ -2315,7 +2401,29 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Role.Find(query))
+            await foreach (var res in Role.FindAsync(query))
+            {
+                Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
+                var summary = res.SummaryFields;
+                Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
+            }
+        }
+        [TestMethod]
+        public async Task Get03ListUser()
+        {
+            var resource = new Resource(ResourceType.User, 1);
+            await foreach (var res in Role.FindAsync(resource))
+            {
+                Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
+                var summary = res.SummaryFields;
+                Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
+            }
+        }
+        [TestMethod]
+        public async Task Get03ListOrganizationObjectRoles()
+        {
+            var resource = new Resource(ResourceType.Organization, 1);
+            await foreach (var res in Role.FindObjectRolesAsync(resource))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
                 var summary = res.SummaryFields;
@@ -2341,7 +2449,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await NotificationTemplate.Get(1);
+            var res = await NotificationTemplate.GetAsync(1);
             Assert.IsInstanceOfType<NotificationTemplate>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2350,7 +2458,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in NotificationTemplate.Find(query))
+            await foreach (var res in NotificationTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2375,7 +2483,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Notification.Get(1);
+            var res = await Notification.GetAsync(1);
             Assert.IsInstanceOfType<Notification>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2384,7 +2492,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Notification.Find(query))
+            await foreach (var res in Notification.FindAsync(query))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2404,7 +2512,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await Label.Get(1);
+            var res = await Label.GetAsync(1);
             Assert.IsInstanceOfType<Label>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2412,7 +2520,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            await foreach (var res in Label.Find(null))
+            await foreach (var res in Label.FindAsync())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2432,7 +2540,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await UnifiedJobTemplate.Get(1);
+            var res = await UnifiedJobTemplate.GetAsync(1);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(res);
             DumpResource(res);
@@ -2440,8 +2548,7 @@ namespace APITest
         [TestMethod]
         public async Task Get02List()
         {
-            var ujtList = await UnifiedJobTemplate.Get(1, 6, 9, 11, 13);
-            foreach (var res in ujtList)
+            await foreach (var res in UnifiedJobTemplate.GetAsync([1, 6, 9, 11, 13]))
             {
                 DumpResource(res);
                 switch (res)
@@ -2466,14 +2573,13 @@ namespace APITest
                         break;
                 }
             }
-            Util.DumpObject(ujtList);
         }
 
         [TestMethod]
         public async Task Get03ListJobTemplate()
         {
             var query = new HttpQuery("type=job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<JobTemplate>(res);
@@ -2483,7 +2589,7 @@ namespace APITest
         public async Task Get04ListProject()
         {
             var query = new HttpQuery("type=project&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<Project>(res);
@@ -2493,7 +2599,7 @@ namespace APITest
         public async Task Get05ListInventorySource()
         {
             var query = new HttpQuery("type=inventory_source&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<InventorySource>(res);
@@ -2503,7 +2609,7 @@ namespace APITest
         public async Task Get06ListSystemJobTemplate()
         {
             var query = new HttpQuery("type=system_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<SystemJobTemplate>(res);
@@ -2513,7 +2619,7 @@ namespace APITest
         public async Task Get07ListWorkflowJobTemplate()
         {
             var query = new HttpQuery("type=workflow_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.Find(query))
+            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
@@ -2535,14 +2641,14 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var job = await UnifiedJob.Get(20);
+            var job = await UnifiedJob.GetAsync(20);
             Console.WriteLine($"{job.Id} {job.Type} {job.Name}");
         }
         [TestMethod]
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
             }
@@ -2551,7 +2657,7 @@ namespace APITest
         public async Task Get03JobTemplateJob()
         {
             var query = new HttpQuery("type=job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<JobTemplateJob>(job);
@@ -2561,7 +2667,7 @@ namespace APITest
         public async Task Get04ProjectUpdateJob()
         {
             var query = new HttpQuery("type=project_update&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
@@ -2571,7 +2677,7 @@ namespace APITest
         public async Task Get05InventoryUpdate()
         {
             var query = new HttpQuery("type=inventory_update&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<InventoryUpdateJob>(job);
@@ -2581,7 +2687,7 @@ namespace APITest
         public async Task Get06WorkflobJob()
         {
             var query = new HttpQuery("type=workflow_job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<WorkflowJob>(job);
@@ -2591,7 +2697,7 @@ namespace APITest
         public async Task Get07SystemJob()
         {
             var query = new HttpQuery("type=system_job&page_size=2&order_by=-id");
-            await foreach (var job in UnifiedJob.Find(query))
+            await foreach (var job in UnifiedJob.FindAsync(query))
             {
                 DumpResource(job);
                 Assert.IsInstanceOfType<SystemJob>(job);
@@ -2609,18 +2715,18 @@ namespace APITest
             Console.WriteLine($"Status      : {res.Status}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJobTemplate.Get(13);
+            var res = WorkflowJobTemplate.Get(13);
             Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplate.Find(query))
+            foreach (var res in WorkflowJobTemplate.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
                 DumpResource(res);
@@ -2628,11 +2734,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get03ListFromOrganization()
+        public void Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
-            Console.WriteLine($"WorkflowJobTemplate in ({org.Type})[{org.Id}]{org.Name}");
-            await foreach (var wjt in WorkflowJobTemplate.FindFromOrganization(org.Id))
+            var org = new Resource(ResourceType.Organization, 2);
+            foreach (var wjt in WorkflowJobTemplate.Find(org.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(wjt);
                 Console.WriteLine($"[{wjt.Id}] {wjt.Name} [{wjt.Status}]");
@@ -2641,7 +2746,7 @@ namespace APITest
     }
 
     [TestClass]
-    public class TestWofkflowJob
+    public class TestWorkflowJob
     {
         private static void DumpResource(WorkflowJob res)
         {
@@ -2650,18 +2755,18 @@ namespace APITest
             Console.WriteLine($"Status      : {res.Status}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJob.Get(51);
-            Assert.IsInstanceOfType<WorkflowJob>(res);
-            DumpResource(res);
-            Util.DumpSummary(res.SummaryFields);
+            var job = WorkflowJob.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            var detail = WorkflowJob.Get(job.Id);
+            Assert.IsInstanceOfType<WorkflowJob.Detail>(detail);
+            Util.DumpSummary(detail.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJob.Find(query))
+            foreach (var res in WorkflowJob.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(res);
                 DumpResource(res);
@@ -2669,11 +2774,10 @@ namespace APITest
             }
         }
         [TestMethod]
-        public async Task Get03ListFromWorkflowJobTemplate()
+        public void Get03ListFromWorkflowJobTemplate()
         {
-            var wjt = await WorkflowJobTemplate.Get(13);
-            Console.WriteLine($"WorkflowJobTemplate in ({wjt.Type})[{wjt.Id}]{wjt.Name}");
-            await foreach (var job in WorkflowJob.FindFromWorkflowJobTemplate(wjt.Id))
+            var wjt = new Resource(ResourceType.WorkflowJobTemplate, 13);
+            foreach (var job in WorkflowJob.Find(wjt.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} [{job.Status}] [{job.Finished}]");
@@ -2694,22 +2798,31 @@ namespace APITest
             Console.WriteLine($"AlwaysNodes         : {string.Join(", ", res.AlwaysNodes)}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJobTemplateNode.Get(1);
+            var res = WorkflowJobTemplateNode.Get(1);
             Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobTemplateNode.Find(query))
+            foreach (var res in WorkflowJobTemplateNode.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
+            }
+        }
+        [TestMethod]
+        public void Get03ListFromWorkflowJobTemplate()
+        {
+            var wjt = WorkflowJobTemplate.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            foreach (var node in WorkflowJobTemplateNode.Find(wjt.Id))
+            {
+                Assert.IsInstanceOfType<WorkflowJobTemplateNode>(node);
             }
         }
     }
@@ -2726,22 +2839,31 @@ namespace APITest
             Console.WriteLine($"AlwaysNodes         : {string.Join(", ", res.AlwaysNodes)}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            var res = await WorkflowJobNode.Get(1);
+            var res = WorkflowJobNode.Get(131);
             Assert.IsInstanceOfType<WorkflowJobNode>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
         [TestMethod]
-        public async Task Get02List()
+        public void Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=-id");
-            await foreach (var res in WorkflowJobNode.Find(query))
+            foreach (var res in WorkflowJobNode.Find(query))
             {
                 Assert.IsInstanceOfType<WorkflowJobNode>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
+            }
+        }
+        [TestMethod]
+        public void Get03ListFromWorkflowJob()
+        {
+            var job = WorkflowJob.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            foreach (var res in WorkflowJobNode.Find(job.Id))
+            {
+                Assert.IsInstanceOfType<WorkflowJobNode>(res);
             }
         }
     }
@@ -2759,7 +2881,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await CredentialInputSource.Get(1);
+            var res = await CredentialInputSource.GetAsync(1);
             Assert.IsInstanceOfType<CredentialInputSource>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2768,7 +2890,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in CredentialInputSource.Find(query))
+            await foreach (var res in CredentialInputSource.FindAsync(query))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(res);
                 DumpResource(res);
@@ -2778,9 +2900,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromCredential()
         {
-            var cred = await Credential.Get(7);
+            var cred = await Credential.GetAsync(7);
             Console.WriteLine($"Credential for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var cis in CredentialInputSource.FindFromCredential(cred.Id))
+            await foreach (var cis in CredentialInputSource.FindAsync(cred.Id))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(cis);
                 Console.WriteLine($"[{cis.Id}] Source:{cis.SourceCredential} Target:{cis.TargetCredential}");
@@ -2801,7 +2923,7 @@ namespace APITest
         [TestMethod]
         public async Task Get01Single()
         {
-            var res = await ExecutionEnvironment.Get(1);
+            var res = await ExecutionEnvironment.GetAsync(1);
             Assert.IsInstanceOfType<ExecutionEnvironment>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
@@ -2810,7 +2932,7 @@ namespace APITest
         public async Task Get02List()
         {
             var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in ExecutionEnvironment.Find(query))
+            await foreach (var res in ExecutionEnvironment.FindAsync(query))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(res);
                 DumpResource(res);
@@ -2820,9 +2942,9 @@ namespace APITest
         [TestMethod]
         public async Task Get03ListFromOrganization()
         {
-            var org = await Organization.Get(2);
+            var org = await Organization.GetAsync(2);
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var exeEnv in ExecutionEnvironment.FindFromOrganization(org.Id))
+            await foreach (var exeEnv in ExecutionEnvironment.FindAsync(org.Id))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(exeEnv);
                 Console.WriteLine($"[{exeEnv.Id}] {exeEnv.Name} {exeEnv.Image}");
@@ -2854,13 +2976,13 @@ namespace APITest
             Console.WriteLine($"Timeout: {res.Timeout}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
-            await foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
+            foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
             {
                 Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
                 Assert.IsNotNull(approval.UnifiedJobTemplate);
-                var res = await WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
+                var res = WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
                 Assert.IsInstanceOfType<WorkflowApprovalTemplate>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
@@ -2877,22 +2999,24 @@ namespace APITest
             Console.WriteLine($"  {res.Status} {res.Finished}");
         }
         [TestMethod]
-        public async Task Get01Single()
+        public void Get01Single()
         {
             var query = new HttpQuery("order_by=-id&page_size=1");
-            await foreach (var res in WorkflowApproval.Find(query))
+            foreach (var res in WorkflowApproval.Find(query))
             {
-                var detail = await WorkflowApproval.Get(res.Id);
+                var detail = WorkflowApproval.Get(res.Id);
                 Assert.IsInstanceOfType<WorkflowApproval.Detail>(detail);
                 DumpResource(detail);
                 Util.DumpSummary(detail.SummaryFields);
             }
         }
         [TestMethod]
-        public async Task Get02Find()
+        public void Get02FindFromWorkflowApprovalTemplate()
         {
+            var approval = WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            Assert.IsNotNull(approval.UnifiedJobTemplate);
             var query = new HttpQuery("order_by=-id&page_size=2");
-            await foreach (var res in WorkflowApproval.Find(query))
+            foreach (var res in WorkflowApproval.Find((ulong)approval.UnifiedJobTemplate, query))
             {
                 Assert.IsInstanceOfType<WorkflowApproval>(res);
                 DumpResource(res);
@@ -2925,29 +3049,19 @@ namespace APITest
     public class TestSettings
     {
         [TestMethod]
-        public async Task SettingsGet()
+        public void ListSlugs()
         {
-            var apiResult = await RestAPI.GetAsync<ResultSet<Setting>>("/api/v2/settings/");
-            Assert.IsNotNull(apiResult);
-            var resultSet = apiResult.Contents;
-            Assert.IsNotNull(resultSet);
-            Util.DumpObject(resultSet);
-            Util.DumpResponse(apiResult.Response);
-
-            Assert.IsTrue(resultSet.Results.Length > 0);
-            foreach (var setting in resultSet.Results)
-            {
-                Assert.IsInstanceOfType<Setting>(setting);
-                Console.WriteLine($"{setting.Name}: Slug: {setting.Slug} URL: {setting.Url}");
-            }
+            var slugs = Setting.ListSlugs();
+            Assert.IsInstanceOfType<Setting[]>(slugs);
+            Assert.IsTrue(slugs.Length > 0);
+            Util.DumpObject(slugs);
         }
         [TestMethod]
-        public async Task SettingsGetGithub()
+        public void GetGithub()
         {
-            var apiResult = await RestAPI.GetAsync<object>("/api/v2/settings/github/");
-            Assert.IsNotNull(apiResult);
-            var setting = apiResult.Contents;
-            Assert.IsNotNull(setting);
+            var setting = Setting.Get("github");
+            Assert.IsInstanceOfType<Dictionary<string, object?>>(setting);
+            Assert.IsTrue(setting.Count > 0);
             Util.DumpObject(setting);
         }
     }

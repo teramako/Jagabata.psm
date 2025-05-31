@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IInventoryUpdateJob : IUnifiedJob
@@ -170,25 +172,40 @@ namespace Jagabata.Resources
         : InventoryUpdateJobBase
     {
         /// <summary>
-        /// Retrieve an Inventory Update.<br/>
-        /// API Path: <c>/api/v2/inventory_updates/<paramref name="id"/>/</c>
+        /// Get a detail Inventory Update
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_updates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Inventory Update Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Inventory Updates.<br/>
-        /// API Path: <c>/api/v2/inventory_updates/</c>
+        /// Find Inventory Updates
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_updates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<InventoryUpdateJob> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<InventoryUpdateJob> FindAsync(HttpQuery? query = null,
+                                                                               [EnumeratorCancellation]
+                                                                               CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(PATH, query, ct))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
                 {
@@ -196,18 +213,34 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Inventory Updadates for a Project Update.<br/>
-        /// API Path: <c>/api/v2/project_update/<paramref name="projectUpdateId"/>/scm_inventory_updates/</c>
+        /// Find Inventory Updates associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/inventory_updates/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>ProjectUpdate</item>
+        ///     <item>InventorySource</item>
+        /// </list>
         /// </summary>
-        /// <param name="projectUpdateId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<InventoryUpdateJob> FindFromProjectUpdate(ulong projectUpdateId,
-                                                                                       HttpQuery? query = null)
+        public static async IAsyncEnumerable<InventoryUpdateJob> FindAsync(IResource resource,
+                                                                           HttpQuery? query = null,
+                                                                           [EnumeratorCancellation]
+                                                                           CancellationToken ct = default)
         {
-            var path = $"{ProjectUpdateJobBase.PATH}{projectUpdateId}/scm_inventory_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{resource.Id}/scm_inventory_updates/",
+                ResourceType.InventorySource => $"{Resources.InventorySource.PATH}{resource.Id}/inventory_updates/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query, ct))
             {
                 foreach (var inventoryUpdateJob in result.Contents.Results)
                 {
@@ -215,24 +248,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Inventory Updadates for an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/nventory_sources/<paramref name="inventorySourceId"/>/inventory_updates/</c>
-        /// </summary>
-        /// <param name="inventorySourceId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventoryUpdateJob> FindFromInventorySource(ulong inventorySourceId,
-                                                                                         HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new InventoryUpdateJob[] Find(HttpQuery query)
         {
-            var path = $"{Resources.InventorySource.PATH}{inventorySourceId}/inventory_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventoryUpdateJob>(path, query))
-            {
-                foreach (var inventoryUpdateJob in result.Contents.Results)
-                {
-                    yield return inventoryUpdateJob;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Inventory Updates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_updates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new InventoryUpdateJob[] Find(string? searchWords = null,
+                                                    string orderBy = "name",
+                                                    ushort pageSize = 20,
+                                                    uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        public static InventoryUpdateJob[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

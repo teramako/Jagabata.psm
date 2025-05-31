@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -100,27 +101,41 @@ namespace Jagabata.Resources
     {
         public new const string PATH = "/api/v2/projects/";
 
-
         /// <summary>
-        /// Retrieve a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="id"/>/</c>
+        /// Get a Project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Project ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Project> Get(ulong id)
+        public static new async Task<Project> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Project>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Project>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Project Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Projects.<br/>
-        /// API Path: <c>/api/v2/projects/</c>
+        /// Find Projects
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<Project> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<Project> FindAsync(HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query, ct))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -128,18 +143,35 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Projects for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/projects/</c>
+        /// Find Projects associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/projects/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromOrganization(ulong organizationId,
-                                                                           HttpQuery? query = null)
+        public static async IAsyncEnumerable<Project> FindAsync(IResource resource,
+                                                                HttpQuery? query = null,
+                                                                [EnumeratorCancellation]
+                                                                CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/projects/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/projects/",
+                ResourceType.Team => $"{Team.PATH}{resource.Id}/projects/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, ct))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -147,43 +179,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Projects for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/projects/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromUser(ulong userId,
-                                                                   HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new Project[] Find(HttpQuery query)
         {
-            var path = $"{User.PATH}{userId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
-            {
-                foreach (var project in result.Contents.Results)
-                {
-                    yield return project;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Projects for a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="teamId"/>/projects/</c>
+        /// Find Labels by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/labels/</c>
+        /// </para>
         /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromTeam(ulong teamId,
-                                                                   HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new Project[] Find(string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
         {
-            var path = $"{Team.PATH}{teamId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query))
-            {
-                foreach (var project in result.Contents.Results)
-                {
-                    yield return project;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Project[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         /// <summary>

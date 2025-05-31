@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IProjectUpdateJob : IUnifiedJob
@@ -84,25 +86,40 @@ namespace Jagabata.Resources
         : ProjectUpdateJobBase
     {
         /// <summary>
-        /// Retrieve a Project Update.<br/>
-        /// API Path: <c>/api/v2/project_updates/<paramref name="id"/>/</c>
+        /// Get a Project Update
+        /// <para>
+        /// Implement API: <c>/api/v2/project_updates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Project Update Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Project Updages.<br/>
-        /// API Path: <c>/api/v2/project_updates/</c>
+        /// Find Project Updages
+        /// <para>
+        /// Implement API: <c>/api/v2/project_updates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<ProjectUpdateJob> Find(HttpQuery? query)
+        public static new async IAsyncEnumerable<ProjectUpdateJob> FindAsync(HttpQuery? query,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(PATH, query, ct))
             {
                 foreach (var projectUpdateJob in result.Contents.Results)
                 {
@@ -111,23 +128,62 @@ namespace Jagabata.Resources
             }
         }
         /// <summary>
-        /// List Project Updates for a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="projectId"/>/project_updates/</c>
+        /// Find Project Updates for a Project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/<paramref name="projectId"/>/project_updates/</c>
+        /// </para>
         /// </summary>
-        /// <param name="projectId"></param>
+        /// <param name="projectId">Project ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ProjectUpdateJob> FindFromProject(ulong projectId,
-                                                                               HttpQuery? query = null)
+        public static async IAsyncEnumerable<ProjectUpdateJob> FindAsync(ulong projectId,
+                                                                         HttpQuery? query = null,
+                                                                         [EnumeratorCancellation]
+                                                                         CancellationToken ct = default)
         {
             var path = $"{Resources.Project.PATH}{projectId}/project_updates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(path, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJob>(path, query, ct))
             {
                 foreach (var projectUpdateJob in result.Contents.Results)
                 {
                     yield return projectUpdateJob;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new ProjectUpdateJob[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Project Updates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/project_updates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new ProjectUpdateJob[] Find(string? searchWords = null,
+                                                  string orderBy = "-id",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static ProjectUpdateJob[] Find(ulong projectId, HttpQuery? query = null)
+        {
+            return [.. FindAsync(projectId, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

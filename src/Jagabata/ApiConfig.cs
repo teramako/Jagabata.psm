@@ -153,9 +153,7 @@ namespace Jagabata
         {
             if (force || _user is null)
             {
-                var task = User.GetMe();
-                task.Wait();
-                _user = task.Result;
+                _user = User.GetMe();
             }
             _userId = _user.Id;
             _userName = _user.Username;

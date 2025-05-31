@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IOAuth2AccessToken
@@ -24,26 +26,42 @@ namespace Jagabata.Resources
         : ResourceBase, IOAuth2AccessToken
     {
         public const string PATH = "/api/v2/tokens/";
+
         /// <summary>
-        /// Retieve an Access Token.<br/>
-        /// API Path: <c>/api/v2/tokens/<paramref name="id"/>/</c>
+        /// Get an Access Token
+        /// <para>
+        /// Implement API: <c>/api/v2/tokens/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<OAuth2AccessToken> Get(ulong id)
+        public static async Task<OAuth2AccessToken> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<OAuth2AccessToken>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<OAuth2AccessToken>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static OAuth2AccessToken Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Assess Tokens.<br/>
-        /// API Path: <c>/api/v2/tokens/</c>
+        /// Find Assess Tokens
+        /// <para>
+        /// Implement API: <c>/api/v2/tokens/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<OAuth2AccessToken> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<OAuth2AccessToken> FindAsync(HttpQuery? query = null,
+                                                                          [EnumeratorCancellation]
+                                                                          CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(PATH, query, ct))
             {
                 foreach (var token in result.Contents.Results)
                 {
@@ -51,6 +69,76 @@ namespace Jagabata.Resources
                 }
             }
         }
+
+        /// <summary>
+        /// Find Access Tokens associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/tokens/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Application</item>
+        ///     <item>User</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<OAuth2AccessToken> FindAsync(IResource resource,
+                                                                          HttpQuery? query = null,
+                                                                          [EnumeratorCancellation]
+                                                                          CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.OAuth2Application => $"{Resources.Application.PATH}{resource.Id}/tokens/",
+                ResourceType.User => $"{Resources.User.PATH}{resource.Id}/tokens/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<OAuth2AccessToken>(path, query, ct))
+            {
+                foreach (var token in result.Contents.Results)
+                {
+                    yield return token;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static OAuth2AccessToken[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Access Tokens by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static OAuth2AccessToken[] Find(string? searchWords = null,
+                                               string orderBy = "-id",
+                                               ushort pageSize = 20,
+                                               uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static OAuth2AccessToken[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
         /// <summary>
         /// List Access Tokens for an Application.<br/>
         /// API Path: <c>/api/v2/applications/<paramref name="applicationId"/>/tokens/</c>

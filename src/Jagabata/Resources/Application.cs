@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -60,26 +61,36 @@ namespace Jagabata.Resources
         : ResourceBase, IApplication
     {
         public const string PATH = "/api/v2/applications/";
+
         /// <summary>
-        /// Retieve an Application.<br/>
-        /// API Path: <c>/api/v2/applications/<paramref name="id"/>/</c>
+        /// Get an Application
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<Application> Get(ulong id)
+        public static async Task<Application> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Application>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Application>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
         /// <summary>
-        /// List Applications.<br/>
-        /// API Path: <c>/api/v2/applications/</c>
+        /// Find Applications
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Application> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Application> FindAsync(HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Application>(PATH, query, ct))
             {
                 foreach (var app in result.Contents.Results)
                 {
@@ -87,43 +98,115 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Applications for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/applications/</c>
+        /// Find Applications associated with <paramref name="resource"/>.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Application> FindFromOrganization(ulong organizationId,
-                                                                               HttpQuery? query = null)
+        public static async IAsyncEnumerable<Application> FindAsync(IResource resource,
+                                                                    HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/applications/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(path, query))
+            var path = resource.Type switch
             {
-                foreach (var app in result.Contents.Results)
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/applications/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/applications/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<Application>(path, query, ct))
+            {
+                foreach (var activity in apiResult.Contents.Results)
                 {
-                    yield return app;
+                    yield return activity;
                 }
             }
         }
+
         /// <summary>
-        /// List Applications for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/applications/</c>
+        /// Find Applications
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/</c>
+        /// </para>
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Application> FindFromUser(ulong userId,
-                                                                       HttpQuery? query = null)
+        public static Application[] Find(HttpQuery query)
         {
-            var path = $"{User.PATH}{userId}/applications/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(path, query))
-            {
-                foreach (var app in result.Contents.Results)
-                {
-                    yield return app;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Applications by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Application[] Find(string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find Applications associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="query"></param>
+        public static Application[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find applications associated with <paramref name="resource"/> by basic parammeters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Application[] Find(IResource resource,
+                                         string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;

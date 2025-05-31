@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface ILabel
@@ -18,32 +20,128 @@ namespace Jagabata.Resources
         : ResourceBase, ILabel
     {
         public const string PATH = "/api/v2/labels/";
+
         /// <summary>
-        /// Retrieve a Label.<br/>
-        /// API Path: <c>/api/v2/labels/<paramref name="id"/>/</c>
+        /// Get a Label
+        /// <para>
+        /// Implement API: <c>/api/v2/labels/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Label ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Label> Get(ulong id)
+        public static async Task<Label> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Label>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Label>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Label Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Labels.<br/>
-        /// API Path: <c>/api/v2/labels/</c>
+        /// Find Labels
+        /// <para>
+        /// Implement API: <c>/api/v2/labels/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Label> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Label> FindAsync(HttpQuery? query = null,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Label>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Label>(PATH, query, ct))
             {
                 foreach (var label in result.Contents.Results)
                 {
                     yield return label;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Labels associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/labels/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Inventory</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Job</item>
+        ///     <item>Schedule</item>
+        ///     <item>WorkflowJobTemplate</item>
+        ///     <item>WorkflowJob</item>
+        ///     <item>WorkflowJobTemplateNode</item>
+        ///     <item>WorkflowJobNode</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Label> FindAsync(IResource resource,
+                                                              HttpQuery? query = null,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Inventory => $"{Inventory.PATH}{resource.Id}/labels/",
+                ResourceType.JobTemplate => $"{InventorySource.PATH}{resource.Id}/labels/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/labels/",
+                ResourceType.Schedule => $"{Schedule.PATH}{resource.Id}/labels/",
+                ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{resource.Id}/labels/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{resource.Id}/labels/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{resource.Id}/labels/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{resource.Id}/labels/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Label>(path, query, ct))
+            {
+                foreach (var label in result.Contents.Results)
+                {
+                    yield return label;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Label[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Labels by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Label[] Find(string? searchWords = null,
+                                   string orderBy = "name",
+                                   ushort pageSize = 20,
+                                   uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Label[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

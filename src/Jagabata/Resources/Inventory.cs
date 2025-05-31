@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class Inventory(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -11,25 +13,39 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/inventories/";
 
         /// <summary>
-        /// Retrieve an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// Get an Inventory
+        /// <para>
+        /// Implement API: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Inventory ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Inventory> Get(ulong id)
+        public static async Task<Inventory> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Inventory>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Inventory>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Inventory Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Inventories.<br/>
-        /// API Path: <c>/api/v2/inventories/</c>
+        /// Find Inventories
+        /// <para>
+        /// Implement API: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Inventory> FindAsync(HttpQuery? query = null,
+                                                                  [EnumeratorCancellation]
+                                                                  CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query, ct))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
@@ -37,18 +53,38 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Inventories for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/inventories/</c>
+        /// Find Inventories associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/inventories/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>Project</item>
+        ///     <item>Inventory</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="resource">Resource object associated with this group</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> FindFromOrganization(ulong organizationId,
-                                                                             HttpQuery? query = null)
+        public static async IAsyncEnumerable<Inventory> FindAsync(IResource resource,
+                                                                  HttpQuery? query = null,
+                                                                  [EnumeratorCancellation]
+                                                                  CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/inventories/",
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/inventories/",
+                ResourceType.Inventory => $"{PATH}{resource.Id}/input_inventories/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/smart_inventories/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, ct))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
@@ -56,24 +92,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Inventories for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/input_inventories/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> FindInputInventoires(ulong inventoryId,
-                                                                             HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Inventory[] Find(HttpQuery? query = null)
         {
-            var path = $"{PATH}{inventoryId}/input_inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query))
-            {
-                foreach (var inventory in result.Contents.Results)
-                {
-                    yield return inventory;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Insntance Groups by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Inventory[] Find(string? searchWords = null,
+                                       string orderBy = "name",
+                                       ushort pageSize = 20,
+                                       uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Inventory[] Find(IResource resource, HttpQuery? query = null)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

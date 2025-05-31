@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface IUnifiedJobSummary : IResource
@@ -85,52 +87,143 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Retrieve a job.
+        /// Get a job of <paramref name="id"/>.
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/?id=<paramref name="id"/>/</c>
+        /// </para>
+        /// <para>
         /// The job is one of:
         /// <list type="bullet">
-        /// <item><term><see cref="JobTemplateJob"/></term><description>Type: <c>job</c></description></item>
-        /// <item><term><see cref="WorkflowJob"/></term><description>Type: <c>workflow_job</c></description></item>
-        /// <item><term><see cref="ProjectUpdateJob"/></term><description>Type: <c>project_update</c></description></item>
-        /// <item><term><see cref="InventoryUpdateJob"/></term><description>Type: <c>inventory_update</c></description></item>
-        /// <item><term><see cref="SystemJob"/></term><description>Type: <c>sytem_job</c></description></item>
+        /// <item><c>job</c></item>
+        /// <item><c>workflow_job</c></item>
+        /// <item><c>project_update</c></item>
+        /// <item><c>inventory_update</c></item>
+        /// <item><c>sytem_job</c></item>
         /// </list>
+        /// </para>
         /// </summary>
         /// <param name="id">Unified Job ID</param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<IUnifiedJob> Get(ulong id)
+        public static async Task<IUnifiedJob> GetAsync(ulong id, CancellationToken ct = default)
         {
             var query = new HttpQuery($"id={id}&page_size=1");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
+            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}", cancellationToken: ct);
             return apiResult.Contents.Results.OfType<IUnifiedJob>().Single();
         }
-        public static async Task<IUnifiedJob[]> Get(params ulong[] idList)
-        {
-            if (idList.Length > 200)
-            {
-                throw new ArgumentException($"too many items: {nameof(idList)} Length must be less than or equal to 200.");
-            }
-            var query = new HttpQuery($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
-            return [.. apiResult.Contents.Results.OfType<IUnifiedJob>()];
-        }
+
         /// <summary>
-        /// List Unified Jobs.<br/>
-        /// API Path: <c>/api/v2/unified_jobs/</c>
+        /// Get jobs by id list
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/?id__in=<paramref name="idList"/>/</c>
+        /// </para>
+        /// <para>
+        /// The job is one of:
+        /// <list type="bullet">
+        /// <item><c>job</c></item>
+        /// <item><c>workflow_job</c></item>
+        /// <item><c>project_update</c></item>
+        /// <item><c>inventory_update</c></item>
+        /// <item><c>sytem_job</c></item>
+        /// </list>
+        /// </para>
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<IUnifiedJob> Find(HttpQuery? query = null)
+        /// <param name="idList"></param>
+        public static async IAsyncEnumerable<IUnifiedJob> GetAsync(params ulong[] idList)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query))
+            foreach (var query in new QueryBuilder().SetOrderBy("id")
+                                                    .BuildWithIdList([.. idList.Order()]))
             {
-                foreach (var obj in result.Contents.Results)
+                await foreach (var job in FindAsync(query))
                 {
-                    if (obj is IUnifiedJob job)
-                    {
-                        yield return job;
-                    }
+                    yield return job;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get a job
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/?id=<paramref name="id"/>/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static IUnifiedJob Get(ulong id)
+        {
+            var task = GetAsync(id);
+            task.Wait();
+            return task.Result;
+        }
+
+        /// <summary>
+        /// Get jobs by id list
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/?id__in=<paramref name="idList"/>/</c>
+        /// </para>
+        /// <param name="idList"></param>
+        /// <returns></returns>
+        public static IUnifiedJob[] Get(params ulong[] idList)
+        {
+            return [.. new QueryBuilder().SetOrderBy("id")
+                                         .BuildWithIdList([.. idList.Order()])
+                                         .SelectMany(static query => FindAsync(query).ToBlockingEnumerable())];
+        }
+
+        /// <summary>
+        /// List Unified Jobs.<br/>
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<IUnifiedJob> FindAsync(HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
+        {
+            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query, ct))
+            {
+                foreach (var job in result.Contents.Results.OfType<IUnifiedJob>())
+                {
+                    yield return job;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        public static IUnifiedJob[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find jobs by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static IUnifiedJob[] Find(string? searchWords = null,
+                                            string orderBy = "-timestamp",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
@@ -161,25 +162,40 @@ namespace Jagabata.Resources
         : JobTemplateJobBase
     {
         /// <summary>
-        /// Retrieve a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="id"/>/</c>
+        /// Get a detail Job
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Jobs.<br/>
-        /// API Path: <c>/api/v2/jobs/</c>
+        /// Find Jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplateJob> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<JobTemplateJob> FindAsync(HttpQuery? query = null,
+                                                                           [EnumeratorCancellation]
+                                                                           CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query, ct))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -187,24 +203,64 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Jobs for a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="jobTemplateId"/>/jobs/</c>
+        /// Find Jobs for a Job Template.<br/>
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/jobs/</c>
+        /// </para>
         /// </summary>
-        /// <param name="jobTemplateId"></param>
+        /// <param name="id">Job Template ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplateJob> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                 HttpQuery? query = null)
+        public static async IAsyncEnumerable<JobTemplateJob> FindAsync(ulong id,
+                                                                       HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
         {
-            var path = $"{Resources.JobTemplate.PATH}{jobTemplateId}/jobs/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query))
+            var path = $"{Resources.JobTemplate.PATH}{id}/jobs/";
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query, ct))
             {
                 foreach (var job in result.Contents.Results)
                 {
                     yield return job;
                 }
             }
+        }
+
+        /// <summary>
+        /// Find Jobs by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new JobTemplateJob[] Find(string? searchWords = null,
+                                                string orderBy = "name",
+                                                ushort pageSize = 20,
+                                                uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new JobTemplateJob[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static JobTemplateJob[] Find(ulong id, HttpQuery? query = null)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

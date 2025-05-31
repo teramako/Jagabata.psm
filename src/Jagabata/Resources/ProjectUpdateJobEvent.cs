@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class ProjectUpdateJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -10,23 +12,52 @@ namespace Jagabata.Resources
         : JobEventBase
     {
         /// <summary>
-        /// List Project Update Events for a Project Update.<br/>
-        /// API Path: <c>/api/v2/project_updates/<paramref name="projectUpdateJobId"/>/events/</c>
+        /// Find Project Update Events for a Project Update
+        /// <para>
+        /// Implement API: <c>/api/v2/project_updates/<paramref name="id"/>/events/</c>
+        /// </para>
         /// </summary>
-        /// <param name="projectUpdateJobId"></param>
+        /// <param name="id">Project Update Job ID</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<ProjectUpdateJobEvent> FindFromProjectUpdateJob(ulong projectUpdateJobId,
-                                                                                             HttpQuery? query = null)
+        public static async IAsyncEnumerable<ProjectUpdateJobEvent> FindAsync(ulong id,
+                                                                              HttpQuery? query = null,
+                                                                              [EnumeratorCancellation]
+                                                                              CancellationToken ct = default)
         {
-            var path = $"{ProjectUpdateJobBase.PATH}{projectUpdateJobId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJobEvent>(path, query))
+            var path = $"{ProjectUpdateJobBase.PATH}{id}/events/";
+            await foreach (var result in RestAPI.GetResultSetAsync<ProjectUpdateJobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
                     yield return jobEvent;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static ProjectUpdateJobEvent[] Find(ulong id, HttpQuery? query = null)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static ProjectUpdateJobEvent[] Find(ulong id,
+                                                   string? searchWords = null,
+                                                   string orderBy = "counter",
+                                                   ushort pageSize = 20,
+                                                   uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
         }
 
         public override ulong Id { get; } = id;

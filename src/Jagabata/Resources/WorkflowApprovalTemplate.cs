@@ -10,15 +10,24 @@ namespace Jagabata.Resources
         public new const string PATH = "/api/v2/workflow_approval_templates/";
 
         /// <summary>
-        /// Retrieve a Workflow Approval Template.<br/>
-        /// API Path: <c>/api/v2/workflow_approval_templates/<paramref name="id"/>/</c>
+        /// Get a Workflow Approval Template
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_approval_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Workflow Approval Template ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<WorkflowApprovalTemplate> Get(ulong id)
+        public static new async Task<WorkflowApprovalTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<WorkflowApprovalTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<WorkflowApprovalTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
+        }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new WorkflowApprovalTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
         }
 
         public override ulong Id { get; } = id;

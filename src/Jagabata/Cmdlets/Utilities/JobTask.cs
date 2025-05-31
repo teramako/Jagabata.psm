@@ -33,15 +33,16 @@ namespace Jagabata.Cmdlets.Utilities
         }
         public void UpdateJob()
         {
-            var getJobsTask = UnifiedJob.Get([.. Keys]);
-            getJobsTask.Wait();
-            foreach (var job in getJobsTask.Result)
+            Task.Run(async () =>
             {
-                if (TryGetValue(job.Id, out var jp))
+                await foreach (var job in UnifiedJob.GetAsync([.. Keys]))
                 {
-                    jp.UpdateJob(job);
+                    if (TryGetValue(job.Id, out var jp))
+                    {
+                        jp.UpdateJob(job);
+                    }
                 }
-            }
+            }).Wait();
         }
         public IEnumerable<JobProgress> GetAll()
         {

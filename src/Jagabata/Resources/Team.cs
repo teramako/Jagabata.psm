@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public interface ITeam
@@ -24,25 +26,40 @@ namespace Jagabata.Resources
         public const string PATH = "/api/v2/teams/";
 
         /// <summary>
-        /// Retrieve a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="id"/>/</c>
+        /// Get a Team
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Team ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Team> Get(ulong id)
+        public static async Task<Team> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Team>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Team>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Team Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Teams.<br/>
-        /// API Path: <c>/api/v2/teams/</c>
+        /// Find Teams
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Team> Find(HttpQuery? query = null)
+        public static async IAsyncEnumerable<Team> FindAsync(HttpQuery? query = null,
+                                                             [EnumeratorCancellation]
+                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<Team>(PATH, query, ct))
             {
                 foreach (var team in result.Contents.Results)
                 {
@@ -50,18 +67,40 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Teams for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/teams/</c>
+        /// Find Teams associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/teams/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        ///     <item>Project</item>
+        ///     <item>Credential</item>
+        ///     <item>Role</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Team> FindFromOrganization(ulong organizationId,
-                                                                        HttpQuery? query = null)
+        public static async IAsyncEnumerable<Team> FindAsync(IResource resource,
+                                                              HttpQuery? query = null,
+                                                              [EnumeratorCancellation]
+                                                              CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/teams/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/teams/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/teams/",
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/teams/",
+                ResourceType.Credential => $"{Credential.PATH}{resource.Id}/owner_teams/",
+                ResourceType.Role => $"{Role.PATH}{resource.Id}/teams/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query, ct))
             {
                 foreach (var team in result.Contents.Results)
                 {
@@ -69,81 +108,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Teams for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/teams/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Team> FindFromUser(ulong userId,
-                                                                HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Team[] Find(HttpQuery query)
         {
-            var path = $"{User.PATH}{userId}/teams/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query))
-            {
-                foreach (var team in result.Contents.Results)
-                {
-                    yield return team;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Teams for a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="projectId"/>/teams/</c>
+        /// Find Teams by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/teams/</c>
+        /// </para>
         /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Team> FindFromProject(ulong projectId,
-                                                                   HttpQuery? query = null)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Team[] Find(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
         {
-            var path = $"{Project.PATH}{projectId}/teams/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query))
-            {
-                foreach (var team in result.Contents.Results)
-                {
-                    yield return team;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
-        /// <summary>
-        /// List owner Teams for a Credential.<br/>
-        /// API Path: <c>/api/v2/credentials/<paramref name="credentialId"/>/owner_teams/</c>
-        /// </summary>
-        /// <param name="credentialId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Team> FindOwnerFromCredential(ulong credentialId,
-                                                                           HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Team[] Find(IResource resource, HttpQuery? query = null)
         {
-            var path = $"{Credential.PATH}{credentialId}/owner_teams/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query))
-            {
-                foreach (var team in result.Contents.Results)
-                {
-                    yield return team;
-                }
-            }
-        }
-        /// <summary>
-        /// List Teams for a Role.<br/>
-        /// API Path: <c>/api/v2/roles/<paramref name="credentialId"/>/teams/</c>
-        /// </summary>
-        /// <param name="credentialId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Team> FindFromRole(ulong credentialId,
-                                                                HttpQuery? query = null)
-        {
-            var path = $"{Role.PATH}{credentialId}/teams/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Team>(path, query))
-            {
-                foreach (var team in result.Contents.Results)
-                {
-                    yield return team;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

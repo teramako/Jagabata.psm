@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Jagabata.Resources
 {
     public class SystemJobTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
@@ -10,31 +12,74 @@ namespace Jagabata.Resources
         public new const string PATH = "/api/v2/system_job_templates/";
 
         /// <summary>
-        /// Retrieve a System Job Template.<br/>
-        /// API Path: <c>/api/v2/system_job_templates/<paramref name="id"/>/</c>
+        /// Get a System Job Template
+        /// <para>
+        /// Implement API: <c>/api/v2/system_job_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">System Job Template ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<SystemJobTemplate> Get(ulong id)
+        public static new async Task<SystemJobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<SystemJobTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<SystemJobTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new SystemJobTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List System Job Templates.<br/>
-        /// API Path: <c>/api/v2/system_job_templates/</c>
+        /// Find System Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/system_job_templates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<SystemJobTemplate> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<SystemJobTemplate> FindAsync(HttpQuery? query = null,
+                                                                              [EnumeratorCancellation]
+                                                                              CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobTemplate>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<SystemJobTemplate>(PATH, query, ct))
             {
                 foreach (var systemJobTemplate in result.Contents.Results)
                 {
                     yield return systemJobTemplate;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new SystemJobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find System Job Templates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/system_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new SystemJobTemplate[] Find(string? searchWords = null,
+                                                   string orderBy = "name",
+                                                   ushort pageSize = 20,
+                                                   uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;

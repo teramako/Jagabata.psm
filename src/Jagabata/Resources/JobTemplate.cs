@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -152,25 +153,40 @@ namespace Jagabata.Resources
         public new const string PATH = "/api/v2/job_templates/";
 
         /// <summary>
-        /// Retrieve a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="id"/>/</c>
+        /// Get a Job Template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">JobTemplate ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<JobTemplate> Get(ulong id)
+        public static new async Task<JobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<JobTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<JobTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new JobTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Job Templates.<br/>
-        /// API Path: <c>/api/v2/job_templates/</c>
+        /// Find Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplate> Find(HttpQuery? query = null)
+        public static new async IAsyncEnumerable<JobTemplate> FindAsync(HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query, ct))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -178,18 +194,34 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Job Templates for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/job_templates/</c>
+        /// Find Job Templates associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/job_templates/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>Inventory</item>
+        /// </list>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplate> FindFromOrganization(ulong organizationId,
-                                                                               HttpQuery? query = null)
+        public static async IAsyncEnumerable<JobTemplate> FindAsync(IResource resource,
+                                                                    HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/job_templates/",
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/job_templates/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, ct))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -197,24 +229,39 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Job Templates for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/job_templates/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplate> FindFromInventory(ulong inventoryId,
-                                                                            HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        public static JobTemplate[] Find(IResource resource, HttpQuery? query = null)
         {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query))
-            {
-                foreach (var jobTemplate in result.Contents.Results)
-                {
-                    yield return jobTemplate;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new JobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Job Templates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new JobTemplate[] Find(string? searchWords = null,
+                                             string orderBy = "name",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;

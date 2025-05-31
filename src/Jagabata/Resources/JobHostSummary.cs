@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -10,29 +11,57 @@ namespace Jagabata.Resources
         : ResourceBase
     {
         public const string PATH = "/api/v2/job_host_summaries/";
+
         /// <summary>
-        /// Retrieve a Job Host Summary.<br/>
-        /// API Path: <c>/api/v2/job_host_summaries/<paramref name="id"/>/</c>
+        /// Get a Job Host Summary.<br/>
+        /// <para>
+        /// Implement API: <c>/api/v2/job_host_summaries/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">JobHostSummary ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<JobHostSummary> Get(ulong id)
+        public static async Task<JobHostSummary> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<JobHostSummary>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<JobHostSummary>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Job Host Summaries for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/job_host_summaries/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobHostSummary> FindFromGroup(ulong groupId,
-                                                                           HttpQuery? query = null)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static JobHostSummary Get(ulong id)
         {
-            var path = $"{Group.PATH}{groupId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Hosts associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/job_host_summaries/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        ///     <item>Job</item>
+        /// </list>
+        /// </summary>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<JobHostSummary> FindAsync(IResource resource,
+                                                                       HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/job_host_summaries/",
+                ResourceType.Host => $"{Resources.Host.PATH}{resource.Id}/job_host_summaries/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/job_host_summaries/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query, ct))
             {
                 foreach (var jobHostSummary in result.Contents.Results)
                 {
@@ -40,43 +69,29 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Job Host Summaries for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/job_host_summaries/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobHostSummary> FindFromHost(ulong hostId,
-                                                                          HttpQuery? query = null)
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobHostSummary[] Find(IResource resource, HttpQuery? query = null)
         {
-            var path = $"{Resources.Host.PATH}{hostId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
-            {
-                foreach (var jobHostSummary in result.Contents.Results)
-                {
-                    yield return jobHostSummary;
-                }
-            }
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
-        /// <summary>
-        /// List Job Host Summaries for a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="jobId"/>/job_host_summaries/</c>
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobHostSummary> FindFromJob(ulong jobId,
-                                                                         HttpQuery? query = null)
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobHostSummary[] Find(IResource resource,
+                                            string? searchWords = null,
+                                            string orderBy = "-id",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
         {
-            var path = $"{JobTemplateJobBase.PATH}{jobId}/job_host_summaries/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobHostSummary>(path, query))
-            {
-                foreach (var jobHostSummary in result.Contents.Results)
-                {
-                    yield return jobHostSummary;
-                }
-            }
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
 
         public override ulong Id { get; } = id;
