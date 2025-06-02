@@ -41,9 +41,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "name", "created", "modified", "max_concurrent_jobs", "max_forks",
-                           "is_container_group", "credential", "policy_instance_percentage",
-                           "policy_instance_minimum", "policy_instance_list")]
+        [OrderByCompletionFromHelp(ResourceType.InstanceGroup, InstanceGroup.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

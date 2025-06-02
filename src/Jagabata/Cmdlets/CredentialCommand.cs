@@ -63,8 +63,7 @@ namespace Jagabata.Cmdlets
         public SwitchParameter Galaxy { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "credential_type", "managed", "created_by", "modified_by")]
+        [OrderByCompletionFromHelp(ResourceType.Credential, Credential.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

@@ -35,8 +35,7 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -62,8 +61,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -99,8 +97,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -140,8 +137,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -181,8 +177,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

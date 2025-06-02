@@ -29,8 +29,7 @@ namespace Jagabata.Cmdlets
     public class FindHostMetricCommand : FindCommandBase
     {
         [Parameter()]
-        [OrderByCompletion("id", "hostname", "first_automation", "last_automation", "last_deleted",
-                           "automated_counter", "deleted_counter", "deleted", "used_in_inventories")]
+        [OrderByCompletionFromHelp(ResourceType.HostMetrics, HostMetric.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

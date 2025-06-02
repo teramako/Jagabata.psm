@@ -42,9 +42,7 @@ namespace Jagabata.Cmdlets
         public WorkflowJobNodeLinkState Linked { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "extra_data", "inventory", "execution_environment",
-                           "job", "workflow_job", "unified_job_template", "success_nodes", "failure_nodes",
-                           "always_nodes", "all_parents_must_converge", "do_not_run", "identifier", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.WorkflowJobNode, WorkflowJobNode.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

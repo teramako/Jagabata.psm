@@ -33,8 +33,7 @@ namespace Jagabata.Cmdlets
         public ulong Credential { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "description", "input_field_name",
-                           "metadata", "target_credential", "source_credential")]
+        [OrderByCompletionFromHelp(ResourceType.CredentialInputSource, CredentialInputSource.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

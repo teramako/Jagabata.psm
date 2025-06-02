@@ -43,8 +43,7 @@ namespace Jagabata.Cmdlets
         public ETokenType TokenType { get; set; } = ETokenType.Both;
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "description", "user",
-                           "application", "expires", "scope")]
+        [OrderByCompletionFromHelp(ResourceType.OAuth2AccessToken, OAuth2AccessToken.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         public enum ETokenType

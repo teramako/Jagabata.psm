@@ -35,11 +35,7 @@ namespace Jagabata.Cmdlets
         public JobStatus[]? Status { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "unified_job_template",
-                           "launch_type", "status", "execution_environment", "failed", "started", "finished",
-                           "canceled_on", "elapsed", "job_explanation", "work_unit_id", "timed_out",
-                           "workflow_approval_template", "approved_or_denied_by", "schedule", "notifications",
-                           "created_by", "modified_by", "instance_group", "organization", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.WorkflowApproval, WorkflowApprovalBase.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()
