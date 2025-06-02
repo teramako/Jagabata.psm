@@ -77,8 +77,7 @@ namespace Jagabata.Cmdlets
         public SwitchParameter OnlyParnets { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "inventory", "variables",
-                           "parents", "created_by", "modified_by", "children", "hosts")]
+        [OrderByCompletionFromHelp(ResourceType.Group, Group.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

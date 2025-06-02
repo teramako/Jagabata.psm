@@ -47,7 +47,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "timestamp", "operation", "changes", "object1", "object2", "action_node")]
+        [OrderByCompletionFromHelp(ResourceType.ActivityStream, ActivityStream.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()

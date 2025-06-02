@@ -34,8 +34,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "name", "description", "client_type", "redirect_uris",
-                           "authorization_grant_type", "skip_authorization", "organization", "user")]
+        [OrderByCompletionFromHelp(ResourceType.OAuth2Application, Application.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

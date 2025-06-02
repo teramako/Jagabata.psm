@@ -35,7 +35,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "role_field", "content_type", "parents", "ancestors", "descendents", "children")]
+        [OrderByCompletionFromHelp(ResourceType.Role, Role.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -71,7 +71,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "role_field", "content_type", "parents", "ancestors", "descendents", "children")]
+        [OrderByCompletionFromHelp(ResourceType.Role, Role.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

@@ -41,9 +41,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("rrule", "id", "created", "modified", "name", "description", "extra_data", "inventory",
-                           "execution_environment", "unified_job_template", "enabled", "dtstart", "dtend", "next_run",
-                           "created_by", "modified_by", "credentials", "instance_groups", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.Schedule, Resources.Schedule.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

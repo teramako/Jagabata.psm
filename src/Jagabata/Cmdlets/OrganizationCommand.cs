@@ -40,7 +40,7 @@ namespace Jagabata.Cmdlets
         public string[]? Name { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "max_hosts", "default_environment")]
+        [OrderByCompletionFromHelp(ResourceType.Organization, Organization.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
