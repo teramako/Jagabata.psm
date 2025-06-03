@@ -17,7 +17,7 @@ namespace Jagabata.Resources
         /// </summary>
         /// <param name="adHocCommandId">AdHocCommand Job ID</param>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommandJobEvent> FindAsync(ulong adHocCommandId,
                                                                              HttpQuery? query = null,
@@ -34,16 +34,8 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find AdHocCommand Events for an Ad HocCommand
-        /// <para>
-        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId, HttpQuery? query = null)
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId, HttpQuery query)
         {
             return [.. FindAsync(adHocCommandId, query).ToBlockingEnumerable()];
         }

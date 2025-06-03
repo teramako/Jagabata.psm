@@ -2004,13 +2004,14 @@ namespace APITest
     [TestClass]
     public class TestJobEvent
     {
-        [TestMethod]
-        public async Task Get01FindFromJob()
+        private readonly HttpQuery singleQuery = new("order_by=-id&page_size=1");
+        private readonly HttpQuery orderByCounter = new("order_by=counter");
+
+        [TestMethod("[JobEvent] 01 JobEvents from Job")]
+        public void Get01FindFromJob()
         {
-            var job = await JobTemplateJob.GetAsync(40);
-            Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in JobEvent.FindAsync(job, eventQuery))
+            var job = JobTemplateJob.Find(singleQuery).Single();
+            foreach (var je in JobEvent.Find(job, orderByCounter))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"[{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2020,13 +2021,11 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
-        public async Task Get02FindFromGroup()
+        [TestMethod("[JobEvent] 02 JobEvents from Group")]
+        public void Get02FindFromGroup()
         {
-            var group = await Group.GetAsync(1);
-            Console.WriteLine($"JobEvents in ({group.Type})[{group.Id}] {group.Name}");
-            var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindAsync(group, eventQuery))
+            var group = new Resource(ResourceType.Group, 1);
+            foreach (var je in JobEvent.Find(group, orderByCounter))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2036,13 +2035,11 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
-        public async Task Get03FindFromHost()
+        [TestMethod("[JobEvent] 03 JobEvents from Host")]
+        public void Get03FindFromHost()
         {
-            var host = await Host.GetAsync(2);
-            Console.WriteLine($"JobEvents in ({host.Type})[{host.Id}] {host.Name}");
-            var eventQuery = new HttpQuery("order_by=job,counter");
-            await foreach (var je in JobEvent.FindAsync(host, eventQuery))
+            var host = new Resource(ResourceType.Host, 2);
+            foreach (var je in JobEvent.Find(host, orderByCounter))
             {
                 Assert.IsInstanceOfType<JobEvent>(je);
                 Console.WriteLine($"{je.Job} [{je.Id}][{je.Counter}] {je.EventLevel} {je.EventDisplay} {je.Task}");
@@ -2052,13 +2049,12 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
-        public async Task Get04ProjectUpdate()
+        [TestMethod("[JobEvent] 04 ProjectUpdateEvents")]
+        public void Get04ProjectUpdate()
         {
-            var job = await ProjectUpdateJob.GetAsync(76);
+            var job = ProjectUpdateJob.Find(singleQuery).Single();
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in ProjectUpdateJobEvent.FindAsync(job.Id, eventQuery))
+            foreach (var je in ProjectUpdateJobEvent.Find(job.Id, orderByCounter))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<ProjectUpdateJobEvent>(je);
@@ -2069,13 +2065,12 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
-        public async Task Get05InventoryUpdate()
+        [TestMethod("[JobEvent] 05 InventoryUpdateEvents")]
+        public void Get05InventoryUpdate()
         {
-            var job = await InventoryUpdateJob.GetAsync(43);
+            var job = InventoryUpdateJob.Find(singleQuery).Single();
             Console.WriteLine($"JobEvents in ({job.Type})[{job.Id}] {job.Name}");
-            var eventQuery = new HttpQuery("order_by=counter");
-            await foreach (var je in InventoryUpdateJobEvent.FindAsync(job.Id, eventQuery))
+            foreach (var je in InventoryUpdateJobEvent.Find(job.Id, orderByCounter))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<InventoryUpdateJobEvent>(je);
@@ -2086,12 +2081,11 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
+        [TestMethod("[JobEvent] 06 SystemJobEvents")]
         public void Get06SystemJob()
         {
-            var job = new Resource(ResourceType.SystemJob, 80);
-            var eventQuery = new HttpQuery("order_by=counter");
-            foreach (var je in SystemJobEvent.Find(job.Id, eventQuery))
+            var job = SystemJob.Find(singleQuery).Single();
+            foreach (var je in SystemJobEvent.Find(job.Id, orderByCounter))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<SystemJobEvent>(je);
@@ -2102,12 +2096,11 @@ namespace APITest
                 }
             }
         }
-        [TestMethod]
-        public async Task Get07AdHocCommandEvent()
+        [TestMethod("[JobEvent] 07 AdHocCommandJobEvent")]
+        public void Get07AdHocCommandEvent()
         {
-            var cmd = await AdHocCommand.GetAsync(69);
-            Console.WriteLine($"AdHocCommand in ({cmd.Type})[{cmd.Id}] {cmd.Name} {cmd.Status}");
-            await foreach (var je in AdHocCommandJobEvent.FindAsync(cmd.Id))
+            var cmd = AdHocCommand.Find(singleQuery).Single();
+            foreach (var je in AdHocCommandJobEvent.Find(cmd.Id, orderByCounter))
             {
                 Assert.IsInstanceOfType<IJobEventBase>(je);
                 Assert.IsInstanceOfType<AdHocCommandJobEvent>(je);
