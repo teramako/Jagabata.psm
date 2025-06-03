@@ -2186,6 +2186,8 @@ namespace APITest
     [TestClass]
     public class TestAdHocCommand
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(AdHocCommandBase res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
@@ -2193,51 +2195,41 @@ namespace APITest
             Console.WriteLine($"  {res.ModuleName} {res.ModuleArgs}");
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[AdHocCommand] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var res = await AdHocCommand.GetAsync(69);
-            Assert.IsInstanceOfType<AdHocCommand>(res);
-            Assert.IsInstanceOfType<AdHocCommand.Detail>(res);
-            DumpResource(res);
+            var adhocCommands = AdHocCommand.Find(singleQuery);
+            Assert.AreEqual(1, adhocCommands.Length);
+            Assert.IsInstanceOfType<AdHocCommand>(adhocCommands[0]);
+            var detail = AdHocCommand.Get(adhocCommands[0].Id);
+            Assert.IsInstanceOfType<AdHocCommand.Detail>(detail);
+            DumpResource(detail);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[AdHocCommand] 02 List from Inventoroy")]
+        public void Get02ListFromInventory()
         {
-            var query = new HttpQuery("order_by=-id&page_size=2");
-            await foreach (var res in AdHocCommand.FindAsync(query))
-            {
-                DumpResource(res);
-            }
-        }
-        [TestMethod]
-        public async Task Get03ListFromInventory()
-        {
-            var inventory = await Inventory.GetAsync(1);
-            Console.WriteLine($"AdHocCommands in ({inventory.Type})[{inventory.Id}] {inventory.Name}");
-            await foreach (var cmd in AdHocCommand.FindAsync(inventory))
+            var inventory = Inventory.Find(singleQuery).Single();
+            foreach (var cmd in AdHocCommand.Find(inventory))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromFroup()
+        [TestMethod("[AdHocCommand] 03 List from Group")]
+        public void Get03ListFromFroup()
         {
-            var group = await Group.GetAsync(5);
-            Console.WriteLine($"AdHocCommands in ({group.Type})[{group.Id}] {group.Name}");
-            await foreach (var cmd in AdHocCommand.FindAsync(group))
+            var group = Group.Find(singleQuery).Single();
+            foreach (var cmd in AdHocCommand.Find(group))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");
             }
         }
-        [TestMethod]
-        public async Task Get05ListFromHost()
+        [TestMethod("[AdHocCommand] 04 List from Host")]
+        public void Get04ListFromHost()
         {
-            var host = await Host.GetAsync(3);
-            Console.WriteLine($"AdHocCommands in ({host.Type})[{host.Id}] {host.Name}");
-            await foreach (var cmd in AdHocCommand.FindAsync(host))
+            var host = Host.Find(singleQuery).Single();
+            foreach (var cmd in AdHocCommand.Find(host))
             {
                 Assert.IsInstanceOfType<AdHocCommand>(cmd);
                 Console.WriteLine($"[{cmd.Id}] {cmd.Name}[{cmd.Status}] {cmd.Finished}");

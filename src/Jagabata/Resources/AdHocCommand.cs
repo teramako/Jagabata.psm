@@ -121,8 +121,8 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
         /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
+        /// <param name="id">AdHocCommand ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
@@ -130,14 +130,7 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        /// <summary>
-        /// Get an AdhocCommand job
-        /// <para>
-        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="id"/>/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
         public static new Detail Get(ulong id)
         {
             var task = GetAsync(id);
@@ -152,7 +145,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static new async IAsyncEnumerable<AdHocCommand> FindAsync(HttpQuery? query = null,
                                                                          [EnumeratorCancellation]
@@ -172,15 +165,18 @@ namespace Jagabata.Resources
         /// <para>
         /// Implement API: <c>/api/v2/{Type}/{Id}/ad_hoc_commands/</c>
         /// </para>
+        /// </summary>
+        /// <remarks>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Inventory</item>
         ///     <item>Group</item>
         ///     <item>Host</item>
         /// </list>
-        /// </summary>
-        /// <param name="resource"></param>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<AdHocCommand> FindAsync(IResource resource,
                                                                      HttpQuery? query = null,
@@ -203,13 +199,7 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find AdHocCommand jobs
-        /// <para>
-        /// Implement API: <c>/api/v2/ad_hoc_commands/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query"></param>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
         public static new AdHocCommand[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
@@ -256,14 +246,11 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/{Type}/{Id}/ad_hoc_commands/</c>
         /// </para>
         /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
         public static AdHocCommand[] Find(IResource resource,
                                           string? searchWords = null,
-                                          string orderBy = "-timestamp",
+                                          string orderBy = "-id",
                                           ushort pageSize = 20,
                                           uint startPage = 1)
         {
