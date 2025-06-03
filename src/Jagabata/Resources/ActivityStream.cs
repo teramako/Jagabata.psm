@@ -36,8 +36,8 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/activity_stream/<paramref name="id"/>/</c>
         /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
+        /// <param name="id">ActivityStream ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async Task<ActivityStream> GetAsync(ulong id, CancellationToken ct = default)
         {
@@ -45,19 +45,10 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        /// <summary>
-        /// Get an ActivityStream
-        /// <para>
-        /// Implement API: <c>/api/v2/activity_stream/<paramref name="id"/>/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
         public static ActivityStream Get(ulong id)
         {
-            var task = GetAsync(id);
-            task.Wait();
-            return task.Result;
+            return GetAsync(id).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -67,7 +58,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ActivityStream> FindAsync(HttpQuery? query = null,
                                                                        [EnumeratorCancellation]
@@ -147,13 +138,7 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find ActivityStream
-        /// <para>
-        /// Implement API: <c>/api/v2/activity_stream/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query"></param>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
         public static ActivityStream[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
@@ -181,14 +166,7 @@ namespace Jagabata.Resources
                                           .Build());
         }
 
-        /// <summary>
-        /// Find ActivityStream associated with <paramref name="resource"/>
-        /// <para>
-        /// Implement API: <c>/api/v2/{Type}/{Id}/activity_stream/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="query"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
         public static ActivityStream[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];

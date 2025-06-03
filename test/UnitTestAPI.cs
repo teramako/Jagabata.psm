@@ -223,230 +223,219 @@ namespace APITest
     [TestClass]
     public class TestActivityStream
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(ActivityStream a)
         {
             Console.WriteLine($"{a.Id} {a.Type} {a.Timestamp}");
             Console.WriteLine($"Operation: {a.Operation}");
             Console.WriteLine($"Object   : 1:{a.Object1}, 2:{a.Object2}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[ActivityStream] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var activity = await ActivityStream.GetAsync(1);
-            Assert.IsNotNull(activity);
+            var activites = ActivityStream.Find(singleQuery);
+            Assert.AreEqual(1, activites.Length);
+            var activity = ActivityStream.Get(activites[0].Id);
+            Assert.IsInstanceOfType<ActivityStream>(activity);
             Assert.AreEqual(ResourceType.ActivityStream, activity.Type);
             Assert.IsInstanceOfType<ActivityStreamOperation>(activity.Operation);
             DumpResource(activity);
             Util.DumpSummary(activity.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[ActivityStream] 02 List from Application")]
+        public void Get02ListFromApplication()
         {
-            var expectCount = 2;
-            var c = 0;
-            var query = new HttpQuery($"page_size={expectCount}");
-            await foreach (var activity in ActivityStream.FindAsync(query))
-            {
-                c++;
-                Assert.IsInstanceOfType<ActivityStream>(activity);
-                DumpResource(activity);
-                Util.DumpSummary(activity.SummaryFields);
-            }
-            Assert.AreEqual(expectCount, c);
-        }
-        [TestMethod]
-        public async Task Get03ListFromApplication()
-        {
-            var app = await Application.GetAsync(1);
+            var app = Application.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{app.Id}][{app.Type}] {app.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(app))
+            foreach (var activity in ActivityStream.Find(app))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromToken()
+        [TestMethod("[ActivityStream] 03 List from Token")]
+        public void Get03ListFromToken()
         {
-            var token = await OAuth2AccessToken.GetAsync(1);
+            var token = OAuth2AccessToken.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{token.Id}][{token.Type}] {token.Description})");
-            await foreach (var activity in ActivityStream.FindAsync(token))
+            foreach (var activity in ActivityStream.Find(token))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get05ListFromOrganization()
+        [TestMethod("[ActivityStream] 04 List from Organization")]
+        public void Get04ListFromOrganization()
         {
-            var org = await Organization.GetAsync(1);
+            var org = Organization.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(org))
+            foreach (var activity in ActivityStream.Find(org))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get06ListFromUser()
+        [TestMethod("[ActivityStream] 05 List from User")]
+        public void Get05ListFromUser()
         {
-            var user = await User.GetAsync(1);
+            var user = User.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{user.Id}][{user.Type}] {user.Username})");
-            await foreach (var activity in ActivityStream.FindAsync(user))
+            foreach (var activity in ActivityStream.Find(user))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get07ListFromProject()
+        [TestMethod("[ActivityStream] 06 List from Project")]
+        public void Get06ListFromProject()
         {
-            var proj = await Project.GetAsync(8);
+            var proj = Project.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{proj.Id}][{proj.Type}] {proj.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(proj))
+            foreach (var activity in ActivityStream.Find(proj))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get08ListFromTeam()
+        [TestMethod("[ActivityStream] 07 List from Team")]
+        public void Get07ListFromTeam()
         {
-            var team = await Team.GetAsync(1);
+            var team = Team.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{team.Id}][{team.Type}] {team.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(team))
+            foreach (var activity in ActivityStream.Find(team))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get09ListFromCredential()
+        [TestMethod("[ActivityStream] 08 List from Credential")]
+        public void Get08ListFromCredential()
         {
-            var cred = await Credential.GetAsync(1);
+            var cred = Credential.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(cred))
+            foreach (var activity in ActivityStream.Find(cred))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get10ListFromCredentialType()
+        [TestMethod("[ActivityStream] 09 List from CredentialType")]
+        public void Get09ListFromCredentialType()
         {
-            var credType = await CredentialType.GetAsync(29);
+            var credType = CredentialType.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{credType.Id}][{credType.Type}] {credType.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(credType))
+            foreach (var activity in ActivityStream.Find(credType))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get11ListFromInventory()
+        [TestMethod("[ActivityStream] 10 List from Inventory")]
+        public void Get10ListFromInventory()
         {
-            var inventory = await Inventory.GetAsync(1);
+            var inventory = Inventory.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{inventory.Id}][{inventory.Type}] {inventory.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(inventory))
+            foreach (var activity in ActivityStream.Find(inventory))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get12ListFromInventorySource()
+        [TestMethod("[ActivityStream] 11 List from InventorySource")]
+        public void Get11ListFromInventorySource()
         {
-            var inventorySource = await InventorySource.GetAsync(11);
+            var inventorySource = InventorySource.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(inventorySource))
+            foreach (var activity in ActivityStream.Find(inventorySource))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get13ListFromGroup()
+        [TestMethod("[ActivityStream] 12 List from Group")]
+        public void Get12ListFromGroup()
         {
-            var group = await Group.GetAsync(1);
+            var group = Group.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{group.Id}][{group.Type}] {group.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(group))
+            foreach (var activity in ActivityStream.Find(group))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get14ListFromHost()
+        [TestMethod("[ActivityStream] 13 List from Host")]
+        public void Get13ListFromHost()
         {
-            var host = await Host.GetAsync(2);
+            var host = Host.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{host.Id}][{host.Type}] {host.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(host))
+            foreach (var activity in ActivityStream.Find(host))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get15ListFromJobTemplate()
+        [TestMethod("[ActivityStream] 14 List from JobTemplate")]
+        public void Get14ListFromJobTemplate()
         {
-            var jt = await JobTemplate.GetAsync(9);
+            var jt = JobTemplate.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{jt.Id}][{jt.Type}] {jt.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(jt))
+            foreach (var activity in ActivityStream.Find(jt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get16ListFromJobTemplateJob()
+        [TestMethod("[ActivityStream] 15 List from JobTemplateJob")]
+        public void Get15ListFromJobTemplateJob()
         {
-            var job = await JobTemplateJob.GetAsync(40);
+            var job = JobTemplateJob.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{job.Id}][{job.Type}] {job.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(job))
+            foreach (var activity in ActivityStream.Find(job))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get17ListFromAdHoCommand()
+        [TestMethod("[ActivityStream] 16 List from AdHocCommand")]
+        public void Get16ListFromAdHoCommand()
         {
-            var cmd = await AdHocCommand.GetAsync(69);
+            var cmd = AdHocCommand.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{cmd.Id}][{cmd.Type}] {cmd.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(cmd))
+            foreach (var activity in ActivityStream.Find(cmd))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get18ListFromWorkflowJobTemplate()
+        [TestMethod("[ActivityStream] 17 List from WorkflowJobTemplate")]
+        public void Get17ListFromWorkflowJobTemplate()
         {
-            var wjt = await WorkflowJobTemplate.GetAsync(13);
+            var wjt = WorkflowJobTemplate.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(wjt))
+            foreach (var activity in ActivityStream.Find(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get19ListFromWorkflowJob()
+        [TestMethod("[ActivityStream] 18 List from WorkflowJob")]
+        public void Get18ListFromWorkflowJob()
         {
-            var wjt = await WorkflowJob.GetAsync(51);
+            var wjt = WorkflowJob.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{wjt.Id}][{wjt.Type}] {wjt.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(wjt))
+            foreach (var activity in ActivityStream.Find(wjt))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
             }
         }
-        [TestMethod]
-        public async Task Get20ListFromExecutionEnvironment()
+        [TestMethod("[ActivityStream] 19 List from ExecutionEnvironment")]
+        public void Get19ListFromExecutionEnvironment()
         {
-            var ee = await ExecutionEnvironment.GetAsync(1);
+            var ee = ExecutionEnvironment.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{ee.Id}][{ee.Type}] {ee.Name})");
-            await foreach (var activity in ActivityStream.FindAsync(ee))
+            foreach (var activity in ActivityStream.Find(ee))
             {
                 Assert.IsInstanceOfType<ActivityStream>(activity);
                 Console.WriteLine($"[{activity.Timestamp}] {activity.Operation} [{activity.Object1}, {activity.Object2}]");
