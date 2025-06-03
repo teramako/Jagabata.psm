@@ -41,8 +41,8 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/credentials/<paramref name="id"/>/</c>
         /// </apra>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
+        /// <param name="id">Credential ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async Task<Credential> GetAsync(ulong id, CancellationToken ct = default)
         {
@@ -50,14 +50,7 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        /// <summary>
-        /// Get a Credential
-        /// <para>
-        /// Implement API: <c>/api/v2/credentials/<paramref name="id"/>/</c>
-        /// </apra>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
         public static Credential Get(ulong id)
         {
             return GetAsync(id).GetAwaiter().GetResult();
@@ -70,7 +63,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindAsync(HttpQuery? query = null,
                                                                    [EnumeratorCancellation]
@@ -85,6 +78,32 @@ namespace Jagabata.Resources
             }
         }
 
+        /// <summary>
+        /// Find Credentials associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        ///     <item>Team</item>
+        ///     <item>CredentialType</item>
+        ///     <item>InventorySource</item>
+        ///     <item>InventoryUpdate</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Job</item>
+        ///     <item>Schedule</item>
+        ///     <item>WorkflowJobTemplateNode</item>
+        ///     <item>WorkflowJobNode</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindAsync(IResource resource,
                                                                    HttpQuery? query = null,
                                                                    [EnumeratorCancellation]
@@ -119,7 +138,7 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/galaxy_credentials/</c>
         /// <para>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <param name="organizationId">Organization ID</param>
         /// <param name="query"></param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Credential> FindGalaxyAsync(ulong organizationId,
@@ -133,6 +152,67 @@ namespace Jagabata.Resources
                     yield return credential;
                 }
             }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Credentials by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Credential[] Find(string? searchWords = null,
+                                        string orderBy = "name",
+                                        ushort pageSize = 20,
+                                        uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Credentials associated with <paramref name="resource"/> by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(IResource resource,
+                                        string? searchWords = null,
+                                        string orderBy = "name",
+                                        ushort pageSize = 20,
+                                        uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        /// <inheritdoc cref="FindGalaxyAsync(ulong, HttpQuery?)"/>
+        public static Credential[] FindGalaxy(ulong organizationId, HttpQuery? query = null)
+        {
+            return [.. FindGalaxyAsync(organizationId, query).ToBlockingEnumerable()];
         }
 
         public override ulong Id { get; } = id;

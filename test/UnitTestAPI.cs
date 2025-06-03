@@ -1205,6 +1205,8 @@ namespace APITest
     [TestClass]
     public class TestCredential
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(Credential cred)
         {
             Console.WriteLine($"Id            : {cred.Id}");
@@ -1222,142 +1224,143 @@ namespace APITest
             Util.DumpSummary(cred.SummaryFields);
         }
 
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Credential] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var cred = await Credential.GetAsync(2);
+            var creds = Credential.Find(singleQuery);
+            Assert.AreEqual(1, creds.Length);
+            Assert.IsInstanceOfType<Credential>(creds[0]);
+
+            var cred = Credential.Get(creds[0].Id);
             Assert.IsInstanceOfType<Credential>(cred);
             DumpResource(cred);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Credential] 02 List from Organization")]
+        public void Get02ListFromOrganization()
         {
-            var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var cred in Credential.FindAsync(query))
-            {
-                DumpResource(cred);
-            }
-        }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
-        {
-            var res = new Resource(ResourceType.Organization, 2);
-            await foreach (var cred in Credential.FindAsync(res))
+            var orgId = Credential.Find(new("organization__gt=0&page_size=1"))
+                                  .Single()
+                                  .Organization ?? 0;
+            Assert.AreNotEqual<ulong>(0, orgId);
+            var res = new Resource(ResourceType.Organization, orgId);
+            foreach (var cred in Credential.Find(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListGalaxyFromOrganization()
+        [TestMethod("[Credential] 03 List GalaxyCredentials")]
+        public void Get03ListGalaxyFromOrganization()
         {
-            await foreach (var cred in Credential.FindGalaxyAsync(1))
+            ulong orgId = 1;
+            foreach (var cred in Credential.FindGalaxy(orgId))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get05ListFromUser()
+        [TestMethod("[Credential] 04 List from User")]
+        public void Get04ListFromUser()
         {
             var res = new Resource(ResourceType.User, 1);
-            await foreach (var cred in Credential.FindAsync(res))
+            foreach (var cred in Credential.Find(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get06ListFromTeam()
+        [TestMethod("[Credential] 05 List from Team")]
+        public void Get05ListFromTeam()
         {
             var res = new Resource(ResourceType.Team, 1);
-            await foreach (var cred in Credential.FindAsync(res))
+            foreach (var cred in Credential.Find(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get07ListFromCredentialType()
+        [TestMethod("[Credential] 06 List from CredentialType")]
+        public void Get06ListFromCredentialType()
         {
             var res = new Resource(ResourceType.CredentialType, 1);
-            await foreach (var cred in Credential.FindAsync(res))
+            foreach (var cred in Credential.Find(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get08ListFromInventorySource()
+        [TestMethod("[Credential] 07 List from InventorySource")]
+        public void Get07ListFromInventorySource()
         {
-            var res = new Resource(ResourceType.InventorySource, 17);
-            await foreach (var cred in Credential.FindAsync(res))
+            var inventorySource = InventorySource.Find(new("credentials__gt=0&page_size=1")).Single();
+            foreach (var cred in Credential.Find(inventorySource))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get09ListFromInventoryUpdate()
+        [TestMethod("[Credential] 08 List from InventoryUpdate")]
+        public void Get08ListFromInventoryUpdate()
         {
-            var res = new Resource(ResourceType.InventoryUpdate, 526);
-            await foreach (var cred in Credential.FindAsync(res))
+            var inventoryUpdate = InventoryUpdateJob.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(inventoryUpdate))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get10ListFromJobTemplate()
+        [TestMethod("[Credential] 09 List from JobTemplate")]
+        public void Get09ListFromJobTemplate()
         {
-            var res = new Resource(ResourceType.JobTemplate, 7);
-            await foreach (var cred in Credential.FindAsync(res))
+            var jobTemplate = JobTemplate.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(jobTemplate))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get11ListFromJob()
+        [TestMethod("[Credential] 10 List from Job")]
+        public void Get11ListFromJob()
         {
-            var res = new Resource(ResourceType.Job, 565);
-            await foreach (var cred in Credential.FindAsync(res))
+            var job = JobTemplateJob.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(job))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get12ListFromSchedule()
+        [TestMethod("[Credential] 11 List from Schedule")]
+        public void Get12ListFromSchedule()
         {
-            var res = new Resource(ResourceType.Schedule, 6);
-            await foreach (var cred in Credential.FindAsync(res))
+            var schedule = Schedule.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(schedule))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get13ListFromWorkflowJobTemplateNode()
+        [TestMethod("[Credential] 12 List from WorkflowJobTemplateNode")]
+        public void Get12ListFromWorkflowJobTemplateNode()
         {
-            var res = new Resource(ResourceType.WorkflowJobTemplateNode, 1);
-            await foreach (var cred in Credential.FindAsync(res))
+            var wjtNode = WorkflowJobTemplateNode.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(wjtNode))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get14ListFromWorkflowJobNode()
+        [TestMethod("[Credential] 13 List from WorkflowJobNode")]
+        public void Get13ListFromWorkflowJobNode()
         {
-            var res = new Resource(ResourceType.WorkflowJobNode, 131);
-            await foreach (var cred in Credential.FindAsync(res))
+            var res = WorkflowJobNode.Find(new("credentials__gt=0&page_size=1&order_by=-id")).Single();
+            foreach (var cred in Credential.Find(res))
             {
                 Assert.IsInstanceOfType<Credential>(cred);
                 Console.WriteLine($"[{cred.Id}][{cred.CredentialType}] {cred.Name}");
             }
         }
     }
+
     [TestClass]
     public class TestCredentialType
     {
