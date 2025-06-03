@@ -446,10 +446,15 @@ namespace APITest
     [TestClass]
     public class TestApplication
     {
-        [TestMethod]
-        public async Task Get01Single()
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
+        [TestMethod("[Application] 01 Simple Find and Get")]
+        public void Get01Single()
         {
-            var app = await Application.GetAsync(1);
+            var apps = Application.Find(singleQuery);
+            Assert.AreEqual(1, apps.Length);
+            Assert.IsInstanceOfType<Application>(apps[0]);
+            var app = Application.Get(apps[0].Id);
             Assert.IsInstanceOfType<Application>(app);
             Console.WriteLine($"Id           : {app.Id}");
             Console.WriteLine($"Name         : {app.Name}");
@@ -466,44 +471,29 @@ namespace APITest
 
             Util.DumpSummary(app.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Application] 02 List from Organization")]
+        public void Get02ListFromOrganization()
         {
-            var expectCount = 2;
-            var c = 0;
-            var query = new HttpQuery($"page_size={expectCount}");
-
-            await foreach (var app in Application.FindAsync(query))
-            {
-                c++;
-                Assert.IsInstanceOfType<Application>(app);
-                Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
-
-                Util.DumpSummary(app.SummaryFields);
-            }
-            Assert.AreEqual(expectCount, c);
-        }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
-        {
-            var resource = new Resource(ResourceType.Organization, 2);
-            await foreach (Application app in Application.FindAsync(resource))
+            var orgId = Application.Find(new HttpQuery("organization__gt=0&order_by=-id&page_size=1"))
+                                   .Single()
+                                   .Organization;
+            var resource = new Resource(ResourceType.Organization, orgId);
+            foreach (Application app in Application.Find(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromUser()
+        [TestMethod("[Application] 03 List from User")]
+        public void Get03ListFromUser()
         {
-            var resource = new Resource(ResourceType.User, 2);
-            await foreach (var app in Application.FindAsync(resource))
+            var resource = new Resource(ResourceType.User, 1);
+            foreach (var app in Application.Find(resource))
             {
                 Assert.IsInstanceOfType<Application>(app);
                 Console.WriteLine($"{app.Id,5:d}: {app.Name} {app.Description}");
             }
         }
-
     }
 
     [TestClass]

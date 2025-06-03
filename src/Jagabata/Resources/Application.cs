@@ -68,13 +68,19 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/applications/<paramref name="id"/>/</c>
         /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
+        /// <param name="id">Application ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async Task<Application> GetAsync(ulong id, CancellationToken ct = default)
         {
             var apiResult = await RestAPI.GetAsync<Application>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
+        }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Application Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -84,7 +90,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Application> FindAsync(HttpQuery? query = null,
                                                                     [EnumeratorCancellation]
@@ -104,14 +110,17 @@ namespace Jagabata.Resources
         /// <para>
         /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
         /// </para>
+        /// </summary>
+        /// <remarks>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Organization</item>
         ///     <item>User</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Application> FindAsync(IResource resource,
                                                                     HttpQuery? query = null,
@@ -133,13 +142,7 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find Applications
-        /// <para>
-        /// Implement API: <c>/api/v2/applications/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query"></param>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
         public static Application[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
@@ -167,19 +170,7 @@ namespace Jagabata.Resources
                                           .Build());
         }
 
-        /// <summary>
-        /// Find Applications associated with <paramref name="resource"/>
-        /// <para>
-        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
-        /// </para>
-        /// Available types of <paramref name="resource"/>:
-        /// <list type="bullet">
-        ///     <item>Organization</item>
-        ///     <item>User</item>
-        /// </list>
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="query"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
         public static Application[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
@@ -191,11 +182,11 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
         /// </para>
         /// </summary>
-        /// <param name="resource"></param>
         /// <param name="searchWords"></param>
         /// <param name="orderBy"></param>
         /// <param name="pageSize"></param>
         /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
         public static Application[] Find(IResource resource,
                                          string? searchWords = null,
                                          string orderBy = "name",
