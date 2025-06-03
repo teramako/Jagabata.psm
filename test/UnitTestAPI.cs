@@ -2837,6 +2837,8 @@ namespace APITest
     [TestClass]
     public class TestCredentialInputSource
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(CredentialInputSource res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Description}");
@@ -2844,36 +2846,29 @@ namespace APITest
             Console.WriteLine($"  SourceCredential: {res.SourceCredential}");
             Console.WriteLine($"  TargetCredential: {res.TargetCredential}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[CredentialInputSource] 01 Simple Find and Get")]
+        public void Get01Single()
         {
-            var res = await CredentialInputSource.GetAsync(1);
+            var inputSources = CredentialInputSource.Find(singleQuery);
+            Assert.AreNotEqual(1, inputSources.Length);
+            Assert.IsInstanceOfType<CredentialInputSource>(inputSources[0]);
+
+            var res = CredentialInputSource.Get(inputSources[0].Id);
             Assert.IsInstanceOfType<CredentialInputSource>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[CredentialInputSource] 02 List from Credential")]
+        public void Get03ListFromCredential()
         {
-            var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in CredentialInputSource.FindAsync(query))
-            {
-                Assert.IsInstanceOfType<CredentialInputSource>(res);
-                DumpResource(res);
-                Util.DumpSummary(res.SummaryFields);
-            }
-        }
-        [TestMethod]
-        public async Task Get03ListFromCredential()
-        {
-            var cred = await Credential.GetAsync(7);
-            Console.WriteLine($"Credential for ([{cred.Id}][{cred.Type}] {cred.Name})");
-            await foreach (var cis in CredentialInputSource.FindAsync(cred.Id))
+            var targetCredential = CredentialInputSource.Find(singleQuery)
+                                                        .Single().TargetCredential;
+            var cred = new Resource(ResourceType.Credential, targetCredential);
+            foreach (var cis in CredentialInputSource.Find(cred.Id))
             {
                 Assert.IsInstanceOfType<CredentialInputSource>(cis);
                 Console.WriteLine($"[{cis.Id}] Source:{cis.SourceCredential} Target:{cis.TargetCredential}");
             }
-
         }
     }
 
