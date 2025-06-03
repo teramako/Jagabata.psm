@@ -1452,9 +1452,12 @@ namespace APITest
             }
         }
     }
+
     [TestClass]
     public class TestConstructedInventory
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(ConstructedInventory inventory)
         {
             Console.WriteLine($"Id          : {inventory.Id}");
@@ -1468,24 +1471,20 @@ namespace APITest
             Console.WriteLine($"Sourcevars  : {inventory.SourceVars}");
             Util.DumpSummary(inventory.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[ConstructedInventory] 01 Simple Find And Get")]
+        public void Get01FindAndGet()
         {
-            var inventory = await ConstructedInventory.GetAsync(4);
+            var inventories = ConstructedInventory.Find(singleQuery);
+            Assert.AreEqual(1, inventories.Length);
+            Assert.IsInstanceOfType<ConstructedInventory>(inventories[0]);
+
+            var inventory = ConstructedInventory.Get(inventories[0].Id);
             Assert.IsInstanceOfType<ConstructedInventory>(inventory);
             Assert.AreEqual("constructed", inventory.Kind);
             DumpResource(inventory);
         }
-        [TestMethod]
-        public async Task Get02List()
-        {
-            await foreach (var inventory in ConstructedInventory.FindAsync())
-            {
-                Assert.AreEqual("constructed", inventory.Kind);
-                DumpResource(inventory);
-            }
-        }
     }
+
     [TestClass]
     public class TestInventorySource
     {

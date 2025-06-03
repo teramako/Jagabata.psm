@@ -20,8 +20,8 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/constructed_inventories/<paramref name="id"/>/</c>
         /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
+        /// <param name="id">Inventory ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async Task<ConstructedInventory> GetAsync(ulong id, CancellationToken ct = default)
         {
@@ -29,19 +29,10 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        /// <summary>
-        /// Get a Constructed Inventory
-        /// <para>
-        /// Implement API: <c>/api/v2/constructed_inventories/<paramref name="id"/>/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
         public static ConstructedInventory Get(ulong id)
         {
-            var task = GetAsync(id);
-            task.Wait();
-            return task.Result;
+            return GetAsync(id).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -51,7 +42,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<ConstructedInventory> FindAsync(HttpQuery? query = null,
                                                                              [EnumeratorCancellation]
@@ -66,14 +57,7 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find Constructed Inventories
-        /// <para>
-        /// Implement API: <c>/api/v2/constructed_inventories/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
         public static ConstructedInventory[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
