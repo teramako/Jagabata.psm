@@ -1382,21 +1382,22 @@ namespace APITest
             Util.DumpObject(ct.Injectors);
             Util.DumpSummary(ct.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[CredentialType] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var ct = await CredentialType.GetAsync(1);
+            var credentialTypes = CredentialType.Find(new("order_by=id&page_size=1"));
+            Assert.AreEqual(1, credentialTypes.Length);
+            Assert.IsInstanceOfType<CredentialType>(credentialTypes[0]);
+
+            var ct = CredentialType.Get(credentialTypes[0].Id);
             Assert.IsInstanceOfType<CredentialType>(ct);
             DumpResource(ct);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[CredentialType] 02 Search")]
+        public void Get02Search()
         {
-            var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var ct in CredentialType.FindAsync(query))
-            {
-                DumpResource(ct);
-            }
+            var credentialTypes = CredentialType.Find("machine");
+            Assert.AreNotEqual(0, credentialTypes.Length);
         }
     }
 

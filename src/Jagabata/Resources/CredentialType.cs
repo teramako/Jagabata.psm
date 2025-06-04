@@ -86,22 +86,15 @@ namespace Jagabata.Resources
         /// Implement API: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
         /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <param name="id">CredentialType ID</param>
+        /// <param name="ct">Cancellation token</param>
         public static async Task<CredentialType> GetAsync(ulong id, CancellationToken ct = default)
         {
             var apiResult = await RestAPI.GetAsync<CredentialType>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
 
-        /// <summary>
-        /// Get a Credential Type
-        /// <para>
-        /// Implement API: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="id"></param>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
         public static CredentialType Get(ulong id)
         {
             return GetAsync(id).GetAwaiter().GetResult();
@@ -114,8 +107,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <param name="ct">Cancellation token</param>
         public static async IAsyncEnumerable<CredentialType> FindAsync(HttpQuery? query = null,
                                                                        [EnumeratorCancellation]
                                                                        CancellationToken ct = default)
@@ -129,14 +121,7 @@ namespace Jagabata.Resources
             }
         }
 
-        /// <summary>
-        /// Find CredentialTypes
-        /// <para>
-        /// Implement API: <c>/api/v2/credential_types/</c>
-        /// </para>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
         public static CredentialType[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
