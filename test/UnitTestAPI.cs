@@ -2876,37 +2876,32 @@ namespace APITest
     [TestClass]
     public class TestExecutionEnvironment
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(ExecutionEnvironment res)
         {
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"Image   : {res.Image}");
             Console.WriteLine($"Managed : {res.Managed}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[ExecutionEnvironment] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var res = await ExecutionEnvironment.GetAsync(1);
-            Assert.IsInstanceOfType<ExecutionEnvironment>(res);
-            DumpResource(res);
-            Util.DumpSummary(res.SummaryFields);
+            var envs = ExecutionEnvironment.Find(singleQuery);
+            Assert.AreEqual(1, envs.Length);
+            Assert.IsInstanceOfType<ExecutionEnvironment>(envs[0]);
+
+            var env = ExecutionEnvironment.Get(envs[0].Id);
+            Assert.IsInstanceOfType<ExecutionEnvironment>(env);
+            DumpResource(env);
+            Util.DumpSummary(env.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[ExecutionEnvironment] 02 List from Organization")]
+        public void Get02ListFromOrganization()
         {
-            var query = new HttpQuery("page_size=10&order_by=id");
-            await foreach (var res in ExecutionEnvironment.FindAsync(query))
-            {
-                Assert.IsInstanceOfType<ExecutionEnvironment>(res);
-                DumpResource(res);
-                Util.DumpSummary(res.SummaryFields);
-            }
-        }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
-        {
-            var org = await Organization.GetAsync(2);
+            var org = Organization.Find(singleQuery).Single();
             Console.WriteLine($"ActivityStream for ([{org.Id}][{org.Type}] {org.Name})");
-            await foreach (var exeEnv in ExecutionEnvironment.FindAsync(org.Id))
+            foreach (var exeEnv in ExecutionEnvironment.Find(org.Id))
             {
                 Assert.IsInstanceOfType<ExecutionEnvironment>(exeEnv);
                 Console.WriteLine($"[{exeEnv.Id}] {exeEnv.Name} {exeEnv.Image}");
