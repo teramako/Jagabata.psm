@@ -1709,6 +1709,8 @@ namespace APITest
     [TestClass]
     public class TestHost
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(Host host)
         {
             Console.WriteLine($"Id          : {host.Id}");
@@ -1723,61 +1725,56 @@ namespace APITest
             Console.WriteLine($"Variables   : {host.Variables}");
             Util.DumpSummary(host.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Host] 01 Simple Find and Get")]
+        public void Get01FindAndGet()
         {
-            var host = await Host.GetAsync(1);
+            var hosts = Host.Find(singleQuery);
+            Assert.AreEqual(1, hosts.Length);
+            Assert.IsInstanceOfType<Host>(hosts[0]);
+
+            var host = Host.Get(hosts[0].Id);
             Assert.IsInstanceOfType<Host>(host);
             DumpResource(host);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Host] 02 List from Inventory")]
+        public void Get02ListFromInventory()
         {
-            var query = new HttpQuery("page_size=20");
-            await foreach (var host in Host.FindAsync(query))
-            {
-                DumpResource(host);
-            }
-        }
-        [TestMethod]
-        public async Task Get03ListFromInventory()
-        {
-            var inventory = await Inventory.GetAsync(2);
+            var inventory = Inventory.Find(singleQuery).Single();
             Console.WriteLine($"Hosts in [{inventory.Type}][{inventory.Id}] {inventory.Name}");
-            await foreach (var host in Host.FindAsync(inventory))
+            foreach (var host in Host.Find(inventory))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromInventorySource()
+        [TestMethod("[Host] 03 List from InventorySource")]
+        public void Get03ListFromInventorySource()
         {
-            var inventorySource = await InventorySource.GetAsync(11);
+            var inventorySource = InventorySource.Find(singleQuery).Single();
             Console.WriteLine($"Hosts in [{inventorySource.Type}][{inventorySource.Id}] {inventorySource.Name}");
-            await foreach (var host in Host.FindAsync(inventorySource))
+            foreach (var host in Host.Find(inventorySource))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get05ListAllFromHost()
+        [TestMethod("[Host] 04 List all from Group")]
+        public void Get04ListAllFromGroup()
         {
-            var group = await Group.GetAsync(1);
+            var group = Group.Find(singleQuery).Single();
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindAsync(group, all: true))
+            foreach (var host in Host.Find(group, all: true))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get06ListFromHost()
+        [TestMethod("[Host] 05 List from Group")]
+        public void Get05ListFromGroup()
         {
-            var group = await Group.GetAsync(1);
+            var group = Group.Find(singleQuery).Single();
             Console.WriteLine($"Groups in [{group.Type}][{group.Id}] {group.Name}");
-            await foreach (var host in Host.FindAsync(group, all: false))
+            foreach (var host in Host.Find(group, all: false))
             {
                 Assert.IsInstanceOfType<Host>(host);
                 Console.WriteLine($"[{host.Id}] {host.Name}");

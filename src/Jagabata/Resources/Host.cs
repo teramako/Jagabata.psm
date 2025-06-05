@@ -86,13 +86,15 @@ namespace Jagabata.Resources
         /// <para>
         /// Implement API: <c>/api/v2/{Type}/{Id}/{hosts | all_hosts}/</c>
         /// </para>
+        /// </summary>
+        /// <remarks>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Inventory</item>
         ///     <item>InventorySource</item>
         ///     <item>Host</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object associated with this group</param>
         /// <param name="query"></param>
         /// <param name="all">
@@ -124,7 +126,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
-        public static Host[] Find(HttpQuery? query = null)
+        public static Host[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
         }
@@ -152,9 +154,33 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
-        public static Host[] Find(IResource resource, HttpQuery? query = null, bool all = true)
+        public static Host[] Find(IResource resource, HttpQuery query, bool all = true)
         {
             return [.. FindAsync(resource, query, all).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Hosts associated with <paramref name="resource"/> by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/{hosts | all_hosts}/</c>
+        /// </para>
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Host[] Find(IResource resource,
+                                  string? searchWords = null,
+                                  bool all = true,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
+        {
+            return Find(resource,
+                        new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build(),
+                        all);
         }
 
         public override ulong Id { get; } = id;
