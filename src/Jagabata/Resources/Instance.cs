@@ -120,7 +120,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
-        public static Instance[] Find(HttpQuery? query = null)
+        public static Instance[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
         }
@@ -136,7 +136,7 @@ namespace Jagabata.Resources
         /// <param name="pageSize"></param>
         /// <param name="startPage"></param>
         public static Instance[] Find(string? searchWords = null,
-                                      string orderBy = "name",
+                                      string orderBy = "hostname",
                                       ushort pageSize = 20,
                                       uint startPage = 1)
         {
@@ -148,9 +148,33 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static Instance[] Find(ulong instanceGroupId, HttpQuery? query = null)
+        public static Instance[] Find(ulong instanceGroupId, HttpQuery query)
         {
             return [.. FindAsync(instanceGroupId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Instances for an Instance Group by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/instance_groups/{id}/instances/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="instanceGroupId">Instance Group ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Instance[] Find(ulong instanceGroupId,
+                                      string? searchWords = null,
+                                      string orderBy = "hostname",
+                                      ushort pageSize = 20,
+                                      uint startPage = 1)
+        {
+            return Find(instanceGroupId, new QueryBuilder().SetSearchWords(searchWords)
+                                                           .SetOrderBy(orderBy)
+                                                           .SetPageSize(pageSize)
+                                                           .SetStartPage(startPage)
+                                                           .Build());
         }
 
         public override ulong Id { get; } = id;

@@ -715,6 +715,8 @@ namespace Jagabata
                         return Deserialize<LabelSummary>(ref reader, options, isArray);
                     case "Labels":
                         return Deserialize<ListSummary<LabelSummary>>(ref reader, options, isArray);
+                    case "Links":
+                        return JsonSerializer.Deserialize<string[]>(ref reader, options);
                     case "Notification":
                         return Deserialize<NotificationSummary>(ref reader, options, isArray);
                     case "NotificationTemplate":

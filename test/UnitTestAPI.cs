@@ -602,41 +602,39 @@ namespace APITest
             Console.WriteLine($"IpAddress         : {instance.IpAddress}");
             Console.WriteLine($"Listener Port     : {instance.ListenerPort}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Instance] 01 Simple Get")]
+        public void Get01Get()
         {
-            var instance = await Instance.GetAsync(1);
+            var instances = Instance.Find(new HttpQuery("order_by=id&page_size=1"));
+            Assert.AreEqual(1, instances.Length);
+
+            var instance = Instance.Get(instances[0].Id);
             Assert.IsInstanceOfType<Instance>(instance);
             DumpInstance(instance);
             Util.DumpSummary(instance.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Instance] 02 Simple List")]
+        public void Get02List()
         {
-            var expectCount = 2;
-            var c = 0;
-            var query = new HttpQuery($"page_size={expectCount}");
-
-            await foreach (var instance in Instance.FindAsync(query))
+            foreach (var instance in Instance.Find())
             {
-                c++;
                 Assert.IsInstanceOfType<Instance>(instance);
-                DumpInstance(instance);
-                Util.DumpSummary(instance.SummaryFields);
-                Console.WriteLine();
+                Console.WriteLine($"[{instance.Id}] {instance.Hostname} {instance.NodeType} {instance.NodeState}");
             }
-            Assert.IsTrue(c <= expectCount);
         }
-        [TestMethod]
-        public async Task Get03ListFromInstanceGroup()
+        [TestMethod("[Instance] 03 List from InstanceGroup")]
+        public void Get03ListFromInstanceGroup()
         {
-            await foreach (var inst in Instance.FindAsync(1))
+            var instanceGroup = InstanceGroup.Find(new HttpQuery("order_by=id&page_size=1"))
+                                             .Single();
+            foreach (var inst in Instance.Find(instanceGroup.Id))
             {
                 Assert.IsInstanceOfType<Instance>(inst);
                 Console.WriteLine($"[{inst.Id}] {inst.Hostname} {inst.NodeType} {inst.NodeState}");
             }
         }
     }
+
     [TestClass]
     public class TestInstanceGroup
     {
