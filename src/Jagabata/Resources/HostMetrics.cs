@@ -53,7 +53,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
-        public static HostMetric[] Find(HttpQuery? query = null)
+        public static HostMetric[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
         }
@@ -69,7 +69,7 @@ namespace Jagabata.Resources
         /// <param name="pageSize"></param>
         /// <param name="startPage"></param>
         public static HostMetric[] Find(string? searchWords = null,
-                                        string orderBy = "name",
+                                        string orderBy = "hostname",
                                         ushort pageSize = 20,
                                         uint startPage = 1)
         {

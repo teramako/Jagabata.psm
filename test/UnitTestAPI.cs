@@ -1797,18 +1797,16 @@ namespace APITest
             Console.WriteLine($"DeletedCounter  : {metric.DeletedCounter}");
             Console.WriteLine($"Deleted         : {metric.Deleted}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[HostMetric] 01 Get")]
+        public void Get01Single()
         {
-            var metric = await HostMetric.GetAsync(1);
+            var metric = HostMetric.Get(1);
             Assert.IsInstanceOfType<HostMetric>(metric);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[HostMetric] 02 Find")]
+        public void Get02List()
         {
-            await foreach (var metric in HostMetric.FindAsync(new QueryBuilder().SetPageSize(1)
-                                                                                .SetOrderBy("id")
-                                                                                .Build()))
+            foreach (var metric in HostMetric.Find())
             {
                 DumpResource(metric);
             }
