@@ -219,9 +219,13 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Inventory Sources associated with <paramref name="resource"/>
-        /// <para>
-        /// Implement API: <c>/api/v2/{Type}/{Id}/inventory_sources/</c>
-        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Implement API:
+        /// <list type="bullet">
+        ///     <item><c>/api/v2/projects/{Id}/scm_inventory_sources/</c></item>
+        ///     <item><c>/api/v2/{inventories | groups | hosts}/{Id}/inventory_sources/</c></item>
+        /// </list>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Project</item>
@@ -229,7 +233,7 @@ namespace Jagabata.Resources
         ///     <item>Group</item>
         ///     <item>Host</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -263,7 +267,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static InventorySource[] Find(IResource resource, HttpQuery? query = null)
+        public static InventorySource[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
@@ -288,6 +292,24 @@ namespace Jagabata.Resources
                                           .SetPageSize(pageSize)
                                           .SetStartPage(startPage)
                                           .Build());
+        }
+
+        /// <summary>
+        /// Find Inventory Sources associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static InventorySource[] Find(IResource resource,
+                                             string? searchWords = null,
+                                             string orderBy = "name",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;

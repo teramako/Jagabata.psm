@@ -1493,6 +1493,8 @@ namespace APITest
     [TestClass]
     public class TestInventorySource
     {
+        private readonly HttpQuery singleQuery = new("page_size=1");
+
         private static void DumpResource(InventorySource res)
         {
             Console.WriteLine($"Id          : {res.Id}");
@@ -1506,66 +1508,73 @@ namespace APITest
             Console.WriteLine($"Overwrite   : {res.Overwrite}, Vars: {res.OverwriteVars}");
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[InventorySource] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await InventorySource.GetAsync(11);
+            var sources = InventorySource.Find(singleQuery);
+            Assert.AreEqual(1, sources.Length);
+
+            var res = InventorySource.Get(sources[0].Id);
             Assert.IsInstanceOfType<InventorySource>(res);
             DumpResource(res);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[InventorySource] 02 Simple Find")]
+        public void Get02List()
         {
-            await foreach (var res in InventorySource.FindAsync(new HttpQuery("order_by=id")))
+            foreach (var res in InventorySource.Find())
             {
                 DumpResource(res);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromProject()
+        [TestMethod("[InventorySource] 03 List from Project")]
+        public void Get03ListFromProject()
         {
-            var proj = await Project.GetAsync(8);
-            Console.WriteLine($"Scm InventorySources for ([{proj.Type}][{proj.Id}] {proj.Name})");
-            await foreach (var res in InventorySource.FindAsync(proj))
+            var projId = InventorySource.Find(new("source_project__gt=0&page_size=1"))
+                                        .Single().SourceProject;
+            Assert.IsNotNull(projId);
+            var proj = new Resource(ResourceType.Project, (ulong)projId);
+            foreach (var res in InventorySource.Find(proj))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromInventory()
+        [TestMethod("[InventorySource] 04 List from Inventory")]
+        public void Get04ListFromInventory()
         {
-            var inventory = await Inventory.GetAsync(4);
-            Console.WriteLine($"InventorySources for ([{inventory.Type}][{inventory.Id}] {inventory.Name})");
-            await foreach (var res in InventorySource.FindAsync(inventory))
+            var inventoryId = InventorySource.Find(new("inventory__gt=0&page_size=1"))
+                                             .Single().Inventory;
+            var inventory = new Resource(ResourceType.Inventory, inventoryId);
+            foreach (var res in InventorySource.Find(inventory))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get05ListFromGroup()
+        [TestMethod("[InventorySource] 05 List from Group")]
+        public void Get05ListFromGroup()
         {
-            var group = await Group.GetAsync(4);
-            Console.WriteLine($"InventorySources for ([{group.Type}][{group.Id}] {group.Name})");
-            await foreach (var res in InventorySource.FindAsync(group))
+            var constructedInventory = ConstructedInventory.Find(singleQuery).Single();
+            var group = Group.Find(constructedInventory, singleQuery).Single();
+            foreach (var res in InventorySource.Find(group))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get06ListFromHost()
+        [TestMethod("[InventorySource] 06 List from Host")]
+        public void Get06ListFromHost()
         {
-            var host = await Host.GetAsync(3);
-            Console.WriteLine($"InventorySources for ([{host.Type}][{host.Id}] {host.Name})");
-            await foreach (var res in InventorySource.FindAsync(host))
+            var constructedInventory = ConstructedInventory.Find(singleQuery).Single();
+            var host = Host.Find(constructedInventory, singleQuery).Single();
+            foreach (var res in InventorySource.Find(host))
             {
                 Assert.IsInstanceOfType<InventorySource>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name}");
             }
         }
     }
+
     [TestClass]
     public class TestInventoryUpdate
     {
