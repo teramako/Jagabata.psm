@@ -35,6 +35,8 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Hosts associated with <paramref name="resource"/>
+        /// </summary>
+        /// <remarks>
         /// <para>
         /// Implement API: <c>/api/v2/{Type}/{Id}/job_host_summaries/</c>
         /// </para>
@@ -44,7 +46,7 @@ namespace Jagabata.Resources
         ///     <item>Host</item>
         ///     <item>Job</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -71,11 +73,14 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static JobHostSummary[] Find(IResource resource, HttpQuery? query = null)
+        public static JobHostSummary[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
+        /// <summary>
+        /// Find Hosts associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
         /// <param name="searchWords"></param>
         /// <param name="orderBy"></param>
         /// <param name="pageSize"></param>
