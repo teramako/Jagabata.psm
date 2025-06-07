@@ -1401,6 +1401,8 @@ namespace APITest
     [TestClass]
     public class TestInventory
     {
+        private readonly HttpQuery singleQuery = new("page_size=1");
+
         private static void DumpResource(Inventory inventory)
         {
             Console.WriteLine($"Id          : {inventory.Id}");
@@ -1415,38 +1417,40 @@ namespace APITest
             Util.DumpSummary(inventory.SummaryFields);
         }
 
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Inventory] 01 Simple Get")]
+        public void Get01Single()
         {
-            var inventory = await Inventory.GetAsync(1);
+            var inventories = Inventory.Find(singleQuery);
+            Assert.AreEqual(1, inventories.Length);
+
+            var inventory = Inventory.Get(inventories[0].Id);
             Assert.IsInstanceOfType<Inventory>(inventory);
             DumpResource(inventory);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Inventory] 02 Simple Find")]
+        public void Get02List()
         {
-            var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var inventory in Inventory.FindAsync(query))
+            foreach (var inventory in Inventory.Find())
             {
+                Assert.IsInstanceOfType<Inventory>(inventory);
                 DumpResource(inventory);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
+        [TestMethod("[Inventory] 03 List from Organization")]
+        public void Get03ListFromOrganization()
         {
-            var resource = new Resource(ResourceType.Organization, 2);
-            await foreach (var inventory in Inventory.FindAsync(resource))
+            var resource = Organization.Find(singleQuery).Single();
+            foreach (var inventory in Inventory.Find(resource))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListInputInventires()
+        [TestMethod("[Inventory] 04 List from InputInventories")]
+        public void Get04ListInputInventires()
         {
-            Console.WriteLine("Inventory [4]'s Inpput Inventories:");
-            var resource = new Resource(ResourceType.Inventory, 4);
-            await foreach (var inventory in Inventory.FindAsync(resource))
+            var constructedInventory = ConstructedInventory.Find(singleQuery).Single();
+            foreach (var inventory in Inventory.Find(constructedInventory))
             {
                 Assert.IsInstanceOfType<Inventory>(inventory);
                 Console.WriteLine($"[{inventory.Id}] {inventory.Name}");

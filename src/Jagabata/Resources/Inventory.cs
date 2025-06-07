@@ -36,7 +36,7 @@ namespace Jagabata.Resources
         /// <summary>
         /// Find Inventories
         /// <para>
-        /// Implement API: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// Implement API: <c>/api/v2/inventories//</c>
         /// </para>
         /// </summary>
         /// <param name="query"></param>
@@ -56,9 +56,14 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Inventories associated with <paramref name="resource"/>
-        /// <para>
-        /// Implement API: <c>/api/v2/{Type}/{Id}/inventories/</c>
-        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Implement API:
+        /// <list type="bullet">
+        ///     <item><c>/api/v2/{organizations | projects}/{Id}/inventories/</c></item>
+        ///     <item><c>/api/v2/inventories/{Id}/input_inventories/</c></item>
+        ///     <item><c>/api/v2/hosts/{Id}/smart_inventories/</c></item>
+        /// </list>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Organization</item>
@@ -66,8 +71,8 @@ namespace Jagabata.Resources
         ///     <item>Inventory</item>
         ///     <item>Host</item>
         /// </list>
-        /// </summary>
-        /// <param name="resource">Resource object associated with this group</param>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -94,7 +99,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
-        public static Inventory[] Find(HttpQuery? query = null)
+        public static Inventory[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
         }
@@ -102,7 +107,7 @@ namespace Jagabata.Resources
         /// <summary>
         /// Find Insntance Groups by basic parameters.
         /// <para>
-        /// Implement API: <c>/api/v2/instance_groups/</c>
+        /// Implement API: <c>/api/v2/inventories/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
@@ -122,9 +127,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static Inventory[] Find(IResource resource, HttpQuery? query = null)
+        public static Inventory[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Inventories associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Inventory[] Find(IResource resource,
+                                       string? searchWords = null,
+                                       string orderBy = "name",
+                                       ushort pageSize = 20,
+                                       uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;
