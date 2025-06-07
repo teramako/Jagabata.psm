@@ -638,6 +638,8 @@ namespace APITest
     [TestClass]
     public class TestInstanceGroup
     {
+        private readonly HttpQuery singleQuery = new("order_by=id&page_size=1");
+
         private static void DumpResource(InstanceGroup ig)
         {
             Console.WriteLine($"Id                : {ig.Id}");
@@ -660,98 +662,95 @@ namespace APITest
             Console.WriteLine($"PolicyInstanceList      : {ig.PolicyInstanceList}");
             Console.WriteLine($"PodSpecOverride   : {ig.PodSpecOverride}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[InstanceGroup] 01 Get")]
+        public void Get01()
         {
-            var ig = await InstanceGroup.GetAsync(1);
-            Assert.IsInstanceOfType<InstanceGroup>(ig);
-            DumpResource(ig);
-            Util.DumpSummary(ig.SummaryFields);
-        }
-        [TestMethod]
-        public async Task Get02List()
-        {
-            var expectCount = 2;
-            var c = 0;
-            var query = new HttpQuery($"page_size={expectCount}");
+            var instanceGroups = InstanceGroup.Find(singleQuery);
+            Assert.AreEqual(1, instanceGroups.Length);
 
-            await foreach (var ig in InstanceGroup.FindAsync(query))
+            var instanceGroup = InstanceGroup.Get(instanceGroups[0].Id);
+            Assert.IsInstanceOfType<InstanceGroup>(instanceGroup);
+            DumpResource(instanceGroup);
+            Util.DumpSummary(instanceGroup.SummaryFields);
+        }
+        [TestMethod("[InstanceGroup] 02 Simple Find")]
+        public void Get02List()
+        {
+            foreach (var ig in InstanceGroup.Find())
             {
-                c++;
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 DumpResource(ig);
                 Util.DumpSummary(ig.SummaryFields);
                 Console.WriteLine();
             }
-            Assert.IsTrue(c <= expectCount);
         }
-        [TestMethod]
-        public async Task Get03ListFromInstance()
+        [TestMethod("[InstanceGroup] 03 List from Instance")]
+        public void Get03ListFromInstance()
         {
-            var resource = new Resource(ResourceType.Instance, 1);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = Instance.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
 
         }
-        [TestMethod]
-        public async Task Get04ListFromOranization()
+        [TestMethod("[InstanceGroup] 04 List from Organization")]
+        public void Get04ListFromOranization()
         {
-            var resource = new Resource(ResourceType.Organization, 2);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = Organization.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
 
         }
-        [TestMethod]
-        public async Task Get05ListFromInventory()
+        [TestMethod("[InstanceGroup] 05 List from Inventory")]
+        public void Get05ListFromInventory()
         {
-            var resource = new Resource(ResourceType.Inventory, 2);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = Inventory.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
         }
-        [TestMethod]
-        public async Task Get06ListFromJobTemplate()
+        [TestMethod("[InstanceGroup] 06 List from JobTemplate")]
+        public void Get06ListFromJobTemplate()
         {
-            var resource = new Resource(ResourceType.Inventory, 7);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = JobTemplate.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
         }
-        [TestMethod]
-        public async Task Get07ListFromSchedule()
+        [TestMethod("[InstanceGroup] 07 List from Schedule")]
+        public void Get07ListFromSchedule()
         {
-            var resource = new Resource(ResourceType.Schedule, 8);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = Schedule.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
         }
-        [TestMethod]
-        public async Task Get08ListFromWorkflowJobTemplateNode()
+        [TestMethod("[InstanceGroup] 08 List from WorkflowJobTemplateNode")]
+        public void Get08ListFromWorkflowJobTemplateNode()
         {
-            var resource = new Resource(ResourceType.WorkflowJobTemplateNode, 4);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = WorkflowJobTemplateNode.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");
             }
         }
-        [TestMethod]
-        public async Task Get09ListFromWorkflowJobNode()
+        [TestMethod("[InstanceGroup] 09 List from WorkflowJobNode")]
+        public void Get09ListFromWorkflowJobNode()
         {
-            var resource = new Resource(ResourceType.WorkflowJobNode, 7);
-            await foreach (var ig in InstanceGroup.FindAsync(resource))
+            var resource = WorkflowJobNode.Find(singleQuery).Single();
+            foreach (var ig in InstanceGroup.Find(resource))
             {
                 Assert.IsInstanceOfType<InstanceGroup>(ig);
                 Console.WriteLine($"[{ig.Id}] {ig.Name} Instances = {ig.Instances}");

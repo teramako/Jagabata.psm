@@ -58,7 +58,7 @@ namespace Jagabata.Resources
         /// </para>
         /// </summary>
         /// <param name="id">Instance ID</param>
-        /// <param name="ct"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async Task<Instance> GetAsync(ulong id, CancellationToken ct = default)
         {

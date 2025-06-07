@@ -73,6 +73,8 @@ namespace Jagabata.Resources
         /// <para>
         /// Implement API: <c>/api/v2/{Type}/{Id}/instance_groups/</c>
         /// </para>
+        /// </summary>
+        /// <remarks>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Instance</item>
@@ -83,7 +85,7 @@ namespace Jagabata.Resources
         ///     <item>WorkflowJobTemplateNode</item>
         ///     <item>WorkflowJobNode</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object associated with this group</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -114,7 +116,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
-        public static InstanceGroup[] Find(HttpQuery? query = null)
+        public static InstanceGroup[] Find(HttpQuery query)
         {
             return [.. FindAsync(query).ToBlockingEnumerable()];
         }
@@ -142,9 +144,30 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static InstanceGroup[] Find(IResource resource, HttpQuery? query = null)
+        public static InstanceGroup[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find InstanceGroup associated with <paramref name="resource"/> by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static InstanceGroup[] Find(IResource resource,
+                                           string? searchWords = null,
+                                           string orderBy = "name",
+                                           ushort pageSize = 20,
+                                           uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;
