@@ -1578,6 +1578,8 @@ namespace APITest
     [TestClass]
     public class TestInventoryUpdate
     {
+        private readonly HttpQuery singleQuery = new("page_size=1");
+
         private static void DumpResource(InventoryUpdateJobBase res)
         {
             Console.WriteLine($"Id          : {res.Id}");
@@ -1591,39 +1593,44 @@ namespace APITest
             Console.WriteLine($"Overwrite   : {res.Overwrite}, Vars: {res.OverwriteVars}");
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[InventoryUpdate] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await InventoryUpdateJob.GetAsync(46);
+            var jobs = InventoryUpdateJob.Find(singleQuery);
+            Assert.AreEqual(1, jobs.Length);
+
+            var res = InventoryUpdateJob.Get(jobs[0].Id);
             Assert.IsInstanceOfType<InventoryUpdateJob.Detail>(res);
             Assert.IsInstanceOfType<IUnifiedJob>(res);
             DumpResource(res);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[InventoryUpdate] 02 Simple Find")]
+        public void Get02List()
         {
-            await foreach (var res in InventoryUpdateJob.FindAsync(new HttpQuery("order_by=id")))
+            foreach (var res in InventoryUpdateJob.Find())
             {
                 DumpResource(res);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromProjectUpdate()
+        [TestMethod("[InventoryUpdate] 03 List from ProjectUpdate")]
+        public void Get03ListFromProjectUpdate()
         {
-            var projectUpdateJob = await ProjectUpdateJob.GetAsync(76);
+            var inventorySource = InventorySource.Find(new("source_project__gt=0&page_size=1")).Single();
+            Assert.IsNotNull(inventorySource.SourceProject);
+            var projectUpdateJob = ProjectUpdateJob.Find((ulong)inventorySource.SourceProject, singleQuery).Single();
             Console.WriteLine($"InventoryUpdateJobs for ([{projectUpdateJob.Id}][{projectUpdateJob.Type}] {projectUpdateJob.Name})");
-            await foreach (var res in InventoryUpdateJob.FindAsync(projectUpdateJob))
+            foreach (var res in InventoryUpdateJob.Find(projectUpdateJob))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromInventorySource()
+        [TestMethod("[InventoryUpdate] 04 List from InventorySource")]
+        public void Get04ListFromInventorySource()
         {
-            var inventorySource = await InventorySource.GetAsync(11);
+            var inventorySource = InventorySource.Find(new("source_project__gt=0&page_size=1")).Single();
             Console.WriteLine($"InventoryUpdateJobs for ([{inventorySource.Id}][{inventorySource.Type}] {inventorySource.Name})");
-            await foreach (var res in InventoryUpdateJob.FindAsync(inventorySource))
+            foreach (var res in InventoryUpdateJob.Find(inventorySource))
             {
                 Assert.IsInstanceOfType<InventoryUpdateJob>(res);
                 Console.WriteLine($"[{res.Id}] {res.Name} {res.Status} {res.Finished}");
