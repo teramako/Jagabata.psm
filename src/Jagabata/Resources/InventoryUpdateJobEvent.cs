@@ -36,7 +36,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static InventoryUpdateJobEvent[] Find(ulong id, HttpQuery? query = null)
+        public static InventoryUpdateJobEvent[] Find(ulong id, HttpQuery query)
         {
             return [.. FindAsync(id, query).ToBlockingEnumerable()];
         }
