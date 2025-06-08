@@ -1833,6 +1833,8 @@ namespace APITest
     [TestClass]
     public class TestJobTemplate
     {
+        private readonly HttpQuery singleQuery = new("page_size=1");
+
         private static void DumpResource(JobTemplate jt)
         {
             Console.WriteLine($"Id          : {jt.Id}");
@@ -1847,46 +1849,49 @@ namespace APITest
             Console.WriteLine($"ExtraVars   : {jt.ExtraVars}");
             Util.DumpSummary(jt.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[JobTemplate] 01 Simple Get")]
+        public void Get01Single()
         {
-            var jt = await JobTemplate.GetAsync(9);
+            var templates = JobTemplate.Find(singleQuery);
+            Assert.AreEqual(1, templates.Length);
+
+            var jt = JobTemplate.Get(templates[0].Id);
             Assert.IsInstanceOfType<JobTemplate>(jt);
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(jt);
             DumpResource(jt);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[JobTemplate] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("page_size=20&order_by=id");
-            await foreach (var jt in JobTemplate.FindAsync(query))
+            foreach (var jt in JobTemplate.Find())
             {
                 DumpResource(jt);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
+        [TestMethod("[JobTemplate] 03 List from Organization")]
+        public void Get03ListFromOrganization()
         {
-            var org = await Organization.GetAsync(2);
+            var org = Organization.Find(singleQuery).Single();
             Console.WriteLine($"JobTemplates in ({org.Type})[{org.Id}] {org.Name}");
-            await foreach (var jt in JobTemplate.FindAsync(org))
+            foreach (var jt in JobTemplate.Find(org))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
             }
         }
-        [TestMethod]
-        public async Task Get04listFromInventory()
+        [TestMethod("[JobTemplate] 04 List from Inventory")]
+        public void Get04listFromInventory()
         {
-            var inv = await Inventory.GetAsync(2);
+            var inv = Inventory.Find(singleQuery).Single();
             Console.WriteLine($"JobTemplates in ({inv.Type})[{inv.Id}] {inv.Name}");
-            await foreach (var jt in JobTemplate.FindAsync(inv))
+            foreach (var jt in JobTemplate.Find(inv))
             {
                 Assert.IsInstanceOfType<JobTemplate>(jt);
                 Console.WriteLine($"[{jt.Id}] {jt.Name} {jt.Status}");
             }
         }
     }
+
     [TestClass]
     public class TestJob
     {

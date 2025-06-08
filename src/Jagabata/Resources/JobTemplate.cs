@@ -197,15 +197,17 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Job Templates associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/job_templates/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Organization</item>
         ///     <item>Inventory</item>
         /// </list>
-        /// </summary>
+        /// </para>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -231,7 +233,7 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
-        public static JobTemplate[] Find(IResource resource, HttpQuery? query = null)
+        public static JobTemplate[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
@@ -262,6 +264,24 @@ namespace Jagabata.Resources
                                           .SetPageSize(pageSize)
                                           .SetStartPage(startPage)
                                           .Build());
+        }
+
+        /// <summary>
+        /// Find Job Templates associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static JobTemplate[] Find(IResource resource,
+                                         string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;
