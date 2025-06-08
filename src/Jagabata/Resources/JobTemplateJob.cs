@@ -205,11 +205,11 @@ namespace Jagabata.Resources
         }
 
         /// <summary>
-        /// Find Jobs for a Job Template.<br/>
-        /// <para>
-        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/jobs/</c>
-        /// </para>
+        /// Find Jobs for a Job Template
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/jobs/</c>
+        /// </remarks>
         /// <param name="id">Job Template ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -258,9 +258,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static JobTemplateJob[] Find(ulong id, HttpQuery? query = null)
+        public static JobTemplateJob[] Find(ulong id, HttpQuery query)
         {
             return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Jobs for a Job Template by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static JobTemplateJob[] Find(ulong id,
+                                            string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
         }
 
         public override ulong Id { get; } = id;

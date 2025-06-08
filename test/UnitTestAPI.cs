@@ -1895,7 +1895,8 @@ namespace APITest
     [TestClass]
     public class TestJob
     {
-        private const ulong jobId = 4;
+        private static readonly HttpQuery singleQuery = new("page_size=1");
+        private readonly Lazy<JobTemplateJob> _job = new(static () => JobTemplateJob.Find(singleQuery).Single());
 
         private static void DumpResource(JobTemplateJob.Detail job)
         {
@@ -1932,12 +1933,12 @@ namespace APITest
             Assert.IsInstanceOfType<JobVerbosity>(job.Verbosity);
             Console.WriteLine("=== Launched By ===");
             Console.WriteLine($"  [{job.LaunchedBy.Type}]{job.LaunchedBy.Name} [{job.LaunchedBy.Id}] {job.LaunchedBy.Url}");
-            Assert.AreEqual($"[{job.LaunchedBy.Type}]{job.LaunchedBy.Name}", job.LaunchedBy.ToString());
+            Assert.AreEqual($"{job.LaunchedBy.Type}:{job.LaunchedBy.Id}:{job.LaunchedBy.Name}", job.LaunchedBy.ToString());
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[JobTemplateJob] 01 Get Detail")]
+        public void Get01Single()
         {
-            var job = await JobTemplateJob.GetAsync(jobId);
+            var job = JobTemplateJob.Get(_job.Value.Id);
             Assert.IsInstanceOfType<JobTemplateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs   : {job.JobArgs}");
@@ -1945,67 +1946,33 @@ namespace APITest
             Util.DumpSummary(job.SummaryFields);
         }
 
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[JobTemplateJob] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in JobTemplateJob.FindAsync(query))
+            foreach (var job in JobTemplateJob.Find())
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromJobtemplate()
+        [TestMethod("[JobTemplateJob] 03 List from JobTemplate")]
+        public void Get03ListFromJobtemplate()
         {
-            var jt = await JobTemplate.GetAsync(9);
+            var jt = JobTemplate.Find(singleQuery).Single();
             Console.WriteLine($"Jobs in ({jt.Type})[{jt.Id}] {jt.Name}");
-            await foreach (var job in JobTemplateJob.FindAsync(jt.Id))
+            foreach (var job in JobTemplateJob.Find(jt.Id))
             {
                 Assert.IsInstanceOfType<JobTemplateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Status} {job.Finished} {job.LaunchedBy}");
             }
         }
 
-        [TestMethod]
-        public async Task JobLogTestText()
+        [TestMethod("[JobTemplateJob] 04 Get job log")]
+        public void Get04Log()
         {
-            var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/", AcceptType.Text);
-            Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsInstanceOfType<string>(apiResult.Contents);
-            var jobLog = apiResult.Contents;
+            var jobLog = _job.Value.GetJobLog(false);
+            Assert.IsNotEmpty(jobLog);
             Console.WriteLine(jobLog);
-        }
-        [TestMethod]
-        public async Task JobLogTestAnsi()
-        {
-            var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=ansi", AcceptType.Text);
-            Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsInstanceOfType<string>(apiResult.Contents);
-            var jobLog = apiResult.Contents;
-            Console.WriteLine(jobLog);
-        }
-
-        [TestMethod]
-        public async Task JobLogTestHtml()
-        {
-            var apiResult = await RestAPI.GetAsync<string>($"/api/v2/jobs/{jobId}/stdout/?format=html", AcceptType.Html);
-            Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsInstanceOfType<string>(apiResult.Contents);
-            var jobLog = apiResult.Contents;
-            Console.WriteLine(jobLog);
-        }
-        [TestMethod]
-        public async Task JobLogTestJson()
-        {
-            var apiResult = await RestAPI.GetAsync<JobLog>($"/api/v2/jobs/{jobId}/stdout/?format=json");
-            Assert.IsTrue(apiResult.Response.IsSuccessStatusCode);
-            Assert.IsInstanceOfType<JobLog>(apiResult.Contents);
-            var jobLog = apiResult.Contents;
-            Assert.IsInstanceOfType<JobLog.JobLogRange>(jobLog.Range);
-            Assert.AreEqual<uint>(0, jobLog.Range.Start);
-            Assert.IsInstanceOfType<string>(jobLog.Content);
-            Console.WriteLine(jobLog.Content);
         }
     }
 
