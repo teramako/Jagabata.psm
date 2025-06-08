@@ -65,10 +65,12 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Labels associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/labels/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
+        /// </para>
         /// <list type="bullet">
         ///     <item>Inventory</item>
         ///     <item>JobTemplate</item>
@@ -79,7 +81,7 @@ namespace Jagabata.Resources
         ///     <item>WorkflowJobTemplateNode</item>
         ///     <item>WorkflowJobNode</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -92,7 +94,7 @@ namespace Jagabata.Resources
             var path = resource.Type switch
             {
                 ResourceType.Inventory => $"{Inventory.PATH}{resource.Id}/labels/",
-                ResourceType.JobTemplate => $"{InventorySource.PATH}{resource.Id}/labels/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/labels/",
                 ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/labels/",
                 ResourceType.Schedule => $"{Schedule.PATH}{resource.Id}/labels/",
                 ResourceType.WorkflowJobTemplate => $"{WorkflowJobTemplate.PATH}{resource.Id}/labels/",
@@ -119,7 +121,7 @@ namespace Jagabata.Resources
         /// <summary>
         /// Find Labels by basic parameters.
         /// <para>
-        /// Implement API: <c>/api/v2/labels/</c>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/labels/</c>
         /// </para>
         /// </summary>
         /// <param name="searchWords"></param>
@@ -139,9 +141,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static Label[] Find(IResource resource, HttpQuery? query = null)
+        public static Label[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Labels associated with <paramref name="resource"/> by basic parameters.
+        /// </summary>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Label[] Find(IResource resource,
+                                   string? searchWords = null,
+                                   string orderBy = "name",
+                                   ushort pageSize = 20,
+                                   uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;

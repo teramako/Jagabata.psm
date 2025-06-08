@@ -2454,21 +2454,42 @@ namespace APITest
             Console.WriteLine($"Organization: {res.Organization}");
             Console.WriteLine($"Created: {res.Created} Modified: {res.Modified}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Label] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await Label.GetAsync(1);
+            var labels = Label.Find(new("page_size=1"));
+            Assert.AreEqual(1, labels.Length);
+
+            var res = Label.Get(labels[0].Id);
             Assert.IsInstanceOfType<Label>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Label] 02 Simple List")]
+        public void Get02List()
         {
-            await foreach (var res in Label.FindAsync())
+            foreach (var res in Label.Find())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
+            }
+        }
+        [TestMethod("[Label] 03 List from JobTemplate")]
+        public void Get03ListFromJobTemplate()
+        {
+            var jt = JobTemplate.Find(new("labels__gt=0&page_size=1")).Single();
+            foreach (var res in Label.Find(jt))
+            {
+                Assert.IsInstanceOfType<Label>(res);
+            }
+        }
+        [TestMethod("[Label] 04 List from JobTemplateJob")]
+        public void Get04ListFromJob()
+        {
+            var job = JobTemplateJob.Find(new("labels__gt=0&page_size=1")).Single();
+            foreach (var res in Label.Find(job))
+            {
+                Assert.IsInstanceOfType<Label>(res);
             }
         }
     }
