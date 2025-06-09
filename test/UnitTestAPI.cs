@@ -2391,19 +2391,21 @@ namespace APITest
                 Util.DumpObject(res.Messages);
 
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[NotificationTemplate] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await NotificationTemplate.GetAsync(1);
+            var templates = NotificationTemplate.Find(new("page_size=1"));
+            Assert.AreEqual(1, templates.Length);
+
+            var res = NotificationTemplate.Get(templates[0].Id);
             Assert.IsInstanceOfType<NotificationTemplate>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[NotificationTemplate] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("order_by=id");
-            await foreach (var res in NotificationTemplate.FindAsync(query))
+            foreach (var res in NotificationTemplate.Find())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
