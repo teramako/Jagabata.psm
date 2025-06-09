@@ -508,58 +508,43 @@ namespace APITest
             Console.WriteLine($"Created     : {token.Created}");
             Console.WriteLine($"Modified    : {token.Modified?.ToString("o") ?? "(null)"}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[OAuth2AccessToken] 01 Simple Get")]
+        public void Get01Single()
         {
-            var token = await OAuth2AccessToken.GetAsync(1);
+            var tokens = OAuth2AccessToken.Find(new("page_size=1"));
+            Assert.AreEqual(1, tokens.Length);
+
+            var token = OAuth2AccessToken.Get(tokens[0].Id);
             Assert.IsInstanceOfType<OAuth2AccessToken>(token);
             DumpToken(token);
             Util.DumpSummary(token.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[OAuth2AccessToken] 02 Simple List")]
+        public void Get02List()
         {
-            await foreach (var token in OAuth2AccessToken.FindAsync())
+            foreach (var token in OAuth2AccessToken.Find())
             {
                 DumpToken(token);
                 Util.DumpSummary(token.SummaryFields);
                 Console.WriteLine();
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromApplication()
+        [TestMethod("[OAuth2AccessToken] 03 List from Application")]
+        public void Get03ListFromApplication()
         {
-            await foreach (var token in OAuth2AccessToken.FindFromApplication(1))
+            var application = Application.Find(new("page_size=1")).Single();
+            foreach (var token in OAuth2AccessToken.Find(application))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
                     (token.Application > 0 ? $" App:[{token.Application}]" : ""));
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromUser()
+        [TestMethod("[OAuth2AccessToken] 04 List from User")]
+        public void Get04ListFromUser()
         {
-            await foreach (var token in OAuth2AccessToken.FindFromUser(1))
-            {
-                Assert.IsInstanceOfType<OAuth2AccessToken>(token);
-                Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
-                    (token.Application > 0 ? $" App:[{token.Application}]" : ""));
-            }
-        }
-        [TestMethod]
-        public async Task Get05ListPersonalTokensFromUser()
-        {
-            await foreach (var token in OAuth2AccessToken.FindPersonalTokensFromUser(1))
-            {
-                Assert.IsInstanceOfType<OAuth2AccessToken>(token);
-                Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
-                    (token.Application > 0 ? $" App:[{token.Application}]" : ""));
-            }
-        }
-        [TestMethod]
-        public async Task Get06ListAuthorizedTokensFromUser()
-        {
-            await foreach (var token in OAuth2AccessToken.FindAuthorizedTokensFromUser(1))
+            var user = new Resource(ResourceType.User, 1);
+            foreach (var token in OAuth2AccessToken.Find(user))
             {
                 Assert.IsInstanceOfType<OAuth2AccessToken>(token);
                 Console.WriteLine($"[{token.Id}] {token.Scope} User:[{token.User}]" +
