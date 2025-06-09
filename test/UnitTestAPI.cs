@@ -2410,6 +2410,7 @@ namespace APITest
             }
         }
     }
+
     [TestClass]
     public class TestNotification
     {
@@ -2425,19 +2426,21 @@ namespace APITest
             Console.WriteLine($"Subject              : {res.Subject}");
             Console.WriteLine($"Body                 : {res.Body ?? "(null)"}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Notification] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await Notification.GetAsync(1);
+            var notifications = Notification.Find(new("page_size=1"));
+            Assert.AreEqual(1, notifications.Length);
+
+            var res = Notification.Get(notifications[0].Id);
             Assert.IsInstanceOfType<Notification>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Notification] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("order_by=id");
-            await foreach (var res in Notification.FindAsync(query))
+            foreach (var res in Notification.Find())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
