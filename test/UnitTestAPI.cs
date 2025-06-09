@@ -2911,11 +2911,12 @@ namespace APITest
     [TestClass]
     public class TestMetrics
     {
-        [TestMethod]
-        public async Task GetMetrics()
+        [TestMethod("[Metric] 01 Simple Get")]
+        public void GetMetrics()
         {
-            var apiResult = await RestAPI.GetAsync<Metrics>(Metrics.PATH);
-            foreach (var (key, value) in apiResult.Contents)
+            var metrics = Metrics.Get();
+            Assert.IsTrue(metrics.Count > 0);
+            foreach (var (key, value) in metrics)
             {
                 Console.WriteLine($"{key}:");
                 Console.WriteLine($"    {value}");
