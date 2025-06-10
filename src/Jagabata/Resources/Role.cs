@@ -51,17 +51,48 @@ namespace Jagabata.Resources
             }
         }
 
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Role[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Roles by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/roles/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Role[] Find(string? searchWords = null,
+                                  string orderBy = "id",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
         /// <summary>
         /// Find Roles associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/roles/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>User</item>
         ///     <item>Team</item>
         /// </list>
-        /// </summary>
+        /// </para>
+        /// </remarks>
         /// <param name="resource">Resource object associated with the User or Team</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -92,11 +123,11 @@ namespace Jagabata.Resources
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
         }
 
-        /// <param name="searchWords"></param>
-        /// <param name="orderBy"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="startPage"></param>
+        /// <summary>
+        /// Find Roles associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
         public static Role[] Find(IResource resource,
                                   string? searchWords = null,
                                   string orderBy = "id",
@@ -112,9 +143,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Object Roles associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/object_roles/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>InstanceGroup</item>
@@ -126,7 +158,8 @@ namespace Jagabata.Resources
         ///     <item>JobTemplate</item>
         ///     <item>WorkflowJobTemplate</item>
         /// </list>
-        /// </summary>
+        /// </para>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -163,11 +196,15 @@ namespace Jagabata.Resources
             return [.. FindObjectRolesAsync(resource, query).ToBlockingEnumerable()];
         }
 
+        /// <summary>
+        /// Find Object Roles associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
         /// <param name="searchWords"></param>
         /// <param name="orderBy"></param>
         /// <param name="pageSize"></param>
         /// <param name="startPage"></param>
         /// <inheritdoc cref="FindObjectRolesAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
         public static Role[] FindObjectRoles(IResource resource,
                                              string? searchWords = null,
                                              string orderBy = "id",

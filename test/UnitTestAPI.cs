@@ -2318,42 +2318,53 @@ namespace APITest
     [TestClass]
     public class TestRole
     {
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Role] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await Role.GetAsync(1);
+            var res = Role.Get(1);
             Assert.IsInstanceOfType<Role>(res);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             var summary = res.SummaryFields;
             Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Role] 02 List")]
+        public void Get02List()
         {
             var query = new HttpQuery("order_by=id");
-            await foreach (var res in Role.FindAsync(query))
+            foreach (var res in Role.Find(query))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
                 var summary = res.SummaryFields;
                 Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
             }
         }
-        [TestMethod]
-        public async Task Get03ListUser()
+        [TestMethod("[Role] 03 List from User")]
+        public void Get03ListUser()
         {
             var resource = new Resource(ResourceType.User, 1);
-            await foreach (var res in Role.FindAsync(resource))
+            foreach (var res in Role.Find(resource))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
                 var summary = res.SummaryFields;
                 Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
             }
         }
-        [TestMethod]
-        public async Task Get03ListOrganizationObjectRoles()
+        [TestMethod("[Role] 04 List from Team")]
+        public void Get04ListTeam()
+        {
+            var team = Team.Find(new("page_size=1")).Single();
+            foreach (var res in Role.Find(team))
+            {
+                Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
+                var summary = res.SummaryFields;
+                Console.WriteLine($"  Resource: {summary.ResourceId} {summary.ResourceType} {summary.ResourceName}");
+            }
+        }
+        [TestMethod("[Role] 05 List ObjectRoles from Organization")]
+        public void Get05ListOrganizationObjectRoles()
         {
             var resource = new Resource(ResourceType.Organization, 1);
-            await foreach (var res in Role.FindObjectRolesAsync(resource))
+            foreach (var res in Role.FindObjectRoles(resource))
             {
                 Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
                 var summary = res.SummaryFields;
