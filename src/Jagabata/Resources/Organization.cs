@@ -62,11 +62,11 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Organizations associated with the User of <paramref name="userId"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/users/{userId}/organizations/</c>
         /// and <c>/api/v2/users/{userId}/admin_of_organizations/</c>
-        /// </para>
-        /// </summary>
+        /// </remarks>
         /// <param name="userId">User ID</param>
         /// <param name="query"></param>
         /// <param name="admin">true; Organizations Administered by the User of <paramref name="userId"/></param>
@@ -117,9 +117,30 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, bool, CancellationToken)"/>
-        public static Organization[] Find(ulong userId, HttpQuery? query = null, bool admin = false)
+        public static Organization[] Find(ulong userId, HttpQuery query, bool admin = false)
         {
             return [.. FindAsync(userId, query, admin).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Organizations associated with the User of <paramref name="userId"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, bool, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Organization[] Find(ulong userId,
+                                          bool admin = false,
+                                          string? searchWords = null,
+                                          string orderBy = "name",
+                                          ushort pageSize = 20,
+                                          uint startPage = 1)
+        {
+            return Find(userId,
+                        new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build(),
+                        admin);
         }
 
         public override ulong Id { get; } = id;

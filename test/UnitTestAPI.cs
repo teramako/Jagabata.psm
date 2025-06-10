@@ -745,6 +745,15 @@ namespace APITest
     [TestClass]
     public class TestOrganization
     {
+        private readonly Lazy<User> adminUser = new(static () =>
+        {
+            var roles = Role.Find(new("role_field=admin_role&content_type__model=organization"));
+            var user = User.Find(new QueryBuilder().Add("roles", roles.Select(static r => r.Id).ToArray())
+                                                   .SetPageSize(1)
+                                                   .Build())
+                           .Single();
+            return user;
+        });
         private static void DumpResource(Organization org)
         {
             Console.WriteLine($"Id                : {org.Id}");
@@ -756,43 +765,40 @@ namespace APITest
             Console.WriteLine($"MaxHosts          : {org.MaxHosts}");
             Console.WriteLine($"DefaultEnvironment: {org.DefaultEnvironment?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Organization] 01 Simple Get")]
+        public void Get01Single()
         {
-            var org = await Organization.GetAsync(1);
+            var orgs = Organization.Find(new("page_size=1"));
+            Assert.AreEqual(1, orgs.Length);
+
+            var org = Organization.Get(orgs[0].Id);
             Assert.IsInstanceOfType<Organization>(org);
             DumpResource(org);
             Util.DumpSummary(org.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Organization] 02 Simple List")]
+        public void Get02List()
         {
-            var expectCount = 2;
-            var c = 0;
-            var query = new HttpQuery($"page_size={expectCount}");
-
-            await foreach (var org in Organization.FindAsync(query))
+            foreach (var org in Organization.Find())
             {
-                c++;
                 Assert.IsInstanceOfType<Organization>(org);
                 DumpResource(org);
                 Util.DumpSummary(org.SummaryFields);
             }
-            Assert.IsTrue(c <= expectCount);
         }
-        [TestMethod]
-        public async Task Get03ListAdministeredFromUser()
+        [TestMethod("[Organization] 03 List adminstered from User")]
+        public void Get03ListAdministeredFromUser()
         {
-            await foreach (var org in Organization.FindAsync(8, admin: true))
+            foreach (var org in Organization.Find(adminUser.Value.Id, admin: true))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromUser()
+        [TestMethod("[Organization] 04 List from User")]
+        public void Get04ListFromUser()
         {
-            await foreach (var org in Organization.FindAsync(8, admin: false))
+            foreach (var org in Organization.Find(adminUser.Value.Id, admin: false))
             {
                 Assert.IsInstanceOfType<Organization>(org);
                 Console.WriteLine($"[{org.Id}] {org.Name}");
