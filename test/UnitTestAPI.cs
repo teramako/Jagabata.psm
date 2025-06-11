@@ -946,6 +946,8 @@ namespace APITest
     [TestClass]
     public class TestProject
     {
+        private readonly HttpQuery singleQuery = new("page_size=1");
+
         private static void DumpResource(Project proj)
         {
             Console.WriteLine($"Id                   : {proj.Id}");
@@ -980,57 +982,60 @@ namespace APITest
             Console.WriteLine($"SignatureValidateionCredential: {proj.SignatureValidationCredential?.ToString(CultureInfo.InvariantCulture) ?? "(null)"}");
             Util.DumpSummary(proj.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Project] 01 Simple Get")]
+        public void Get01Single()
         {
-            var proj = await Project.GetAsync(8);
+            var projects = Project.Find(singleQuery);
+            Assert.AreEqual(1, projects.Length);
+
+            var proj = Project.Get(projects[0].Id);
             Assert.IsInstanceOfType<Project>(proj);
             DumpResource(proj);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Project] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("page_size=2");
-            await foreach (var proj in Project.FindAsync(query))
+            foreach (var proj in Project.Find())
             {
                 DumpResource(proj);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromOrganization()
+        [TestMethod("[Project] 03 List from Organization")]
+        public void Get03ListFromOrganization()
         {
-            var resource = new Resource(ResourceType.Organization, 1);
-            await foreach (var proj in Project.FindAsync(resource))
+            var org = Organization.Find(singleQuery).Single();
+            foreach (var proj in Project.Find(org))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
             }
         }
-        [TestMethod]
-        public async Task Get04ListFromUser()
+        [TestMethod("[Project] 04 List from User")]
+        public void Get04ListFromUser()
         {
-            var resource = new Resource(ResourceType.User, 1);
-            await foreach (var proj in Project.FindAsync(resource))
+            var user = User.Find(singleQuery).Single();
+            foreach (var proj in Project.Find(user))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
             }
 
         }
-        [TestMethod]
-        public async Task Get05ListFromTeam()
+        [TestMethod("[Project] 05 List from Team")]
+        public void Get05ListFromTeam()
         {
-            var resource = new Resource(ResourceType.Team, 1);
-            await foreach (var proj in Project.FindAsync(resource))
+            var team = Team.Find(singleQuery).Single();
+            foreach (var proj in Project.Find(team))
             {
                 Assert.IsInstanceOfType<Project>(proj);
                 Console.WriteLine($"[{proj.Id}] {proj.Name} {proj.ScmType}");
             }
         }
-        [TestMethod]
-        public async Task Get06GetInventoryFiles()
+        [TestMethod("[Project] 06 List Inventory Files")]
+        public void Get06GetInventoryFiles()
         {
-            var files = await Project.GetInventoryFiles(8);
+            var proj = Project.Find(new("scm_type=git&order_by=-id&page_size=1")).Single();
+            var files = Project.GetInventoryFiles(proj.Id).GetAwaiter().GetResult();
             Console.WriteLine(string.Join('\n', files));
         }
     }
