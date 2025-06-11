@@ -1061,10 +1061,13 @@ namespace APITest
             Console.WriteLine($"Project    : {job.Project}");
         }
 
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[ProjectUpdate] 01 Simple Get")]
+        public void Get01Single()
         {
-            var job = await ProjectUpdateJob.GetAsync(5);
+            var jobs = ProjectUpdateJob.Find(new("order_by=-id&page_size=1"));
+            Assert.AreEqual(1, jobs.Length);
+
+            var job = ProjectUpdateJob.Get(jobs[0].Id);
             Assert.IsInstanceOfType<ProjectUpdateJob.Detail>(job);
             DumpResource(job);
             Console.WriteLine($"JobArgs    : {job.JobArgs}");
@@ -1076,20 +1079,20 @@ namespace APITest
             }
             Util.DumpSummary(job.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[ProjectUpdate] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("page_size=2&order_by=-id");
-            await foreach (var job in ProjectUpdateJob.FindAsync(query))
+            foreach (var job in ProjectUpdateJob.Find())
             {
                 DumpResource(job);
                 Util.DumpSummary(job.SummaryFields);
             }
         }
-        [TestMethod]
-        public async Task Get03ListFromProject()
+        [TestMethod("[ProjectUpdate] 03 List from Project")]
+        public void Get03ListFromProject()
         {
-            await foreach (var job in ProjectUpdateJob.FindAsync(8))
+            var latestJob = ProjectUpdateJob.Find(new("order_by=-id&page_size=1")).Single();
+            foreach (var job in ProjectUpdateJob.Find(latestJob.Project))
             {
                 Assert.IsInstanceOfType<ProjectUpdateJob>(job);
                 Console.WriteLine($"[{job.Id}] {job.Name} {job.Finished}");

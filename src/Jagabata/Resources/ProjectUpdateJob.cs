@@ -129,10 +129,10 @@ namespace Jagabata.Resources
         }
         /// <summary>
         /// Find Project Updates for a Project
-        /// <para>
-        /// Implement API: <c>/api/v2/projects/<paramref name="projectId"/>/project_updates/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/projects/<paramref name="projectId"/>/project_updates/</c>
+        /// </remarks>
         /// <param name="projectId">Project ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -181,9 +181,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static ProjectUpdateJob[] Find(ulong projectId, HttpQuery? query = null)
+        public static ProjectUpdateJob[] Find(ulong projectId, HttpQuery query)
         {
             return [.. FindAsync(projectId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Project Updates for a Project
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static ProjectUpdateJob[] Find(ulong projectId,
+                                              string? searchWords = null,
+                                              string orderBy = "-id",
+                                              ushort pageSize = 20,
+                                              uint startPage = 1)
+        {
+            return Find(projectId, new QueryBuilder().SetSearchWords(searchWords)
+                                                     .SetOrderBy(orderBy)
+                                                     .SetPageSize(pageSize)
+                                                     .SetStartPage(startPage)
+                                                     .Build());
         }
 
         public override ulong Id { get; } = id;
