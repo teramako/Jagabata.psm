@@ -82,9 +82,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Schedules associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/schedules/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
         /// <list type="bullet">
         ///     <item>Project</item>
@@ -93,7 +94,8 @@ namespace Jagabata.Resources
         ///     <item>SystemJobTemplate</item>
         ///     <item>WorkflowJobTemplate</item>
         /// </list>
-        /// </summary>
+        /// </para>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -150,9 +152,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static Schedule[] Find(IResource resource, HttpQuery? query = null)
+        public static Schedule[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Schedules associated with <paramref name="resource"/>
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Schedule[] Find(IResource resource,
+                                      string? searchWords = null,
+                                      string orderBy = "id",
+                                      ushort pageSize = 20,
+                                      uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public string Rrule { get; } = rrule;

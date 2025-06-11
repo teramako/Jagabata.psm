@@ -2300,35 +2300,38 @@ namespace APITest
             Console.WriteLine($"NextRun : {res.NextRun}");
             Console.WriteLine($"End     : {res.DtEnd}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[Schedule] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await Schedule.GetAsync(1);
+            var schedules = Schedule.Find(new("page_size=1"));
+            Assert.AreEqual(1, schedules.Length);
+
+            var res = Schedule.Get(schedules[0].Id);
             Assert.IsInstanceOfType<Schedule>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[Schedule] 02 Simple List")]
+        public void Get02List()
         {
-            var query = new HttpQuery("order_by=id");
-            await foreach (var res in Schedule.FindAsync(query))
+            foreach (var res in Schedule.Find())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
-        [TestMethod]
-        public async Task Get03ListSystemJobTemplate()
+        [TestMethod("[Schedule] 03 List from SystemJobTemplate")]
+        public void Get03ListSystemJobTemplate()
         {
             var resource = new Resource(ResourceType.SystemJobTemplate, 1);
-            await foreach (var res in Schedule.FindAsync(resource))
+            foreach (var res in Schedule.Find(resource))
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
     }
+
     [TestClass]
     public class TestRole
     {
