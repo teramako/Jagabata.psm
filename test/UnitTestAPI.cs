@@ -3041,4 +3041,37 @@ namespace APITest
         }
     }
 
+    [TestClass]
+    public class TestSurvey
+    {
+        [TestMethod("[Survey] 01 Get from JobTemplate")]
+        public void Get01FromJobTemplate()
+        {
+            var jts = JobTemplate.Find(new("survey_enabled=True&page_size=1"));
+            Assert.AreEqual(1, jts.Length);
+
+            var survey = Survey.Get(jts[0]);
+            Console.WriteLine($"{survey.Name} - {survey.Description}");
+            foreach (var spec in survey.Spec)
+            {
+                Assert.IsInstanceOfType<SurveySpec>(spec);
+                Console.WriteLine($" [{spec.Variable}] {spec.Name} ({spec.Type}): {spec.Description}");
+            }
+        }
+
+        [TestMethod("[Survey] 02 Get from WorkflowJobTemplate")]
+        public void Get02FromWorkflowJobTemplate()
+        {
+            var wjts = WorkflowJobTemplate.Find(new("survey_enabled=True&page_size=1"));
+            Assert.AreEqual(1, wjts.Length);
+
+            var survey = Survey.Get(wjts[0]);
+            Console.WriteLine($"{survey.Name} - {survey.Description}");
+            foreach (var spec in survey.Spec)
+            {
+                Assert.IsInstanceOfType<SurveySpec>(spec);
+                Console.WriteLine($" [{spec.Variable}] {spec.Name} ({spec.Type}): {spec.Description}");
+            }
+        }
+    }
 }
