@@ -3023,7 +3023,7 @@ namespace APITest
     [TestClass]
     public class TestSettings
     {
-        [TestMethod]
+        [TestMethod("[Setting] 01 List Slugs")]
         public void ListSlugs()
         {
             var slugs = Setting.ListSlugs();
@@ -3031,7 +3031,7 @@ namespace APITest
             Assert.IsTrue(slugs.Length > 0);
             Util.DumpObject(slugs);
         }
-        [TestMethod]
+        [TestMethod("[Setting] 02 Get settings for 'github'")]
         public void GetGithub()
         {
             var setting = Setting.Get("github");
