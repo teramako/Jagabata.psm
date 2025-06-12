@@ -2210,14 +2210,14 @@ namespace APITest
             Console.WriteLine($"  {res.LastJobRun} {res.NextJobRun}");
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[SystemJobtemplate] 01 Simple Get")]
         public void Get01Single()
         {
             var res = SystemJobTemplate.Get(1);
             Assert.IsInstanceOfType<SystemJobTemplate>(res);
             DumpResource(res);
         }
-        [TestMethod]
+        [TestMethod("[SystemJobTemplate] 02 Simple List")]
         public void Get02List()
         {
             foreach (var res in SystemJobTemplate.Find())
