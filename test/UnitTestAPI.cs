@@ -2250,7 +2250,7 @@ namespace APITest
             Console.WriteLine($"ExtraVars     : {res.ExtraVars}");
             Console.WriteLine($"ResultStdout  : {res.ResultStdout}");
         }
-        [TestMethod]
+        [TestMethod("[SystemJob] 01 Simple Get")]
         public void Get01Single()
         {
             var job = SystemJob.Find(new QueryBuilder().SetOrderBy("id").SetPageSize(1).Build()).FirstOrDefault();
@@ -2268,17 +2268,16 @@ namespace APITest
             }
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[SystemJob] 01 Simple List")]
         public void Get02List()
         {
-            var query = new HttpQuery("order_by=id");
-            foreach (var res in SystemJob.Find(query))
+            foreach (var res in SystemJob.Find())
             {
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
-        [TestMethod]
+        [TestMethod("[SystemJob] 01 List from SystemJobTemplate")]
         public void Get03ListSystemJobTemplate()
         {
             var resource = new Resource(ResourceType.SystemJobTemplate, 1);
