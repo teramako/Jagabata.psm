@@ -1100,6 +1100,7 @@ namespace APITest
             }
         }
     }
+
     [TestClass]
     public class TestTeam
     {
@@ -1125,71 +1126,74 @@ namespace APITest
             }
         }
 
-        [TestMethod]
+        [TestMethod("[Team] 01 Simple Get")]
         public void Get01Single()
         {
             var team = Team.Get(1);
             Assert.IsInstanceOfType<Team>(team);
             DumpResource(team);
         }
-        [TestMethod]
+        [TestMethod("[Team] 02 Simple List")]
         public void Get02List()
         {
-            var query = new HttpQuery("page_size=2");
-            foreach (var team in Team.Find(query))
+            foreach (var team in Team.Find())
             {
                 DumpResource(team);
             }
         }
-        [TestMethod]
+        [TestMethod("[Team] 03 List from Organization")]
         public void Get03ListFromOrganization()
         {
-            var resource = new Resource(ResourceType.Organization, 2);
-            foreach (var team in Team.Find(resource))
+            var org = new Resource(ResourceType.Organization,
+                                   Team.Find(new("page_size=1")).Single().Organization);
+            foreach (var team in Team.Find(org))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
                 DumpObjectRoles(team);
             }
         }
-        [TestMethod]
+        [TestMethod("[Team] 04 List from User")]
         public void Get04ListFromUser()
         {
-            var resource = new Resource(ResourceType.User, 2);
-            foreach (var team in Team.Find(resource))
+            var user = User.Find(new("id__gt=1&page_size=1"))
+                           .Single();
+            foreach (var team in Team.Find(user))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
                 DumpObjectRoles(team);
             }
         }
-        [TestMethod]
+        [TestMethod("[Team] 05 List from Project")]
         public void Get05ListFromProject()
         {
-            var resource = new Resource(ResourceType.Project, 8);
-            foreach (var team in Team.Find(resource))
+            var proj = Project.Find(new("scm_type=git&order_by=-id&page_size=1"))
+                              .Single();
+            foreach (var team in Team.Find(proj))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
                 DumpObjectRoles(team);
             }
         }
-        [TestMethod]
+        [TestMethod("[Team] 06 List from Credential")]
         public void Get06FindOwnerFromCredential()
         {
-            var resource = new Resource(ResourceType.Credential, 2);
-            foreach (var team in Team.Find(resource))
+            var cred = Credential.Find(new("credential_type__kind=ssh&id__gt=1&order_by=id&page_size=1"))
+                                 .Single();
+            foreach (var team in Team.Find(cred))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
                 DumpObjectRoles(team);
             }
         }
-        [TestMethod]
+        [TestMethod("[Team] 07 List from Role")]
         public void Get07FindFromRole()
         {
-            var resource = new Resource(ResourceType.Role, 73);
-            foreach (var team in Team.Find(resource))
+            var role = Role.Find(new("role_field=admin_role&content_type__model=team&page_size=1")).Single();
+            foreach (var team in Team.Find(role))
             {
                 Assert.IsInstanceOfType<Team>(team);
                 Console.WriteLine($"[{team.Id}] {team.Name}");
@@ -1198,6 +1202,7 @@ namespace APITest
 
         }
     }
+
     [TestClass]
     public class TestCredential
     {

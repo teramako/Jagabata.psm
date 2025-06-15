@@ -70,10 +70,12 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Teams associated with <paramref name="resource"/>
-        /// <para>
+        /// </summary>
+        /// <remarks>
         /// Implement API: <c>/api/v2/{Type}/{Id}/teams/</c>
-        /// </para>
+        /// <para>
         /// Available types of <paramref name="resource"/>:
+        /// </para>
         /// <list type="bullet">
         ///     <item>Organization</item>
         ///     <item>User</item>
@@ -81,15 +83,15 @@ namespace Jagabata.Resources
         ///     <item>Credential</item>
         ///     <item>Role</item>
         /// </list>
-        /// </summary>
+        /// </remarks>
         /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<Team> FindAsync(IResource resource,
-                                                              HttpQuery? query = null,
-                                                              [EnumeratorCancellation]
-                                                              CancellationToken ct = default)
+                                                             HttpQuery? query = null,
+                                                             [EnumeratorCancellation]
+                                                             CancellationToken ct = default)
         {
             var path = resource.Type switch
             {
@@ -138,9 +140,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
-        public static Team[] Find(IResource resource, HttpQuery? query = null)
+        public static Team[] Find(IResource resource, HttpQuery query)
         {
             return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Teams associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Team[] Find(IResource resource,
+                                  string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20,
+                                  uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         public override ulong Id { get; } = id;
