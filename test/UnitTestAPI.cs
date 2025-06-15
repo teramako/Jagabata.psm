@@ -806,6 +806,7 @@ namespace APITest
         }
 
     }
+
     [TestClass]
     public class TestUser
     {
@@ -879,40 +880,39 @@ namespace APITest
             Console.WriteLine($"ExternalAccount  : {user.ExternalAccount}");
             Util.DumpSummary(user.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[User] 01 Simple Get")]
         public void Get01Single()
         {
-            var user = User.Get(2);
+            var user = User.Get(1);
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
-        [TestMethod]
+        [TestMethod("[User] 02 Simple Find")]
         public void Get02List()
         {
-            var query = new HttpQuery("page_size=2");
-            foreach (var user in User.Find(query))
+            foreach (var user in User.Find())
             {
                 DumpResource(user);
             }
         }
-        [TestMethod]
+        [TestMethod("[User] 03 Get Me")]
         public void Get03Me()
         {
             var user = User.GetMe();
             Assert.IsInstanceOfType<User>(user);
             DumpResource(user);
         }
-        [TestMethod]
+        [TestMethod("[User] 04 List from Organization")]
         public void Get04ListFromOrganization()
         {
-            var resource = new Resource(ResourceType.Organization, 2);
-            foreach (var user in User.Find(resource))
+            var org = Organization.Find(new("id__gt=1&order_by=id&page_size=1")).Single();
+            foreach (var user in User.Find(org))
             {
                 Assert.IsInstanceOfType<User>(user);
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
-        [TestMethod]
+        [TestMethod("[User] 05 List from Team")]
         public void Get05ListFromTeam()
         {
             var resource = new Resource(ResourceType.Team, 1);
@@ -922,7 +922,7 @@ namespace APITest
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
-        [TestMethod]
+        [TestMethod("[User] 06 List from Credential")]
         public void Get6ListOwnersFromCredential()
         {
             var resource = new Resource(ResourceType.Credential, 1);
@@ -932,7 +932,7 @@ namespace APITest
                 Console.WriteLine($"[{user.Id}] {user.Username} {user.Email}");
             }
         }
-        [TestMethod]
+        [TestMethod("[User] 07 List from Role")]
         public void Get07ListFromRole()
         {
             var resource = new Resource(ResourceType.Role, 1);
@@ -943,6 +943,7 @@ namespace APITest
             }
         }
     }
+
     [TestClass]
     public class TestProject
     {
