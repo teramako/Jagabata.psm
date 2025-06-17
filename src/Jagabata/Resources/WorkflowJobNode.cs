@@ -100,10 +100,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Workflow Job Nodes for a Workflow Job
-        /// <para>
-        /// Implement API: <c>/api/v2/workflow_jobs/<paramref name="workflowJobId"/>/workflow_nodes/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/workflow_jobs/<paramref name="workflowJobId"/>/workflow_nodes/</c>
+        /// </remarks>
         /// <param name="workflowJobId">Workflow Job ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -152,9 +152,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static WorkflowJobNode[] Find(ulong workflowJobId, HttpQuery? query = null)
+        public static WorkflowJobNode[] Find(ulong workflowJobId, HttpQuery query)
         {
             return [.. FindAsync(workflowJobId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Nodes for a Workflow Job by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowJobNode[] Find(ulong workflowJobId,
+                                             string? searchWords = null,
+                                             string orderBy = "-id",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(workflowJobId, new QueryBuilder().SetSearchWords(searchWords)
+                                                         .SetOrderBy(orderBy)
+                                                         .SetPageSize(pageSize)
+                                                         .SetStartPage(startPage)
+                                                         .Build());
         }
 
         public override ulong Id { get; } = id;
