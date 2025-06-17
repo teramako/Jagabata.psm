@@ -82,10 +82,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Workflow Approvals for a Workflow Approval Template
-        /// <para>
-        /// Implement API: <c>/api/v2/workflow_approval_templates/<paramref name="id"/>/approvals/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/workflow_approval_templates/<paramref name="id"/>/approvals/</c>
+        /// </remarks>
         /// <param name="id">Workflow Approval Template ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -134,9 +134,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static WorkflowApproval[] Find(ulong id, HttpQuery? query = null)
+        public static WorkflowApproval[] Find(ulong id, HttpQuery query)
         {
             return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Approvals for a Workflow Approval Template by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowApproval[] Find(ulong id,
+                                              string? searchWords = null,
+                                              string orderBy = "-id",
+                                              ushort pageSize = 20,
+                                              uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
         }
 
         public override ulong Id { get; } = id;

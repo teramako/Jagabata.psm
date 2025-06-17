@@ -2955,18 +2955,16 @@ namespace APITest
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"Timeout: {res.Timeout}");
         }
-        [TestMethod]
+        [TestMethod("[WorkflowApprovalTemplate] 01 Simple Get")]
         public void Get01Single()
         {
-            foreach (var approval in WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")))
-            {
-                Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
-                Assert.IsNotNull(approval.UnifiedJobTemplate);
-                var res = WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
-                Assert.IsInstanceOfType<WorkflowApprovalTemplate>(res);
-                DumpResource(res);
-                Util.DumpSummary(res.SummaryFields);
-            }
+            var approval = WorkflowApproval.Find(new("order_by=-id&page_size=1")).Single();
+            Console.WriteLine($"WorkflowApproval: [{approval.Id}]{approval.Name}");
+            Assert.IsNotNull(approval.UnifiedJobTemplate);
+            var res = WorkflowApprovalTemplate.Get((ulong)approval.UnifiedJobTemplate);
+            Assert.IsInstanceOfType<WorkflowApprovalTemplate>(res);
+            DumpResource(res);
+            Util.DumpSummary(res.SummaryFields);
         }
     }
 
@@ -2978,22 +2976,29 @@ namespace APITest
             Console.WriteLine($"{res.Id} {res.Type} {res.Name} {res.Description}");
             Console.WriteLine($"  {res.Status} {res.Finished}");
         }
-        [TestMethod]
+        [TestMethod("[WorkflowApproval] 01 Simple Get")]
         public void Get01Single()
         {
-            var query = new HttpQuery("order_by=-id&page_size=1");
-            foreach (var res in WorkflowApproval.Find(query))
+            var approvals = WorkflowApproval.Find(new("order_by=-id&page_size=1"));
+            Assert.AreEqual(1, approvals.Length);
+
+            var detail = WorkflowApproval.Get(approvals[0].Id);
+            Assert.IsInstanceOfType<WorkflowApproval.Detail>(detail);
+            DumpResource(detail);
+            Util.DumpSummary(detail.SummaryFields);
+        }
+        [TestMethod("[WorkflowApproval] 02 Simple List")]
+        public void Get02List()
+        {
+            foreach (var approval in WorkflowApproval.Find())
             {
-                var detail = WorkflowApproval.Get(res.Id);
-                Assert.IsInstanceOfType<WorkflowApproval.Detail>(detail);
-                DumpResource(detail);
-                Util.DumpSummary(detail.SummaryFields);
+                Assert.IsInstanceOfType<WorkflowApproval>(approval);
             }
         }
-        [TestMethod]
-        public void Get02FindFromWorkflowApprovalTemplate()
+        [TestMethod("[WorkflowApproval] 03 List from WorkflowApprovalTemplate")]
+        public void Get03FindFromWorkflowApprovalTemplate()
         {
-            var approval = WorkflowApproval.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            var approval = WorkflowApproval.Find(new("order_by=-id&page_size=1")).Single();
             Assert.IsNotNull(approval.UnifiedJobTemplate);
             var query = new HttpQuery("order_by=-id&page_size=2");
             foreach (var res in WorkflowApproval.Find((ulong)approval.UnifiedJobTemplate, query))
