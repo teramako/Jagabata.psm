@@ -2743,7 +2743,7 @@ namespace APITest
             Console.WriteLine($"Description : {res.Description}");
             Console.WriteLine($"Status      : {res.Status}");
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJob] 01 Simple Get")]
         public void Get01Single()
         {
             var job = WorkflowJob.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
@@ -2751,21 +2751,20 @@ namespace APITest
             Assert.IsInstanceOfType<WorkflowJob.Detail>(detail);
             Util.DumpSummary(detail.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJob] 02 List")]
         public void Get02List()
         {
-            var query = new HttpQuery("page_size=10&order_by=-id");
-            foreach (var res in WorkflowJob.Find(query))
+            foreach (var res in WorkflowJob.Find())
             {
                 Assert.IsInstanceOfType<WorkflowJob>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJob] 03 List from WorkflowJobTemplate")]
         public void Get03ListFromWorkflowJobTemplate()
         {
-            var wjt = new Resource(ResourceType.WorkflowJobTemplate, 13);
+            var wjt = WorkflowJobTemplate.Find(new("order_by=id&page_size=1")).Single();
             foreach (var job in WorkflowJob.Find(wjt.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJob>(job);

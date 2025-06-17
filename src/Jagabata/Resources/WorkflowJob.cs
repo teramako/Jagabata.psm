@@ -163,10 +163,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Workflow Job for a Workflow Job Template
-        /// <para>
-        /// Implement API: <c>/api/v2/workflow_job_templates/<paramref name="id"/>/workflow_jobs/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/workflow_job_templates/<paramref name="id"/>/workflow_jobs/</c>
+        /// </remarks>
         /// <param name="id">Workflow Job Template ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -215,9 +215,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static WorkflowJob[] Find(ulong id, HttpQuery? query = null)
+        public static WorkflowJob[] Find(ulong id, HttpQuery query)
         {
             return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job for a Workflow Job Template by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowJob[] Find(ulong id,
+                                         string? searchWords = null,
+                                         string orderBy = "-id",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
         }
 
         public override ulong Id { get; } = id;
