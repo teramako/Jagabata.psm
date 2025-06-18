@@ -2526,18 +2526,22 @@ namespace APITest
             Console.WriteLine($"{jt.Id} [{jt.Type}] {jt.Name}");
             Console.WriteLine($"  Status: {jt.Status}");
         }
-        [TestMethod]
-        public async Task Get01Single()
+        [TestMethod("[UnifiedJobTemplate] 01 Simple Get")]
+        public void Get01Single()
         {
-            var res = await UnifiedJobTemplate.GetAsync(1);
+            var templates = UnifiedJobTemplate.Find(new("order_by=id&page_size=1"));
+            Assert.AreEqual(1, templates.Length);
+
+
+            var res = UnifiedJobTemplate.Get(templates[0].Id);
             Console.WriteLine($"{res.Id} {res.Type} {res.Name}");
             Assert.IsInstanceOfType<IUnifiedJobTemplate>(res);
             DumpResource(res);
         }
-        [TestMethod]
-        public async Task Get02List()
+        [TestMethod("[UnifiedJobTemplate] 02 Simple List")]
+        public void Get02List()
         {
-            await foreach (var res in UnifiedJobTemplate.GetAsync([1, 6, 9, 11, 13]))
+            foreach (var res in UnifiedJobTemplate.Find())
             {
                 DumpResource(res);
                 switch (res)
@@ -2563,52 +2567,51 @@ namespace APITest
                 }
             }
         }
-
-        [TestMethod]
-        public async Task Get03ListJobTemplate()
+        [TestMethod("[UnifiedJobTemplate] 03 List JobTemplate")]
+        public void Get03ListJobTemplate()
         {
             var query = new HttpQuery("type=job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
+            foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<JobTemplate>(res);
             }
         }
-        [TestMethod]
-        public async Task Get04ListProject()
+        [TestMethod("[UnifiedJobTemplate] 04 List Project")]
+        public void Get04ListProject()
         {
             var query = new HttpQuery("type=project&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
+            foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<Project>(res);
             }
         }
-        [TestMethod]
-        public async Task Get05ListInventorySource()
+        [TestMethod("[UnifiedJobTemplate] 05 List InventorySource")]
+        public void Get05ListInventorySource()
         {
             var query = new HttpQuery("type=inventory_source&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
+            foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<InventorySource>(res);
             }
         }
-        [TestMethod]
-        public async Task Get06ListSystemJobTemplate()
+        [TestMethod("[UnifiedJobTemplate] 06 List SystemJobTemplate")]
+        public void Get06ListSystemJobTemplate()
         {
             var query = new HttpQuery("type=system_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
+            foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<SystemJobTemplate>(res);
             }
         }
-        [TestMethod]
-        public async Task Get07ListWorkflowJobTemplate()
+        [TestMethod("[UnifiedJobTemplate] 07 List WorkflowJobTemplate")]
+        public void Get07ListWorkflowJobTemplate()
         {
             var query = new HttpQuery("type=workflow_job_template&order_by=-id&page_size=2");
-            await foreach (var res in UnifiedJobTemplate.FindAsync(query))
+            foreach (var res in UnifiedJobTemplate.Find(query))
             {
                 DumpResource(res);
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
