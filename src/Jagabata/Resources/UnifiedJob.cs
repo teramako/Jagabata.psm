@@ -215,9 +215,9 @@ namespace Jagabata.Resources
         /// <param name="pageSize"></param>
         /// <param name="startPage"></param>
         public static IUnifiedJob[] Find(string? searchWords = null,
-                                            string orderBy = "-timestamp",
-                                            ushort pageSize = 20,
-                                            uint startPage = 1)
+                                         string orderBy = "-id",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
         {
             return Find(new QueryBuilder().SetSearchWords(searchWords)
                                           .SetOrderBy(orderBy)
