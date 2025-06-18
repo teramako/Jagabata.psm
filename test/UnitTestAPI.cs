@@ -2703,30 +2703,32 @@ namespace APITest
             Console.WriteLine($"Description : {res.Description}");
             Console.WriteLine($"Status      : {res.Status}");
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplate] 01 Simple Get")]
         public void Get01Single()
         {
-            var res = WorkflowJobTemplate.Get(13);
+            var wjts = WorkflowJobTemplate.Find(new("order_by=id&page_size=1"));
+            Assert.AreEqual(1, wjts.Length);
+
+            var res = WorkflowJobTemplate.Get(wjts[0].Id);
             Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplate] 02 Simple List")]
         public void Get02List()
         {
-            var query = new HttpQuery("page_size=10&order_by=-id");
-            foreach (var res in WorkflowJobTemplate.Find(query))
+            foreach (var res in WorkflowJobTemplate.Find())
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplate] 03 List from Organization")]
         public void Get03ListFromOrganization()
         {
-            var org = new Resource(ResourceType.Organization, 2);
-            foreach (var wjt in WorkflowJobTemplate.Find(org.Id))
+            var orgId = (ulong)WorkflowJobTemplate.Find(new("organization__gt=0&page_size=1")).Single().Organization!;
+            foreach (var wjt in WorkflowJobTemplate.Find(orgId))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplate>(wjt);
                 Console.WriteLine($"[{wjt.Id}] {wjt.Name} [{wjt.Status}]");

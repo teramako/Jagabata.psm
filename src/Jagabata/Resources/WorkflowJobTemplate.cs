@@ -109,10 +109,10 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Workflow Job Templates for an Organization
-        /// <para>
-        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/workflow_job_templates/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/workflow_job_templates/</c>
+        /// </remarks>
         /// <param name="organizationId">Organization ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
@@ -161,9 +161,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static WorkflowJobTemplate[] Find(ulong organizationId, HttpQuery? query = null)
+        public static WorkflowJobTemplate[] Find(ulong organizationId, HttpQuery query)
         {
             return [.. FindAsync(organizationId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Templates for an Organization by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowJobTemplate[] Find(ulong organizationId,
+                                                 string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20,
+                                                 uint startPage = 1)
+        {
+            return Find(organizationId, new QueryBuilder().SetSearchWords(searchWords)
+                                                          .SetOrderBy(orderBy)
+                                                          .SetPageSize(pageSize)
+                                                          .SetStartPage(startPage)
+                                                          .Build());
         }
 
         public override ulong Id { get; } = id;
