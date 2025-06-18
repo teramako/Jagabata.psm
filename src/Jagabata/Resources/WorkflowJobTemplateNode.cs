@@ -87,18 +87,18 @@ namespace Jagabata.Resources
 
         /// <summary>
         /// Find Workflow Job Template Nodes for a Workflow Job Template
-        /// <para>
-        /// Implement API: <c>/api/v2/workflow_job_templates/<paramref name="workflowJobTemplateId"/>/workflow_nodes/</c>
-        /// </para>
         /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/workflow_job_templates/<paramref name="workflowJobTemplateId"/>/workflow_nodes/</c>
+        /// </remarks>
         /// <param name="workflowJobTemplateId">Workflow Job Template ID</param>
         /// <param name="query"></param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         public static async IAsyncEnumerable<WorkflowJobTemplateNode> FindAsync(ulong workflowJobTemplateId,
-                                                                        HttpQuery? query = null,
-                                                                        [EnumeratorCancellation]
-                                                                        CancellationToken ct = default)
+                                                                                HttpQuery? query = null,
+                                                                                [EnumeratorCancellation]
+                                                                                CancellationToken ct = default)
         {
             var path = $"{Resources.WorkflowJobTemplate.PATH}{workflowJobTemplateId}/workflow_nodes/";
             await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobTemplateNode>(path, query, ct))
@@ -139,9 +139,27 @@ namespace Jagabata.Resources
         }
 
         /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
-        public static WorkflowJobTemplateNode[] Find(ulong workflowJobTemplateId, HttpQuery? query = null)
+        public static WorkflowJobTemplateNode[] Find(ulong workflowJobTemplateId, HttpQuery query)
         {
             return [.. FindAsync(workflowJobTemplateId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Template Nodes for a Workflow Job Template by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowJobTemplateNode[] Find(ulong workflowJobTemplateId,
+                                                     string? searchWords = null,
+                                                     string orderBy = "-id",
+                                                     ushort pageSize = 20,
+                                                     uint startPage = 1)
+        {
+            return Find(workflowJobTemplateId, new QueryBuilder().SetSearchWords(searchWords)
+                                                                 .SetOrderBy(orderBy)
+                                                                 .SetPageSize(pageSize)
+                                                                 .SetStartPage(startPage)
+                                                                 .Build());
         }
 
         public override ulong Id { get; } = id;

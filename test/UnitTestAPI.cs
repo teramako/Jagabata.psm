@@ -2787,35 +2787,38 @@ namespace APITest
             Console.WriteLine($"FailureNodes        : {string.Join(", ", res.FailureNodes)}");
             Console.WriteLine($"AlwaysNodes         : {string.Join(", ", res.AlwaysNodes)}");
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplateNode] 01 Simple Get")]
         public void Get01Single()
         {
-            var res = WorkflowJobTemplateNode.Get(1);
+            var nodes = WorkflowJobTemplateNode.Find(new("page_size=1"));
+            Assert.AreEqual(1, nodes.Length);
+
+            var res = WorkflowJobTemplateNode.Get(nodes[0].Id);
             Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
             DumpResource(res);
             Util.DumpSummary(res.SummaryFields);
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplateNode] 02 Simple List")]
         public void Get02List()
         {
-            var query = new HttpQuery("page_size=10&order_by=-id");
-            foreach (var res in WorkflowJobTemplateNode.Find(query))
+            foreach (var res in WorkflowJobTemplateNode.Find())
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplateNode>(res);
                 DumpResource(res);
                 Util.DumpSummary(res.SummaryFields);
             }
         }
-        [TestMethod]
+        [TestMethod("[WorkflowJobTemplateNode] 03 List from WorkflowJobTemplate")]
         public void Get03ListFromWorkflowJobTemplate()
         {
-            var wjt = WorkflowJobTemplate.Find(new HttpQuery("order_by=-id&page_size=1")).Single();
+            var wjt = WorkflowJobTemplate.Find(new("order_by=-id&page_size=1")).Single();
             foreach (var node in WorkflowJobTemplateNode.Find(wjt.Id))
             {
                 Assert.IsInstanceOfType<WorkflowJobTemplateNode>(node);
             }
         }
     }
+
     [TestClass]
     public class TestWorkflowJobNode
     {
