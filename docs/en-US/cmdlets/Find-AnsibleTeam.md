@@ -13,8 +13,8 @@ Retrieve Teams.
 ## SYNTAX
 
 ```
-Find-AnsibleTeam [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-AnsibleTeam [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <HttpQuery>]
+ [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -85,7 +85,7 @@ For examples:
 For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
-Type: NameValueCollection
+Type: HttpQuery
 Parameter Sets: (All)
 Aliases:
 

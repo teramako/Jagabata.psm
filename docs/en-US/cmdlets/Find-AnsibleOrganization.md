@@ -14,15 +14,14 @@ Retrieve Organizations.
 
 ### All (Default)
 ```
-Find-AnsibleOrganization [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-AnsibleOrganization [[-Name] <String[]>] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <HttpQuery>]
+ [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### User
 ```
 Find-AnsibleOrganization -User <UInt64> [-Admin] [[-Name] <String[]>] [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Search <String[]>] [-Filter <HttpQuery>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -112,7 +111,7 @@ For examples:
 For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
-Type: NameValueCollection
+Type: HttpQuery
 Parameter Sets: (All)
 Aliases:
 

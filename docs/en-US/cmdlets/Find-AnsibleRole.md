@@ -13,8 +13,8 @@ Retrieve Roles all or granted to the target resource.
 ## SYNTAX
 
 ```
-Find-AnsibleRole [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+Find-AnsibleRole [[-Resource] <IResource>] [-OrderBy <String[]>] [-Search <String[]>] [-Filter <HttpQuery>]
+ [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -82,7 +82,7 @@ For examples:
 For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
-Type: NameValueCollection
+Type: HttpQuery
 Parameter Sets: (All)
 Aliases:
 

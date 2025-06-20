@@ -14,21 +14,20 @@ Retrieve WorkflowJobTemplateNodes.
 
 ### All (Default)
 ```
-Find-AnsibleWorkflowJobTemplateNode [-OrderBy <String[]>] [-Search <String[]>] [-Filter <NameValueCollection>]
+Find-AnsibleWorkflowJobTemplateNode [-OrderBy <String[]>] [-Search <String[]>] [-Filter <HttpQuery>]
  [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### WorkflowJobTemplate
 ```
 Find-AnsibleWorkflowJobTemplateNode [-Template] <UInt64> [-OrderBy <String[]>] [-Search <String[]>]
- [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
+ [-Filter <HttpQuery>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ### WorkflowJobTemplateNode
 ```
 Find-AnsibleWorkflowJobTemplateNode [-Node] <UInt64> [-Linked] <WorkflowJobNodeLinkState> [-OrderBy <String[]>]
- [-Search <String[]>] [-Filter <NameValueCollection>] [-Count <UInt16>] [-Page <UInt32>] [-All]
- [<CommonParameters>]
+ [-Search <String[]>] [-Filter <HttpQuery>] [-Count <UInt16>] [-Page <UInt32>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -105,7 +104,7 @@ For examples:
 For more details, see [about_Jagabata.psm_Filter_parameter](about_Jagabata.psm_Filter_parameter.md).
 
 ```yaml
-Type: NameValueCollection
+Type: HttpQuery
 Parameter Sets: (All)
 Aliases:
 
