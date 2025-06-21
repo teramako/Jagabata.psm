@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets;
 
@@ -8,25 +6,15 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
 {
     public virtual ulong[] Id { get; set; } = [];
 
-    [Parameter(ValueFromPipelineByPropertyName = true, DontShow = true)]
-    public ResourceType? Type { get; set; }
-
     protected HashSet<ulong> IdSet { get; } = [];
-    protected NameValueCollection Query { get; } = HttpUtility.ParseQueryString("");
+    protected HttpQuery Query { get; } = [];
 
     private string? _apiPath;
     protected virtual string ApiPath
     {
-        get
-        {
-            if (_apiPath is not null)
-            {
-                return _apiPath;
-            }
-
-            _apiPath = GetApiPath(typeof(TResource));
-            return _apiPath;
-        }
+        get => _apiPath is not null || Utils.TryGetApiPath<TResource>(out _apiPath)
+              ? _apiPath
+              : throw new NotImplementedException($"'PATH' field is not implemented on {typeof(TResource)}");
         set => _apiPath = value;
     }
 
@@ -48,27 +36,15 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     /// </summary>
     protected IEnumerable<TResource> GetResultSet()
     {
-        if (IdSet.Count == 0)
+        return IdSet.Count switch
         {
-            yield break;
-        }
-        else if (IdSet.Count == 1)
-        {
-            var res = GetResource<TResource>($"{ApiPath}{IdSet.First()}/");
-            yield return res;
-        }
-        else
-        {
-            Query.Add("id__in", string.Join(',', IdSet));
-            Query.Add("page_size", $"{IdSet.Count}");
-            foreach (var resultSet in GetResultSet<TResource>(ApiPath, Query, true))
-            {
-                foreach (var res in resultSet.Results)
-                {
-                    yield return res;
-                }
-            }
-        }
+            0 => [],
+            1 => [GetResource<TResource>($"{ApiPath}{IdSet.First()}/")],
+            _ => new QueryBuilder(Query).SetOrderBy("id")
+                                        .BuildWithIdList(IdSet.Order().ToArray())
+                                        .SelectMany(query => GetResultSet<TResource>(ApiPath, query))
+                                        .SelectMany(static resultSet => resultSet.Results)
+        };
     }
 
     /// <summary>
@@ -78,6 +54,11 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
     /// <param name="subPath">sub path</param>
     protected IEnumerable<TResource> GetResource(string subPath = "")
     {
+        if (!string.IsNullOrEmpty(subPath) && !subPath.EndsWith('/'))
+            subPath += '/';
+
+        var tailingPathAndQuery = Query.Count == 0 ? subPath : $"{subPath}?{Query}";
+
         foreach (var id in Id.Where(static id => id > 0))
         {
             if (!IdSet.Add(id))
@@ -85,7 +66,7 @@ public abstract class GetCommandBase<TResource> : APICmdletBase where TResource 
                 // skip already processed
                 continue;
             }
-            var res = GetResource<TResource>($"{ApiPath}{id}/{subPath}");
+            var res = GetResource<TResource>($"{ApiPath}{id}/{tailingPathAndQuery}");
             yield return res;
         }
     }

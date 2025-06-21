@@ -24,6 +24,30 @@ namespace Jagabata.Cmdlets
         }
     }
 
+    /// <summary>
+    /// GET <c>/api/v2/inventories/{id}/tree/</c>
+    /// </summary>
+    [Cmdlet(VerbsCommon.Get, "GroupTree")]
+    [OutputType(typeof(Group.Tree))]
+    public class GetGroupTreeCommand : GetCommandBase<Group.Tree[]>
+    {
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
+        [ResourceIdTransformation(ResourceType.Inventory)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Inventory)]
+        [Alias("inventory")]
+        public override ulong[] Id { get; set; } = [];
+
+        protected override string ApiPath => Inventory.PATH;
+
+        protected override void ProcessRecord()
+        {
+            foreach (var rootGroups in GetResource("tree/"))
+            {
+                WriteObject(rootGroups, true);
+            }
+        }
+    }
+
     [Cmdlet(VerbsCommon.Find, "Group")]
     [OutputType(typeof(Group))]
     public class FindGroupCommand : FindCommandBase
@@ -53,8 +77,7 @@ namespace Jagabata.Cmdlets
         public SwitchParameter OnlyParnets { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "inventory", "variables",
-                           "parents", "created_by", "modified_by", "children", "hosts")]
+        [OrderByCompletionFromHelp(ResourceType.Group, Group.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

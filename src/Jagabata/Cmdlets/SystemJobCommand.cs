@@ -35,11 +35,7 @@ namespace Jagabata.Cmdlets
         public string[]? Status { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "unified_job_template",
-                           "launch_type", "status", "execution_environment", "failed", "started", "finished",
-                           "canceled_on", "elapsed", "job_explanation", "execution_node", "work_unit_id",
-                           "system_job_template", "job_type", "schedule", "notifications", "created_by",
-                           "modified_by", "dependent_jobs", "labels", "instance_group")]
+        [OrderByCompletionFromHelp(ResourceType.SystemJob, SystemJobBase.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 
@@ -53,7 +49,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = SystemJobTemplate > 0 ? $"{Resources.SystemJobTemplate.PATH}{SystemJobTemplate}/jobs/" : SystemJob.PATH;
+            var path = SystemJobTemplate > 0
+                ? $"{Resources.SystemJobTemplate.PATH}{SystemJobTemplate}/jobs/"
+                : SystemJobBase.PATH;
             Find<SystemJob>(path);
         }
     }

@@ -1,129 +1,51 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
-    public interface IInventory
-    {
-        /// <summary>
-        /// Name of this inventory.
-        /// </summary>
-        string Name { get; }
-        /// <summary>
-        /// Optional description of this inventry.
-        /// </summary>
-        string Description { get; }
-        /// <summary>
-        /// Organization containing this inventory.
-        /// </summary>
-        ulong Organization { get; }
-        /// <summary>
-        /// Kind of inventory being represented.
-        /// <list type="bullet">
-        ///     <item>
-        ///         <term><c>""</c></term>
-        ///         <description>Hosts have a direct link to this inventory.(default></description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"smart"</c></term>
-        ///         <description>Hosts for inventory generated using the host_filter property</description>
-        ///     </item>
-        ///     <item>
-        ///         <term><c>"constructed"</c></term>
-        ///         <description>Parse list of source inventories with the constructed inventory plugin.</description>
-        ///     </item>
-        /// </list>
-        /// </summary>
-        string Kind { get; }
-        /// <summary>
-        /// Filter that will be applied to the hosts of this inventory.
-        /// </summary>
-        string HostFilter { get; }
-        /// <summary>
-        /// Inventory variables in JSON or YAML
-        /// </summary>
-        string Variables { get; }
-        /// <summary>
-        /// If enabled, the inventory will prevent adding any organization instance groups
-        /// to the list of preferred instances groups to run associated job templates on.
-        /// If this setting is enabled and you provided an empty list, the global instance groups
-        /// will be applied.
-        /// </summary>
-        bool PreventInstanceGroupFallback { get; }
-    }
-
     public class Inventory(ulong id, ResourceType type, string url, RelatedDictionary related,
                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                            string description, ulong organization, string kind, string hostFilter, string variables,
                            bool hasActiveFailures, int totalHosts, int hostsWithActiveFailures, int totalGroups,
                            bool hasInventorySources, int totalInventorySources, int inventorySourcesWithFailures,
                            bool pendingDeletion, bool preventInstanceGroupFallback)
-        : SummaryFieldsContainer, IInventory, IResource, ICacheableResource
+        : InventoryBase
     {
         public const string PATH = "/api/v2/inventories/";
 
         /// <summary>
-        /// Retrieve an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// Get an Inventory
+        /// <para>
+        /// Implement API: <c>/api/v2/inventories/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Inventory ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Inventory> Get(ulong id)
+        public static async Task<Inventory> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Inventory>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Inventory>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Inventories.<br/>
-        /// API Path: <c>/api/v2/inventories/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Inventory Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query, getAll))
-            {
-                foreach (var inventory in result.Contents.Results)
-                {
-                    yield return inventory;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Inventories for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/inventories/</c>
+        /// Find Inventories
+        /// <para>
+        /// Implement API: <c>/api/v2/inventories//</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> FindFromOrganization(ulong organizationId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+        public static async IAsyncEnumerable<Inventory> FindAsync(HttpQuery? query = null,
+                                                                  [EnumeratorCancellation]
+                                                                  CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, getAll))
-            {
-                foreach (var inventory in result.Contents.Results)
-                {
-                    yield return inventory;
-                }
-            }
-        }
-        /// <summary>
-        /// List Inventories for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/input_inventories/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Inventory> FindInputInventoires(ulong inventoryId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
-        {
-            var path = $"{PATH}{inventoryId}/input_inventories/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(PATH, query, ct))
             {
                 foreach (var inventory in result.Contents.Results)
                 {
@@ -132,42 +54,126 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
-        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public ulong Organization { get; } = organization;
-        public string Kind { get; } = kind;
-        public string HostFilter { get; } = hostFilter;
-        public string Variables { get; } = variables;
-        public bool HasActiveFailures { get; } = hasActiveFailures;
-        public int TotalHosts { get; } = totalHosts;
-        public int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
-        public int TotalGroups { get; } = totalGroups;
-        public bool HasInventorySources { get; } = hasInventorySources;
-        public int TotalInventorySources { get; } = totalInventorySources;
-        public int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
-        public bool PendingDeletion { get; } = pendingDeletion;
-        public bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
-
-        public override string ToString()
+        /// <summary>
+        /// Find Inventories associated with <paramref name="resource"/>
+        /// </summary>
+        /// <remarks>
+        /// Implement API:
+        /// <list type="bullet">
+        ///     <item><c>/api/v2/{organizations | projects}/{Id}/inventories/</c></item>
+        ///     <item><c>/api/v2/inventories/{Id}/input_inventories/</c></item>
+        ///     <item><c>/api/v2/hosts/{Id}/smart_inventories/</c></item>
+        /// </list>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>Project</item>
+        ///     <item>Inventory</item>
+        ///     <item>Host</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Inventory> FindAsync(IResource resource,
+                                                                  HttpQuery? query = null,
+                                                                  [EnumeratorCancellation]
+                                                                  CancellationToken ct = default)
         {
-            return $"[{Id}] {Name}";
-        }
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
+            var path = resource.Type switch
             {
-                Metadata = {
-                    ["Kind"] = Kind
-                }
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/inventories/",
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/inventories/",
+                ResourceType.Inventory => $"{PATH}{resource.Id}/input_inventories/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/smart_inventories/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
             };
+            await foreach (var result in RestAPI.GetResultSetAsync<Inventory>(path, query, ct))
+            {
+                foreach (var inventory in result.Contents.Results)
+                {
+                    yield return inventory;
+                }
+            }
         }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Inventory[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Insntance Groups by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventories/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Inventory[] Find(string? searchWords = null,
+                                       string orderBy = "name",
+                                       ushort pageSize = 20,
+                                       uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Inventory[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Inventories associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Inventory[] Find(IResource resource,
+                                       string? searchWords = null,
+                                       string orderBy = "name",
+                                       ushort pageSize = 20,
+                                       uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
+        public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong Organization { get; } = organization;
+        public override string Kind { get; } = kind;
+        /// <summary>
+        /// Filter that will be applied to the hosts of this inventory.
+        /// </summary>
+        public string HostFilter { get; } = hostFilter;
+        public override string Variables { get; } = variables;
+        public override bool HasActiveFailures { get; } = hasActiveFailures;
+        public override int TotalHosts { get; } = totalHosts;
+        public override int HostsWithActiveFailures { get; } = hostsWithActiveFailures;
+        public override int TotalGroups { get; } = totalGroups;
+        public override bool HasInventorySources { get; } = hasInventorySources;
+        public override int TotalInventorySources { get; } = totalInventorySources;
+        public override int InventorySourcesWithFailures { get; } = inventorySourcesWithFailures;
+        public override bool PendingDeletion { get; } = pendingDeletion;
+        public override bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
     }
 }

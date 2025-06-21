@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Management.Automation;
 using System.Security;
 using System.Text;
@@ -13,7 +14,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
     {
         Dispose(false);
     }
-    protected readonly JobProgressManager JobProgressManager = [];
+    protected JobProgressManager JobProgressManager { get; } = [];
     private Sleep? _sleep;
     protected void Sleep(int milliseconds)
     {
@@ -109,22 +110,22 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
         var sb = new StringBuilder();
         if (notSpecified)
         {
-            sb.Append($"Not specified {label}. Will be used default");
+            sb.Append(CultureInfo.InvariantCulture, $"Not specified {label}. Will be used default");
         }
         else
         {
-            sb.Append($"Accepted {label}");
+            sb.Append(CultureInfo.InvariantCulture, $"Accepted {label}");
         }
         if (!string.IsNullOrEmpty(resultValue))
         {
-            sb.Append($": {resultValue}");
+            sb.Append(CultureInfo.InvariantCulture, $": {resultValue}");
         }
         WriteHost(sb.ToString());
         ui.WriteLine("\n");
     }
 
     // Store SecureString gotten from Survey and Credential passwords.
-    protected List<SecureString> SecureStrings = [];
+    protected List<SecureString> SecureStrings { get; } = [];
 
     protected void ClearSecureStrings()
     {
@@ -192,7 +193,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         return false;
                     case SurveySpecType.Integer:
                         int? intDefault = string.IsNullOrEmpty(spec.Default as string) ? null : (int)spec.Default;
-                        if (prompt.Ask<int>(label, key, (int?)spec.Default, description, spec.Required, out var intAnswer))
+                        if (prompt.Ask(label, key, (int?)spec.Default, description, spec.Required, out var intAnswer))
                         {
                             extraVars[varName] = intAnswer.Input;
                             PrintPromptResult(varName, $"{intAnswer.Input}", intAnswer.IsEmpty);
@@ -201,7 +202,7 @@ public abstract class LaunchJobCommandBase : APICmdletBase, IDisposable
                         return false;
                     case SurveySpecType.Float:
                         float? floatDefault = string.IsNullOrEmpty(spec.Default as string) ? null : (float)spec.Default;
-                        if (prompt.Ask<float>(label, key, floatDefault, description, spec.Required, out var floatAnswer))
+                        if (prompt.Ask(label, key, floatDefault, description, spec.Required, out var floatAnswer))
                         {
                             extraVars[varName] = floatAnswer.Input;
                             PrintPromptResult(varName, $"{floatAnswer.Input}", floatAnswer.IsEmpty);

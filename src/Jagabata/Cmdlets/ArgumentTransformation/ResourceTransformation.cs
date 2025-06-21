@@ -2,7 +2,6 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Management.Automation;
-using Jagabata.Resources;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation
 {

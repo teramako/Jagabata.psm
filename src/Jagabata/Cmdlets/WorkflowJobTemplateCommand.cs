@@ -38,15 +38,7 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "last_job_run",
-                           "last_job_failed", "next_job_run", "status", "organization", "survey_enabled",
-                           "allow_simultaneous", "ask_variables_on_launch", "inventory",
-                           "ask_inventory_on_launch", "ask_scm_branch_on_launch", "ask_limit_on_launch",
-                           "webhook_service", "webhook_credential", "ask_labels_on_launch",
-                           "ask_skip_tags_on_launch", "ask_tags_on_launch", "notification_templates_error",
-                           "notification_templates_success", "notification_templates_approvals",
-                           "notification_templates_started", "inventory", "organization", "last_job",
-                           "schedules", "created_by", "modified_by", "labels", "next_schedule")]
+        [OrderByCompletionFromHelp(ResourceType.WorkflowJobTemplate, WorkflowJobTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -260,11 +252,11 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.Inventory.Id,
-                                           helpMessage: "Input an Inventory ID.",
-                                           required: false,
-                                           out var inventoryAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.Inventory.Id,
+                                    helpMessage: "Input an Inventory ID.",
+                                    required: false,
+                                    out var inventoryAnswer))
                 {
                     if (!inventoryAnswer.IsEmpty && inventoryAnswer.Input > 0)
                     {
@@ -598,12 +590,14 @@ namespace Jagabata.Cmdlets
         public SwitchParameter SurveyEnabled { get; set; }
 
         [Parameter()]
-        [ValidateSet("github", "gitlab")]
+        [AllowEmptyString]
+        [ValidateSet("github", "gitlab", "")]
         public string? WebhookService { get; set; }
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -728,12 +722,15 @@ namespace Jagabata.Cmdlets
         public bool? SurveyEnabled { get; set; }
 
         [Parameter()]
-        [ValidateSet("github", "gitlab")]
+        [AllowEmptyString]
+        [ValidateSet("github", "gitlab", "")]
         public string? WebhookService { get; set; }
 
         [Parameter()]
+        [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]

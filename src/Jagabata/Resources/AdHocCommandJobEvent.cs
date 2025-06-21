@@ -1,35 +1,31 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
-    public interface IAdHocCommandJobEvent : IJobEventBase
-    {
-        ulong AdHocCommand { get; }
-        ulong? Host { get; }
-        string HostName { get; }
-    }
-
     public class AdHocCommandJobEvent(ulong id, ResourceType type, string url, RelatedDictionary related,
                                       SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                                       ulong adHocCommand, JobEventEvent @event, int counter, string eventDisplay,
                                       Dictionary<string, object?> eventData, bool failed, bool changed, string uuid, ulong? host,
                                       string hostName, string stdout, int startLine, int endLine, JobVerbosity verbosity)
-        : SummaryFieldsContainer, IAdHocCommandJobEvent, IResource, ICacheableResource
+        : JobEventBase
     {
         /// <summary>
-        /// List Ad Hoc Command Events for an Ad Hoc Command.<br/>
-        /// API Path: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// Find AdHocCommand Events for an Ad HocCommand
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// </para>
         /// </summary>
-        /// <param name="adHocCommandId"></param>
+        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<AdHocCommandJobEvent> FindFromAdHocCommand(ulong adHocCommandId,
-                                                                                     NameValueCollection? query = null,
-                                                                                     bool getAll = false)
+        public static async IAsyncEnumerable<AdHocCommandJobEvent> FindAsync(ulong adHocCommandId,
+                                                                             HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            var path = $"{Resources.AdHocCommand.PATH}{adHocCommandId}/events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query, getAll))
+            var path = $"{AdHocCommandBase.PATH}{adHocCommandId}/events/";
+            await foreach (var result in RestAPI.GetResultSetAsync<AdHocCommandJobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
@@ -38,29 +34,60 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId, HttpQuery query)
+        {
+            return [.. FindAsync(adHocCommandId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find AdHocCommand Events for an Ad HocCommand by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/ad_hoc_commands/<paramref name="adHocCommandId"/>/events/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="adHocCommandId">AdHocCommand Job ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <returns></returns>
+        public static AdHocCommandJobEvent[] Find(ulong adHocCommandId,
+                                                  string? searchWords = null,
+                                                  string orderBy = "counter",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(adHocCommandId, new QueryBuilder().SetSearchWords(searchWords)
+                                                          .SetOrderBy(orderBy)
+                                                          .SetPageSize(pageSize)
+                                                          .SetStartPage(startPage)
+                                                          .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
         public ulong AdHocCommand { get; } = adHocCommand;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
         public ulong? Host { get; } = host;
         public string HostName { get; } = hostName;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {

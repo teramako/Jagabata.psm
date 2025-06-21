@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -36,43 +36,50 @@ namespace Jagabata.Resources
         Messages? Messages { get; }
     }
 
-    public class NotificationTemplate(ulong id,
-                                      ResourceType type,
-                                      string url,
-                                      RelatedDictionary related,
-                                      SummaryFieldsDictionary summaryFields,
-                                      DateTime created,
-                                      DateTime? modified,
-                                      string name,
-                                      string description,
-                                      ulong organization,
+    public class NotificationTemplate(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                      string name, string description, ulong organization,
                                       NotificationType notificationType,
-                                      Dictionary<string, object?> notificationConfiguration,
-                                      Messages? messages)
-                : SummaryFieldsContainer, INotificationTemplate, IResource, ICacheableResource
+                                      Dictionary<string, object?> notificationConfiguration, Messages? messages)
+        : ResourceBase, INotificationTemplate
     {
         public const string PATH = "/api/v2/notification_templates/";
+
         /// <summary>
-        /// Retrieve a Notification Template.<br/>
-        /// API Path: <c>/api/v2/notification_templates/<paramref name="id"/>/</c>
+        /// Get a Notification Template
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">NotificationTemplate ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<NotificationTemplate> Get(ulong id)
+        public static async Task<NotificationTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<NotificationTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<NotificationTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static NotificationTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Notification Templates.<br/>
-        /// API Path: <c>/api/v2/notification_templates/</c>
+        /// Find Notification Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<NotificationTemplate> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<NotificationTemplate> FindAsync(HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<NotificationTemplate>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<NotificationTemplate>(PATH, query, ct))
             {
                 foreach (var notificationTemplate in result.Contents.Results)
                 {
@@ -81,10 +88,38 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static NotificationTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find NotificationTemplate by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static NotificationTemplate[] Find(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
@@ -96,7 +131,48 @@ namespace Jagabata.Resources
         public Dictionary<string, object?> NotificationConfiguration { get; } = notificationConfiguration;
         public Messages? Messages { get; } = messages;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Find notifications related to this notification template
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/{id}/notifications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Notification[] FindNotifications(string? searchWords = null,
+                                                string orderBy = "-id",
+                                                ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Notification>("notifications",
+                                                             searchWords,
+                                                             orderBy,
+                                                             pageSize)];
+        }
+
+        /// <summary>
+        /// Find notifications related to this notification template
+        /// <para>
+        /// Implement API: <c>/api/v2/notification_templates/{id}/notifications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Notification[] FindNotifications(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Notification>("notifications", query)];
+        }
+
+        /// <summary>
+        /// Get the organization related this notification template
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {
@@ -104,6 +180,11 @@ namespace Jagabata.Resources
                     ["Type"] = $"{NotificationType}"
                 }
             };
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
         }
     }
 

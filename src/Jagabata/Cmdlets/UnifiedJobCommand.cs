@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Cmdlets.Utilities;
 using Jagabata.Resources;
-using System.Collections.Specialized;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -26,18 +25,13 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "unified_job_template",
-                           "launch_type", "status", "execution_environment", "failed", "started", "finished",
-                           "canceled_on", "elapsed", "job_explanation", "execution_node", "controller_node",
-                           "work_unit_id", "notifications", "organization", "schedule", "created_by",
-                           "modified_by", "credentials", "instance_group", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.UnifiedJob, UnifiedJob.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
-        private IEnumerable<ResultSet> GetResultSet(string path,
-                                                    NameValueCollection? query = null,
-                                                    bool getAll = false)
+        private IEnumerable<ResultSet> GetResultSet(string path, HttpQuery query)
         {
-            var nextPathAndQuery = path + (query is null ? "" : $"?{query}");
+            var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
+            var count = 0;
             do
             {
                 WriteVerboseRequest(nextPathAndQuery, Method.GET);
@@ -67,19 +61,20 @@ namespace Jagabata.Cmdlets
 
                 yield return resultSet;
 
-                nextPathAndQuery = string.IsNullOrEmpty(resultSet?.Next) ? string.Empty : resultSet.Next;
-            } while (getAll && !string.IsNullOrEmpty(nextPathAndQuery));
+                nextPathAndQuery = resultSet.Next ?? string.Empty;
+            } while ((query.IsInfinity || ++count < query.QueryCount)
+                     && !string.IsNullOrEmpty(nextPathAndQuery));
         }
         private void WriteResultSet(string path)
         {
-            foreach (var resultSet in GetResultSet(path, Query, All))
+            foreach (var resultSet in GetResultSet(path, Query.Build()))
             {
                 WriteObject(resultSet.Results, true);
             }
         }
         private void WriteResultSet<T>(string path) where T : class
         {
-            foreach (var resultSet in GetResultSet<T>(path, Query, All))
+            foreach (var resultSet in GetResultSet<T>(path, Query.Build()))
             {
                 WriteObject(resultSet.Results, true);
             }
@@ -105,7 +100,7 @@ namespace Jagabata.Cmdlets
                     WriteResultSet<InventoryUpdateJob>($"{InventorySource.PATH}{Resource.Id}/inventory_updates/");
                     break;
                 case ResourceType.SystemJobTemplate:
-                    WriteResultSet<SystemJob>($"{SystemJob.PATH}{Resource.Id}/jobs/");
+                    WriteResultSet<SystemJob>($"{SystemJobBase.PATH}{Resource.Id}/jobs/");
                     break;
                 case ResourceType.Inventory:
                     WriteResultSet<AdHocCommand>($"{Inventory.PATH}{Resource.Id}/ad_hoc_commands/");
@@ -208,12 +203,12 @@ namespace Jagabata.Cmdlets
 
             var path = Type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Id}/cancel/",
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Id}/cancel/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Id}/cancel/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{Id}/cancel/",
-                ResourceType.SystemJob => $"{SystemJob.PATH}{Id}/cancel/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Id}/cancel/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Id}/cancel/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{Id}/cancel/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{Id}/cancel/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{Id}/cancel/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{Id}/cancel/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{Id}/cancel/",
                 _ => throw new NotImplementedException()
             };
             var psobject = new PSObject();

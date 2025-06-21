@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
@@ -22,30 +22,45 @@ namespace Jagabata.Resources
                               SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
                               ulong notificationTemplate, string error, JobStatus status, int notificationsSent,
                               NotificationType notificationType, string recipients, string subject, string? body)
-                : SummaryFieldsContainer, INotification, IResource, ICacheableResource
+        : ResourceBase, INotification
     {
         public const string PATH = "/api/v2/notifications/";
+
         /// <summary>
-        /// Retrieve a Notification.<br/>
-        /// API Path: <c>/api/v2/notifications/<paramref name="id"/>/</c>
+        /// Get a Notification
+        /// <para>
+        /// Implement API: <c>/api/v2/notifications/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Notification ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Notification> Get(ulong id)
+        public static async Task<Notification> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Notification>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Notification>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Notification Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Notifications.<br/>
-        /// API Path: <c>/api/v2/notifications/</c>
+        /// Find Notifications
+        /// <para>
+        /// Implement API: <c>/api/v2/notifications/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Notification> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<Notification> FindAsync(HttpQuery? query = null,
+                                                                     [EnumeratorCancellation]
+                                                                     CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Notification>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Notification>(PATH, query, ct))
             {
                 foreach (var notification in result.Contents.Results)
                 {
@@ -54,10 +69,109 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Notifications associated with <paramref name="resource"/>
+        /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/notifications/</c>
+        /// <para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>ProjectUpdate</item>
+        ///     <item>InventoryUpdate</item>
+        ///     <item>Job</item>
+        ///     <item>AdHocCommand</item>
+        ///     <item>SystemJob</item>
+        ///     <item>NotificationTemplate</item>
+        ///     <item>WorkflowJob</item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Notification> FindAsync(IResource resource,
+                                                                     HttpQuery? query = null,
+                                                                     [EnumeratorCancellation]
+                                                                     CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{resource.Id}/notifications/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{resource.Id}/notifications/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/notifications/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{resource.Id}/notifications/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{resource.Id}/notifications/",
+                ResourceType.NotificationTemplate => $"{Resources.NotificationTemplate.PATH}{resource.Id}/notifications/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{resource.Id}/notifications/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Notification>(path, query, ct))
+            {
+                foreach (var notification in result.Contents.Results)
+                {
+                    yield return notification;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Notification[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Notification[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Notifications by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/notifications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Notification[] Find(string? searchWords = null,
+                                          string orderBy = "-id",
+                                          ushort pageSize = 20,
+                                          uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find Notifications associated with <paramref name="resource"/>
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Notification[] Find(IResource resource,
+                                          string? searchWords = null,
+                                          string orderBy = "-id",
+                                          ushort pageSize = 20,
+                                          uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
         public DateTime Created { get; } = created;
@@ -71,7 +185,30 @@ namespace Jagabata.Resources
         public string Subject { get; } = subject;
         public string? Body { get; } = body;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Get the notification template related to this notification.
+        /// </summary>
+        public NotificationTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("notification_template", out var path)
+                ? RestAPI.Get<NotificationTemplate>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the job related to this notification.
+        /// </summary>
+        public IUnifiedJob? GetJob()
+        {
+            var query = new QueryBuilder().Add("notifications", $"{Id}").SetPageSize(1).Build();
+            return RestAPI.GetResultSetAsync(UnifiedJob.PATH, query)
+                          .ToBlockingEnumerable()
+                          .SelectMany(static apiResult => apiResult.Contents.Results)
+                          .OfType<IUnifiedJob>()
+                          .FirstOrDefault();
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty)
             {

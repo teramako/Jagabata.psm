@@ -2,12 +2,12 @@ using System.Text;
 
 namespace Jagabata;
 
-public interface ICacheableResource : IResource
+internal interface ICacheableResource : IResource
 {
     CacheItem GetCacheItem();
 }
 
-public interface IHasCacheableItems
+internal interface IHasCacheableItems
 {
     IEnumerable<CacheItem> GetCacheableItems();
 }
@@ -92,6 +92,8 @@ public static class Caches
 {
     private static readonly Lazy<List<CacheItem>> _items = new(static () => []);
     internal static List<CacheItem> Data => _items.Value;
+    public static Dictionary<ResourceType, Resources.ApiHelp> ApiHelps { get; } = [];
+
     // FIXME: to be configurable
     public static int MAX_COUNT = 100;
 

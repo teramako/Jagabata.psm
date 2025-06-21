@@ -11,3 +11,12 @@ internal class OrderByCompletionAttribute(params string[] keys)
         return new OrderByCompleter(Keys);
     }
 }
+
+internal class OrderByCompletionFromHelpAttribute(ResourceType resourceType, string path)
+    : ArgumentCompleterAttribute, IArgumentCompleterFactory
+{
+    public IArgumentCompleter Create()
+    {
+        return new OrderByCompleterFromHelp(resourceType, path);
+    }
+}

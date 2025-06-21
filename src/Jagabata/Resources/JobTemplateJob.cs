@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
@@ -44,6 +45,107 @@ namespace Jagabata.Resources
         Dictionary<string, object?> GetExtraVars();
     }
 
+    public abstract class JobTemplateJobBase : UnifiedJob, IJobTemplateJob
+    {
+        public new const string PATH = "/api/v2/jobs/";
+
+        public abstract string Description { get; }
+        public abstract ulong UnifiedJobTemplate { get; }
+        public abstract ulong? ExecutionEnvironment { get; }
+        public abstract string ExecutionNode { get; }
+        public abstract string ControllerNode { get; }
+        public abstract LaunchedBy LaunchedBy { get; }
+        public abstract JobType JobType { get; }
+        public abstract ulong Inventory { get; }
+        public abstract ulong Project { get; }
+        public abstract string Playbook { get; }
+        public abstract string ScmBranch { get; }
+        public abstract byte Forks { get; }
+        public abstract string Limit { get; }
+        public abstract JobVerbosity Verbosity { get; }
+        public abstract string ExtraVars { get; }
+        public abstract string JobTags { get; }
+        public abstract bool ForceHandlers { get; }
+        public abstract string SkipTags { get; }
+        public abstract string StartAtTask { get; }
+        public abstract ushort Timeout { get; }
+        public abstract bool UseFactCache { get; }
+        public abstract ulong Organization { get; }
+        public abstract ulong JobTemplate { get; }
+        public abstract string[] PasswordsNeededToStart { get; }
+        public abstract bool AllowSimultaneous { get; }
+        public abstract OrderedDictionary Artifacts { get; }
+        public abstract string ScmRevision { get; }
+        public abstract ulong? InstanceGroup { get; }
+        public abstract bool DiffMode { get; }
+        public abstract int JobSliceNumber { get; }
+        public abstract int JobSliceCount { get; }
+        public abstract string WebhookService { get; }
+        public abstract uint? WebhookCredential { get; }
+        public abstract string WebhookGuid { get; }
+
+        public JobTemplate? GetTemplate()
+        {
+            return GetTemplate<JobTemplate>();
+        }
+
+        /// <summary>
+        /// Get job events for this job
+        /// </summary>
+        public JobEvent[] GetEvents()
+        {
+            return [.. GetEvents<JobEvent>("job_events")];
+        }
+
+        public Dictionary<string, object?> GetExtraVars()
+        {
+            return Yaml.DeserializeToDict(ExtraVars);
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        protected override CacheItem GetCacheItem()
+        {
+            return new CacheItem(Type, Id, Name, Description)
+            {
+                Metadata = {
+                    ["Status"] = $"{Status}",
+                    ["Finished"] = $"{Finished}",
+                    ["Elapsed"] = $"{Elapsed}"
+                }
+            };
+        }
+    }
+
     public class JobTemplateJob(ulong id, ResourceType type, string url, RelatedDictionary related,
                                 SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
                                 string description, ulong unifiedJobTemplate, JobLaunchType launchType, JobStatus status,
@@ -57,53 +159,43 @@ namespace Jagabata.Resources
                                 string[] passwordsNeededToStart, bool allowSimultaneous, OrderedDictionary artifacts,
                                 string scmRevision, ulong? instanceGroup, bool diffMode, int jobSliceNumber,
                                 int jobSliceCount, string webhookService, uint? webhookCredential, string webhookGuid)
-        : UnifiedJob(id, type, url, created, modified, name, launchType, status, executionEnvironment, failed,
-                     started, finished, canceledOn, elapsed, jobExplanation, launchedBy, workUnitId),
-          IJobTemplateJob, IResource, ICacheableResource
+        : JobTemplateJobBase
     {
-        public new const string PATH = "/api/v2/jobs/";
         /// <summary>
-        /// Retrieve a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="id"/>/</c>
+        /// Get a detail Job
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async Task<Detail> Get(ulong id)
+        public static new async Task<Detail> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Detail>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Jobs.<br/>
-        /// API Path: <c>/api/v2/jobs/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplateJob> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Detail Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query, getAll))
-            {
-                foreach (var job in result.Contents.Results)
-                {
-                    yield return job;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Jobs for a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="jobTemplateId"/>/jobs/</c>
+        /// Find Jobs
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/</c>
+        /// </para>
         /// </summary>
-        /// <param name="jobTemplateId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplateJob> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
+        public static new async IAsyncEnumerable<JobTemplateJob> FindAsync(HttpQuery? query = null,
+                                                                           [EnumeratorCancellation]
+                                                                           CancellationToken ct = default)
         {
-            var path = $"{Resources.JobTemplate.PATH}{jobTemplateId}/jobs/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(PATH, query, ct))
             {
                 foreach (var job in result.Contents.Results)
                 {
@@ -112,61 +204,134 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Jobs for a Job Template
+        /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/jobs/</c>
+        /// </remarks>
+        /// <param name="id">Job Template ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<JobTemplateJob> FindAsync(ulong id,
+                                                                       HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
+        {
+            var path = $"{Resources.JobTemplate.PATH}{id}/jobs/";
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplateJob>(path, query, ct))
+            {
+                foreach (var job in result.Contents.Results)
+                {
+                    yield return job;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find Jobs by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new JobTemplateJob[] Find(string? searchWords = null,
+                                                string orderBy = "name",
+                                                ushort pageSize = 20,
+                                                uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new JobTemplateJob[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static JobTemplateJob[] Find(ulong id, HttpQuery query)
+        {
+            return [.. FindAsync(id, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Jobs for a Job Template by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static JobTemplateJob[] Find(ulong id,
+                                            string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(id, new QueryBuilder().SetSearchWords(searchWords)
+                                              .SetOrderBy(orderBy)
+                                              .SetPageSize(pageSize)
+                                              .SetStartPage(startPage)
+                                              .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
-        public string Description { get; } = description;
-        public ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
-        public string ExecutionNode { get; } = executionNode;
-        public string ControllerNode { get; } = controllerNode;
-
-        #region JobTemplateJob Properties
-        public JobType JobType { get; } = jobType;
-        public ulong Inventory { get; } = inventory;
-        public ulong Project { get; } = project;
-        public string Playbook { get; } = playbook;
-        public string ScmBranch { get; } = scmBranch;
-        public byte Forks { get; } = forks;
-        public string Limit { get; } = limit;
-        public JobVerbosity Verbosity { get; } = verbosity;
-        public string ExtraVars { get; } = extraVars;
-        public string JobTags { get; } = jobTags;
-        public bool ForceHandlers { get; } = forceHandlers;
-        public string SkipTags { get; } = skipTags;
-        public string StartAtTask { get; } = startAtTask;
-        public ushort Timeout { get; } = timeout;
-        public bool UseFactCache { get; } = useFactCache;
-        public ulong Organization { get; } = organization;
-        public ulong JobTemplate { get; } = jobTemplate;
-        public string[] PasswordsNeededToStart { get; } = passwordsNeededToStart;
-        public bool AllowSimultaneous { get; } = allowSimultaneous;
-        public OrderedDictionary Artifacts { get; } = artifacts;
-        public string ScmRevision { get; } = scmRevision;
-        public ulong? InstanceGroup { get; } = instanceGroup;
-        public bool DiffMode { get; } = diffMode;
-        public int JobSliceNumber { get; } = jobSliceNumber;
-        public int JobSliceCount { get; } = jobSliceCount;
-        public string WebhookService { get; } = webhookService;
-        public uint? WebhookCredential { get; } = webhookCredential;
-        public string WebhookGuid { get; } = webhookGuid;
-        #endregion
-
-        public Dictionary<string, object?> GetExtraVars()
-        {
-            return Yaml.DeserializeToDict(ExtraVars);
-        }
-
-        public CacheItem GetCacheItem()
-        {
-            return new CacheItem(Type, Id, Name, Description)
-            {
-                Metadata = {
-                    ["Status"] = $"{Status}",
-                    ["Finished"] = $"{Finished}",
-                    ["Elapsed"] = $"{Elapsed}"
-                }
-            };
-        }
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
+        public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+        public override JobLaunchType LaunchType { get; } = launchType;
+        public override JobStatus Status { get; } = status;
+        public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+        public override bool Failed { get; } = failed;
+        public override DateTime? Started { get; } = started;
+        public override DateTime? Finished { get; } = finished;
+        public override DateTime? CanceledOn { get; } = canceledOn;
+        public override double Elapsed { get; } = elapsed;
+        public override string JobExplanation { get; } = jobExplanation;
+        public override string ExecutionNode { get; } = executionNode;
+        public override string ControllerNode { get; } = controllerNode;
+        public override LaunchedBy LaunchedBy { get; } = launchedBy;
+        public override string? WorkUnitId { get; } = workUnitId;
+        public override JobType JobType { get; } = jobType;
+        public override ulong Inventory { get; } = inventory;
+        public override ulong Project { get; } = project;
+        public override string Playbook { get; } = playbook;
+        public override string ScmBranch { get; } = scmBranch;
+        public override byte Forks { get; } = forks;
+        public override string Limit { get; } = limit;
+        public override JobVerbosity Verbosity { get; } = verbosity;
+        public override string ExtraVars { get; } = extraVars;
+        public override string JobTags { get; } = jobTags;
+        public override bool ForceHandlers { get; } = forceHandlers;
+        public override string SkipTags { get; } = skipTags;
+        public override string StartAtTask { get; } = startAtTask;
+        public override ushort Timeout { get; } = timeout;
+        public override bool UseFactCache { get; } = useFactCache;
+        public override ulong Organization { get; } = organization;
+        public override ulong JobTemplate { get; } = jobTemplate;
+        public override string[] PasswordsNeededToStart { get; } = passwordsNeededToStart;
+        public override bool AllowSimultaneous { get; } = allowSimultaneous;
+        public override OrderedDictionary Artifacts { get; } = artifacts;
+        public override string ScmRevision { get; } = scmRevision;
+        public override ulong? InstanceGroup { get; } = instanceGroup;
+        public override bool DiffMode { get; } = diffMode;
+        public override int JobSliceNumber { get; } = jobSliceNumber;
+        public override int JobSliceCount { get; } = jobSliceCount;
+        public override string WebhookService { get; } = webhookService;
+        public override uint? WebhookCredential { get; } = webhookCredential;
+        public override string WebhookGuid { get; } = webhookGuid;
 
         public class Detail(ulong id, ResourceType type, string url, RelatedDictionary related,
                             SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
@@ -184,30 +349,69 @@ namespace Jagabata.Resources
                             string webhookService, uint? webhookCredential, string webhookGuid,
                             Dictionary<string, int> hostStatusCounts, Dictionary<string, int> playbookCounts,
                             string customVirtualenv)
-            : JobTemplateJob(id, type, url, related, summaryFields, created, modified, name, description,
-                             unifiedJobTemplate, launchType, status, executionEnvironment, failed, started,
-                             finished, canceledOn, elapsed, jobExplanation, executionNode, controllerNode,
-                             launchedBy, workUnitId, jobType, inventory, project, playbook, scmBranch, forks,
-                             limit, verbosity, extraVars, jobTags, forceHandlers, skipTags, startAtTask, timeout,
-                             useFactCache, organization, jobTemplate, passwordsNeededToStart, allowSimultaneous,
-                             artifacts, scmRevision, instanceGroup, diffMode, jobSliceNumber, jobSliceCount,
-                             webhookService, webhookCredential, webhookGuid),
-               IJobTemplateJob, IJobDetail, IResource
+            : JobTemplateJobBase, IJobDetail
         {
-
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
+            public override string ExecutionNode { get; } = executionNode;
+            public override string ControllerNode { get; } = controllerNode;
             public string ResultTraceback { get; } = resultTraceback;
             public bool EventProcessingFinished { get; } = eventProcessingFinished;
-
-
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override JobType JobType { get; } = jobType;
+            public override ulong Inventory { get; } = inventory;
+            public override ulong Project { get; } = project;
+            public override string Playbook { get; } = playbook;
+            public override string ScmBranch { get; } = scmBranch;
+            public override byte Forks { get; } = forks;
+            public override string Limit { get; } = limit;
+            public override JobVerbosity Verbosity { get; } = verbosity;
+            public override string ExtraVars { get; } = extraVars;
+            public override string JobTags { get; } = jobTags;
+            public override bool ForceHandlers { get; } = forceHandlers;
+            public override string SkipTags { get; } = skipTags;
+            public override string StartAtTask { get; } = startAtTask;
+            public override ushort Timeout { get; } = timeout;
+            public override bool UseFactCache { get; } = useFactCache;
+            public override ulong Organization { get; } = organization;
+            public override ulong JobTemplate { get; } = jobTemplate;
+            public override string[] PasswordsNeededToStart { get; } = passwordsNeededToStart;
+            public override bool AllowSimultaneous { get; } = allowSimultaneous;
+            public override OrderedDictionary Artifacts { get; } = artifacts;
+            public override string ScmRevision { get; } = scmRevision;
+            public override ulong? InstanceGroup { get; } = instanceGroup;
+            public override bool DiffMode { get; } = diffMode;
+            public override int JobSliceNumber { get; } = jobSliceNumber;
+            public override int JobSliceCount { get; } = jobSliceCount;
+            public override string WebhookService { get; } = webhookService;
+            public override uint? WebhookCredential { get; } = webhookCredential;
+            public override string WebhookGuid { get; } = webhookGuid;
             public Dictionary<string, int> HostStatusCounts { get; } = hostStatusCounts;
-
             public Dictionary<string, int> PlaybookCounts { get; } = playbookCounts;
-
             public string? CustomVirtualenv { get; } = customVirtualenv;
         }
+
         public class LaunchResult(ulong job, Dictionary<string, object?> ignoredFields, ulong id, ResourceType type,
                                   string url, RelatedDictionary related, SummaryFieldsDictionary summaryFields, DateTime created,
                                   DateTime? modified, string name, string description, JobType jobType, ulong inventory,
@@ -224,24 +428,67 @@ namespace Jagabata.Resources
                                   OrderedDictionary artifacts, string scmRevision, ulong? instanceGroup, bool diffMode,
                                   int jobSliceNumber, int jobSliceCount, string webhookService, uint? webhookCredential,
                                   string webhookGuid)
-            : JobTemplateJob(id, type, url, related, summaryFields, created, modified, name, description,
-                             unifiedJobTemplate, launchType, status, executionEnvironment, failed, started,
-                             finished, canceledOn, elapsed, jobExplanation, executionNode, controllerNode,
-                             launchedBy, workUnitId, jobType, inventory, project, playbook, scmBranch, forks,
-                             limit, verbosity, extraVars, jobTags, forceHandlers, skipTags, startAtTask, timeout,
-                             useFactCache, organization, jobTemplate, passwordsNeededToStart, allowSimultaneous,
-                             artifacts, scmRevision, instanceGroup, diffMode, jobSliceNumber, jobSliceCount,
-                             webhookService, webhookCredential, webhookGuid),
-               IJobTemplateJob, IJobDetail, IResource
+            : JobTemplateJobBase, IJobDetail
         {
             public ulong Job { get; } = job;
             public Dictionary<string, object?> IgnoredFields { get; } = ignoredFields;
 
+            public override ulong Id { get; } = id;
+            public override ResourceType Type { get; } = type;
+            public override string Url { get; } = url;
+            public override RelatedDictionary Related { get; } = related;
+            public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+            public override DateTime Created { get; } = created;
+            public override DateTime? Modified { get; } = modified;
+            public override string Name { get; } = name;
+            public override string Description { get; } = description;
+            public override ulong UnifiedJobTemplate { get; } = unifiedJobTemplate;
+            public override JobLaunchType LaunchType { get; } = launchType;
+            public override JobStatus Status { get; } = status;
+            public override ulong? ExecutionEnvironment { get; } = executionEnvironment;
+            public override bool Failed { get; } = failed;
+            public override DateTime? Started { get; } = started;
+            public override DateTime? Finished { get; } = finished;
+            public override DateTime? CanceledOn { get; } = canceledOn;
+            public override double Elapsed { get; } = elapsed;
             public string JobArgs { get; } = jobArgs;
             public string JobCwd { get; } = jobCwd;
             public Dictionary<string, string> JobEnv { get; } = jobEnv;
+            public override string JobExplanation { get; } = jobExplanation;
+            public override string ExecutionNode { get; } = executionNode;
+            public override string ControllerNode { get; } = controllerNode;
             public string ResultTraceback { get; } = resultTraceback;
             public bool EventProcessingFinished { get; } = eventProcessingFinished;
+            public override LaunchedBy LaunchedBy { get; } = launchedBy;
+            public override string? WorkUnitId { get; } = workUnitId;
+            public override JobType JobType { get; } = jobType;
+            public override ulong Inventory { get; } = inventory;
+            public override ulong Project { get; } = project;
+            public override string Playbook { get; } = playbook;
+            public override string ScmBranch { get; } = scmBranch;
+            public override byte Forks { get; } = forks;
+            public override string Limit { get; } = limit;
+            public override JobVerbosity Verbosity { get; } = verbosity;
+            public override string ExtraVars { get; } = extraVars;
+            public override string JobTags { get; } = jobTags;
+            public override bool ForceHandlers { get; } = forceHandlers;
+            public override string SkipTags { get; } = skipTags;
+            public override string StartAtTask { get; } = startAtTask;
+            public override ushort Timeout { get; } = timeout;
+            public override bool UseFactCache { get; } = useFactCache;
+            public override ulong Organization { get; } = organization;
+            public override ulong JobTemplate { get; } = jobTemplate;
+            public override string[] PasswordsNeededToStart { get; } = passwordsNeededToStart;
+            public override bool AllowSimultaneous { get; } = allowSimultaneous;
+            public override OrderedDictionary Artifacts { get; } = artifacts;
+            public override string ScmRevision { get; } = scmRevision;
+            public override ulong? InstanceGroup { get; } = instanceGroup;
+            public override bool DiffMode { get; } = diffMode;
+            public override int JobSliceNumber { get; } = jobSliceNumber;
+            public override int JobSliceCount { get; } = jobSliceCount;
+            public override string WebhookService { get; } = webhookService;
+            public override uint? WebhookCredential { get; } = webhookCredential;
+            public override string WebhookGuid { get; } = webhookGuid;
         }
     }
 }

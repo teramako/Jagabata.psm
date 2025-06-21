@@ -1,21 +1,8 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
-    public interface IJobEvent : IJobEventBase
-    {
-        int EventLevel { get; }
-        string ParentUUID { get; }
-        ulong? Host { get; }
-        string HostName { get; }
-        string Playbook { get; }
-        string Play { get; }
-        string Task { get; }
-        string Role { get; }
-        ulong Job { get; }
-    }
-
     [JsonConverter(typeof(Json.EnumUpperCamelCaseStringConverter<JobEventEvent>))]
     public enum JobEventEvent
     {
@@ -142,66 +129,60 @@ namespace Jagabata.Resources
                           int eventLevel, bool failed, bool changed, string uuid, string parentUUID, ulong? host,
                           string hostName, string playbook, string play, string task, string role, string stdout,
                           int startLine, int endLine, JobVerbosity verbosity)
-                : SummaryFieldsContainer, IJobEvent, IResource, ICacheableResource
+        : JobEventBase
     {
         public const string PATH = "/api/v2/job_events/";
 
         /// <summary>
-        /// List Job Events for a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="jobId"/>/job_events/</c>
+        /// Get a Job Event
+        /// <para>
+        /// Implement API: <c>/api/v2/job_events/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="id">Job ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromJob(ulong jobId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+        public static async Task<JobEvent> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var path = $"{JobTemplateJob.PATH}{jobId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
-            {
-                foreach (var jobEvent in result.Contents.Results)
-                {
-                    yield return jobEvent;
-                }
-            }
+            var apiResult = await RestAPI.GetAsync<JobEvent>($"{PATH}{id}/", cancellationToken: ct);
+            return apiResult.Contents;
         }
-        /// <summary>
-        /// List Job Events for a Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/job_events/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromGroup(ulong groupId,
-                                                                     NameValueCollection? query = null,
-                                                                     bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static JobEvent Get(ulong id)
         {
-            var path = $"{Group.PATH}{groupId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
-            {
-                foreach (var jobEvent in result.Contents.Results)
-                {
-                    yield return jobEvent;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Job Events for a Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/job_events/</c>
+        /// Find Job Events associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/job_events/</c>
+        /// </para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Job</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        /// </list>
         /// </summary>
-        /// <param name="hostId"></param>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobEvent> FindFromHost(ulong hostId,
-                                                                    NameValueCollection? query = null,
-                                                                    bool getAll = false)
+        public static async IAsyncEnumerable<JobEvent> FindAsync(IResource resource,
+                                                                 HttpQuery? query = null,
+                                                                 [EnumeratorCancellation]
+                                                                 CancellationToken ct = default)
         {
-            var path = $"{Resources.Host.PATH}{hostId}/job_events/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, getAll))
+            var path = resource.Type switch
+            {
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/job_events/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/job_events/",
+                ResourceType.Host => $"{Resources.Host.PATH}{resource.Id}/job_events/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<JobEvent>(path, query, ct))
             {
                 foreach (var jobEvent in result.Contents.Results)
                 {
@@ -210,24 +191,48 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobEvent[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static JobEvent[] Find(IResource resource,
+                                      string? searchWords = null,
+                                      string orderBy = "counter",
+                                      ushort pageSize = 20,
+                                      uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsJobEventConverter))]
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
 
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
         public ulong Job { get; } = job;
-        public JobEventEvent Event { get; } = @event;
-        public int Counter { get; } = counter;
-        public string EventDisplay { get; } = eventDisplay;
-        public Dictionary<string, object?> EventData { get; } = eventData;
+        public override JobEventEvent Event { get; } = @event;
+        public override int Counter { get; } = counter;
+        public override string EventDisplay { get; } = eventDisplay;
+        public override Dictionary<string, object?> EventData { get; } = eventData;
         public int EventLevel { get; } = eventLevel;
-        public bool Failed { get; } = failed;
-        public bool Changed { get; } = changed;
-        public string UUID { get; } = uuid;
+        public override bool Failed { get; } = failed;
+        public override bool Changed { get; } = changed;
+        public override string UUID { get; } = uuid;
         public string ParentUUID { get; } = parentUUID;
         public ulong? Host { get; } = host;
         public string HostName { get; } = hostName;
@@ -235,12 +240,12 @@ namespace Jagabata.Resources
         public string Play { get; } = play;
         public string Task { get; } = task;
         public string Role { get; } = role;
-        public string Stdout { get; } = stdout;
-        public int StartLine { get; } = startLine;
-        public int EndLine { get; } = endLine;
-        public JobVerbosity Verbosity { get; } = verbosity;
+        public override string Stdout { get; } = stdout;
+        public override int StartLine { get; } = startLine;
+        public override int EndLine { get; } = endLine;
+        public override JobVerbosity Verbosity { get; } = verbosity;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, string.Empty, $"{Counter}:{Event}")
             {
@@ -249,7 +254,10 @@ namespace Jagabata.Resources
                     ["Play"] = Play,
                     ["Task"] = Task,
                     ["Failed"] = $"{Failed}",
-                    ["Changed"] = $"{Changed}"
+                    ["Changed"] = $"{Changed}",
+                    ["Job"] = SummaryFields.TryGetValue<JobExSummary>("Job", out var pu)
+                              ? $"{pu.Type}:{pu.Id}:{pu.Name}"
+                              : string.Empty
                 }
             };
         }

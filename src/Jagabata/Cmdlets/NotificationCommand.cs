@@ -41,8 +41,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "notification_template", "error", "status",
-                           "notifications_sent", "notification_type", "recipients", "subject", "body")]
+        [OrderByCompletionFromHelp(ResourceType.Notification, Notification.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()
@@ -54,12 +53,12 @@ namespace Jagabata.Cmdlets
             var path = Resource?.Type switch
             {
                 ResourceType.NotificationTemplate => $"{NotificationTemplate.PATH}{Resource.Id}/notifications/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/notifications/",
-                ResourceType.WorkflowJob => $"{WorkflowJob.PATH}{Resource.Id}/notifications/",
-                ResourceType.SystemJob => $"{SystemJob.PATH}{Resource.Id}/notifications/",
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{Resource.Id}/notifications/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Resource.Id}/notifications/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{Resource.Id}/notifications/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/notifications/",
+                ResourceType.WorkflowJob => $"{WorkflowJobBase.PATH}{Resource.Id}/notifications/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{Resource.Id}/notifications/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{Resource.Id}/notifications/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{Resource.Id}/notifications/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{Resource.Id}/notifications/",
                 _ => Notification.PATH
             };
             Find<Notification>(path);

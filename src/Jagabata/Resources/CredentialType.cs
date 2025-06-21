@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Jagabata.CredentialType;
 
@@ -72,45 +72,47 @@ namespace Jagabata.Resources
         Injectors Injectors { get; }
     }
 
-    public class CredentialType(ulong id,
-                                ResourceType type,
-                                string url,
-                                RelatedDictionary related,
-                                SummaryFieldsDictionary summaryFields,
-                                DateTime created,
-                                DateTime? modified,
-                                string name,
-                                string description,
-                                CredentialTypeKind kind,
-                                string nameSpace,
-                                bool managed,
-                                FieldList inputs,
-                                Injectors injectors)
-        : SummaryFieldsContainer, ICredentialType, IResource, ICacheableResource
+    public class CredentialType(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                                string description, CredentialTypeKind kind, string nameSpace, bool managed,
+                                FieldList inputs, Injectors injectors)
+        : ResourceBase, ICredentialType
     {
         public const string PATH = "/api/v2/credential_types/";
 
         /// <summary>
-        /// Retrieve a Credential Type.<br/>
-        /// API Path: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
+        /// Get a Credential Type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static async Task<CredentialType> Get(ulong id)
+        /// <param name="id">CredentialType ID</param>
+        /// <param name="ct">Cancellation token</param>
+        public static async Task<CredentialType> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<CredentialType>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<CredentialType>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static CredentialType Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Credential Types.<br/>
-        /// API Path: <c>/api/v2/credential_types/</c>
+        /// Find CredentialTypes
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<CredentialType> Find(NameValueCollection? query, bool getAll = false)
+        /// <param name="ct">Cancellation token</param>
+        public static async IAsyncEnumerable<CredentialType> FindAsync(HttpQuery? query = null,
+                                                                       [EnumeratorCancellation]
+                                                                       CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<CredentialType>(PATH, query, ct))
             {
                 foreach (var credentialType in result.Contents.Results)
                 {
@@ -119,10 +121,38 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static CredentialType[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find CredentialTypes by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static CredentialType[] Find(string? searchWords = null,
+                                            string orderBy = "id",
+                                            ushort pageSize = 20,
+                                            uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -134,7 +164,69 @@ namespace Jagabata.Resources
         public FieldList Inputs { get; } = inputs;
         public Injectors Injectors { get; } = injectors;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this credential type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of credential_types to retrieve</param>
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this credential type
+        /// <para>
+        /// Implement API: <c>/api/v2/credential_types/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Credential[] FindCredentials(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {
@@ -144,6 +236,11 @@ namespace Jagabata.Resources
                     ["Managed"] = $"{Managed}"
                 }
             };
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Kind}:{Name}";
         }
     }
 }

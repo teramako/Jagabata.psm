@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets
 {
@@ -36,18 +35,14 @@ namespace Jagabata.Cmdlets
         public JobStatus[]? Status { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "unified_job_template",
-                           "launch_type", "status", "execution_environment", "failed", "started", "finished",
-                           "canceled_on", "elapsed", "job_explanation", "work_unit_id", "timed_out",
-                           "workflow_approval_template", "approved_or_denied_by", "schedule", "notifications",
-                           "created_by", "modified_by", "instance_group", "organization", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.WorkflowApproval, WorkflowApprovalBase.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()
         {
             if (Status is not null)
             {
-                Query.Add("status__in", string.Join(',', Status.Select(s => $"{s}".ToLowerInvariant())));
+                Query.Add("status__in", string.Join(',', Status.Select(static s => $"{s}".ToLowerInvariant())));
             }
             SetupCommonQuery();
         }
@@ -56,7 +51,7 @@ namespace Jagabata.Cmdlets
             var path = WorkflowApprovalTemplate switch
             {
                 > 0 => $"{Resources.WorkflowApprovalTemplate.PATH}{WorkflowApprovalTemplate}/approvals/",
-                _ => WorkflowApproval.PATH
+                _ => WorkflowApprovalBase.PATH
             };
             Find<WorkflowApproval>(path);
         }
@@ -80,7 +75,7 @@ namespace Jagabata.Cmdlets
                 return;
             }
 
-            var result = CreateResource<string>($"{WorkflowApproval.PATH}{Id}/{Command}/");
+            var result = CreateResource<string>($"{WorkflowApprovalBase.PATH}{Id}/{Command}/");
             if (result is null)
             {
                 return;
@@ -94,13 +89,11 @@ namespace Jagabata.Cmdlets
                 return;
             }
 
-            var query = HttpUtility.ParseQueryString("");
-            query.Add("id__in", string.Join(',', treatedIds));
-            query.Add("page_size", $"{treatedIds.Count}");
-            foreach (var resultSet in GetResultSet<WorkflowApproval>(WorkflowApproval.PATH, query, false))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            WriteObject(new QueryBuilder().SetOrderBy("id")
+                                          .BuildWithIdList(treatedIds.Order().ToArray())
+                                          .SelectMany(query => GetResultSet<WorkflowApproval>(WorkflowApprovalBase.PATH, query))
+                                          .SelectMany(resultSet => resultSet.Results),
+                        true);
         }
     }
 

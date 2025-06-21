@@ -1,4 +1,5 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
 {
@@ -26,299 +27,49 @@ namespace Jagabata.Resources
     }
 
 
-    public class Credential(ulong id,
-                            ResourceType type,
-                            string url,
-                            RelatedDictionary related,
-                            SummaryFieldsDictionary summaryFields,
-                            DateTime created,
-                            DateTime? modified,
-                            string name,
-                            string description,
-                            ulong? organization,
-                            ulong credentialType,
-                            bool managed,
-                            Dictionary<string, object?> inputs,
-                            string kind,
-                            bool cloud,
-                            bool kubernetes)
-        : SummaryFieldsContainer, ICredential, IResource, ICacheableResource
+    public class Credential(ulong id, ResourceType type, string url, RelatedDictionary related,
+                            SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified, string name,
+                            string description, ulong? organization, ulong credentialType, bool managed,
+                            Dictionary<string, object?> inputs, string kind, bool cloud, bool kubernetes)
+        : ResourceBase, ICredential
     {
         public const string PATH = "/api/v2/credentials/";
 
         /// <summary>
-        /// Retrieve a Credential.<br/>
-        /// API Path: <c>/api/v2/credentials/<paramref name="id"/>/</c>
+        /// Get a Credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/<paramref name="id"/>/</c>
+        /// </apra>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Credential ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Credential> Get(ulong id)
+        public static async Task<Credential> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Credential>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Credential>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Credentials.<br/>
-        /// API Path: <c>api/v2/credentials/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Credential Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(PATH, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Credentials for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/credentials/</c>
+        /// Find Credentials
+        /// <para>
+        /// Implement API: <c>api/v2/credentials/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromOrganization(ulong organizationId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+        public static async IAsyncEnumerable<Credential> FindAsync(HttpQuery? query = null,
+                                                                   [EnumeratorCancellation]
+                                                                   CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Galaxy Credentials for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/galaxy_credentials/</c>
-        /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindGalaxyFromOrganization(ulong organizationId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
-        {
-            var path = $"{Resources.Organization.PATH}{organizationId}/galaxy_credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromUser(ulong userId,
-                                                                      NameValueCollection? query = null,
-                                                                      bool getAll = false)
-        {
-            var path = $"{User.PATH}{userId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="teamId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromTeam(ulong teamId,
-                                                                      NameValueCollection? query = null,
-                                                                      bool getAll = false)
-        {
-            var path = $"{Team.PATH}{teamId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Credential Type.<br/>
-        /// API Path: <c>/api/v2/credential_type/<paramref name="credentialTypeId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="credentialTypeId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromCredentialType(ulong credentialTypeId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
-        {
-            var path = $"{Resources.CredentialType.PATH}{credentialTypeId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/<paramref name="inventorySourceId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="inventorySourceId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromInventorySource(ulong inventorySourceId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
-        {
-            var path = $"{InventorySource.PATH}{inventorySourceId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Inventory Update.<br/>
-        /// API Path: <c>/api/v2/inventory_updates/<paramref name="inventoryUpdateJobId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="inventoryUpdateJobId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromInventoryUpdateJob(ulong inventoryUpdateJobId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
-        {
-            var path = $"{InventoryUpdateJob.PATH}{inventoryUpdateJobId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="jobTemplateId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="jobTemplateId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromJobTemplate(ulong jobTemplateId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
-        {
-            var path = $"{JobTemplate.PATH}{jobTemplateId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Job.<br/>
-        /// API Path: <c>/api/v2/jobs/<paramref name="jobId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromJobTemplateJob(ulong jobId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
-        {
-            var path = $"{JobTemplateJob.PATH}{jobId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Schedule.<br/>
-        /// API Path: <c>/api/v2/schedule/<paramref name="scheduleId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="scheduleId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromSchedule(ulong scheduleId,
-                                                                          NameValueCollection? query = null,
-                                                                          bool getAll = false)
-        {
-            var path = $"{Schedule.PATH}{scheduleId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Workflow Job Template Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_template_nodes/<paramref name="wjtnId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="wjtnId">ID of Workflow Job Template Node</param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromWorkflowJobTemplateNode(ulong wjtnId,
-                                                                                         NameValueCollection? query = null,
-                                                                                         bool getAll = false)
-        {
-            var path = $"{WorkflowJobTemplateNode.PATH}{wjtnId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
-            {
-                foreach (var credential in result.Contents.Results)
-                {
-                    yield return credential;
-                }
-            }
-        }
-        /// <summary>
-        /// List Credentials for a Workflow Job Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/<paramref name="wjnId"/>/credentials/</c>
-        /// </summary>
-        /// <param name="wjnId">ID of Workflow Job Node</param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Credential> FindFromWorkflowJobNode(ulong wjnId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
-        {
-            var path = $"{WorkflowJobNode.PATH}{wjnId}/credentials/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(PATH, query, ct))
             {
                 foreach (var credential in result.Contents.Results)
                 {
@@ -327,10 +78,147 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Credentials associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        ///     <item>Team</item>
+        ///     <item>CredentialType</item>
+        ///     <item>InventorySource</item>
+        ///     <item>InventoryUpdate</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Job</item>
+        ///     <item>Schedule</item>
+        ///     <item>WorkflowJobTemplateNode</item>
+        ///     <item>WorkflowJobNode</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Credential> FindAsync(IResource resource,
+                                                                   HttpQuery? query = null,
+                                                                   [EnumeratorCancellation]
+                                                                   CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/credentials/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/credentials/",
+                ResourceType.Team => $"{Team.PATH}{resource.Id}/credentials/",
+                ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{resource.Id}/credentials/",
+                ResourceType.InventorySource => $"{InventorySource.PATH}{resource.Id}/credentials/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{resource.Id}/credentials/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/credentials/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{resource.Id}/credentials/",
+                ResourceType.Schedule => $"{Schedule.PATH}{resource.Id}/credentials/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{resource.Id}/credentials/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{resource.Id}/credentials/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query, ct))
+            {
+                foreach (var credential in result.Contents.Results)
+                {
+                    yield return credential;
+                }
+            }
+        }
+        /// <summary>
+        /// Find Galaxy Credentials for an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/galaxy_credentials/</c>
+        /// <para>
+        /// </summary>
+        /// <param name="organizationId">Organization ID</param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Credential> FindGalaxyAsync(ulong organizationId,
+                                                                         HttpQuery? query = null)
+        {
+            var path = $"{Resources.Organization.PATH}{organizationId}/galaxy_credentials/";
+            await foreach (var result in RestAPI.GetResultSetAsync<Credential>(path, query))
+            {
+                foreach (var credential in result.Contents.Results)
+                {
+                    yield return credential;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Credentials by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Credential[] Find(string? searchWords = null,
+                                        string orderBy = "name",
+                                        ushort pageSize = 20,
+                                        uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Credentials associated with <paramref name="resource"/> by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Credential[] Find(IResource resource,
+                                        string? searchWords = null,
+                                        string orderBy = "name",
+                                        ushort pageSize = 20,
+                                        uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        /// <inheritdoc cref="FindGalaxyAsync(ulong, HttpQuery?)"/>
+        public static Credential[] FindGalaxy(ulong organizationId, HttpQuery? query = null)
+        {
+            return [.. FindGalaxyAsync(organizationId, query).ToBlockingEnumerable()];
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -345,7 +233,195 @@ namespace Jagabata.Resources
         public bool Cloud { get; } = cloud;
         public bool Kubernetes { get; } = kubernetes;
 
-        public CacheItem GetCacheItem()
+        [JsonIgnore]
+        public OwnerSummary[] Owners =>
+            SummaryFields.TryGetValue<OwnerSummary[]>("Owners", out var owners) ? owners : [];
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] FindAccessList(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles related to this credential
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Find the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] FindOwnerUsers(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<User>("owner_users",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find the owner users related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_users/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] FindOwnerUsers(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<User>("owner_users", query)];
+        }
+
+        /// <summary>
+        /// Find the owner teams related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] FindOwnerTeams(string? searchWords = null,
+                                     string orderBy = "name",
+                                     ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Team>("owner_teams",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find the owner teams related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/owner_teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] FindOwnerTeams(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Team>("owner_teams", query)];
+        }
+
+        /// <summary>
+        /// Find input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public CredentialInputSource[] FindInputSources(string? searchWords = null,
+                                                        string orderBy = "id",
+                                                        ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<CredentialInputSource>("input_sources",
+                                                                      searchWords,
+                                                                      orderBy,
+                                                                      pageSize)];
+        }
+
+        /// <summary>
+        /// Find input sources related to this credential
+        /// <para>
+        /// Implement API: <c>/api/v2/credentials/{id}/input_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public CredentialInputSource[] FindInputSources(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<CredentialInputSource>("input_sources", query)];
+        }
+
+        /// <summary>
+        /// Get the credential type related this credential
+        /// </summary>
+        public CredentialType? GetCredentialType()
+        {
+            return Related.TryGetPath("credential_type", out var path)
+                ? RestAPI.Get<CredentialType>(path)
+                : null;
+        }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Kind) ? $"{Type}:{Id}:{Name}" : $"{Type}:{Id}:{Kind}:{Name}";
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
             {

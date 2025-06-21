@@ -25,7 +25,7 @@ namespace Jagabata.Cmdlets
                 WriteObject(CreateItem(key, item), true);
             }
         }
-        private IEnumerable<MetricItem> CreateItem(string key, Metrics.Item item)
+        private static IEnumerable<MetricItem> CreateItem(string key, Metrics.Item item)
         {
             foreach (var sample in item.Samples)
             {

@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
@@ -15,199 +15,51 @@ namespace Jagabata.Resources
         string PodSpecOverride { get; }
     }
 
-    public class InstanceGroup(ulong id,
-                               ResourceType type,
-                               string url,
-                               RelatedDictionary related,
-                               SummaryFieldsDictionary summaryFields,
-                               string name,
-                               DateTime created,
-                               DateTime? modified,
-                               int capacity,
-                               int consumedCapacity,
-                               double percentCapacityRemaining,
-                               int jobsRunning,
-                               int maxConcurrentJobs,
-                               int maxForks,
-                               int jobsTotal,
-                               int instances,
-                               bool isContainerGroup,
-                               ulong? credential,
-                               double policyInstancePercentage,
-                               int policyInstanceMinimum,
-                               string[] policyInstanceList,
-                               string podSpecOverride)
-        : SummaryFieldsContainer, IInstanceGroup, IResource, ICacheableResource
+    public class InstanceGroup(ulong id, ResourceType type, string url, RelatedDictionary related,
+                               SummaryFieldsDictionary summaryFields, string name, DateTime created, DateTime? modified,
+                               int capacity, int consumedCapacity, double percentCapacityRemaining, int jobsRunning,
+                               int maxConcurrentJobs, int maxForks, int jobsTotal, int instances, bool isContainerGroup,
+                               ulong? credential, double policyInstancePercentage, int policyInstanceMinimum,
+                               string[] policyInstanceList, string podSpecOverride)
+        : ResourceBase, IInstanceGroup
     {
         public const string PATH = "/api/v2/instance_groups/";
+
         /// <summary>
-        /// Retrieve an Instance Group.<br/>
-        /// API Path: <c>api/v2/instance_groups/<paramref name="id"/>/</c>
+        /// Get an Instance Group.<br/>
+        /// <para>
+        /// Impelement API: <c>api/v2/instance_groups/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">InstanceGroup ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<InstanceGroup> Get(ulong id)
+        public static async Task<InstanceGroup> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<InstanceGroup>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<InstanceGroup>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Instance Groups.<br/>
-        /// API Path: <c>/api/v2/instance_groups/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static InstanceGroup Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(PATH, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Instance Groups for an Instance.<br/>
-        /// API Path: <c>/api/v2/instance/<paramref name="instanceId"/>/instance_groups/</c>
+        /// Find Instance Groups.<br/>
+        /// <para>
+        /// Implement API: <c>/api/v2/instance_groups/</c>
+        /// </para>
         /// </summary>
-        /// <param name="instanceId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromInstance(ulong instanceId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
+        public static async IAsyncEnumerable<InstanceGroup> FindAsync(HttpQuery? query = null,
+                                                                      [EnumeratorCancellation]
+                                                                      CancellationToken ct = default)
         {
-            var path = $"{Instance.PATH}{instanceId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instace Groups for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromOrganization(ulong organizationId,
-                                                                                 NameValueCollection? query = null,
-                                                                                 bool getAll = false)
-        {
-            var path = $"{Organization.PATH}{organizationId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instance Groups for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromInventory(ulong inventoryId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
-        {
-            var path = $"{Inventory.PATH}{inventoryId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instance Groups for a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="jobTemplateId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="jobTemplateId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromJobTemplate(ulong jobTemplateId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
-        {
-            var path = $"{JobTemplate.PATH}{jobTemplateId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instance Groups for a Schedule.<br/>
-        /// API Path: <c>/api/v2/schedules/<paramref name="scheduleId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="scheduleId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromSchedule(ulong scheduleId,
-                                                                             NameValueCollection? query = null,
-                                                                             bool getAll = false)
-        {
-            var path = $"{Schedule.PATH}{scheduleId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instance Groups for a Workflow Job Template Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_template_nodes/<paramref name="wjtnId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="wjtnId">Id of Workflow Job Tempalte Node</param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromWorkflowJobTemplateNode(ulong wjtnId,
-                                                                                            NameValueCollection? query = null,
-                                                                                            bool getAll = false)
-        {
-            var path = $"{WorkflowJobTemplateNode.PATH}{wjtnId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
-            {
-                foreach (var instanceGroup in result.Contents.Results)
-                {
-                    yield return instanceGroup;
-                }
-            }
-        }
-        /// <summary>
-        /// List Instance Groups for a Workflow Job Template Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/<paramref name="wjnId"/>/instance_groups/</c>
-        /// </summary>
-        /// <param name="wjnId">Id of Workflow Job Tempalte Node</param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InstanceGroup> FindFromWorkflowJobNode(ulong wjnId,
-                                                                                    NameValueCollection? query = null,
-                                                                                    bool getAll = false)
-        {
-            var path = $"{WorkflowJobNode.PATH}{wjnId}/instance_groups/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(PATH, query, ct))
             {
                 foreach (var instanceGroup in result.Contents.Results)
                 {
@@ -216,10 +68,112 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find InstanceGroup associated with <paramref name="resource"/>
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Instance</item>
+        ///     <item>Organization</item>
+        ///     <item>Inventory</item>
+        ///     <item>JobTemplate</item>
+        ///     <item>Schedule</item>
+        ///     <item>WorkflowJobTemplateNode</item>
+        ///     <item>WorkflowJobNode</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with this group</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<InstanceGroup> FindAsync(IResource resource,
+                                                                      HttpQuery? query = null,
+                                                                      [EnumeratorCancellation]
+                                                                      CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Instance => $"{Instance.PATH}{resource.Id}/instance_groups/",
+                ResourceType.Organization => $"{Organization.PATH}{resource.Id}/instance_groups/",
+                ResourceType.Inventory => $"{Inventory.PATH}{resource.Id}/instance_groups/",
+                ResourceType.JobTemplate => $"{JobTemplate.PATH}{resource.Id}/instance_groups/",
+                ResourceType.Schedule => $"{Schedule.PATH}{resource.Id}/instance_groups/",
+                ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{resource.Id}/instance_groups/",
+                ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{resource.Id}/instance_groups/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<InstanceGroup>(path, query, ct))
+            {
+                foreach (var instanceGroup in result.Contents.Results)
+                {
+                    yield return instanceGroup;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static InstanceGroup[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Insntance Groups by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static InstanceGroup[] Find(string? searchWords = null,
+                                           string orderBy = "name",
+                                           ushort pageSize = 20,
+                                           uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static InstanceGroup[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find InstanceGroup associated with <paramref name="resource"/> by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static InstanceGroup[] Find(IResource resource,
+                                           string? searchWords = null,
+                                           string orderBy = "name",
+                                           ushort pageSize = 20,
+                                           uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public string Name { get; } = name;
         public DateTime Created { get; } = created;
@@ -239,7 +193,7 @@ namespace Jagabata.Resources
         public string[] PolicyInstanceList { get; } = policyInstanceList;
         public string PodSpecOverride { get; } = podSpecOverride;
 
-        public CacheItem GetCacheItem()
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, string.Empty)
             {
@@ -248,6 +202,11 @@ namespace Jagabata.Resources
                     ["Instances"] = $"{Instances}"
                 }
             };
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
         }
     }
 }

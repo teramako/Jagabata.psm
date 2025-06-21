@@ -63,7 +63,7 @@ PowerShellVersion = '7.4'
 TypesToProcess = @('types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('formats.ps1xml')
+FormatsToProcess = @('formats.ps1xml', 'apiHelp_formats.ps1xml', 'summary_formats.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
@@ -134,6 +134,7 @@ CmdletsToExport = @(
     'Get-Dashboard',
     'Get-ExecutionEnvironment',
     'Get-Group',
+    'Get-GroupTree',
     'Get-Host',
     'Get-HostFactsCache',
     'Get-HostMetric',
@@ -142,6 +143,7 @@ CmdletsToExport = @(
     'Get-Inventory',
     'Get-InventoryFile',
     'Get-InventorySource',
+    'Get-InventoryScript',
     'Get-InventoryUpdateJob',
     'Get-Job',
     'Get-JobHostSummary',

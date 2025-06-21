@@ -28,7 +28,7 @@ namespace Jagabata.Cmdlets
         }
         private Setting[]? GetSettingList()
         {
-            var resultSet = GetResultSet<Setting>(BasePath, false).First();
+            var resultSet = GetResultSet<Setting>(BasePath).First();
             return resultSet.Results;
         }
     }

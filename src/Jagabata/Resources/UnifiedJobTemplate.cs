@@ -1,6 +1,5 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using System.Web;
 
 namespace Jagabata.Resources
 {
@@ -67,37 +66,58 @@ namespace Jagabata.Resources
         JobTemplateStatus Status { get; }
     }
 
-    public abstract class UnifiedJobTemplate(ulong id,
-                                             ResourceType type,
-                                             string url,
-                                             DateTime created,
-                                             DateTime? modified,
-                                             string name,
-                                             string description,
-                                             DateTime? lastJobRun,
-                                             bool lastJobFailed,
-                                             DateTime? nextJobRun,
-                                             JobTemplateStatus status)
-        : SummaryFieldsContainer, IUnifiedJobTemplate
+    public abstract class UnifiedJobTemplate : ResourceBase, IUnifiedJobTemplate
     {
         public const string PATH = "/api/v2/unified_job_templates/";
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public DateTime Created { get; } = created;
-        public DateTime? Modified { get; } = modified;
-        public string Name { get; } = name;
-        public string Description { get; } = description;
-        public DateTime? LastJobRun { get; } = lastJobRun;
-        public bool LastJobFailed { get; } = lastJobFailed;
-        public DateTime? NextJobRun { get; } = nextJobRun;
-        public JobTemplateStatus Status { get; } = status;
+        public abstract DateTime Created { get; }
+        public abstract DateTime? Modified { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract DateTime? LastJobRun { get; }
+        public abstract bool LastJobFailed { get; }
+        public abstract DateTime? NextJobRun { get; }
+        public abstract JobTemplateStatus Status { get; }
 
         /// <summary>
-        /// Retrieve a job template.
-        ///
-        /// The job template is one of:
+        /// Get schedules for this resource.
+        /// <para>Query:</para>
+        /// <list type="bullet">
+        ///     <item><c>order_by=next_run</c></item>
+        ///     <item><c>enabled=true</c> (when not <paramref name="all"/>)</item>
+        ///     <item><c>not__next_run__isnull=true</c> (when not <paramref name="all"/>)</item>
+        ///     <item><c>page_size=<paramref name="count"/></c></item>
+        /// </list>
+        /// </summary>
+        /// <param name="all">Include disabled or next_run is emptied schedules</param>
+        /// <param name="count">Number of schedules to retrieve</param>
+        public IEnumerable<Schedule> GetSchedules(bool all = false, int count = 20)
+        {
+            if (Related.TryGetPath("schedules", out var path))
+            {
+                var query = new HttpQuery("order_by=next_run");
+                if (!all)
+                {
+                    query.Add("enabled", "true");
+                    query.Add("not__next_run__isnull", "true");
+                }
+                query.Add("page_size", $"{count}");
+                return RestAPI.GetResultSet<Schedule>(path, query)
+                              .SelectMany(static apiResult => apiResult.Contents.Results);
+            }
+            return [];
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
+        }
+
+        /// <summary>
+        /// Get an Unified Job Template
+        /// </summary>
+        /// <remarks>
+        /// The unified job template is one of:
         /// <list type="bullet">
         /// <item><term><see cref="JobTemplate"/></term><description>Type: <c>job_template</c></description></item>
         /// <item><term><see cref="WorkflowJobTemplate"/></term><description>Type: <c>workflow_job_template</c></description></item>
@@ -105,44 +125,88 @@ namespace Jagabata.Resources
         /// <item><term><see cref="InventorySource"/></term><description>Type: <c>inventory_source</c></description></item>
         /// <item><term><see cref="SystemJobTemplate"/></term><description>Type: <c>sytem_job_template</c></description></item>
         /// </list>
-        /// </summary>
-        /// <param name="id"></param>
+        /// </remarks>
+        /// <param name="id">UnifiedJobTemplate ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<IUnifiedJobTemplate> Get(long id)
+        public static async Task<IUnifiedJobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var query = HttpUtility.ParseQueryString($"id={id}&page_size=1");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
+            var query = new HttpQuery($"id={id}&page_size=1");
+            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}", cancellationToken: ct);
             return apiResult.Contents.Results.OfType<IUnifiedJobTemplate>().Single();
         }
-        public static async Task<IUnifiedJobTemplate[]> Get(params ulong[] idList)
-        {
-            if (idList.Length > 200)
-            {
-                throw new ArgumentException($"too many items: {nameof(idList)} Length must be less than or equal to 200.");
-            }
-            var query = HttpUtility.ParseQueryString($"id__in={string.Join(',', idList)}&page_size={idList.Length}");
-            var apiResult = await RestAPI.GetAsync<ResultSet>($"{PATH}?{query}");
-            return [.. apiResult.Contents.Results.OfType<IUnifiedJobTemplate>()];
-        }
+
         /// <summary>
-        /// List Unified Job Templates.<br/>
-        /// API Path: <c>/api/v2/unified_job_templates/</c>
+        /// Get Unified Job Templates
         /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<IUnifiedJobTemplate> Find(NameValueCollection? query, bool getAll = false)
+        /// <param name="idList">ID list</param>
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static async IAsyncEnumerable<IUnifiedJobTemplate> GetAsync(ulong[] idList,
+                                                                           [EnumeratorCancellation]
+                                                                           CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query, getAll))
+            var qb = new QueryBuilder().SetOrderBy("id");
+            foreach (var query in qb.BuildWithIdList(idList.Order().ToArray()))
             {
-                foreach (var obj in result.Contents.Results)
+                await foreach (var apiResult in RestAPI.GetResultSetAsync(PATH, query, ct))
                 {
-                    if (obj is IUnifiedJobTemplate jobTemplate)
-                    {
-                        yield return jobTemplate;
-                    }
+                    foreach (var unifiedJobTemplate in apiResult.Contents.Results.OfType<IUnifiedJobTemplate>())
+                        yield return unifiedJobTemplate;
+
+                    if (ct.IsCancellationRequested)
+                        yield break;
                 }
             }
+        }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static IUnifiedJobTemplate Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Find Unified Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/unified_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<IUnifiedJobTemplate> FindAsync(HttpQuery? query = null,
+                                                                            [EnumeratorCancellation]
+                                                                            CancellationToken ct = default)
+        {
+            await foreach (var result in RestAPI.GetResultSetAsync(PATH, query, ct))
+            {
+                foreach (var unifiedJobTemplate in result.Contents.Results.OfType<IUnifiedJobTemplate>())
+                {
+                    yield return unifiedJobTemplate;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static IUnifiedJobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="Find(HttpQuery?)"/>
+        public static IUnifiedJobTemplate[] Find(string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20,
+                                                 uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
         }
     }
 }

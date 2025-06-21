@@ -14,7 +14,8 @@ namespace Jagabata.Cmdlets
     {
         protected override void EndProcessing()
         {
-            foreach (var resultSet in GetResultSet<User>("/api/v2/me/", true))
+            var query = new HttpQuery(QueryCount.Infinity);
+            foreach (var resultSet in GetResultSet<User>("/api/v2/me/", query))
             {
                 WriteObject(resultSet.Results, true);
             }
@@ -61,9 +62,7 @@ namespace Jagabata.Cmdlets
         public string[]? Email { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
-                           "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
-                           "roles", "profile")]
+        [OrderByCompletionFromHelp(ResourceType.User, User.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -111,9 +110,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "username", "first_name", "last_name", "email", "is_superuser", "last_login",
-                           "enterprise_auth", "social_auth", "main_oauth2application", "activity_stream",
-                           "roles", "profile")]
+        [OrderByCompletionFromHelp(ResourceType.User, User.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -192,7 +189,7 @@ namespace Jagabata.Cmdlets
                 else
                 {
                     if (CommandRuntime.Host is null)
-                        throw new NullReferenceException();
+                        throw new NotSupportedException("Could not display prompt for inputting password.");
 
                     _passwordInputedFromPrompt = true;
                     var prompt = new AskPrompt(CommandRuntime.Host);

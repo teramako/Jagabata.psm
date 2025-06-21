@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Management.Automation;
-using System.Web;
 
 namespace Jagabata.Cmdlets.ArgumentTransformation
 {
@@ -44,39 +43,31 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
-            var queries = HttpUtility.ParseQueryString("");
-
+            var queryBuilder = new QueryBuilder();
             foreach (var item in ToItems(inputData))
             {
                 switch (item)
                 {
                     case Filter filter:
-                        queries.Add(filter.GetKey(), filter.GetValue());
+                        queryBuilder.Add(filter);
                         continue;
                     case IDictionary dict:
-                        {
-                            var f = Filter.Parse(dict);
-                            queries.Add(f.GetKey(), f.GetValue());
-                        }
+                        queryBuilder.Add(dict);
                         continue;
                     case NameValueCollection nvc:
-                        foreach (var f in GetQueries(nvc))
-                        {
-                            queries.Add(f.GetKey(), f.GetValue());
-                        }
+                        queryBuilder.Add(nvc);
                         continue;
                     case string str:
                         foreach (var kv in str.Split('&'))
                         {
-                            var filter = Filter.Parse(kv);
-                            queries.Add(filter.GetKey(), filter.GetValue());
+                            queryBuilder.Add(kv);
                         }
                         continue;
                     default:
                         continue;
                 }
             }
-            return queries;
+            return queryBuilder.Build();
         }
         private static IEnumerable ToItems(object inputData)
         {
@@ -90,18 +81,6 @@ namespace Jagabata.Cmdlets.ArgumentTransformation
             else
             {
                 yield return inputData;
-            }
-        }
-        private static IEnumerable<Filter> GetQueries(NameValueCollection collection)
-        {
-            foreach (string key in collection.Keys)
-            {
-                var values = collection.GetValues(key);
-                if (values is null) continue;
-                foreach (var val in values)
-                {
-                    yield return new Filter(key, val);
-                }
             }
         }
     }

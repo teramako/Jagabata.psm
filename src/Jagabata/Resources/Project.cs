@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -97,34 +97,45 @@ namespace Jagabata.Resources
                          int scmUpdateCacheTimeout, bool allowOverride, string? customVirtualenv,
                          ulong? defaultEnvironment, ulong? signatureValidationCredential, bool lastUpdateFailed,
                          DateTime? lastUpdated)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IProject, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IProject
     {
         public new const string PATH = "/api/v2/projects/";
 
-
         /// <summary>
-        /// Retrieve a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="id"/>/</c>
+        /// Get a Project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Project ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Project> Get(ulong id)
+        public static new async Task<Project> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Project>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Project>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new Project Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Projects.<br/>
-        /// API Path: <c>/api/v2/projects/</c>
+        /// Find Projects
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static new async IAsyncEnumerable<Project> Find(NameValueCollection? query, bool getAll = false)
+        public static new async IAsyncEnumerable<Project> FindAsync(HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(PATH, query, ct))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -132,20 +143,37 @@ namespace Jagabata.Resources
                 }
             }
         }
+
         /// <summary>
-        /// List Projects for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/projects/</c>
+        /// Find Projects associated with <paramref name="resource"/>
         /// </summary>
-        /// <param name="organizationId"></param>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/projects/</c>
+        /// <para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromOrganization(ulong organizationId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
+        public static async IAsyncEnumerable<Project> FindAsync(IResource resource,
+                                                                HttpQuery? query = null,
+                                                                [EnumeratorCancellation]
+                                                                CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/projects/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/projects/",
+                ResourceType.Team => $"{Team.PATH}{resource.Id}/projects/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, ct))
             {
                 foreach (var project in result.Contents.Results)
                 {
@@ -153,47 +181,57 @@ namespace Jagabata.Resources
                 }
             }
         }
-        /// <summary>
-        /// List Projects for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/projects/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromUser(ulong userId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new Project[] Find(HttpQuery query)
         {
-            var path = $"{User.PATH}{userId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
-            {
-                foreach (var project in result.Contents.Results)
-                {
-                    yield return project;
-                }
-            }
+            return [.. FindAsync(query).ToBlockingEnumerable()];
         }
+
         /// <summary>
-        /// List Projects for a Team.<br/>
-        /// API Path: <c>/api/v2/teams/<paramref name="teamId"/>/projects/</c>
+        /// Find Labels by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/labels/</c>
+        /// </para>
         /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Project> FindFromTeam(ulong teamId,
-                                                                   NameValueCollection? query = null,
-                                                                   bool getAll = false)
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new Project[] Find(string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
         {
-            var path = $"{Team.PATH}{teamId}/projects/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Project>(path, query, getAll))
-            {
-                foreach (var project in result.Contents.Results)
-                {
-                    yield return project;
-                }
-            }
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Project[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Projects associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static Project[] Find(IResource resource,
+                                     string? searchWords = null,
+                                     string orderBy = "name",
+                                     ushort pageSize = 20,
+                                     uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
         }
 
         /// <summary>
@@ -206,8 +244,15 @@ namespace Jagabata.Resources
             return apiResult.Contents;
         }
 
-        public RelatedDictionary Related { get; } = related;
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public string LocalPath { get; } = localPath;
         public string ScmType { get; } = scmType;
         public string ScmUrl { get; } = scmUrl;
@@ -219,6 +264,10 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public int Timeout { get; } = timeout;
         public string ScmRevision { get; } = scmRevision;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong Organization { get; } = organization;
         public bool ScmUpdateOnLaunch { get; } = scmUpdateOnLaunch;
         public int ScmUpdateCacheTimeout { get; } = scmUpdateCacheTimeout;
@@ -229,7 +278,7 @@ namespace Jagabata.Resources
         public bool LastUpdateFailed { get; } = lastUpdateFailed;
         public DateTime? LastUpdated { get; } = lastUpdated;
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public ProjectOptions Options => (ScmClean ? ProjectOptions.ScmClean : 0) |
                        (ScmDeleteOnUpdate ? ProjectOptions.ScmDeleteOnUpdate : 0) |
                        (ScmTrackSubmodules ? ProjectOptions.ScmTrackSubmodules : 0) |
@@ -237,15 +286,244 @@ namespace Jagabata.Resources
                        (AllowOverride ? ProjectOptions.AllowOverride : 0);
 
         /// <summary>
-        /// Get inventory files and directories.
+        /// Get inventory files and directories available within this project, not comprehensive.
         /// </summary>
-        /// <returns>Array of inventory files and directories available with in this project, not comprehensive</returns>
-        public async Task<string[]> GetInventoryFiles()
+        /// <returns>Array of inventory files and directories</returns>
+        public string[] GetInventoryFiles()
         {
-            return await GetInventoryFiles(Id);
+            return RestAPI.Get<string[]>($"{PATH}{Id}/inventories/");
         }
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Get playbooks available within this project.
+        /// </summary>
+        /// <returns>Array of playbooks</returns>
+        public string[] GetPlaybooks()
+        {
+            return RestAPI.Get<string[]>($"{PATH}{Id}/playbooks/");
+        }
+
+        /// <summary>
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/projects/{id}/project_updates/</c>
+        /// </summary>
+        /// <param name="count">Number of jobs to retrieve</param>
+        public ProjectUpdateJob[] GetRecentJobs(ushort count = 20)
+        {
+            return [.. FindResultsByRelatedKey<ProjectUpdateJob>("project_updates", null, "-id", count)];
+        }
+
+        /// <summary>
+        /// Find the  activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Find teams related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Team[] FindTeams(string? searchWords = null,
+                                string orderBy = "name",
+                                ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Team>("teams",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find teams related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/teams/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Team[] FindTeams(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Team>("teams", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(string? searchWords = null,
+                                                                       string orderBy = "name",
+                                                                       ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this project.
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this project
+        /// <para>
+        /// Implement API: <c>/api/v2/projects/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] FindAccessList(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the object roles related to this project
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Get the organization related this project
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -43,59 +43,53 @@ namespace Jagabata.Resources
         string Identifier { get; }
     }
 
-    public class WorkflowJobNode(ulong id,
-                                 ResourceType type,
-                                 string url,
-                                 RelatedDictionary related,
-                                 SummaryFieldsDictionary summaryFields,
-                                 DateTime created,
-                                 DateTime? modified,
-                                 Dictionary<string, object?> extraData,
-                                 ulong? inventory,
-                                 string? scmBranch,
-                                 string? jobType,
-                                 string? jobTags,
-                                 string? skipTags,
-                                 string? limit,
-                                 bool? diffMode,
-                                 JobVerbosity? verbosity,
-                                 ulong? executionEnvironment,
-                                 int? forks,
-                                 int? jobSliceCount,
-                                 int? timeout,
-                                 ulong? job,
-                                 ulong workflowJob,
-                                 ulong? unifiedJobTemplate,
-                                 ulong[] successNodes,
-                                 ulong[] failureNodes,
-                                 ulong[] alwaysNodes,
-                                 bool allParentsMustConverge,
-                                 bool doNotRun,
-                                 string identifier)
-                : SummaryFieldsContainer, IWorkflowJobNode, IResource, ICacheableResource
+    public class WorkflowJobNode(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                 SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                 Dictionary<string, object?> extraData, ulong? inventory, string? scmBranch,
+                                 string? jobType, string? jobTags, string? skipTags, string? limit, bool? diffMode,
+                                 JobVerbosity? verbosity, ulong? executionEnvironment, int? forks, int? jobSliceCount,
+                                 int? timeout, ulong? job, ulong workflowJob, ulong? unifiedJobTemplate,
+                                 ulong[] successNodes, ulong[] failureNodes, ulong[] alwaysNodes,
+                                 bool allParentsMustConverge, bool doNotRun, string identifier)
+        : ResourceBase, IWorkflowJobNode
     {
         public const string PATH = "/api/v2/workflow_job_nodes/";
+
         /// <summary>
-        /// Retrieve a Workflow Job Node.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/<paramref name="id"/>/</c>
+        /// Get a Workflow Job Node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Workflow Job Node ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<WorkflowJobNode> Get(ulong id)
+        public static async Task<WorkflowJobNode> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<WorkflowJobNode>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<WorkflowJobNode>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static WorkflowJobNode Get(ulong id)
+        {
+            return GetAsync(id).GetAwaiter().GetResult();
+        }
+
         /// <summary>
-        /// List Workflow Job Nodes.<br/>
-        /// API Path: <c>/api/v2/workflow_job_nodes/</c>
+        /// Find Workflow Job Nodes
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/</c>
+        /// </para>
         /// </summary>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<WorkflowJobNode> Find(NameValueCollection? query, bool getAll = false)
+        public static async IAsyncEnumerable<WorkflowJobNode> FindAsync(HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(PATH, query, ct))
             {
                 foreach (var jobNode in result.Contents.Results)
                 {
@@ -104,10 +98,87 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Workflow Job Nodes for a Workflow Job
+        /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/workflow_jobs/<paramref name="workflowJobId"/>/workflow_nodes/</c>
+        /// </remarks>
+        /// <param name="workflowJobId">Workflow Job ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<WorkflowJobNode> FindAsync(ulong workflowJobId,
+                                                                        HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
+        {
+            var path = $"{WorkflowJobBase.PATH}{workflowJobId}/workflow_nodes/";
+            await foreach (var result in RestAPI.GetResultSetAsync<WorkflowJobNode>(path, query, ct))
+            {
+                foreach (var jobNode in result.Contents.Results)
+                {
+                    yield return jobNode;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static WorkflowJobNode[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Nodes by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static WorkflowJobNode[] Find(string? searchWords = null,
+                                             string orderBy = "-id",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static WorkflowJobNode[] Find(ulong workflowJobId, HttpQuery query)
+        {
+            return [.. FindAsync(workflowJobId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Workflow Job Nodes for a Workflow Job by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static WorkflowJobNode[] Find(ulong workflowJobId,
+                                             string? searchWords = null,
+                                             string orderBy = "-id",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(workflowJobId, new QueryBuilder().SetSearchWords(searchWords)
+                                                         .SetOrderBy(orderBy)
+                                                         .SetPageSize(pageSize)
+                                                         .SetStartPage(startPage)
+                                                         .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         [JsonConverter(typeof(Json.SummaryFieldsWorkflowJobNodeConverter))]
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
@@ -136,7 +207,225 @@ namespace Jagabata.Resources
         public bool DoNotRun { get; } = doNotRun;
         public string Identifier { get; } = identifier;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Find success nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_template_nodes/{id}/success_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public WorkflowJobTemplateNode[] FindSuccessNodes(string? searchWords = null,
+                                                          string orderBy = "id",
+                                                          ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobTemplateNode>("success_nodes",
+                                                                        searchWords,
+                                                                        orderBy,
+                                                                        pageSize)];
+        }
+
+        /// <summary>
+        /// Find success nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/success_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public WorkflowJobNode[] FindSuccessNodes(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("success_nodes", query)];
+        }
+
+        /// <summary>
+        /// Find failure nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/failure_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public WorkflowJobNode[] FindFailureNodes(string? searchWords = null,
+                                                  string orderBy = "id",
+                                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("failure_nodes",
+                                                                searchWords,
+                                                                orderBy,
+                                                                pageSize)];
+        }
+
+        /// <summary>
+        /// Find failure nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/failure_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public WorkflowJobNode[] FindFailureNodes(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("failure_nodes", query)];
+        }
+
+        /// <summary>
+        /// Find always nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/always_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public WorkflowJobNode[] FindAlwaysNodes(string? searchWords = null,
+                                                 string orderBy = "id",
+                                                 ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("always_nodes",
+                                                                searchWords,
+                                                                orderBy,
+                                                                pageSize)];
+        }
+
+        /// <summary>
+        /// Find always nodes associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/always_nodes/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public WorkflowJobNode[] FindAlwaysNodes(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJobNode>("always_nodes", query)];
+        }
+
+        /// <summary>
+        /// Get the parent workflow job of this node.
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_jobs/{id}/</c>
+        /// </para>
+        /// </summary>
+        public WorkflowJob? GetWorkflowJob()
+        {
+            return Related.TryGetPath("workflow_job", out var path)
+                ? RestAPI.Get<WorkflowJob>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the template applied to this node.
+        /// </summary>
+        public UnifiedJobTemplate? GetTemplate()
+        {
+            return Related.TryGetPath("unified_job_template", out var path)
+                   && SummaryFields.TryGetValue<UnifiedJobTemplateSummary>("UnifiedJobTemplate", out var template)
+                ? template.Type switch
+                {
+                    ResourceType.InventorySource => RestAPI.Get<InventorySource>(path),
+                    ResourceType.JobTemplate => RestAPI.Get<JobTemplate>(path),
+                    ResourceType.Project => RestAPI.Get<Project>(path),
+                    ResourceType.WorkflowJobTemplate => RestAPI.Get<WorkflowJobTemplate>(path),
+                    ResourceType.WorkflowApprovalTemplate => RestAPI.Get<WorkflowApprovalTemplate>(path),
+                    _ => throw new NotSupportedException($"Not supported type: {template.Type}")
+                }
+                : null;
+        }
+
+        /// <summary>
+        /// Find labels associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Name(s) of sort key</param>
+        /// <param name="pageSize">Max number of groups to retrieve</param>
+        public Label[] FindLabels(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
+        }
+
+        /// <summary>
+        /// Find labels associated with this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/labels/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>
+        public Label[] FindLabels(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Label>("labels", query)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] FindCredentials(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        /// <summary>
+        /// Find instance groups related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                              searchWords,
+                                                              orderBy,
+                                                              pageSize)];
+        }
+
+        /// <summary>
+        /// Find instance groups related to this workflow job node
+        /// <para>
+        /// Implement API: <c>/api/v2/workflow_job_nodes/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public InstanceGroup[] FindInstanceGroups(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, string.Empty, string.Empty);
             if (SummaryFields.TryGetValue<WorkflowJobNodeJobSummary>("Job", out var job))

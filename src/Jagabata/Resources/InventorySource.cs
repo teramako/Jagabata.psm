@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -171,117 +171,44 @@ namespace Jagabata.Resources
                                  JobTemplateStatus status, ulong? executionEnvironment, ulong inventory,
                                  bool updateOnLaunch, int updateCacheTimeout, ulong? sourceProject,
                                  bool lastUpdateFailed, DateTime? lastUpdated)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IInventorySource, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IInventorySource
     {
         public new const string PATH = "/api/v2/inventory_sources/";
 
         /// <summary>
-        /// Retrieve an Inventory Source.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/<paramref name="id"/>/</c>
+        /// Get an Inventory Source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">InventorySource ID</param>
         /// <returns></returns>
-        public static async Task<InventorySource> Get(ulong id)
+        public static new async Task<InventorySource> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<InventorySource>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<InventorySource>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Inventory Sources.<br/>
-        /// API Path: <c>/api/v2/inventory_sources/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static new async IAsyncEnumerable<InventorySource> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new InventorySource Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, getAll))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Inventory Sources for a Project.<br/>
-        /// API Path: <c>/api/v2/projects/<paramref name="projectId"/>/scm_inventory_sources/</c>
+        /// Find Inventory Sources
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/</c>
+        /// </para>
         /// </summary>
-        /// <param name="projectId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromProject(ulong projectId,
-                                                                              NameValueCollection? query = null,
-                                                                              bool getAll = false)
+        public static new async IAsyncEnumerable<InventorySource> FindAsync(HttpQuery? query = null,
+                                                                            [EnumeratorCancellation]
+                                                                            CancellationToken ct = default)
         {
-            var path = $"{Project.PATH}{projectId}/scm_inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
-        }
-        /// <summary>
-        /// List Inventory Sources for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/inventory_sources/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromInventory(ulong inventoryId,
-                                                                                NameValueCollection? query = null,
-                                                                                bool getAll = false)
-        {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
-        }
-        /// <summary>
-        /// List Inventory Sources for an Group.<br/>
-        /// API Path: <c>/api/v2/groups/<paramref name="groupId"/>/inventory_sources/</c>
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromGroup(ulong groupId,
-                                                                            NameValueCollection? query = null,
-                                                                            bool getAll = false)
-        {
-            var path = $"{Group.PATH}{groupId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
-            {
-                foreach (var inventorySource in result.Contents.Results)
-                {
-                    yield return inventorySource;
-                }
-            }
-        }
-        /// <summary>
-        /// List Inventory Sources for an Host.<br/>
-        /// API Path: <c>/api/v2/hosts/<paramref name="hostId"/>/inventory_sources/</c>
-        /// </summary>
-        /// <param name="hostId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<InventorySource> FindFromHost(ulong hostId,
-                                                                           NameValueCollection? query = null,
-                                                                           bool getAll = false)
-        {
-            var path = $"{Host.PATH}{hostId}/inventory_sources/";
-            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(PATH, query, ct))
             {
                 foreach (var inventorySource in result.Contents.Results)
                 {
@@ -290,9 +217,110 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Inventory Sources associated with <paramref name="resource"/>
+        /// </summary>
+        /// <remarks>
+        /// Implement API:
+        /// <list type="bullet">
+        ///     <item><c>/api/v2/projects/{Id}/scm_inventory_sources/</c></item>
+        ///     <item><c>/api/v2/{inventories | groups | hosts}/{Id}/inventory_sources/</c></item>
+        /// </list>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Project</item>
+        ///     <item>Inventory</item>
+        ///     <item>Group</item>
+        ///     <item>Host</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<InventorySource> FindAsync(IResource resource,
+                                                                        HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Project => $"{Project.PATH}{resource.Id}/scm_inventory_sources/",
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/inventory_sources/",
+                ResourceType.Group => $"{Group.PATH}{resource.Id}/inventory_sources/",
+                ResourceType.Host => $"{Host.PATH}{resource.Id}/inventory_sources/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<InventorySource>(path, query, ct))
+            {
+                foreach (var inventorySource in result.Contents.Results)
+                {
+                    yield return inventorySource;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new InventorySource[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static InventorySource[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Inventory Sources by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new InventorySource[] Find(string? searchWords = null,
+                                                 string orderBy = "name",
+                                                 ushort pageSize = 20,
+                                                 uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find Inventory Sources associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static InventorySource[] Find(IResource resource,
+                                             string? searchWords = null,
+                                             string orderBy = "name",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
-
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public InventorySourceSource Source { get; } = source;
         public string SourcePath { get; } = sourcePath;
         public string SourceVars { get; } = sourceVars;
@@ -307,6 +335,10 @@ namespace Jagabata.Resources
         public int Timeout { get; } = timeout;
         public int Verbosity { get; } = verbosity;
         public string Limit { get; } = limit;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public ulong Inventory { get; } = inventory;
         public bool UpdateOnLaunch { get; } = updateOnLaunch;
@@ -315,12 +347,269 @@ namespace Jagabata.Resources
         public bool LastUpdateFailed { get; } = lastUpdateFailed;
         public DateTime? LastUpdated { get; } = lastUpdated;
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public InventorySourceOptions Options => (Overwrite ? InventorySourceOptions.Overwrite : 0)
                                                  | (OverwriteVars ? InventorySourceOptions.OverwriteVars : 0)
                                                  | (UpdateOnLaunch ? InventorySourceOptions.UpdateOnLaunch : 0);
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/inventory_updates/</c>
+        /// </summary>
+        /// <param name="count">Number of jobs to retrieve</param>
+        public InventoryUpdateJob[] GetRecentJobs(ushort count = 20)
+        {
+            return [.. FindResultsByRelatedKey<InventoryUpdateJob>("inventory_updates", null, "-id", count)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Get the execution environment related to this inventory source
+        /// </summary>
+        public ExecutionEnvironment? GetExecutionEnvironment()
+        {
+            return Related.TryGetPath("execution_environment", out var path)
+                ? RestAPI.Get<ExecutionEnvironment>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Find hosts related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Host[] FindHosts(string? searchWords = null,
+                                string orderBy = "name",
+                                ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Host>("hosts",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find hosts related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/hosts/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Host[] FindHosts(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Host>("hosts", query)];
+        }
+
+        /// <summary>
+        /// Find groups related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Group[] FindGroups(string? searchWords = null,
+                                  string orderBy = "name",
+                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Group>("groups",
+                                                      searchWords,
+                                                      orderBy,
+                                                      pageSize)];
+        }
+
+        /// <summary>
+        /// Find groups related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Group[] FindGroups(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Group>("groups", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(string? searchWords = null,
+                                                                       string orderBy = "name",
+                                                                       ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this inventory source.
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Get the inventory related to this inventory source
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path)
+                ? RestAPI.Get<Inventory>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the source project related to this inventory source
+        /// </summary>
+        public Project? GetSourceProject()
+        {
+            return Related.TryGetPath("source_project", out var path)
+                ? RestAPI.Get<Project>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Find credentials related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public Credential[] FindCredentials(string? searchWords = null,
+                                            string orderBy = "name",
+                                            ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials",
+                                                           searchWords,
+                                                           orderBy,
+                                                           pageSize)];
+        }
+
+        /// <summary>
+        /// Find credentials related to this inventory source
+        /// <para>
+        /// Implement API: <c>/api/v2/inventory_sources/{id}/credentials/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public Credential[] FindCredentials(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<Credential>("credentials", query)];
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             var item = new CacheItem(Type, Id, Name, Description)
             {

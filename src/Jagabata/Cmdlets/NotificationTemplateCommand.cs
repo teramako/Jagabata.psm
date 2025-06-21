@@ -35,8 +35,7 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -45,11 +44,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            var path = Organization > 0 ? $"{Resources.Organization.PATH}{Organization}/notification_templates/" : NotificationTemplate.PATH;
-            foreach (var resultSet in GetResultSet<NotificationTemplate>(path, Query, All))
-            {
-                WriteObject(resultSet.Results, true);
-            }
+            Find<NotificationTemplate>(Organization > 0
+                                       ? $"{Resources.Organization.PATH}{Organization}/notification_templates/"
+                                       : NotificationTemplate.PATH);
         }
     }
 
@@ -64,8 +61,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -101,8 +97,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -142,8 +137,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -183,8 +177,7 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "notification_type", "messages")]
+        [OrderByCompletionFromHelp(ResourceType.NotificationTemplate, NotificationTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -364,8 +357,9 @@ namespace Jagabata.Cmdlets
             };
             foreach (var timing in On)
             {
-                if (timing == "Approval" && (For.Type != ResourceType.Organization
-                                             && For.Type != ResourceType.WorkflowJobTemplate))
+                if (timing == "Approval"
+                    && For.Type != ResourceType.Organization
+                    && For.Type != ResourceType.WorkflowJobTemplate)
                 {
                     WriteWarning($"{For.Type} has no \"{timing}\" notifications.");
                     continue;

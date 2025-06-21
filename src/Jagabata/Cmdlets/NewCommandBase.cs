@@ -7,17 +7,9 @@ public abstract class NewCommandBase<TResource> : APICmdletBase where TResource 
     protected abstract Dictionary<string, object> CreateSendData();
 
     private string? _apiPath;
-    protected virtual string ApiPath
-    {
-        get
-        {
-            if (_apiPath is not null)
-                return _apiPath;
-
-            _apiPath = GetApiPath(typeof(TResource));
-            return _apiPath;
-        }
-    }
+    protected virtual string ApiPath => _apiPath is not null || Utils.TryGetApiPath<TResource>(out _apiPath)
+        ? _apiPath
+        : throw new NotImplementedException($"'PATH' field is not implemented on {typeof(TResource)}");
 
     protected bool TryCreate([MaybeNullWhen(false)] out TResource result, string? action = null)
     {

@@ -39,7 +39,7 @@ namespace Jagabata.Cmdlets
                          |___/                             |_|
 
             """;
-        private ApiConfig? config = null;
+        private ApiConfig? config;
         private SecureString? GetToken()
         {
             var fd = new FieldDescription("Personal Token");
@@ -61,10 +61,7 @@ namespace Jagabata.Cmdlets
 
         protected override void BeginProcessing()
         {
-            if (Uri is null)
-            {
-                throw new ArgumentNullException(nameof(Uri));
-            }
+            ArgumentNullException.ThrowIfNull(Uri, nameof(Uri));
 
             Host.UI.WriteLine(ConsoleColor.Red, Console.BackgroundColor, banner);
 

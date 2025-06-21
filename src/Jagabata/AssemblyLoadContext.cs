@@ -15,7 +15,7 @@ internal class AclModuleAssemblyLoadContext(string dependencyDirPath) : Assembly
     }
 }
 
-public class AclModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAssemblyCleanup
+public class AclModuleResolveHandler : IModuleAssemblyInitializer, IModuleAssemblyCleanup
 {
     private static readonly string s_dependencyDirPath =
         Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "libs"));

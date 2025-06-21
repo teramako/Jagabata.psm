@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Jagabata.Resources
 {
@@ -33,66 +33,47 @@ namespace Jagabata.Resources
         string Pull { get; }
     }
 
-    public class ExecutionEnvironment(ulong id,
-                                      ResourceType type,
-                                      string url,
-                                      RelatedDictionary related,
-                                      SummaryFieldsDictionary summaryFields,
-                                      DateTime created,
-                                      DateTime? modified,
-                                      string name,
-                                      string description,
-                                      ulong? organization,
-                                      string image,
-                                      bool managed,
-                                      ulong? credential,
-                                      string pull)
-                : SummaryFieldsContainer, IExecutionEnvironment, IResource, ICacheableResource
+    public class ExecutionEnvironment(ulong id, ResourceType type, string url, RelatedDictionary related,
+                                      SummaryFieldsDictionary summaryFields, DateTime created, DateTime? modified,
+                                      string name, string description, ulong? organization, string image, bool managed,
+                                      ulong? credential, string pull)
+        : ResourceBase, IExecutionEnvironment
     {
         public const string PATH = "/api/v2/execution_environments/";
 
         /// <summary>
-        /// Retrieve an Execution Environment.<br/>
-        /// API Path: <c>/api/v2/execution_environments/<paramref name="id"/>/</c>
+        /// Get an Execution Environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static async Task<ExecutionEnvironment> Get(ulong id)
+        /// <param name="id">ExecutionEnvironment ID</param>
+        /// <param name="ct">Cancellation token</param>
+        public static async Task<ExecutionEnvironment> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<ExecutionEnvironment>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<ExecutionEnvironment>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Execution Environments.<br/>
-        /// API Path: <c>/api/v2/execution_environments/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ExecutionEnvironment> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static ExecutionEnvironment Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query, getAll))
-            {
-                foreach (var exeEnv in result.Contents.Results)
-                {
-                    yield return exeEnv;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Execution Environments for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// Find Execution Environments
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<ExecutionEnvironment> FindFromOrganization(ulong organizationId,
-                                                                                        NameValueCollection? query = null,
-                                                                                        bool getAll = false)
+        /// <param name="ct">Cancellation token</param>
+        public static async IAsyncEnumerable<ExecutionEnvironment> FindAsync(HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/execution_environments/";
-            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(PATH, query, ct))
             {
                 foreach (var exeEnv in result.Contents.Results)
                 {
@@ -101,10 +82,92 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Execution Environments for an Organization
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="organizationId">Organization ID</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        public static async IAsyncEnumerable<ExecutionEnvironment> FindAsync(ulong organizationId,
+                                                                             HttpQuery? query = null,
+                                                                             [EnumeratorCancellation]
+                                                                             CancellationToken ct = default)
+        {
+            var path = $"{Resources.Organization.PATH}{organizationId}/execution_environments/";
+            await foreach (var result in RestAPI.GetResultSetAsync<ExecutionEnvironment>(path, query, ct))
+            {
+                foreach (var exeEnv in result.Contents.Results)
+                {
+                    yield return exeEnv;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static ExecutionEnvironment[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Execution Environments by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static ExecutionEnvironment[] Find(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(ulong, HttpQuery?, CancellationToken)"/>
+        public static ExecutionEnvironment[] Find(ulong organizationId, HttpQuery query)
+        {
+            return [.. FindAsync(organizationId, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find ExecutionEnvironments for an Organization by basic parameters
+        /// <para>
+        /// Implement API: <c>/api/v2/organizations/<paramref name="organizationId"/>/execution_environments/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="organizationId">Organization ID</param>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static ExecutionEnvironment[] Find(ulong organizationId,
+                                                  string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20,
+                                                  uint startPage = 1)
+        {
+            return Find(organizationId, new QueryBuilder().SetSearchWords(searchWords)
+                                                          .SetOrderBy(orderBy)
+                                                          .SetPageSize(pageSize)
+                                                          .SetStartPage(startPage)
+                                                          .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -116,7 +179,79 @@ namespace Jagabata.Resources
         public ulong? Credential { get; } = credential;
         public string Pull { get; } = pull;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Find unified job templates related to this execution environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public UnifiedJobTemplate[] FindUnifiedJobTemplates(string? searchWords = null,
+                                                            string orderBy = "name",
+                                                            ushort pageSize = 20)
+        {
+            return Related.TryGetPath("unified_job_templates", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, new QueryBuilder().SetSearchWords(searchWords)
+                                                                        .SetOrderBy(orderBy)
+                                                                        .SetPageSize(pageSize)
+                                                                        .Build())
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJobTemplate>()]
+                : [];
+        }
+
+        /// <summary>
+        /// Find unified job templates related to this execution environment
+        /// <para>
+        /// Implement API: <c>/api/v2/execution_environments/{id}/unified_job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public UnifiedJobTemplate[] FindUnifiedJobTemplates(HttpQuery query)
+        {
+            return Related.TryGetPath("unified_job_templates", out var path)
+                ? [.. RestAPI.GetResultSetAsync(path, query)
+                             .ToBlockingEnumerable()
+                             .SelectMany(static apiResult => apiResult.Contents.Results)
+                             .OfType<UnifiedJobTemplate>()]
+                : [];
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {
@@ -124,6 +259,11 @@ namespace Jagabata.Resources
                     ["Image"] = Image
                 }
             };
+        }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Id}:{Name}";
         }
     }
 }

@@ -11,5 +11,16 @@ namespace Jagabata.Resources
         public record SampleItem(Dictionary<string, string> Labels,
                                  double Value,
                                  string? SampleType);
+
+        public static async Task<Metrics> GetAsync(CancellationToken ct = default)
+        {
+            var apiResult = await RestAPI.GetAsync<Metrics>(PATH, cancellationToken: ct);
+            return apiResult.Contents;
+        }
+
+        public static Metrics Get()
+        {
+            return RestAPI.GetAsync<Metrics>(PATH).GetAwaiter().GetResult().Contents;
+        }
     }
 }

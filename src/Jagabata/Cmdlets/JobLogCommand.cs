@@ -2,7 +2,6 @@ using Jagabata.Cmdlets.ArgumentTransformation;
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Management.Automation;
 using System.Reflection;
@@ -48,7 +47,7 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         public SwitchParameter Dark { get; set; }
 
-        private readonly NameValueCollection Query = HttpUtility.ParseQueryString(string.Empty);
+        private readonly HttpQuery Query = [];
         /// <summary>
         /// HashSet to avoid duplicate retrieval of the same job
         /// </summary>
@@ -63,8 +62,8 @@ namespace Jagabata.Cmdlets
         /// <param name="id"></param>
         private void GetJobsFromWorkflowJob(ulong id)
         {
-            var query = HttpUtility.ParseQueryString("do_not_run=false&order_by=modified&page_size=20");
-            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJob.PATH}{id}/workflow_nodes/?{query}", true))
+            var query = new HttpQuery("do_not_run=false&order_by=modified&page_size=200", QueryCount.Infinity);
+            foreach (var resultSet in GetResultSet<WorkflowJobNode>($"{WorkflowJobBase.PATH}{id}/workflow_nodes/", query))
             {
                 foreach (var node in resultSet.Results)
                 {
@@ -154,11 +153,11 @@ namespace Jagabata.Cmdlets
         {
             return type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{id}/stdout/",
-                ResourceType.ProjectUpdate => $"{ProjectUpdateJob.PATH}{id}/stdout/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{id}/stdout/",
-                ResourceType.AdHocCommand => $"{AdHocCommand.PATH}{id}/stdout/",
-                ResourceType.SystemJob => $"{SystemJob.PATH}{id}/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{id}/stdout/",
+                ResourceType.ProjectUpdate => $"{ProjectUpdateJobBase.PATH}{id}/stdout/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{id}/stdout/",
+                ResourceType.AdHocCommand => $"{AdHocCommandBase.PATH}{id}/stdout/",
+                ResourceType.SystemJob => $"{SystemJobBase.PATH}{id}/",
                 _ => throw new NotImplementedException(),
             };
         }
@@ -207,9 +206,8 @@ namespace Jagabata.Cmdlets
         }
         private IEnumerable<FileInfo> DownloadLogs(DirectoryInfo dir)
         {
-            var unifiedJobsTask = UnifiedJob.Get(_jobs.Select(static job => job.Id).ToArray());
-            unifiedJobsTask.Wait();
-            foreach (var unifiedJob in unifiedJobsTask.Result)
+            foreach (var unifiedJob in UnifiedJob.GetAsync([.. _jobs.Select(static job => job.Id)])
+                                                 .ToBlockingEnumerable())
             {
                 if (unifiedJob is ISystemJob systemJob)
                 {

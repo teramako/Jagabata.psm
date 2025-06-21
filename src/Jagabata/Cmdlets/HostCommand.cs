@@ -42,9 +42,7 @@ namespace Jagabata.Cmdlets
         public SwitchParameter OnlyChildren { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "inventory", "enabled",
-                           "instance_id", "variables", "last_job", "last_job_host_summary",
-                           "ansible_facts_modified", "groups", "created_by", "modified_by")]
+        [OrderByCompletionFromHelp(ResourceType.Host, Host.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()

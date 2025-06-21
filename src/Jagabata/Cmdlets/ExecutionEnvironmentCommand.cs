@@ -34,8 +34,7 @@ namespace Jagabata.Cmdlets
         public ulong Organization { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "image", "managed", "credential", "pull")]
+        [OrderByCompletionFromHelp(ResourceType.ExecutionEnvironment, ExecutionEnvironment.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
@@ -70,7 +69,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["registry"])]
         public ulong? Credential { get; set; }
 
         [Parameter()]
@@ -131,7 +131,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["registry"])]
         public ulong? Credential { get; set; }
 
         [Parameter()]

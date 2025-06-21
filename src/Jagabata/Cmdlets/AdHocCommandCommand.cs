@@ -33,12 +33,7 @@ namespace Jagabata.Cmdlets
         public IResource? Resource { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "launch_type", "status", "execution_environment",
-                           "failed", "started", "finished", "canceled_on", "elapsed", "job_explanation",
-                           "execution_node", "controller_node", "work_unit_id", "job_type", "inventory", "limit",
-                           "credential", "module_name", "module_args", "forks", "verbosity", "become_enabled",
-                           "diff_mode", "hosts", "organization", "schedule", "created_by", "modified_by",
-                           "instance_group", "labels")]
+        [OrderByCompletionFromHelp(ResourceType.AdHocCommand, AdHocCommandBase.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 
@@ -53,7 +48,7 @@ namespace Jagabata.Cmdlets
                 ResourceType.Inventory => $"{Inventory.PATH}{Resource.Id}/ad_hoc_commands/",
                 ResourceType.Host => $"{Host.PATH}{Resource.Id}/ad_hoc_commands/",
                 ResourceType.Group => $"{Group.PATH}{Resource.Id}/ad_hoc_commands/",
-                _ => AdHocCommand.PATH
+                _ => AdHocCommandBase.PATH
             };
             Find<AdHocCommand>(path);
         }

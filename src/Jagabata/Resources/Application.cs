@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -58,72 +58,45 @@ namespace Jagabata.Resources
                              string authorizationGrantType,
                              bool skipAuthorization,
                              ulong organization)
-        : SummaryFieldsContainer, IApplication, IResource, ICacheableResource
+        : ResourceBase, IApplication
     {
         public const string PATH = "/api/v2/applications/";
+
         /// <summary>
-        /// Retieve an Application.<br/>
-        /// API Path: <c>/api/v2/applications/<paramref name="id"/>/</c>
+        /// Get an Application
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Application ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<Application> Get(ulong id)
+        public static async Task<Application> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<Application>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<Application>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Applications.<br/>
-        /// API Path: <c>/api/v2/applications/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Application> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static Application Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(PATH, query, getAll))
-            {
-                foreach (var app in result.Contents.Results)
-                {
-                    yield return app;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Applications for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/applications/</c>
+        /// Find Applications
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<Application> FindFromOrganization(ulong organizationId,
-                                                                               NameValueCollection? query = null,
-                                                                               bool getAll = false)
+        public static async IAsyncEnumerable<Application> FindAsync(HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/applications/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(path, query, getAll))
-            {
-                foreach (var app in result.Contents.Results)
-                {
-                    yield return app;
-                }
-            }
-        }
-        /// <summary>
-        /// List Applications for a User.<br/>
-        /// API Path: <c>/api/v2/users/<paramref name="userId"/>/applications/</c>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<Application> FindFromUser(ulong userId,
-                                                                       NameValueCollection? query = null,
-                                                                       bool getAll = false)
-        {
-            var path = $"{User.PATH}{userId}/applications/";
-            await foreach (var result in RestAPI.GetResultSetAsync<Application>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<Application>(PATH, query, ct))
             {
                 foreach (var app in result.Contents.Results)
                 {
@@ -132,10 +105,105 @@ namespace Jagabata.Resources
             }
         }
 
-        public ulong Id { get; } = id;
-        public ResourceType Type { get; } = type;
-        public string Url { get; } = url;
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Applications associated with <paramref name="resource"/>.
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>User</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<Application> FindAsync(IResource resource,
+                                                                    HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/applications/",
+                ResourceType.User => $"{User.PATH}{resource.Id}/applications/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var apiResult in RestAPI.GetResultSetAsync<Application>(path, query, ct))
+            {
+                foreach (var activity in apiResult.Contents.Results)
+                {
+                    yield return activity;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static Application[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Applications by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static Application[] Find(string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Application[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find applications associated with <paramref name="resource"/> by basic parammeters
+        /// <para>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/applications/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        public static Application[] Find(IResource resource,
+                                         string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
         public DateTime Created { get; } = created;
         public DateTime? Modified { get; } = modified;
@@ -149,7 +217,79 @@ namespace Jagabata.Resources
         public bool SkipAuthorization { get; } = skipAuthorization;
         public ulong Organization { get; } = organization;
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Find tokens related to this application
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public OAuth2AccessToken[] FindTokens(string? searchWords = null,
+                                              string orderBy = "id",
+                                              ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<OAuth2AccessToken>("tokens",
+                                                                  searchWords,
+                                                                  orderBy,
+                                                                  pageSize)];
+        }
+
+        /// <summary>
+        /// Find tokens related to this application
+        /// <para>
+        /// Implement API: <c>/api/v2/applications/{id}/tokens/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public OAuth2AccessToken[] FindTokens(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<OAuth2AccessToken>("tokens", query)];
+        }
+
+        /// <summary>
+        /// Get the organization related to this application
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path)
+                ? RestAPI.Get<Organization>(path)
+                : null;
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description);
         }

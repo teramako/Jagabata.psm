@@ -63,19 +63,18 @@ namespace Jagabata.Cmdlets
         public SwitchParameter Galaxy { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "organization",
-                           "credential_type", "managed", "created_by", "modified_by")]
+        [OrderByCompletionFromHelp(ResourceType.Credential, Credential.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
         protected override void BeginProcessing()
         {
             if (CredentialTypeKind is not null)
             {
-                Query.Add("credential_type__kind__in", string.Join(',', CredentialTypeKind));
+                Query.Add("credential_type__kind", CredentialTypeKind);
             }
             if (CredentialTypeNamespace is not null)
             {
-                Query.Add("credential_type__namespace__in", string.Join(',', CredentialTypeNamespace));
+                Query.Add("credential_type__namespace", CredentialTypeNamespace);
             }
             SetupCommonQuery();
         }
@@ -88,9 +87,9 @@ namespace Jagabata.Cmdlets
                 ResourceType.Team => $"{Team.PATH}{Resource.Id}/credentials/",
                 ResourceType.CredentialType => $"{Resources.CredentialType.PATH}{Resource.Id}/credentials/",
                 ResourceType.InventorySource => $"{InventorySource.PATH}{Resource.Id}/credentials/",
-                ResourceType.InventoryUpdate => $"{InventoryUpdateJob.PATH}{Resource.Id}/credentials/",
+                ResourceType.InventoryUpdate => $"{InventoryUpdateJobBase.PATH}{Resource.Id}/credentials/",
                 ResourceType.JobTemplate => $"{JobTemplate.PATH}{Resource.Id}/credentials/",
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/credentials/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/credentials/",
                 ResourceType.Schedule => $"{Resources.Schedule.PATH}{Resource.Id}/credentials/",
                 ResourceType.WorkflowJobTemplateNode => $"{WorkflowJobTemplateNode.PATH}{Resource.Id}/credentials/",
                 ResourceType.WorkflowJobNode => $"{WorkflowJobNode.PATH}{Resource.Id}/credentials/",

@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Jagabata.Resources
@@ -148,75 +148,45 @@ namespace Jagabata.Resources
                              bool askInstanceGroupsOnLaunch, bool surveyEnabled, bool becomeEnabled, bool diffMode,
                              bool allowSimultaneous, string? customVirtualenv, int jobSliceCount, string webhookService,
                              ulong? webhookCredential, bool preventInstanceGroupFallback)
-        : UnifiedJobTemplate(id, type, url, created, modified, name, description, lastJobRun,
-                             lastJobFailed, nextJobRun, status),
-          IJobTemplate, IUnifiedJobTemplate, IResource, ICacheableResource
+        : UnifiedJobTemplate, IJobTemplate
     {
         public new const string PATH = "/api/v2/job_templates/";
 
         /// <summary>
-        /// Retrieve a Job Template.<br/>
-        /// API Path: <c>/api/v2/job_templates/<paramref name="id"/>/</c>
+        /// Get a Job Template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/<paramref name="id"/>/</c>
+        /// </para>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">JobTemplate ID</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async Task<JobTemplate> Get(ulong id)
+        public static new async Task<JobTemplate> GetAsync(ulong id, CancellationToken ct = default)
         {
-            var apiResult = await RestAPI.GetAsync<JobTemplate>($"{PATH}{id}/");
+            var apiResult = await RestAPI.GetAsync<JobTemplate>($"{PATH}{id}/", cancellationToken: ct);
             return apiResult.Contents;
         }
-        /// <summary>
-        /// List Job Templates.<br/>
-        /// API Path: <c>/api/v2/job_templates/</c>
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static new async IAsyncEnumerable<JobTemplate> Find(NameValueCollection? query, bool getAll = false)
+
+        /// <inheritdoc cref="GetAsync(ulong, CancellationToken)"/>
+        public static new JobTemplate Get(ulong id)
         {
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query, getAll))
-            {
-                foreach (var jobTemplate in result.Contents.Results)
-                {
-                    yield return jobTemplate;
-                }
-            }
+            return GetAsync(id).GetAwaiter().GetResult();
         }
+
         /// <summary>
-        /// List Job Templates for an Organization.<br/>
-        /// API Path: <c>/api/v2/organizations/<paramref name="organizationId"/>/job_templates/</c>
+        /// Find Job Templates
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/</c>
+        /// </para>
         /// </summary>
-        /// <param name="organizationId"></param>
         /// <param name="query"></param>
-        /// <param name="getAll"></param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplate> FindFromOrganization(ulong organizationId,
-                                                                               NameValueCollection? query = null,
-                                                                               bool getAll = false)
+        public static new async IAsyncEnumerable<JobTemplate> FindAsync(HttpQuery? query = null,
+                                                                        [EnumeratorCancellation]
+                                                                        CancellationToken ct = default)
         {
-            var path = $"{Resources.Organization.PATH}{organizationId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, getAll))
-            {
-                foreach (var jobTemplate in result.Contents.Results)
-                {
-                    yield return jobTemplate;
-                }
-            }
-        }
-        /// <summary>
-        /// List Job Templates for an Inventory.<br/>
-        /// API Path: <c>/api/v2/inventories/<paramref name="inventoryId"/>/job_templates/</c>
-        /// </summary>
-        /// <param name="inventoryId"></param>
-        /// <param name="query"></param>
-        /// <param name="getAll"></param>
-        /// <returns></returns>
-        public static async IAsyncEnumerable<JobTemplate> FindFromInventory(ulong inventoryId,
-                                                                            NameValueCollection? query = null,
-                                                                            bool getAll = false)
-        {
-            var path = $"{Resources.Inventory.PATH}{inventoryId}/job_templates/";
-            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, getAll))
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(PATH, query, ct))
             {
                 foreach (var jobTemplate in result.Contents.Results)
                 {
@@ -225,8 +195,104 @@ namespace Jagabata.Resources
             }
         }
 
-        public RelatedDictionary Related { get; } = related;
+        /// <summary>
+        /// Find Job Templates associated with <paramref name="resource"/>
+        /// </summary>
+        /// <remarks>
+        /// Implement API: <c>/api/v2/{Type}/{Id}/job_templates/</c>
+        /// <para>
+        /// Available types of <paramref name="resource"/>:
+        /// <list type="bullet">
+        ///     <item>Organization</item>
+        ///     <item>Inventory</item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        /// <param name="resource">Resource object associated with</param>
+        /// <param name="query"></param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public static async IAsyncEnumerable<JobTemplate> FindAsync(IResource resource,
+                                                                    HttpQuery? query = null,
+                                                                    [EnumeratorCancellation]
+                                                                    CancellationToken ct = default)
+        {
+            var path = resource.Type switch
+            {
+                ResourceType.Organization => $"{Resources.Organization.PATH}{resource.Id}/job_templates/",
+                ResourceType.Inventory => $"{Resources.Inventory.PATH}{resource.Id}/job_templates/",
+                _ => throw new ArgumentException($"Not suppored type: {resource.Type}")
+            };
+            await foreach (var result in RestAPI.GetResultSetAsync<JobTemplate>(path, query, ct))
+            {
+                foreach (var jobTemplate in result.Contents.Results)
+                {
+                    yield return jobTemplate;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, bool, CancellationToken)"/>
+        public static JobTemplate[] Find(IResource resource, HttpQuery query)
+        {
+            return [.. FindAsync(resource, query).ToBlockingEnumerable()];
+        }
+
+        /// <inheritdoc cref="FindAsync(HttpQuery?, CancellationToken)"/>
+        public static new JobTemplate[] Find(HttpQuery query)
+        {
+            return [.. FindAsync(query).ToBlockingEnumerable()];
+        }
+
+        /// <summary>
+        /// Find Job Templates by basic parameters.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="startPage"></param>
+        public static new JobTemplate[] Find(string? searchWords = null,
+                                             string orderBy = "name",
+                                             ushort pageSize = 20,
+                                             uint startPage = 1)
+        {
+            return Find(new QueryBuilder().SetSearchWords(searchWords)
+                                          .SetOrderBy(orderBy)
+                                          .SetPageSize(pageSize)
+                                          .SetStartPage(startPage)
+                                          .Build());
+        }
+
+        /// <summary>
+        /// Find Job Templates associated with <paramref name="resource"/> by basic parameters
+        /// </summary>
+        /// <inheritdoc cref="FindAsync(IResource, HttpQuery?, CancellationToken)"/>
+        /// <inheritdoc cref="Find(string?, string, ushort, uint)"/>
+        public static JobTemplate[] Find(IResource resource,
+                                         string? searchWords = null,
+                                         string orderBy = "name",
+                                         ushort pageSize = 20,
+                                         uint startPage = 1)
+        {
+            return Find(resource, new QueryBuilder().SetSearchWords(searchWords)
+                                                    .SetOrderBy(orderBy)
+                                                    .SetPageSize(pageSize)
+                                                    .SetStartPage(startPage)
+                                                    .Build());
+        }
+
+        public override ulong Id { get; } = id;
+        public override ResourceType Type { get; } = type;
+        public override string Url { get; } = url;
+        public override RelatedDictionary Related { get; } = related;
         public override SummaryFieldsDictionary SummaryFields { get; } = summaryFields;
+        public override DateTime Created { get; } = created;
+        public override DateTime? Modified { get; } = modified;
+        public override string Name { get; } = name;
+        public override string Description { get; } = description;
         public JobType JobType { get; } = jobType;
         public ulong? Inventory { get; } = inventory;
         public ulong Project { get; } = project;
@@ -242,6 +308,10 @@ namespace Jagabata.Resources
         public int Timeout { get; } = timeout;
         public bool UseFactCache { get; } = useFactCache;
         public ulong Organization { get; } = organization;
+        public override DateTime? LastJobRun { get; } = lastJobRun;
+        public override bool LastJobFailed { get; } = lastJobFailed;
+        public override DateTime? NextJobRun { get; } = nextJobRun;
+        public override JobTemplateStatus Status { get; } = status;
         public ulong? ExecutionEnvironment { get; } = executionEnvironment;
         public string HostConfigKey { get; } = hostConfigKey;
         public bool AskScmBranchOnLaunch { get; } = askScmBranchOnLaunch;
@@ -270,12 +340,18 @@ namespace Jagabata.Resources
         public ulong? WebhookCredential { get; } = webhookCredential;
         public bool PreventInstanceGroupFallback { get; } = preventInstanceGroupFallback;
 
+        [JsonIgnore]
+        public LabelSummary[] Labels =>
+            SummaryFields.TryGetValue<ListSummary<LabelSummary>>("Labels", out var labels)
+            ? labels.Results
+            : [];
+
         public Dictionary<string, object?> GetExtraVars()
         {
             return Yaml.DeserializeToDict(ExtraVars);
         }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public JobTemplateAskOnLaunch AskOnLaunch => (AskJobTypeOnLaunch ? JobTemplateAskOnLaunch.JobType : 0)
             | (AskInventoryOnLaunch ? JobTemplateAskOnLaunch.Inventory : 0)
             | (AskScmBranchOnLaunch ? JobTemplateAskOnLaunch.ScmBranch : 0)
@@ -292,7 +368,7 @@ namespace Jagabata.Resources
             | (AskInstanceGroupsOnLaunch ? JobTemplateAskOnLaunch.InstanceGroups : 0)
             | (AskTagsOnLaunch ? JobTemplateAskOnLaunch.JobTags : 0)
             | (AskSkipTagsOnLaunch ? JobTemplateAskOnLaunch.SkipTags : 0);
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        [JsonIgnore]
         public JobTemplateOptions Options => (SurveyEnabled ? JobTemplateOptions.Survey : 0)
             | (BecomeEnabled ? JobTemplateOptions.Become : 0)
             | (!string.IsNullOrEmpty(HostConfigKey) ? JobTemplateOptions.ProvisioningCallback : 0)
@@ -301,7 +377,295 @@ namespace Jagabata.Resources
             | (UseFactCache ? JobTemplateOptions.FactCache : 0)
             | (PreventInstanceGroupFallback ? JobTemplateOptions.PreventInstanceGroupFallback : 0);
 
-        public CacheItem GetCacheItem()
+        /// <summary>
+        /// Get the most recently executed jobs.
+        /// Implement API: <c>/api/v2/job_templates/{id}/jobs/</c>
+        /// </summary>
+        /// <param name="count">Number of jobs to retrieve</param>
+        public JobTemplateJob[] GetRecentJobs(ushort count = 20)
+        {
+            return [.. FindResultsByRelatedKey<JobTemplateJob>("jobs", null, "-id", count)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number of activity streams to retrieve</param>.
+        public ActivityStream[] FindActivityStream(string? searchWords = null,
+                                                   string orderBy = "-timestamp",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream",
+                                                               searchWords,
+                                                               orderBy,
+                                                               pageSize)];
+        }
+
+        /// <summary>
+        /// Find the activity stream for this resource
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/activity_stream/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public ActivityStream[] FindActivityStream(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<ActivityStream>("activity_stream", query)];
+        }
+
+        /// <summary>
+        /// Get the inventory related to this job template
+        /// </summary>
+        public Inventory? GetInventory()
+        {
+            return Related.TryGetPath("inventory", out var path) ? RestAPI.Get<Inventory>(path) : null;
+        }
+
+        /// <summary>
+        /// Get the project related to this job template
+        /// </summary>
+        public Project? GetProject()
+        {
+            return Related.TryGetPath("project", out var path) ? RestAPI.Get<Project>(path) : null;
+        }
+
+        /// <summary>
+        /// Get the organization related to this job template
+        /// </summary>
+        public Organization? GetOrganization()
+        {
+            return Related.TryGetPath("organization", out var path) ? RestAPI.Get<Organization>(path) : null;
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have start notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_started/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnStarted(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_started", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(string? searchWords = null,
+                                                                         string orderBy = "name",
+                                                                         ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have success notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_success/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnSuccess(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_success", query)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(string? searchWords = null,
+                                                                       string orderBy = "name",
+                                                                       ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error",
+                                                                     searchWords,
+                                                                     orderBy,
+                                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find notification templates that have error notification enabled for this job template.
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/notification_templates_error/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public NotificationTemplate[] FindNotificationTemplatesOnError(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<NotificationTemplate>("notification_templates_error", query)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public User[] FindAccessList(string? searchWords = null,
+                                     string orderBy = "username",
+                                     ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list",
+                                                     searchWords,
+                                                     orderBy,
+                                                     pageSize)];
+        }
+
+        /// <summary>
+        /// Find the access list related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/access_list/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public User[] FindAccessList(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<User>("access_list", query)];
+        }
+
+        /// <summary>
+        /// Get the survey spec for this job template
+        /// </summary>
+        public Survey? GetSurveySpec()
+        {
+            return SummaryFields.ContainsKey("Survey") && Related.TryGetPath("survey_spec", out var path)
+                ? RestAPI.Get<Survey>(path)
+                : null;
+        }
+
+        /// <summary>
+        /// Get the object roles related to this job template
+        /// </summary>
+        /// <remarks>
+        /// This is almost same as:
+        /// <code>thisObject.SummaryFields["ObjectRoles"]</code>
+        /// </remarks>
+        public ObjectRoleSummary[] GetObjectRoles()
+        {
+            return SummaryFields.TryGetValue<Dictionary<string, ObjectRoleSummary>>("ObjectRoles", out var dict)
+                ? [.. dict.Values]
+                : [];
+        }
+
+        /// <summary>
+        /// Find the instance groups related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public InstanceGroup[] FindInstanceGroups(string? searchWords = null,
+                                                  string orderBy = "name",
+                                                  ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups",
+                                                              searchWords,
+                                                              orderBy,
+                                                              pageSize)];
+        }
+
+        /// <summary>
+        /// Find instance groups related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/instance_groups/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public InstanceGroup[] FindInstanceGroups(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<InstanceGroup>("instance_groups", query)];
+        }
+
+        /// <summary>
+        /// Find slice workflow jobs related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="searchWords"></param>
+        /// <param name="orderBy">Sort keys (<c>','</c> separated values)</param>
+        /// <param name="pageSize">Max number to retrieve</param>.
+        public WorkflowJob[] FindSliceWorkflowJobs(string? searchWords = null,
+                                                   string orderBy = "-id",
+                                                   ushort pageSize = 20)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs",
+                                                            searchWords,
+                                                            orderBy,
+                                                            pageSize)];
+        }
+
+        /// <summary>
+        /// Find slice workflow jobs related to this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/slice_workflow_jobs/</c>
+        /// </para>
+        /// </summary>
+        /// <param name="query">Full customized queries (filtering, sorting and paging)</param>.
+        public WorkflowJob[] FindSliceWorkflowJobs(HttpQuery query)
+        {
+            return [.. FindResultsByRelatedKey<WorkflowJob>("slice_workflow_jobs", query)];
+        }
+
+        /// <summary>
+        /// Get the webhook key for this job template
+        /// <para>
+        /// Implement API: <c>/api/v2/job_templates/{id}/webhook_key/</c>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, string>? GetWebhookKey()
+        {
+            return !string.IsNullOrEmpty(WebhookService) && Related.TryGetPath("webhook_key", out var path)
+                ? RestAPI.Get<Dictionary<string, string>>(path)
+                : null;
+        }
+
+        protected override CacheItem GetCacheItem()
         {
             return new CacheItem(Type, Id, Name, Description)
             {

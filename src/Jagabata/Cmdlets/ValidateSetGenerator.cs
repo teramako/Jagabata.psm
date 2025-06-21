@@ -7,9 +7,7 @@ namespace Jagabata.Cmdlets
     {
         public string[] GetValidValues()
         {
-            return Enum.GetNames(typeof(TEnum))
-                       .Select(x => x.ToLowerInvariant())
-                       .ToArray();
+            return [.. Enum.GetNames(typeof(TEnum)).Select(static x => x.ToLowerInvariant())];
         }
     }
 }

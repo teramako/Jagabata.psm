@@ -7,7 +7,6 @@ using System.Management.Automation;
 using System.Security;
 using System.Text;
 using System.Text.Json;
-using System.Web;
 
 namespace Jagabata.Cmdlets
 {
@@ -44,17 +43,7 @@ namespace Jagabata.Cmdlets
         public string[]? Name { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "job_type", "inventory", "project",
-                           "playbook", "scm_branch", "forks", "limit", "verbosity", "job_tags", "force_handlers",
-                           "skip_tags", "start_at_task", "timeout", "use_fact_cache", "organization", "last_job_run",
-                           "last_job_failed", "next_job_run", "status", "execution_environment", "ask_scm_branch_on_launch",
-                           "ask_diff_mode_on_launch", "ask_variables_on_launch", "ask_limit_on_launch", "ask_tags_on_launch",
-                           "ask_skip_tags_on_launch", "ask_job_type_on_launch", "ask_verbosity_on_launch",
-                           "ask_inventory_on_launch", "ask_credential_on_launch", "ask_execution_environment_on_launch",
-                           "ask_labels_on_launch", "ask_forks_on_launch", "ask_job_slice_count_on_launch",
-                           "ask_timeout_on_launch", "ask_instance_groups_on_launch", "survey_enabled", "become_enabled",
-                           "diff_mode", "allow_simultaneous", "custom_virtualenv", "job_slice_count", "webhook_service",
-                           "webhook_credential", "prevent_instance_group_fallback")]
+        [OrderByCompletionFromHelp(ResourceType.JobTemplate, JobTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void BeginProcessing()
@@ -360,10 +349,12 @@ namespace Jagabata.Cmdlets
                 if (credentialIds.Length == 0)
                     return false;
 
-                var query = HttpUtility.ParseQueryString("");
-                query.Set("id__in", string.Join(',', credentialIds));
-                query.Set("page_size", $"{credentialIds.Length}");
-                foreach (var resultSet in GetResultSet<Credential>(Credential.PATH, query, true))
+                var query = new HttpQuery
+                {
+                    { "id__in", string.Join(',', credentialIds) },
+                    { "page_size", $"{credentialIds.Length}" }
+                };
+                foreach (var resultSet in GetResultSet<Credential>(Credential.PATH, query))
                 {
                     foreach (var cred in resultSet.Results)
                     {
@@ -510,12 +501,12 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.Inventory.Id,
-                                           helpMessage: "Input an Inventory ID."
-                                                        + (requirements.InventoryNeededToStart ? " (Required)" : ""),
-                                           required: requirements.InventoryNeededToStart,
-                                           out var inventoryAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.Inventory.Id,
+                                    helpMessage: "Input an Inventory ID."
+                                                 + (requirements.InventoryNeededToStart ? " (Required)" : ""),
+                                    required: requirements.InventoryNeededToStart,
+                                    out var inventoryAnswer))
                 {
                     if (!inventoryAnswer.IsEmpty && inventoryAnswer.Input > 0)
                     {
@@ -577,11 +568,11 @@ namespace Jagabata.Cmdlets
                 {
                     WriteHost(string.Format(culture, skipFormat, label, value), dontshow: true);
                 }
-                else if (prompt.Ask<ulong>(label, "",
-                                           defaultValue: requirements.Defaults.ExecutionEnvironment.Id,
-                                           helpMessage: "Enter the Execution Environment ID.",
-                                           required: false,
-                                           out var eeAnswer))
+                else if (prompt.Ask(label, "",
+                                    defaultValue: requirements.Defaults.ExecutionEnvironment.Id,
+                                    helpMessage: "Enter the Execution Environment ID.",
+                                    required: false,
+                                    out var eeAnswer))
                 {
                     if (!eeAnswer.IsEmpty)
                     {
@@ -745,10 +736,10 @@ namespace Jagabata.Cmdlets
                     var v = (JobVerbosity)(int)(value ?? 0);
                     WriteHost(string.Format(culture, skipFormat, label, $"{v:d} ({v:g})"), dontshow: true);
                 }
-                else if (prompt.AskEnum<JobVerbosity>(label,
-                                                      defaultValue: requirements.Defaults.Verbosity,
-                                                      helpMessage: "Choose the job log verbosity level.",
-                                                      out var verbosityAnswer))
+                else if (prompt.AskEnum(label,
+                                        defaultValue: requirements.Defaults.Verbosity,
+                                        helpMessage: "Choose the job log verbosity level.",
+                                        out var verbosityAnswer))
                 {
                     if (!verbosityAnswer.IsEmpty)
                     {
@@ -1148,6 +1139,8 @@ namespace Jagabata.Cmdlets
 
         [Parameter()]
         [ResourceIdTransformation(ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]
@@ -1390,7 +1383,8 @@ namespace Jagabata.Cmdlets
         [Parameter()]
         [AllowNull]
         [ResourceIdTransformation(ResourceType.Credential)]
-        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential)]
+        [ResourceCompletions(ResourceCompleteType.Id, ResourceType.Credential,
+                             FilterKey = "Kind", FilterValues = ["github_token", "gitlab_token"])]
         public ulong? WebhookCredential { get; set; }
 
         [Parameter()]

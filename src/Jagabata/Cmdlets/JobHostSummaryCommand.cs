@@ -31,15 +31,14 @@ namespace Jagabata.Cmdlets
         public IResource Resource { get; set; } = new Resource(0, 0);
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "job", "host", "constructed_host", "host_name", "changed",
-                           "dark", "failures", "ok", "processed", "skipped", "failed", "ignored", "rescued")]
+        [OrderByCompletionFromHelp(ResourceType.JobHostSummary, JobHostSummary.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
         protected override void ProcessRecord()
         {
             var path = Resource.Type switch
             {
-                ResourceType.Job => $"{JobTemplateJob.PATH}{Resource.Id}/job_host_summaries/",
+                ResourceType.Job => $"{JobTemplateJobBase.PATH}{Resource.Id}/job_host_summaries/",
                 ResourceType.Host => $"{Host.PATH}{Resource.Id}/job_host_summaries/",
                 ResourceType.Group => $"{Group.PATH}{Resource.Id}/job_host_summaries/",
                 _ => throw new ArgumentException()

@@ -1,6 +1,5 @@
 using Jagabata.Cmdlets.Completer;
 using Jagabata.Resources;
-using System.Collections.Specialized;
 using System.Management.Automation;
 
 namespace Jagabata.Cmdlets
@@ -10,18 +9,13 @@ namespace Jagabata.Cmdlets
     public class FindUnifiedJobTemplateCommand : FindCommandBase
     {
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "last_job_run", "last_job_failed",
-                           "next_job_run", "status", "execution_environment", "notification_templates_error",
-                           "notification_templates_success", "notification_templates_started", "last_job",
-                           "organization", "schedules", "labels", "created_by", "modified_by", "credentials",
-                           "instance_groups", "next_schedule")]
+        [OrderByCompletionFromHelp(ResourceType.UnifiedJobTemplate, UnifiedJobTemplate.PATH)]
         public override string[] OrderBy { get; set; } = ["id"];
 
-        private IEnumerable<ResultSet> GetResultSet(string path,
-                                                    NameValueCollection? query = null,
-                                                    bool getAll = false)
+        private IEnumerable<ResultSet> GetResultSet(string path, HttpQuery query)
         {
-            var nextPathAndQuery = path + (query is null ? "" : $"?{query}");
+            var nextPathAndQuery = query.Count == 0 ? path : $"{path}?{query}";
+            var count = 0;
             do
             {
                 WriteVerboseRequest(nextPathAndQuery, Method.GET);
@@ -56,7 +50,8 @@ namespace Jagabata.Cmdlets
                 yield return resultSet;
 
                 nextPathAndQuery = string.IsNullOrEmpty(resultSet?.Next) ? string.Empty : resultSet.Next;
-            } while (getAll && !string.IsNullOrEmpty(nextPathAndQuery));
+            } while ((query.IsInfinity || ++count < query.QueryCount)
+                     && !string.IsNullOrEmpty(nextPathAndQuery));
         }
         protected override void BeginProcessing()
         {
@@ -64,7 +59,7 @@ namespace Jagabata.Cmdlets
         }
         protected override void ProcessRecord()
         {
-            foreach (var resultSet in GetResultSet(UnifiedJobTemplate.PATH, Query, All))
+            foreach (var resultSet in GetResultSet(UnifiedJobTemplate.PATH, Query.Build()))
             {
                 WriteObject(resultSet.Results, true);
             }

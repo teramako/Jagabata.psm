@@ -38,11 +38,7 @@ namespace Jagabata.Cmdlets
         public string[]? Status { get; set; }
 
         [Parameter()]
-        [OrderByCompletion("id", "created", "modified", "name", "description", "launch_type", "status",
-                           "execution_environment", "failed", "started", "finished", "canceled_on", "elapsed",
-                           "job_explanation", "execution_node", "work_unit_id", "local_path", "scm_type",
-                           "scm_url", "scm_branch", "scm_refspec", "scm_clean", "scm_track_submodules",
-                           "scm_delete_on_update", "credential", "timeout", "scm_revision", "project")]
+        [OrderByCompletionFromHelp(ResourceType.ProjectUpdate, ProjectUpdateJobBase.PATH)]
         public override string[] OrderBy { get; set; } = ["!id"];
 
 
@@ -60,7 +56,9 @@ namespace Jagabata.Cmdlets
         }
         protected override void EndProcessing()
         {
-            var path = Project > 0 ? $"{Resources.Project.PATH}{Project}/project_updates/" : ProjectUpdateJob.PATH;
+            var path = Project > 0
+                ? $"{Resources.Project.PATH}{Project}/project_updates/"
+                : ProjectUpdateJobBase.PATH;
             Find<ProjectUpdateJob>(path);
         }
     }

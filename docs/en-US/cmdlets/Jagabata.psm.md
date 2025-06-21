@@ -194,6 +194,9 @@ Retrieve ExecutionEnvironments by the ID(s).
 ### [Get-AnsibleGroup](Get-AnsibleGroup.md)
 Retrieve Groups by the ID(s).
 
+### [Get-AnsibleGroupTree](Get-AnsibleGroupTree.md)
+Retrieve group hierarchies for an inventory.
+
 ### [Get-AnsibleHost](Get-AnsibleHost.md)
 Retrieve Hosts by the ID(s).
 
@@ -214,6 +217,9 @@ Retrieve Inventories by the ID(s).
 
 ### [Get-AnsibleInventoryFile](Get-AnsibleInventoryFile.md)
 Retrieve inventory files.
+
+### [Get-AnsibleInventoryScript](Get-AnsibleInventoryScript.md)
+Retrieve inventory scripts for the inventory.
 
 ### [Get-AnsibleInventorySource](Get-AnsibleInventorySource.md)
 Retrieve InventorySources by the ID(s).
